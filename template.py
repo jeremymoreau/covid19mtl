@@ -128,7 +128,7 @@ def generate_layout(labels):
             'autosize': True,
             'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': 'Date'}},
-            'yaxis': {'title': {'text': 'Hospitalisations (Qc)'}, 'gridcolor' : '#f5f5f5'},
+            'yaxis': {'title': {'text': 'Hospitalisations (QC)'}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":0,"l":30,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
             'paper_bgcolor': 'rgba(0,0,0,0)',
