@@ -10,9 +10,11 @@ from app import (app, cases_per1000_long, data_mtl, data_qc, latest_cases_mtl,
 
 def generate_layout(labels):
     ##### Figures #####
+    # get max cases value
+    cases_max_val = cases_per1000_long['cases_per_1000'].max()
     # Montreal cases per 1000 map
     mtlmap_fig = px.choropleth(cases_per1000_long, geojson=mtl_geojson, locations='borough', color='cases_per_1000',
-                        featureidkey="properties.borough", animation_frame='date',
+                        featureidkey="properties.borough", animation_frame='date', range_color=[0, cases_max_val],
                         projection="winkel tripel", labels=labels['montreal_map_colourbar_labels'])
     mtlmap_fig.update_geos(fitbounds="locations", visible=False)
     mtlmap_fig.layout.sliders[0]['pad'] = {'b': 10, 't': 0}
