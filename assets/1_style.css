@@ -1,0 +1,220 @@
+.js-plotly-plot .plotly .modebar {
+  padding-top: 0px !important;
+  margin-right: 0px;
+}
+
+body {
+  background-color: #f2f2f2;
+  margin: 5%;
+}
+#infobox_container > div > ul {
+  list-style-position: outside;
+  padding-left: 20px;
+  text-align: left
+}
+
+a {
+  text-decoration: none !important;
+  font-size: 1.7rem;
+  color: #4d8597;
+}
+a:hover {
+  color: #44aacc;
+}
+a:active {
+  color: #cc4444;
+}
+
+p {
+  font-size: 1.7rem;
+}
+
+.two.columns {
+  width: 16.25%;
+}
+
+.column,
+.columns {
+  margin-left: 0.5%;
+}
+
+.pretty_container {
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #d3d3d3;
+  background-color: #ffffff;
+  margin: 10px;
+  padding: 15px;
+  position: relative;
+}
+
+.mini_container {
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #d3d3d3;
+  background-color: #ffffff;
+  margin: 10px;
+  padding: 15px;
+  position: relative;
+}
+
+#language_select {
+  text-align: right;
+  padding-right: 10px;
+  user-select: none; 
+}
+#language_select_link {
+  color: #323232;
+  font-size: 1.9rem;
+}
+#language_select_link:hover {
+  color: #44aacc;
+}
+#language_select_link:active {
+  color: #cc4444;
+}
+#last_update_text {
+  margin-bottom: 0px;
+  font-size: 1.7rem;
+}
+#cases_mtl {
+  flex: 1;
+  color:#c51515;
+}
+
+#cases_qc {
+  flex: 1;
+  color: #c51515;
+}
+
+#deaths_qc {
+  flex: 1;
+  color: #252525;
+}
+
+#recovered_qc {
+  flex: 1;
+  margin-right: 0px;
+  color: #249a24;
+}
+
+#total_cases_box {
+  margin-left: 0px;
+  margin-right: 6px;
+}
+#total_cases_col {
+  margin-left: 0px;
+  display: inline-grid;
+}
+
+#age_group_box {
+  margin-left: 6px;
+  margin-right: 0px;
+}
+
+#infobox_container {
+  margin-left: 0px;
+  display: inline-grid;
+}
+#total_hospitalisations_col {
+  display: inline-grid;
+}
+#total_deaths_col {
+  margin-left: 0px;
+  display: inline-grid;
+}
+#total_deaths_box {
+  margin-left: 0px;
+}
+#total_testing_box {
+  margin-right: 0px;
+}
+
+#footer p {
+  font-size: 1.2rem !important;
+}
+#footer a {
+  font-size: 1.2rem !important;
+}
+#footer_right {
+  text-align: right;
+}
+
+#confirmed_cases_fig {
+  width: 100%;
+}
+
+.bare_container {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+}
+
+.dcc_control {
+  margin: 0;
+  padding: 5px;
+  width: calc(100%-40px);
+}
+
+.control_label {
+  margin: 0;
+  padding: 10px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  width: calc(100%-40px);
+}
+
+.rc-slider {
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+.flex-display {
+  display: flex;
+}
+
+.container-display {
+  display: flex;
+}
+
+#individual_graph,
+#aggregate_graph {
+  width: calc(100% - 30px);
+  position: absolute;
+}
+
+#count_graph {
+  position: absolute;
+  height: calc(100% - 30px);
+  width: calc(100% - 30px);
+}
+
+#countGraphContainer {
+  flex: 5;
+  position: relative;
+  margin-right: 0px;
+}
+
+#header {
+  align-items: center;
+}
+
+#title {
+  text-align: center;
+}
+
+#right-column {
+  display: flex;
+  flex-direction: column;
+  margin-left: 0px;
+}
+
+#aggregate_data {
+  align-items: center;
+}
+
+#mainContainer {
+  display: flex;
+  flex-direction: column;
+}
