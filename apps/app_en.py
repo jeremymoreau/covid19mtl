@@ -51,6 +51,9 @@ labels = {
     'testing_qc_y_label' : 'Cases (cumulative, QC)',
     'negative_tests_qc_label' : 'Negative tests (QC)',
     'positive_cases_qc_label' : 'Confirmed positive cases (QC)',
+    'date_slider_label' : 'Date: ',
+    'date_label' : 'Date',
+    'age_label' : 'Age'
 }
 
 layout = generate_layout(labels)

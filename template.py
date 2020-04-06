@@ -18,6 +18,7 @@ def generate_layout(labels):
                         projection="winkel tripel", labels=labels['montreal_map_colourbar_labels'])
     mtlmap_fig.update_geos(fitbounds="locations", visible=False)
     mtlmap_fig.layout.sliders[0]['pad'] = {'b': 10, 't': 0}
+    mtlmap_fig.layout.sliders[0]['currentvalue']['prefix'] = labels['date_slider_label']
     mtlmap_fig.layout.updatemenus[0]['pad'] = {'r': 10, 't': 10}
     mtlmap_fig.update_layout({
         'margin': {"r":0,"t":0,"l":0,"b":0},
@@ -52,7 +53,7 @@ def generate_layout(labels):
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': 'Date'}},
+            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {'title': {'text': labels['confirmed_cases_y_label']}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":0,"l":60,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
@@ -71,7 +72,7 @@ def generate_layout(labels):
                 range_y=[0, max_count + 0.25*max_count], barmode='group')
     age_fig.update_layout({
         'legend' : {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1, 'title' : ''},
-        'xaxis' : {'title': {'text': 'Age'}},
+        'xaxis' : {'title': {'text': labels['age_label']}},
         'yaxis' : {'title': {'text': '%'}, 'gridcolor' : '#f5f5f5'},
         'margin': {"r":0,"t":0,"l":0,"b":0},
         'plot_bgcolor': 'rgba(0,0,0,0)',
@@ -79,6 +80,7 @@ def generate_layout(labels):
         'hoverlabel' : {'font' : {'color' : '#ffffff'}}
     })
     age_fig.layout.sliders[0]['pad'] = {'r': 30, 'b': 10, 't': 50}
+    age_fig.layout.sliders[0]['currentvalue']['prefix'] = labels['date_slider_label']
     age_fig.layout.updatemenus[0]['pad'] = {'r': 10, 't': 60}
     age_fig.update_traces({
         'hovertemplate': labels['age_fig_hovertemplate']
@@ -98,7 +100,7 @@ def generate_layout(labels):
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': 'Date'}},
+            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {'title': {'text': labels['deaths_qc_y_label']}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":0,"l":30,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
@@ -127,7 +129,7 @@ def generate_layout(labels):
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': 'Date'}},
+            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {'title': {'text': labels['hospitalisations_y_label']}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":0,"l":30,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
@@ -159,7 +161,7 @@ def generate_layout(labels):
         'layout': {
         'autosize': True,
         'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
-        'xaxis': {'tickformat': '%m-%d', 'title': {'text': 'Date'}},
+        'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
         'yaxis': {'title': {'text': labels['testing_qc_y_label']}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":0,"l":60,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
