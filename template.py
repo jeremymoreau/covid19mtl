@@ -8,6 +8,50 @@ from app import (app, cases_per1000_long, data_mtl, data_qc, latest_cases_mtl,
                  latest_cases_qc, latest_deaths_qc, latest_recovered_qc,
                  latest_update_date, mtl_age_data, mtl_geojson)
 
+
+def add_ylog_menu(fig, y_data, labels):
+    """Add a dropdown menu to select between log and linear scales
+    
+    Parameters
+    ----------
+    fig : plotly.graph_objs._figure.Figure
+        Plotly line chart
+    y_data : pandas.core.series.Series
+        Pandas series containing the y axis data
+    labels : dict
+        Dict containing the labels to display in the dropdown
+    
+    Returns
+    -------
+    plotly.graph_objs._figure.Figure
+        Plotly line chart including a dropdown menu at the bottom left
+    """
+    nticks_log = len(str(y_data.iloc[-1]))  # to hide minor tick labels
+    fig.update_layout(
+        updatemenus=[
+            dict(
+                active=0,
+                buttons=list([
+                    dict(label=labels['linear_label'],
+                         method='update',
+                         args=[{'visible': [True, True]},
+                               {'yaxis': {'type': 'linear'}}]),
+                    dict(label=labels['log_label'],
+                         method='update',
+                         args=[{'visible': [True, True]},
+                               {'yaxis': {'type': 'log', 'nticks': nticks_log}}]),
+                ]),
+                direction='up',
+                pad={'t': 5, 'b': 5, 'r': 5},
+                x=0,
+                xanchor='left',
+                y=-0.125,
+                yanchor='top'
+            )
+        ])
+    return fig
+
+
 def generate_layout(labels):
     ##### Figures #####
     # get max cases value
@@ -60,6 +104,7 @@ def generate_layout(labels):
             'paper_bgcolor': 'rgba(0,0,0,0)'
         }
     })
+    cases_fig = add_ylog_menu(cases_fig, data_qc['cases_qc'], labels)
 
     # Age histogram
     mtl_age_data_copy = mtl_age_data.copy()
@@ -107,6 +152,7 @@ def generate_layout(labels):
             'paper_bgcolor': 'rgba(0,0,0,0)'
         }
     })
+    deaths_qc_fig = add_ylog_menu(deaths_qc_fig, data_qc['deaths_qc'], labels)
 
     # Hospitalisations (QC)
     hospitalisations_qc_fig = go.Figure({
@@ -137,6 +183,7 @@ def generate_layout(labels):
             'hoverlabel' : {'font' : {'color' : '#ffffff'}}
         }
     })
+    hospitalisations_qc_fig = add_ylog_menu(hospitalisations_qc_fig, data_qc['hospitalisations_qc'], labels)
 
     # Testing (QC)
     testing_qc_fig = go.Figure({
@@ -168,6 +215,7 @@ def generate_layout(labels):
             'paper_bgcolor': 'rgba(0,0,0,0)'
         }
     })
+    testing_qc_fig = add_ylog_menu(testing_qc_fig, data_qc['negative_tests_qc'], labels)
 
 
     ##### App layout #####
