@@ -18,7 +18,7 @@ labels = {
     'total_deaths_label' : 'Deaths (QC)',
     'total_hospitalisations_label': 'Hospitalisations (QC)',
     'total_testing_label' : 'Diagnostic tests (QC)',
-    'footer_left' : u'Data: [Santé Montréal](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / Built with [Dash](https://plotly.com/dash/)',
+    'footer_left' : u'Data: [Santé Montréal](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / Built with [Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
     'footer_right' : 'Made by [Jeremy Moreau](https://jeremymoreau.com/) ([RI-MUHC](https://rimuhc.ca/), McGill) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)',
     'infobox' : u"""
     #### Useful resources

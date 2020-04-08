@@ -18,7 +18,7 @@ labels = {
     'total_deaths_label' : 'Décès (QC)',
     'total_hospitalisations_label': 'Hospitalisations (QC)',
     'total_testing_label' : 'Tests diagnostiques (QC)',
-    'footer_left' : u'Données: [Santé Montréal](https://santemontreal.qc.ca/population/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / Créé avec [Dash](https://plotly.com/dash/)',
+    'footer_left' : u'Données: [Santé Montréal](https://santemontreal.qc.ca/population/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / Créé avec [Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
     'footer_right' : 'Créé par [Jeremy Moreau](https://jeremymoreau.com/) ([IR-CUSM](https://rimuhc.ca/fr/home), McGill) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.fr)',
     'infobox' : u"""
     #### Ressources utiles
