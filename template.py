@@ -109,7 +109,7 @@ def generate_layout(labels):
             'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {'title': {'text': labels['confirmed_cases_y_label']}, 'gridcolor' : '#f5f5f5'},
-            'margin': {"r":0,"t":0,"l":60,"b":50},
+            'margin': {"r":0,"t":10,"l":60,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
             'paper_bgcolor': 'rgba(0,0,0,0)'
         }
@@ -129,7 +129,7 @@ def generate_layout(labels):
         'legend' : {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1, 'title' : ''},
         'xaxis' : {'title': {'text': labels['age_label']}},
         'yaxis' : {'title': {'text': '%'}, 'gridcolor' : '#f5f5f5'},
-        'margin': {"r":0,"t":0,"l":0,"b":0},
+        'margin': {"r":0,"t":10,"l":0,"b":0},
         'plot_bgcolor': 'rgba(0,0,0,0)',
         'paper_bgcolor': 'rgba(0,0,0,0)',
         'hoverlabel' : {'font' : {'color' : '#ffffff'}}
@@ -157,7 +157,7 @@ def generate_layout(labels):
             'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {'title': {'text': labels['deaths_qc_y_label']}, 'gridcolor' : '#f5f5f5'},
-            'margin': {"r":0,"t":0,"l":30,"b":50},
+            'margin': {"r":0,"t":10,"l":30,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
             'paper_bgcolor': 'rgba(0,0,0,0)'
         }
@@ -189,7 +189,7 @@ def generate_layout(labels):
             'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {'title': {'text': labels['hospitalisations_y_label']}, 'gridcolor' : '#f5f5f5'},
-            'margin': {"r":0,"t":0,"l":30,"b":50},
+            'margin': {"r":0,"t":10,"l":30,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
             'paper_bgcolor': 'rgba(0,0,0,0)',
             'hoverlabel' : {'font' : {'color' : '#ffffff'}}
@@ -222,7 +222,7 @@ def generate_layout(labels):
         'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
         'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
         'yaxis': {'title': {'text': labels['testing_qc_y_label']}, 'gridcolor' : '#f5f5f5'},
-            'margin': {"r":0,"t":0,"l":60,"b":50},
+            'margin': {"r":0,"t":10,"l":60,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
             'paper_bgcolor': 'rgba(0,0,0,0)'
         }
