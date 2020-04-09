@@ -5,7 +5,9 @@ import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 
 from app import (app, cases_per1000_long, data_mtl, data_qc, latest_cases_mtl,
-                 latest_cases_qc, latest_deaths_qc, latest_recovered_qc,
+                 latest_cases_qc, latest_deaths_mtl, latest_deaths_qc,
+                 latest_hospitalisations_qc, latest_icu_qc,
+                 latest_negative_tests_qc, latest_recovered_qc,
                  latest_update_date, mtl_age_data, mtl_geojson)
 
 
@@ -162,11 +164,13 @@ def generate_layout(labels):
                 'x' : data_qc['date'],
                 'y' : data_qc['hospitalisations_qc'],
                 'mode': 'lines+markers',
+                'marker': {'color': '#F87E3F'},
                 'name': labels['hospitalisations_label'],
             },
             {
                 'type': 'scatter',
                 'mode': 'lines+markers',
+                'marker': {'color': '#0083CB'},
                 'x' : data_qc['date'],
                 'y' : data_qc['icu_qc'],
                 'name': labels['intensive_care_label'],
@@ -193,7 +197,7 @@ def generate_layout(labels):
                 'x' : data_qc['date'],
                 'y' : data_qc['negative_tests_qc'],
                 'mode': 'lines+markers',
-                'marker': {'color': '#26a61b'},
+                'marker': {'color': '#39b686'},
                 'name': labels['negative_tests_qc_label'],
             },
             {
@@ -201,7 +205,7 @@ def generate_layout(labels):
                 'mode': 'lines+markers',
                 'x' : data_qc['date'],
                 'y' : data_qc['cases_qc'],
-                'marker': {'color': '#a61b1b'},
+                'marker': {'color': '#c51515'},
                 'name': labels['positive_cases_qc_label'],
             }
         ],
@@ -275,6 +279,58 @@ def generate_layout(labels):
             ),
             html.Div(
                 [
+
+                    html.Div(
+                        [
+                            html.Div(
+                                [html.H3(latest_cases_mtl, id="cases_mtl_text"), html.P([labels['cases_montreal_label']], id='cases_montreal_label')],
+                                id="cases_mtl",
+                                className="mini_container",
+                            ),
+                            html.Div(
+                                [html.H3(latest_deaths_mtl, id="deaths_mtl_text"), html.P([labels['deaths_montreal_label']], id='deaths_montreal_label')],
+                                id="deaths_mtl",
+                                className="mini_container",
+                            ),
+                            html.Div(
+                                [html.H3(latest_cases_qc, id="cases_qc_text"), html.P([labels['cases_qc_label']], id='cases_qc_label')],
+                                id="cases_qc",
+                                className="mini_container",
+                            ),
+                            html.Div(
+                                [html.H3(latest_deaths_qc, id="deaths_qc_text"), html.P([labels['deaths_qc_label']], id='deaths_qc_label')],
+                                id="deaths_qc",
+                                className="mini_container",
+                            ),
+                            html.Div(
+                                [html.H3(latest_hospitalisations_qc, id="hospitalisations_qc_text"), html.P([labels['hospitalisations_label']], id='hospitalisations_qc_label')],
+                                id="hospitalisations_qc",
+                                className="mini_container",
+                            ),
+                            html.Div(
+                                [html.H3(latest_icu_qc, id="icu_qc_text"), html.P([labels['intensive_care_label']], id='icu_qc_label')],
+                                id="icu_qc",
+                                className="mini_container",
+                            ),
+                            html.Div(
+                                [html.H3(latest_recovered_qc, id="recovered_qc_text"), html.P([labels['recovered_qc_label']], id='recovered_qc_label')],
+                                id="recovered_qc",
+                                className="mini_container",
+                            ),
+                            html.Div(
+                                [html.H3(latest_negative_tests_qc, id="negative_tests_qc_text"), html.P([labels['negative_tests_qc_label']], id='negative_tests_qc_label')],
+                                id="negative_tests_qc",
+                                className="mini_container",
+                            ),
+                        ],
+                        id="info-container",
+                        className="row",
+                    ),
+                ],
+                className="row",
+            ),
+            html.Div(
+                [
                     # infobox
                     html.Div(
                         [
@@ -285,32 +341,6 @@ def generate_layout(labels):
                     ),
                     html.Div(
                         [
-                            html.Div(
-                                [
-                                    html.Div(
-                                        [html.H3(latest_cases_mtl, id="cases_mtl_text"), html.P([labels['cases_montreal_label']], id='cases_montreal_label')],
-                                        id="cases_mtl",
-                                        className="mini_container",
-                                    ),
-                                    html.Div(
-                                        [html.H3(latest_cases_qc, id="cases_qc_text"), html.P([labels['cases_qc_label']], id='cases_qc_label')],
-                                        id="cases_qc",
-                                        className="mini_container",
-                                    ),
-                                    html.Div(
-                                        [html.H3(latest_deaths_qc, id="deaths_qc_text"), html.P([labels['deaths_qc_label']], id='deaths_qc_label')],
-                                        id="deaths_qc",
-                                        className="mini_container",
-                                    ),
-                                    html.Div(
-                                        [html.H3(latest_recovered_qc, id="recovered_qc_text"), html.P([labels['recovered_qc_label']], id='recovered_qc_label')],
-                                        id="recovered_qc",
-                                        className="mini_container",
-                                    ),
-                                ],
-                                id="info-container",
-                                className="row container-display",
-                            ),
                             html.Div(
                                 [
                                     html.Div([

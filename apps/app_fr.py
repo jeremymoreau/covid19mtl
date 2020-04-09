@@ -9,6 +9,7 @@ labels = {
     'title' : u' Tableau de bord COVID-19 Montréal',
     'subtitle' : u'Dernière mise à jour: ' + latest_update_date,
     'cases_montreal_label' : u'Cas (Montréal)',
+    'deaths_montreal_label' : u'Décès (Montréal)',
     'cases_qc_label' : u'Cas (QC)',
     'deaths_qc_label' : u'Décès (QC)',
     'recovered_qc_label' : u'Guéris (QC)',
@@ -21,7 +22,7 @@ labels = {
     'footer_left' : u'Données: [Santé Montréal](https://santemontreal.qc.ca/population/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / Créé avec [Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
     'footer_right' : 'Créé par [Jeremy Moreau](https://jeremymoreau.com/) ([IR-CUSM](https://rimuhc.ca/fr/home), McGill) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.fr)',
     'infobox' : u"""
-    #### Ressources utiles
+    ###### Ressources utiles
 
     - [Outil d'auto-évaluation des symptômes COVID-19](https://ca.thrive.health/covid19/fr)
     - [Santé Montréal](https://santemontreal.qc.ca/population/coronavirus-covid-19/)

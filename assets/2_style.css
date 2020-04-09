@@ -557,18 +557,16 @@ there.
   }
 }
 
-@media (max-width: 1000px) {
-  .mini_container h3 {
-    font-size: 2rem;
-    margin: 5px;
-
-  }
-  .mini_container p {
-    font-size: 1.5rem;
-  }
+@media (max-width: 1500px) {
+#info-container {
+  grid-template-columns: repeat(4, 1fr);
+}
 }
 
 @media (max-width: 800px) {
+  #info-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
   .column,
   .columns {
     width: 100%;
@@ -583,31 +581,6 @@ there.
   }
   a {
     font-size: 1.4rem;
-  }
-  .mini_container p {
-    font-size: 1.2rem;
-  }
-  .mini_container h3 {
-    font-size: 2rem;
-    margin: 5px;
-  }
-  #cases_mtl {
-    padding: 5px;
-    margin-right: 5px !important;
-    margin-left: 10px !important;
-
-  }
-  #cases_qc,
-  #deaths_qc {
-    padding: 5px;
-    margin-right: 5px !important;
-    margin-left: 5px !important;
-
-  }
-  #recovered_qc {
-    padding: 5px;
-    margin-right: 0px !important;
-    margin-left: 5px !important;
   }
   .third-row {
     flex-flow: column wrap;
@@ -636,7 +609,6 @@ there.
     margin-left: 0px !important;
     margin-right: 0px !important;
   }
-  
 }
 
 /* Larger than tablet, for screens smaller than 768px */
@@ -646,9 +618,8 @@ there.
   }
   .pretty_container {
     margin: 0 !important;
-    margin-bottom: 10px !important;
-    margin-top: 10px !important;
-    /* padding: 0px; */
+    margin-bottom: 15px !important;
+    /* margin-top: 10px !important; */
   }
   #individual_graph,
   #count_graph,
@@ -657,36 +628,6 @@ there.
   }
   .container-display {
     display: block;
-  }
-  #cases_mtl,
-  #cases_qc,
-  #deaths_qc,
-  #recovered_qc {
-    width: 45%;
-  }
-  #cases_mtl,
-  #deaths_qc {
-    float: left;
-    margin-left: 0px !important;
-  }
-  #cases_qc,
-  #recovered_qc {
-    float: right !important;
-    margin-right: 0px !important;
-  }
-  
-  .mini_container {
-    /* margin-bottom: 25px !important; */
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    padding: 15px;
-    position: relative;
-    /* box-shadow: 2px 2px 2px lightgrey; */
-  }
-
-  #button {
-    display: flex;
-    justify-content: center;
   }
   #title {
     margin-bottom: 10px;
@@ -707,23 +648,9 @@ there.
   p {
     font-size: 1.5rem;
   }
-  .mini_container p {
-    font-size: 1.5rem;
-    padding-left: 5px;
-  }
 }
 
 @media (max-width: 400px) {
-  #cases_mtl,
-  #cases_qc,
-  #deaths_qc,
-  #recovered_qc {
-    width: 100%;
-    box-sizing: border-box;
-    margin-right: 0px !important;
-    margin-left: 0px !important;
-    float: left !important;
-  }
   .column,
   .columns {
     width: 100%;
@@ -753,8 +680,4 @@ there.
     margin-left: 6px;
     margin-right: 0px;
   } 
-}
-
-/* Larger than Desktop HD */
-@media (min-width: 1200px) {
 }

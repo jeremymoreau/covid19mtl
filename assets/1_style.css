@@ -55,11 +55,16 @@ p {
   border-width: 1px;
   border-color: #d3d3d3;
   background-color: #ffffff;
-  margin: 10px;
+  margin: 0px;
   padding: 15px;
   position: relative;
 }
-
+#info-container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 15px;
+  margin-top: 15px;
+}
 #language_select {
   text-align: right;
   padding-right: 10px;
@@ -80,26 +85,30 @@ p {
   font-size: 1.7rem;
 }
 #cases_mtl {
-  flex: 1;
   color:#c51515;
 }
-
-#cases_qc {
-  flex: 1;
-  color: #c51515;
-}
-
-#deaths_qc {
-  flex: 1;
+#deaths_mtl {
   color: #252525;
 }
-
+#cases_qc {
+  color: #c51515;
+}
+#hospitalisations_qc {
+  color: #F87E3F;
+  hyphens: auto;
+}
+#icu_qc {
+  color: #0083CB;
+}
+#deaths_qc {
+  color: #252525;
+}
 #recovered_qc {
-  flex: 1;
-  margin-right: 0px;
   color: #249a24;
 }
-
+#negative_tests_qc {
+  color: #39b686;
+}
 #total_cases_box {
   margin-left: 0px;
   margin-right: 6px;
@@ -116,6 +125,7 @@ p {
 
 #infobox_container {
   margin-left: 0px;
+  margin-top: 5px;
   display: inline-grid;
 }
 #total_hospitalisations_col {
@@ -194,6 +204,7 @@ p {
   flex: 5;
   position: relative;
   margin-right: 0px;
+  margin-top: 5px;
 }
 
 #header {
