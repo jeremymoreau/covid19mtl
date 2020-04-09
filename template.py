@@ -69,7 +69,15 @@ def generate_layout(labels):
     mtlmap_fig.update_layout({
         'margin': {"r":0,"t":0,"l":0,"b":0},
         'plot_bgcolor': 'rgba(0,0,0,0)',
-        'paper_bgcolor': 'rgba(0,0,0,0)'
+        'paper_bgcolor': 'rgba(0,0,0,0)',
+        'coloraxis' : {'colorbar': {
+                            'thicknessmode': 'fraction',
+                            'thickness': 0.03,
+                            'lenmode': 'fraction',
+                            'len': 0.7,
+                            'title': {'text': ''}
+                            }
+                        }
         })
     mtlmap_fig.update_traces({
         'hovertemplate': labels['montreal_map_hovertemplate']
