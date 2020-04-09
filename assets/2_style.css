@@ -681,3 +681,9 @@ there.
     margin-right: 0px;
   } 
 }
+
+@media (hover: none) {
+  .js-plotly-plot .plotly .modebar {
+    display: none !important;
+  }
+}
