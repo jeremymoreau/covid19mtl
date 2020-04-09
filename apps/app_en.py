@@ -4,7 +4,7 @@ from template import generate_layout
 ##### Label text (EN) #####
 # TODO: Make markdown links open in new tab
 labels = {
-    'language' : u'Français',
+    'language' : 'Français',
     'language_link' : '/',
     'title' : 'COVID-19 Montreal Dashboard',
     'subtitle' : 'Last update: ' + latest_update_date,
@@ -19,9 +19,9 @@ labels = {
     'total_deaths_label' : 'Deaths (QC)',
     'total_hospitalisations_label': 'Hospitalisations (QC)',
     'total_testing_label' : 'Diagnostic tests (QC)',
-    'footer_left' : u'Data: [Santé Montréal](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / Built with [Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
+    'footer_left' : 'Data: [Santé Montréal](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / Built with [Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
     'footer_right' : 'Made by [Jeremy Moreau](https://jeremymoreau.com/) ([RI-MUHC](https://rimuhc.ca/), McGill) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)',
-    'infobox' : u"""
+    'infobox' : """
     ###### Useful resources
     
     - [COVID-19 Symptom Self-Assessment Tool](https://ca.thrive.health/covid19/en)
