@@ -37,11 +37,20 @@ def add_ylog_menu(fig, y_data, labels):
                     dict(label=labels['linear_label'],
                          method='update',
                          args=[{'visible': [True, True]},
-                               {'yaxis': {'type': 'linear'}}]),
+                               {'yaxis': {
+                                            'type': 'linear',
+                                            'gridcolor' : '#f5f5f5'
+                                            }
+                                }]),
                     dict(label=labels['log_label'],
                          method='update',
                          args=[{'visible': [True, True]},
-                               {'yaxis': {'type': 'log', 'nticks': nticks_log}}]),
+                               {'yaxis': {
+                                            'type': 'log', 
+                                            'nticks': nticks_log,
+                                            'gridcolor' : '#f5f5f5'
+                                            }
+                                }]),
                 ]),
                 direction='up',
                 pad={'t': 5, 'b': 5, 'r': 5},
