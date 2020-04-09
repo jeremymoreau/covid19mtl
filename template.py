@@ -243,6 +243,14 @@ def generate_layout(labels):
     })
     testing_qc_fig = add_ylog_menu(testing_qc_fig, data_qc['negative_tests_qc'], labels)
 
+    # modebar buttons to remove
+    modebar_buttons_to_remove = ['select2d',
+                                'lasso2d',
+                                'autoScale2d',
+                                'hoverCompareCartesian',
+                                'hoverClosestCartesian',
+                                'toggleSpikelines'
+                                ]
 
     ##### App layout #####
     layout = html.Div(
@@ -370,7 +378,17 @@ def generate_layout(labels):
                                         html.Div([
                                             html.H6([labels['montreal_map_label']], id='montreal_map_label')
                                         ]),
-                                        dcc.Graph(figure=mtlmap_fig, id="montreal_map"),
+                                        dcc.Graph(
+                                            figure=mtlmap_fig,
+                                            id='montreal_map',
+                                            config={
+                                                'modeBarButtonsToRemove': [
+                                                    'select2d',
+                                                    'lasso2d',
+                                                    'hoverClosestGeo',
+                                                    ],
+                                                }
+                                            ),
 
                                     ]),
                                 ],
@@ -395,7 +413,14 @@ def generate_layout(labels):
                                     html.Div([
                                         html.H6([labels['total_cases_label']], id='total_cases_label'),
                                     ]),
-                                    dcc.Graph(figure=cases_fig, id='confirmed_cases_fig', responsive=True),
+                                    dcc.Graph(
+                                        figure=cases_fig,
+                                        id='confirmed_cases_fig',
+                                        responsive=True,
+                                        config={
+                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                            }
+                                        ),
                                 ],
                                 id="total_cases_box",
                                 className="pretty_container",
@@ -410,7 +435,14 @@ def generate_layout(labels):
                             html.Div(
                                 [
                                     html.H6([labels['age_group_label']], id='age_group'),
-                                    dcc.Graph(figure=age_fig, id='age_fig_mtl', responsive=True),
+                                    dcc.Graph(
+                                        figure=age_fig,
+                                        id='age_fig_mtl',
+                                        responsive=True,
+                                        config={
+                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                            }
+                                        ),
                                 ],
                                 id="age_group_box",
                                 className="pretty_container",
@@ -430,7 +462,14 @@ def generate_layout(labels):
                             html.Div(
                                 [
                                     html.H6([labels['total_deaths_label']], id='total_deaths'),
-                                    dcc.Graph(figure=deaths_qc_fig, id='deaths_fig_qc', responsive=True),
+                                    dcc.Graph(
+                                            figure=deaths_qc_fig,
+                                            id='deaths_fig_qc',
+                                            responsive=True,
+                                        config={
+                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                            }
+                                        ),
                                 ],
                                 id="total_deaths_box",
                                 className="pretty_container",
@@ -445,7 +484,14 @@ def generate_layout(labels):
                             html.Div(
                                 [
                                     html.H6([labels['total_hospitalisations_label']], id='total_hospitalisations'),
-                                    dcc.Graph(figure=hospitalisations_qc_fig, id='hospitalisations_fig_qc', responsive=True),
+                                    dcc.Graph(
+                                        figure=hospitalisations_qc_fig,
+                                        id='hospitalisations_fig_qc',
+                                        responsive=True,
+                                    config={
+                                        'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                        }
+                                        ),
                                 ],
                                 id="total_hospitalisations_box",
                                 className="pretty_container",
@@ -460,7 +506,14 @@ def generate_layout(labels):
                             html.Div(
                                 [
                                     html.H6([labels['total_testing_label']], id='total_testing'),
-                                    dcc.Graph(figure=testing_qc_fig, id='testing_fig_qc', responsive=True),
+                                    dcc.Graph(
+                                        figure=testing_qc_fig,
+                                        id='testing_fig_qc',
+                                        responsive=True,
+                                        config={
+                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                            }
+                                        ),
                                 ],
                                 id="total_testing_box",
                                 className="pretty_container",
