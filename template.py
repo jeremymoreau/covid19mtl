@@ -111,7 +111,8 @@ def generate_layout(labels):
             'yaxis': {'title': {'text': labels['confirmed_cases_y_label']}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":10,"l":60,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
-            'paper_bgcolor': 'rgba(0,0,0,0)'
+            'paper_bgcolor': 'rgba(0,0,0,0)',
+            'hovermode': 'x'
         }
     })
     cases_fig = add_ylog_menu(cases_fig, data_qc['cases_qc'], labels)
@@ -132,6 +133,7 @@ def generate_layout(labels):
         'margin': {"r":0,"t":10,"l":0,"b":0},
         'plot_bgcolor': 'rgba(0,0,0,0)',
         'paper_bgcolor': 'rgba(0,0,0,0)',
+        'hovermode': 'x',
         'hoverlabel' : {'font' : {'color' : '#ffffff'}}
     })
     age_fig.layout.sliders[0]['pad'] = {'r': 30, 'b': 10, 't': 50}
@@ -159,7 +161,8 @@ def generate_layout(labels):
             'yaxis': {'title': {'text': labels['deaths_qc_y_label']}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":10,"l":30,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
-            'paper_bgcolor': 'rgba(0,0,0,0)'
+            'paper_bgcolor': 'rgba(0,0,0,0)',
+            'hovermode': 'x'
         }
     })
     deaths_qc_fig = add_ylog_menu(deaths_qc_fig, data_qc['deaths_qc'], labels)
@@ -192,6 +195,7 @@ def generate_layout(labels):
             'margin': {"r":0,"t":10,"l":30,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
             'paper_bgcolor': 'rgba(0,0,0,0)',
+            'hovermode': 'x',
             'hoverlabel' : {'font' : {'color' : '#ffffff'}}
         }
     })
@@ -222,9 +226,10 @@ def generate_layout(labels):
         'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
         'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
         'yaxis': {'title': {'text': labels['testing_qc_y_label']}, 'gridcolor' : '#f5f5f5'},
-            'margin': {"r":0,"t":10,"l":60,"b":50},
-            'plot_bgcolor': 'rgba(0,0,0,0)',
-            'paper_bgcolor': 'rgba(0,0,0,0)'
+        'margin': {"r":0,"t":10,"l":60,"b":50},
+        'plot_bgcolor': 'rgba(0,0,0,0)',
+        'paper_bgcolor': 'rgba(0,0,0,0)',
+        'hovermode': 'x',
         }
     })
     testing_qc_fig = add_ylog_menu(testing_qc_fig, data_qc['negative_tests_qc'], labels)
