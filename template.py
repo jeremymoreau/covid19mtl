@@ -267,7 +267,8 @@ def generate_layout(labels):
                                 [
                                     # Load in a new tab because some figures do not resize properly otherwise
                                     # TODO: Fix this bug
-                                    html.A([labels['language']], href=labels['language_link'], target='_blank'),
+                                    html.A([labels['language0']], href=labels['language_link0'], target='_blank', className='lang_link'),
+                                    html.A([labels['language1']], href=labels['language_link1'], target='_blank', className='lang_link'),
                                 ],
                                 id="language_select_link"
                             )

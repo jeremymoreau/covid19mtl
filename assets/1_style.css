@@ -8,6 +8,10 @@ body {
   background-color: #f2f2f2;
   margin: 5%;
 }
+.lang_link{
+  margin-left: 1.5rem;
+}
+
 #infobox_container > div > ul {
   list-style-position: outside;
   padding-left: 20px;
@@ -68,7 +72,6 @@ p {
 }
 #language_select {
   text-align: right;
-  padding-right: 10px;
   user-select: none; 
 }
 #language_select_link {
