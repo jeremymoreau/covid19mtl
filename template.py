@@ -145,9 +145,9 @@ def generate_layout(labels):
         'hovermode': 'x',
         'hoverlabel' : {'font' : {'color' : '#ffffff'}}
     })
-    age_fig.layout.sliders[0]['pad'] = {'r': 30, 'b': 10, 't': 50}
+    age_fig.layout.sliders[0]['pad'] = {'r': 30, 'b': 10, 't': 65}
     age_fig.layout.sliders[0]['currentvalue']['prefix'] = labels['date_slider_label']
-    age_fig.layout.updatemenus[0]['pad'] = {'r': 10, 't': 60}
+    age_fig.layout.updatemenus[0]['pad'] = {'r': 10, 't': 75}
     age_fig.update_traces({
         'hovertemplate': labels['age_fig_hovertemplate']
         })
