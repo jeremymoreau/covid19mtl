@@ -33,7 +33,7 @@ labels = {
     - [加拿大冠状病毒相关资源](https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19.html)
     - [Flatten.ca](https://flatten.ca/)
 
-    如果您对新型冠状病毒（COVID19）有所担心或疑问，或者出现咳嗽／发烧等症状，可拨打蒙特利尔地区的免费电话(514) 644-454-545，魁北克市地区的免费电话(418) 644-454545，魁北克其他地区的免费电话(877) 644-4545。
+    如果您对新型冠状病毒（COVID19）有所担心或疑问，或者出现咳嗽／发烧等症状，可拨打蒙特利尔地区的免费电话(514) 644-454-545，魁北克市地区的免费电话(418) 644-454545，或魁北克其他地区的免费电话(877) 644-4545。
     """,
     'montreal_map_colourbar_labels' : {
                                         'date': '日期', 
@@ -52,7 +52,7 @@ labels = {
     'hospitalisations_label' : '入院人数（魁省）',
     'intensive_care_label' : '重症患者 （魁省）',
     'testing_qc_y_label' : '累计人数（魁省）',
-    'negative_tests_qc_label' : '阴性（魁省）',
+    'negative_tests_qc_label' : '检测阴性（魁省）',
     'positive_cases_qc_label' : '确诊阳性病例（魁省）',
     'date_slider_label' : '日期: ',
     'date_label' : '日期',
