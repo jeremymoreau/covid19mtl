@@ -160,7 +160,16 @@ def generate_layout(labels):
                 'x' : data_qc['date'],
                 'y' : data_qc['deaths_qc'],
                 'mode': 'lines+markers',
-                'marker': {'color': '#252525'},
+                'marker': {'color': '#001F97'},
+                'name': labels['deaths_qc_label'],
+            },
+            {
+                'type': 'scatter',
+                'x' : data_mtl['date'],
+                'y' : data_mtl['deaths_mtl'],
+                'mode': 'lines+markers',
+                'marker': {'color': '#D6142C'},
+                'name': labels['deaths_montreal_label'],
             }
         ],
         'layout': {
@@ -462,7 +471,7 @@ def generate_layout(labels):
                         [
                             html.Div(
                                 [
-                                    html.H6([labels['total_deaths_label']], id='total_deaths'),
+                                    html.H6([labels['deaths_fig_label']], id='total_deaths'),
                                     dcc.Graph(
                                             figure=deaths_qc_fig,
                                             id='deaths_fig_qc',
