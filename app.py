@@ -4,6 +4,61 @@ import json
 import pathlib
 import pandas as pd
 
+def reduce_cols(df, downsample):
+    """Reduce number of columns in a pandas df by skipping alternate columns
+
+    Parameters
+    ----------
+    df : pandas.core.frame.DataFrame
+        A pandas dataframe where the first column is the title.
+    downsample : int
+        Factor by which to downsample dataframe. Step == input ncols // downsample
+
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        A pandas dataframe with a reduced number of columns
+    """    
+    title_col = df.iloc[:, 0]  # always keep title col
+    last_col = df.iloc[:, - 1]  # always keep data for latest day
+    cols_to_reduce = df.iloc[:, 1:-1]
+
+    ncols = cols_to_reduce.shape[1]
+    step = ncols // downsample
+    reduced_cols = cols_to_reduce.iloc[:, ::step]
+    new_cols = pd.concat([title_col, reduced_cols, last_col], axis=1)
+
+    return new_cols
+
+
+def reduce_rows(df, downsample):
+    """Reduce number of rows in a pandas df by skipping alternate rows
+
+    Note: drops rows containing NaNs in the 'cases_mtl_0-4' column
+
+    Parameters
+    ----------
+    df : pandas.core.frame.DataFrame
+        A pandas dataframe.
+    downsample : int
+        Factor by which to downsample dataframe. Step == input nrows // downsample
+
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        A pandas dataframe with a reduced number of rows
+    """ 
+    df = df[df['cases_mtl_0-4'].notna()]  # drop rows with no age data
+    last_row = df.iloc[-1, :]  # always keep data for latest day
+    rows_to_reduce = df.iloc[0:-1, :]
+
+    nrows = rows_to_reduce.shape[0]
+    step = nrows // downsample
+    reduced_rows = rows_to_reduce.iloc[::step, :]
+    new_rows = reduced_rows.append(last_row)
+    return new_rows
+
+
 app = dash.Dash(__name__, meta_tags=[{'name' : 'viewport',
                                       'content' : 'width=device-width',
                                       'description' : 'COVID-19 Montreal Dashboard / Tableau de bord COVID-19 Montréal'
@@ -24,13 +79,13 @@ with open(DATA_PATH.joinpath('montreal_shapefile.geojson'), encoding='utf-8') as
     mtl_geojson = json.load(shapefile)
 
 # Montreal cases per borough
-cases = pd.read_csv(DATA_PATH.joinpath('cases.csv'), encoding='utf-8', na_values='na').dropna(axis=1, how='all')
-borough_tbc = cases[-1:]  # Nb. of cases with borough TBC
-cases_df = cases[:-1]  # Nb. of cases with known borough
-cases_long = pd.melt(cases_df, id_vars='borough',
-                    var_name='date', value_name='cases')
+# cases = pd.read_csv(DATA_PATH.joinpath('cases.csv'), encoding='utf-8', na_values='na').dropna(axis=1, how='all')
+# borough_tbc = cases[-1:]  # Nb. of cases with borough TBC
+# cases_df = cases[:-1]  # Nb. of cases with known borough
+# cases_long = pd.melt(cases_df, id_vars='borough',
+#                     var_name='date', value_name='cases')
 cases_per1000_df = pd.read_csv(DATA_PATH.joinpath('cases_per1000.csv'), encoding='utf-8', na_values='na').dropna(axis=1, how='all')
-cases_per1000_long = pd.melt(cases_per1000_df, id_vars='borough',
+cases_per1000_long = pd.melt(reduce_cols(cases_per1000_df, 10), id_vars='borough',
                              var_name='date', value_name='cases_per_1000')
 
 # Montreal data
@@ -55,7 +110,7 @@ latest_recovered_qc = str(int(data_qc['recovered_qc'].iloc[-1]))
 latest_negative_tests_qc = str(int(data_qc['negative_tests_qc'].iloc[-1]))
 
 # Make MTL histogram data tidy
-mtl_age_data = data_mtl.melt(id_vars='date', value_vars=['cases_mtl_0-4_norm', 'cases_mtl_5-9_norm',
+mtl_age_data = reduce_rows(data_mtl, 10).melt(id_vars='date', value_vars=['cases_mtl_0-4_norm', 'cases_mtl_5-9_norm',
                                                'cases_mtl_10-19_norm', 'cases_mtl_20-29_norm',
                                                'cases_mtl_30-39_norm', 'cases_mtl_40-49_norm',
                                                'cases_mtl_50-59_norm', 'cases_mtl_60-69_norm',
