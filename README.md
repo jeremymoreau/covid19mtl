@@ -14,4 +14,4 @@ I'd be happy to help if you'd like to make a version of this for your own city. 
 
 ## Screenshot
 
-![covid19mtl.ca](https://user-images.githubusercontent.com/7446564/78609849-9ebae300-7831-11ea-99eb-0d3c5c1adb5c.png)
+![covid19mtl.ca](https://user-images.githubusercontent.com/7446564/80046310-3da13980-84d8-11ea-818b-83ae210a3dc4.png)
