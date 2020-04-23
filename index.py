@@ -3,7 +3,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 
 from app import app, server
-from apps import app_en, app_fr, app_zh
+from apps import app_en, app_fr, app_zh, app_es
 
 
 app.layout = html.Div([
@@ -23,6 +23,8 @@ def display_page(pathname):
         return app_en.layout
     elif pathname == '/zh':
         return app_zh.layout
+    elif pathname == '/es':
+        return app_es.layout
     else:
         return '404: Page Not Found'
 

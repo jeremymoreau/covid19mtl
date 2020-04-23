@@ -278,6 +278,7 @@ def generate_layout(labels):
                                     # TODO: Fix this bug
                                     html.A([labels['language0']], href=labels['language_link0'], target='_blank', className='lang_link'),
                                     html.A([labels['language1']], href=labels['language_link1'], target='_blank', className='lang_link'),
+                                    html.A([labels['language2']], href=labels['language_link2'], target='_blank', className='lang_link'),
                                 ],
                                 id="language_select_link"
                             )

@@ -8,6 +8,8 @@ labels = {
     'language_link0' : '/',
     'language1' : 'English',
     'language_link1' : '/en',
+    'language2' : 'Español',
+    'language_link2' : '/es',
     'title' : '新型冠状病毒（COVID-19）蒙特利尔数据统计',
     'subtitle' : '上次更新: ' + latest_update_date,
     'cases_montreal_label' : '确诊（蒙特利尔）',
