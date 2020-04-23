@@ -6,8 +6,10 @@ from template import generate_layout
 labels = {
     'language0' : 'Français',
     'language_link0' : '/',
-    'language1' : '中文',
-    'language_link1' : '/zh',
+    'language1' : 'Español',
+    'language_link1' : '/es',
+    'language2' : '中文',
+    'language_link2' : '/zh',
     'title' : 'COVID-19 Montreal Dashboard',
     'subtitle' : 'Last update: ' + latest_update_date,
     'cases_montreal_label' : 'Cases (Montreal)',

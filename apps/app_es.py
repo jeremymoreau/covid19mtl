@@ -4,12 +4,12 @@ from template import generate_layout
 ##### Label text (EN) #####
 # TODO: Make markdown links open in new tab
 labels = {
-    'language0' : 'English',
+    'language0' : 'Français',
     'language_link0' : '/',
-    'language1' : '中文',
-    'language_link1' : '/zh',
-    'language2' : 'Español',
-    'language_link2' : '/',
+    'language1' : 'English',
+    'language_link1' : '/en',
+    'language2' : '中文',
+    'language_link2' : '/zh',
     'title' : 'Información de COVID-19 en Montreal',
     'subtitle' : 'Última actualización: ' + latest_update_date,
     'cases_montreal_label' : 'Casos (Montreal)',
@@ -39,7 +39,8 @@ labels = {
     """,
     'montreal_map_colourbar_labels' : {
                                         'date': 'Fecha', 
-                                        'borough': 'Vecindario/Ciudad',                                        'cases_per_1000': 'Casos por cada 1000<br>habitantes'
+                                        'borough': 'Vecindario/Ciudad',
+                                        'cases_per_1000': 'Casos por cada 1000<br>habitantes'
                                         },
     'montreal_map_hovertemplate' : '<br>Vecindario/Ciudad: %{location}<br>Casos por cada 1000 habitantes: %{z}',
     'confirmed_cases_y_label' : 'Casos confirmados (acumulativo)',
