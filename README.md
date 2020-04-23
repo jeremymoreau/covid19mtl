@@ -10,6 +10,7 @@ I'd be happy to help if you'd like to make a version of this for your own city. 
 ## Contributors
 
 - Chinese translation: [Shangge Jiang](https://ca.linkedin.com/in/shangge-vivien-jiang-83418a117)
+- Spanish translation: [Zaida Escila Martínez Moreno](https://github.com/ZaidaEMtzMo)
 
 ## Screenshot
 
