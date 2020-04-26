@@ -111,7 +111,24 @@ def generate_layout(labels):
                 'mode': 'lines+markers',
                 'marker': {'color': '#D6142C'},
                 'name': labels['confirmed_cases_mtl_label'],
+            },
+            {
+                'type': 'scatter',
+                'x' : data_qc['date'],
+                'y' : data_qc['new_cases_qc'],
+                'mode': 'lines',
+                'marker': {'color': '#00104f'},
+                'name': labels['new_confirmed_cases_qc_label'],
+            },
+            {
+                'type': 'scatter',
+                'x' : data_mtl['date'],
+                'y' : data_mtl['new_cases_mtl'],
+                'mode': 'lines',
+                'marker': {'color': '#780b18'},
+                'name': labels['new_confirmed_cases_mtl_label'],
             }
+
         ],
         'layout': {
             'autosize': True,
@@ -161,7 +178,7 @@ def generate_layout(labels):
                 'y' : data_qc['deaths_qc'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#001F97'},
-                'name': labels['deaths_qc_label'],
+                'name': labels['deaths_fig_qc_label'],
             },
             {
                 'type': 'scatter',
@@ -169,7 +186,23 @@ def generate_layout(labels):
                 'y' : data_mtl['deaths_mtl'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#D6142C'},
-                'name': labels['deaths_montreal_label'],
+                'name': labels['deaths_fig_mtl_label'],
+            },
+            {
+                'type': 'scatter',
+                'x' : data_qc['date'],
+                'y' : data_qc['new_deaths_qc'],
+                'mode': 'lines',
+                'marker': {'color': '#00104f'},
+                'name': labels['new_deaths_qc_label'],
+            },
+            {
+                'type': 'scatter',
+                'x' : data_mtl['date'],
+                'y' : data_mtl['new_deaths_mtl'],
+                'mode': 'lines',
+                'marker': {'color': '#780b18'},
+                'name': labels['new_deaths_mtl_label'],
             }
         ],
         'layout': {
