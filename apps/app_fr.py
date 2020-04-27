@@ -17,6 +17,7 @@ labels = {
     'cases_qc_label' : 'Cas (QC)',
     'deaths_qc_label' : 'Décès (QC)',
     'recovered_qc_label' : 'Rétablis (QC)',
+    'negative_tests_qc_box_label' : 'Analyses négatives (QC)',
     'montreal_map_label' : 'Cas pour 1000 habitants (Île de Montréal)',
     'total_cases_label' : 'Cas confirmés',
     'age_group_label' : "Cas confirmés selon le groupe d'âge",

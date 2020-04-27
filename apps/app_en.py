@@ -17,6 +17,7 @@ labels = {
     'cases_qc_label' : 'Cases (QC)',
     'deaths_qc_label' : 'Deaths (QC)',
     'recovered_qc_label' : 'Recovered (QC)',
+    'negative_tests_qc_box_label' : 'Negative tests (QC)',
     'montreal_map_label' : 'Cases per 1000 population (Island of Montreal)',
     'total_cases_label' : 'Confirmed cases',
     'age_group_label' : 'Cases by age group',

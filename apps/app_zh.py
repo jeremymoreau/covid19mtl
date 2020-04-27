@@ -17,6 +17,7 @@ labels = {
     'cases_qc_label' : '确诊（魁省）',
     'deaths_qc_label' : '死亡（魁省）',
     'recovered_qc_label' : '治愈（魁省）',
+    'negative_tests_qc_box_label' : '检测阴性（魁省）',
     'montreal_map_label' : '病例／1000人（蒙特利尔岛）',
     'total_cases_label' : '确诊病例',
     'age_group_label' : '不同年龄组确诊病例',

@@ -423,7 +423,7 @@ def generate_layout(labels):
                                 className="mini_container",
                             ),
                             html.Div(
-                                [html.H3(latest_negative_tests_qc, id="negative_tests_qc_text"), html.P([labels['negative_tests_qc_label']], id='negative_tests_qc_label')],
+                                [html.H3(latest_negative_tests_qc, id="negative_tests_qc_text"), html.P([labels['negative_tests_qc_box_label']], id='negative_tests_qc_label')],
                                 id="negative_tests_qc",
                                 className="mini_container",
                             ),
