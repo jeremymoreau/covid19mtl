@@ -103,6 +103,17 @@ def generate_layout(labels):
                 'mode': 'lines+markers',
                 'marker': {'color': '#001F97'},
                 'name': labels['confirmed_cases_qc_label'],
+                'hoverlabel': {'namelength': 25},
+            },
+            {
+                'type': 'scatter',
+                'x' : data_qc['date'],
+                'y' : data_qc['active_cases_qc'],
+                'mode': 'lines',
+                'marker': {'color': '#001F97'},
+                'line': {'dash': 'dash'},
+                'name': labels['active_cases_qc_label'],
+                'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
@@ -111,6 +122,7 @@ def generate_layout(labels):
                 'mode': 'lines+markers',
                 'marker': {'color': '#D6142C'},
                 'name': labels['confirmed_cases_mtl_label'],
+                'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
@@ -119,6 +131,7 @@ def generate_layout(labels):
                 'mode': 'lines',
                 'marker': {'color': '#00104f'},
                 'name': labels['new_confirmed_cases_qc_label'],
+                'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
@@ -127,6 +140,7 @@ def generate_layout(labels):
                 'mode': 'lines',
                 'marker': {'color': '#780b18'},
                 'name': labels['new_confirmed_cases_mtl_label'],
+                'hoverlabel': {'namelength': 25},
             }
 
         ],
@@ -179,6 +193,7 @@ def generate_layout(labels):
                 'mode': 'lines+markers',
                 'marker': {'color': '#001F97'},
                 'name': labels['deaths_fig_qc_label'],
+                'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
@@ -187,6 +202,7 @@ def generate_layout(labels):
                 'mode': 'lines+markers',
                 'marker': {'color': '#D6142C'},
                 'name': labels['deaths_fig_mtl_label'],
+                'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
@@ -195,6 +211,7 @@ def generate_layout(labels):
                 'mode': 'lines',
                 'marker': {'color': '#00104f'},
                 'name': labels['new_deaths_qc_label'],
+                'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
@@ -203,6 +220,7 @@ def generate_layout(labels):
                 'mode': 'lines',
                 'marker': {'color': '#780b18'},
                 'name': labels['new_deaths_mtl_label'],
+                'hoverlabel': {'namelength': 25},
             }
         ],
         'layout': {
@@ -228,6 +246,7 @@ def generate_layout(labels):
                 'mode': 'lines+markers',
                 'marker': {'color': '#F87E3F'},
                 'name': labels['hospitalisations_label'],
+                'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
@@ -236,6 +255,7 @@ def generate_layout(labels):
                 'x' : data_qc['date'],
                 'y' : data_qc['icu_qc'],
                 'name': labels['intensive_care_label'],
+                'hoverlabel': {'namelength': 25},
             }
         ],
         'layout': {
@@ -262,6 +282,7 @@ def generate_layout(labels):
                 'mode': 'lines+markers',
                 'marker': {'color': '#39b686'},
                 'name': labels['negative_tests_qc_label'],
+                'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
@@ -270,6 +291,16 @@ def generate_layout(labels):
                 'y' : data_qc['cases_qc'],
                 'marker': {'color': '#c51515'},
                 'name': labels['positive_cases_qc_label'],
+                'hoverlabel': {'namelength': 25},
+            },
+            {
+                'type': 'scatter',
+                'x' : data_qc['date'],
+                'y' : data_qc['new_negative_tests_qc'],
+                'mode': 'lines',
+                'marker': {'color': '#206e50'},
+                'name': labels['new_negative_tests_qc_label'],
+                'hoverlabel': {'namelength': 25},
             }
         ],
         'layout': {
