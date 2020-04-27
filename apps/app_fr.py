@@ -16,7 +16,7 @@ labels = {
     'deaths_montreal_label' : 'Décès (Montréal)',
     'cases_qc_label' : 'Cas (QC)',
     'deaths_qc_label' : 'Décès (QC)',
-    'recovered_qc_label' : 'Guéris (QC)',
+    'recovered_qc_label' : 'Rétablis (QC)',
     'montreal_map_label' : 'Cas pour 1000 habitants (Île de Montréal)',
     'total_cases_label' : 'Cas confirmés',
     'age_group_label' : "Cas confirmés selon le groupe d'âge",
