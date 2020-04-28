@@ -152,7 +152,8 @@ def generate_layout(labels):
             'margin': {"r":0,"t":10,"l":60,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
             'paper_bgcolor': 'rgba(0,0,0,0)',
-            'hovermode': 'x'
+            'hovermode': 'x',
+            'dragmode': False
         }
     })
     cases_fig = add_ylog_menu(cases_fig, data_qc['cases_qc'], labels)
@@ -174,7 +175,8 @@ def generate_layout(labels):
         'plot_bgcolor': 'rgba(0,0,0,0)',
         'paper_bgcolor': 'rgba(0,0,0,0)',
         'hovermode': 'x',
-        'hoverlabel' : {'font' : {'color' : '#ffffff'}}
+        'hoverlabel' : {'font' : {'color' : '#ffffff'}},
+        'dragmode': False
     })
     age_fig.layout.sliders[0]['pad'] = {'r': 30, 'b': 10, 't': 65}
     age_fig.layout.sliders[0]['currentvalue']['prefix'] = labels['date_slider_label']
@@ -231,7 +233,8 @@ def generate_layout(labels):
             'margin': {"r":0,"t":10,"l":30,"b":50},
             'plot_bgcolor': 'rgba(0,0,0,0)',
             'paper_bgcolor': 'rgba(0,0,0,0)',
-            'hovermode': 'x'
+            'hovermode': 'x',
+            'dragmode': False
         }
     })
     deaths_qc_fig = add_ylog_menu(deaths_qc_fig, data_qc['deaths_qc'], labels)
@@ -267,7 +270,8 @@ def generate_layout(labels):
             'plot_bgcolor': 'rgba(0,0,0,0)',
             'paper_bgcolor': 'rgba(0,0,0,0)',
             'hovermode': 'x',
-            'hoverlabel' : {'font' : {'color' : '#ffffff'}}
+            'hoverlabel' : {'font' : {'color' : '#ffffff'}},
+            'dragmode': False
         }
     })
     hospitalisations_qc_fig = add_ylog_menu(hospitalisations_qc_fig, data_qc['hospitalisations_qc'], labels)
@@ -312,6 +316,7 @@ def generate_layout(labels):
         'plot_bgcolor': 'rgba(0,0,0,0)',
         'paper_bgcolor': 'rgba(0,0,0,0)',
         'hovermode': 'x',
+        'dragmode': False
         }
     })
     testing_qc_fig = add_ylog_menu(testing_qc_fig, data_qc['negative_tests_qc'], labels)
@@ -462,6 +467,7 @@ def generate_layout(labels):
                                                     'lasso2d',
                                                     'hoverClosestGeo',
                                                     ],
+                                                'scrollZoom' : False
                                                 }
                                             ),
 
