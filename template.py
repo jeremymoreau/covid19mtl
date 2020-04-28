@@ -94,9 +94,12 @@ def generate_layout(labels):
                             }
                         }
         })
+    # Update hoverlabel for all frames
     mtlmap_fig.update_traces({
         'hovertemplate': labels['montreal_map_hovertemplate']
         })
+    for frame in mtlmap_fig.frames:
+        frame['data'][0]['hovertemplate'] = labels['montreal_map_hovertemplate']
 
 
     # Confirmed cases
@@ -187,9 +190,13 @@ def generate_layout(labels):
     age_fig.layout.sliders[0]['pad'] = {'r': 30, 'b': 10, 't': 65}
     age_fig.layout.sliders[0]['currentvalue']['prefix'] = labels['date_slider_label']
     age_fig.layout.updatemenus[0]['pad'] = {'r': 10, 't': 75}
+    # Update hoverlabel for all frames
     age_fig.update_traces({
         'hovertemplate': labels['age_fig_hovertemplate']
         })
+    for frame in age_fig.frames:
+        frame['data'][0]['hovertemplate'] = labels['age_fig_hovertemplate']
+        frame['data'][1]['hovertemplate'] = labels['age_fig_hovertemplate']
 
     # Deaths (QC)
     deaths_qc_fig = go.Figure({
