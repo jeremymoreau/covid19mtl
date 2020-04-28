@@ -155,7 +155,7 @@ def generate_layout(labels):
         ],
         'layout': {
             'autosize': True,
-            'legend': {'bgcolor': 'rgba(255,255,255,1)', 'x': 0, 'y': 1},
+            'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {'title': {'text': labels['confirmed_cases_y_label']}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":10,"l":60,"b":50},
@@ -240,7 +240,7 @@ def generate_layout(labels):
         ],
         'layout': {
             'autosize': True,
-            'legend': {'bgcolor': 'rgba(255,255,255,1)', 'x': 0, 'y': 1},
+            'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {'title': {'text': labels['deaths_qc_y_label']}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":10,"l":30,"b":50},
@@ -276,7 +276,7 @@ def generate_layout(labels):
         ],
         'layout': {
             'autosize': True,
-            'legend': {'bgcolor': 'rgba(255,255,255,1)', 'x': 0, 'y': 1},
+            'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {'title': {'text': labels['hospitalisations_y_label']}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":10,"l":30,"b":50},
@@ -322,7 +322,7 @@ def generate_layout(labels):
         ],
         'layout': {
         'autosize': True,
-        'legend': {'bgcolor': 'rgba(255,255,255,1)', 'x': 0, 'y': 1},
+        'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
         'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
         'yaxis': {'title': {'text': labels['testing_qc_y_label']}, 'gridcolor' : '#f5f5f5'},
         'margin': {"r":0,"t":10,"l":60,"b":50},
