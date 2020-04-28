@@ -83,8 +83,8 @@ def generate_layout(labels):
 
     mtlmap_fig.update_layout({
         'margin': {"r":0,"t":0,"l":0,"b":0},
-        'plot_bgcolor': 'rgba(0,0,0,0)',
-        'paper_bgcolor': 'rgba(0,0,0,0)',
+        'plot_bgcolor': 'rgba(255,255,255,1)',
+        'paper_bgcolor': 'rgba(255,255,255,1)',
         'coloraxis' : {'colorbar': {
                             'thicknessmode': 'fraction',
                             'thickness': 0.03,
@@ -155,12 +155,12 @@ def generate_layout(labels):
         ],
         'layout': {
             'autosize': True,
-            'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
+            'legend': {'bgcolor': 'rgba(255,255,255,1)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {'title': {'text': labels['confirmed_cases_y_label']}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":10,"l":60,"b":50},
-            'plot_bgcolor': 'rgba(0,0,0,0)',
-            'paper_bgcolor': 'rgba(0,0,0,0)',
+            'plot_bgcolor': 'rgba(255,255,255,1)',
+            'paper_bgcolor': 'rgba(255,255,255,1)',
             'hovermode': 'x',
             'dragmode': False
         }
@@ -177,12 +177,12 @@ def generate_layout(labels):
     age_fig = px.bar(mtl_age_data_copy, x='age_group', y='percent', color='per100000', animation_frame='date',
                 range_y=[0, max_count + 0.25*max_count], barmode='group')
     age_fig.update_layout({
-        'legend' : {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1, 'title' : ''},
+        'legend' : {'bgcolor': 'rgba(255,255,255,1)', 'x': 0, 'y': 1, 'title' : ''},
         'xaxis' : {'title': {'text': labels['age_label']}},
         'yaxis' : {'title': {'text': '%'}, 'gridcolor' : '#f5f5f5'},
         'margin': {"r":0,"t":10,"l":0,"b":0},
-        'plot_bgcolor': 'rgba(0,0,0,0)',
-        'paper_bgcolor': 'rgba(0,0,0,0)',
+        'plot_bgcolor': 'rgba(255,255,255,1)',
+        'paper_bgcolor': 'rgba(255,255,255,1)',
         'hovermode': 'x',
         'hoverlabel' : {'font' : {'color' : '#ffffff'}},
         'dragmode': False
@@ -240,12 +240,12 @@ def generate_layout(labels):
         ],
         'layout': {
             'autosize': True,
-            'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
+            'legend': {'bgcolor': 'rgba(255,255,255,1)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {'title': {'text': labels['deaths_qc_y_label']}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":10,"l":30,"b":50},
-            'plot_bgcolor': 'rgba(0,0,0,0)',
-            'paper_bgcolor': 'rgba(0,0,0,0)',
+            'plot_bgcolor': 'rgba(255,255,255,1)',
+            'paper_bgcolor': 'rgba(255,255,255,1)',
             'hovermode': 'x',
             'dragmode': False
         }
@@ -276,12 +276,12 @@ def generate_layout(labels):
         ],
         'layout': {
             'autosize': True,
-            'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
+            'legend': {'bgcolor': 'rgba(255,255,255,1)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {'title': {'text': labels['hospitalisations_y_label']}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":10,"l":30,"b":50},
-            'plot_bgcolor': 'rgba(0,0,0,0)',
-            'paper_bgcolor': 'rgba(0,0,0,0)',
+            'plot_bgcolor': 'rgba(255,255,255,1)',
+            'paper_bgcolor': 'rgba(255,255,255,1)',
             'hovermode': 'x',
             'hoverlabel' : {'font' : {'color' : '#ffffff'}},
             'dragmode': False
@@ -322,12 +322,12 @@ def generate_layout(labels):
         ],
         'layout': {
         'autosize': True,
-        'legend': {'bgcolor': 'rgba(0,0,0,0)', 'x': 0, 'y': 1},
+        'legend': {'bgcolor': 'rgba(255,255,255,1)', 'x': 0, 'y': 1},
         'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
         'yaxis': {'title': {'text': labels['testing_qc_y_label']}, 'gridcolor' : '#f5f5f5'},
         'margin': {"r":0,"t":10,"l":60,"b":50},
-        'plot_bgcolor': 'rgba(0,0,0,0)',
-        'paper_bgcolor': 'rgba(0,0,0,0)',
+        'plot_bgcolor': 'rgba(255,255,255,1)',
+        'paper_bgcolor': 'rgba(255,255,255,1)',
         'hovermode': 'x',
         'dragmode': False
         }
