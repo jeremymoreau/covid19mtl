@@ -100,14 +100,15 @@ latest_mtl_date = datetime.date.fromisoformat(data_mtl['date'].iloc[-1]) + datet
 latest_update_date = latest_mtl_date.isoformat()
 
 # Mini info boxes
-latest_cases_mtl = str(int(data_mtl['cases_mtl'].iloc[-1]))
-latest_deaths_mtl = str(int(data_mtl['deaths_mtl'].iloc[-1]))
-latest_cases_qc = str(int(data_qc['cases_qc'].iloc[-1]))
-latest_deaths_qc = str(int(data_qc['deaths_qc'].iloc[-1]))
-latest_hospitalisations_qc = str(int(data_qc['hospitalisations_qc'].iloc[-1]))
-latest_icu_qc = str(int(data_qc['icu_qc'].iloc[-1]))
-latest_recovered_qc = str(int(data_qc['recovered_qc'].iloc[-1]))
-latest_negative_tests_qc = str(int(data_qc['negative_tests_qc'].iloc[-1]))
+latest_cases_mtl = str(int(data_mtl['cases_mtl'].dropna().iloc[-1]))
+latest_deaths_mtl = str(int(data_mtl['deaths_mtl'].dropna().iloc[-1]))
+
+latest_cases_qc = str(int(data_qc['cases_qc'].dropna().iloc[-1]))
+latest_deaths_qc = str(int(data_qc['deaths_qc'].dropna().iloc[-1]))
+latest_hospitalisations_qc = str(int(data_qc['hospitalisations_qc'].dropna().iloc[-1]))
+latest_icu_qc = str(int(data_qc['icu_qc'].dropna().iloc[-1]))
+latest_recovered_qc = str(int(data_qc['recovered_qc'].dropna().iloc[-1]))
+latest_negative_tests_qc = str(int(data_qc['negative_tests_qc'].dropna().iloc[-1]))
 
 # Make MTL histogram data tidy
 mtl_age_data = reduce_rows(data_mtl, 10).melt(id_vars='date', value_vars=['cases_mtl_0-4_norm', 'cases_mtl_5-9_norm',
