@@ -74,6 +74,10 @@ def generate_layout(labels):
                     zoom=9, center = {'lat': 45.55, 'lon': -73.75},
                     labels=labels['montreal_map_colourbar_labels'])
 
+    # set the default frame to the latest date
+    mtlmap_fig.layout.sliders[0]['active'] = len(mtlmap_fig.frames) - 1  # slider
+    mtlmap_fig.update_traces(z=mtlmap_fig.frames[-1].data[0].z)  # frame
+
     mtlmap_fig.layout.sliders[0]['currentvalue']['prefix'] = labels['date_slider_label']
     mtlmap_fig.layout.sliders[0]['xanchor'] = 'left'
     mtlmap_fig.layout.sliders[0]['pad'] = {'b': 10, 't': 0, 'l': 50}
@@ -187,6 +191,11 @@ def generate_layout(labels):
         'hoverlabel' : {'font' : {'color' : '#ffffff'}},
         'dragmode': False
     })
+
+    # set the default frame to the latest date
+    age_fig.layout.sliders[0]['active'] = len(age_fig.frames) - 1  # slider
+    age_fig.update_traces(y=age_fig.frames[-1].data[0].y)  # frame
+
     age_fig.layout.sliders[0]['pad'] = {'r': 30, 'b': 10, 't': 65}
     age_fig.layout.sliders[0]['currentvalue']['prefix'] = labels['date_slider_label']
     age_fig.layout.updatemenus[0]['pad'] = {'r': 10, 't': 75}
