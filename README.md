@@ -7,6 +7,13 @@ View the application at [covid19mtl.ca](https://covid19mtl.ca/en)
 
 I'd be happy to help if you'd like to make a version of this for your own city. You can find my contact info here: [jeremymoreau.com](https://jeremymoreau.com/)
 
+## Running Locally
+
+Here are the steps to follow if you want to run COVID-19 MTL locally for testing or development purposes:
+
+1. Clone this repository and install all dependencies in the requirements.txt file in a conda/virtualenv (navigate to the project folder and run `pip install -r requirements.txt`)
+2. Run `python index.py`
+
 ## Contributors
 
 - Chinese translation: [Shangge Jiang](https://ca.linkedin.com/in/shangge-vivien-jiang-83418a117)
