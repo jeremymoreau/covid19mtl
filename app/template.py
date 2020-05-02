@@ -2,13 +2,15 @@ import dash_core_components as dcc
 import dash_html_components as html
 import plotly.express as px
 import plotly.graph_objects as go
-from dash.dependencies import Input, Output
 
-from app import (app, cases_per1000_long, data_mtl, data_qc, latest_cases_mtl,
-                 latest_cases_qc, latest_deaths_mtl, latest_deaths_qc,
-                 latest_hospitalisations_qc, latest_icu_qc,
-                 latest_negative_tests_qc, latest_recovered_qc,
-                 latest_update_date, mtl_age_data, mtl_geojson)
+from .core import (
+    cases_per1000_long, data_mtl, data_qc,
+    latest_cases_mtl, latest_cases_qc,
+    latest_deaths_mtl, latest_deaths_qc,
+    latest_hospitalisations_qc, latest_icu_qc,
+    latest_negative_tests_qc, latest_recovered_qc,
+    mtl_age_data, mtl_geojson,
+)
 
 
 def add_ylog_menu(fig, y_data, labels):
