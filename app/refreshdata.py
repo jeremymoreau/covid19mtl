@@ -17,12 +17,12 @@ import bs4
 
 # Data sources mapping
 # {filename: url}
-SOURCES = { #'cases.csv': '', 
-            #'cases_per1000': '', 
-            'data_mtl.html': 'https://santemontreal.qc.ca/population/coronavirus-covid-19/',
+SOURCES = { 'data_mtl.html': 'https://santemontreal.qc.ca/population/coronavirus-covid-19/',
 
-            # The main page for this dataset is https://www.inspq.qc.ca/covid-19/donnees 
-            'data_qc.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/combine.csv'}
+            # The main page for these 3 dataset is https://www.inspq.qc.ca/covid-19/donnees 
+            'data_qc.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/combine.csv',
+            'data_qc_case_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls.csv',
+            'data_qc_death_loc_by_reg.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa.csv'}
 DATA_DIR = 'data'
 NB_RETRIES = 3
 CHARSET_PAT = re.compile(r'charset=((\w|-)+)')
@@ -68,6 +68,16 @@ def fetch(url):
     raise RuntimeError('Failed to retrieve {}'.format(url))
 
 
+def backup(filename):
+    ''' Hard link a file to a date-tagged name.  
+    Do nothing if the file does not exists. '''
+    if not os.path.isfile(filename):
+        return
+    time_tag = datetime.utcnow().isoformat()
+    base, ext = os.path.splitext(filename) 
+    os.link(filename, '{}-{}{}'.format(base, time_tag, ext))
+
+
 def save_df(filename, data):
     ''' Save a datafile if it's newer and at least as big as what we cached.  
     Raise ValueError otherwise.'''
@@ -76,10 +86,7 @@ def save_df(filename, data):
         if os.path.getsize(filename) > len(data):
             msg = '{} is smaller than the cached version we have on disk.'.format(filename)
             raise ValueError(msg)
-        # backup the old file
-        time_tag = datetime.utcnow().isoformat()
-        base, ext = os.path.splitext(filename) 
-        os.link(filename, '{}-{}{}'.format(base, time_tag, ext))
+        backup(filename)
     # it's all good if we made it this far, save the new file 
     with open(filename, 'wb') as f:
         f.write(data)
@@ -132,6 +139,7 @@ def parse_data_mtl(data_dir):
             rows.append([norm_cell(td.text) for td in tr.select('th,td')])
         fq_path = os.path.join(data_dir, 'processed', filename)
 
+        backup(fq_path)
         with open(fq_path, 'w') as f:
             writer = csv.writer(f)
             writer.writerows(rows)
