@@ -3,6 +3,7 @@
 
 import os
 import sys
+import fcntl
 
 from datetime import datetime
 from argparse import ArgumentParser
@@ -22,6 +23,20 @@ SOURCES = { #'cases.csv': '',
 DATA_DIR = '/tmp/data'
 NB_RETRIES = 3
 
+def lock():
+    ''' Lock the data directory to prenvent concurent runs of the scraper, 
+    which would be risky for data corruption. '''
+
+    lockf = os.path.join(DATA_DIR, 'scraper.pid')
+    if not os.path.isfile(lockf):
+        open(lockf, 'w') # create the empty file
+    fd = os.open(lockf, os.O_RDONLY)
+    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+
+    # No unlocking needed.  fcntl() locks are released then the process exits.
+    open(lockf, 'w').write('{}'.format(os.getpid))
+
+
 def fetch(url):
     ''' Get the data at `url`.  Our data sources are notoriously unreliable, 
     so we retry a few times. '''
@@ -31,6 +46,7 @@ def fetch(url):
             next
         return resp.content
     raise RuntimeError('Failed to retrieve {}'.format(url))
+
 
 def save_df(filename, data):
     ''' Save a datafile if it's newer and at least as big as what we cached.  
@@ -51,6 +67,8 @@ def save_df(filename, data):
 def main():
     parser = ArgumentParser("refreshdata", description=__doc__)
     args = parser.parse_args()
+
+    lock()
 
     for file, url in SOURCES.items():
         data = fetch(url)
