@@ -12,3 +12,7 @@ class CustomLazyString(LazyString):
 def lazy_gettext(string, **variables):
     """Use this for strings in dash components."""
     return CustomLazyString(gettext, string, **variables)
+
+
+def gettext_noop(string):
+    return string
