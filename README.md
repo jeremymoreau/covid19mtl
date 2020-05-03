@@ -11,8 +11,23 @@ I'd be happy to help if you'd like to make a version of this for your own city. 
 
 Here are the steps to follow if you want to run COVID-19 MTL locally for testing or development purposes:
 
-1. Clone this repository and install all dependencies in the requirements.txt file in a conda/virtualenv (navigate to the project folder and run `pip install -r requirements.txt`)
-2. Run `python index.py`
+1. Clone this repository then navigate to the checkout
+2. Create a virtual environment: `python3.8 -m venv .venv`
+3. Activate the environment: `. .venv/bin/activate` (the command is `.`, meaning source or include)
+4. Install dependencies: `pip install -r requirements.txt`
+5. Run the app!  `python -m app`
+
+## Managing dependencies
+
+We use [pip-tools](https://github.com/jazzband/pip-tools) to make it easy to add or
+change dependencies.  Direct dependencies of the app are added to `requirements.in`,
+with version specifiers that allow bugfix updates.  The command `pip-compile
+requirements.in` writes the full list of all needed packages, with pinned versions,
+to the `requirements.txt` file, which is used for deployment.
+
+To add a dependency or change the version of an existing one, edit `requirements.in`
+and run `pip-compile`, adapt the code of the app if that's needed, then commit all
+changes.
 
 ## Contributors
 

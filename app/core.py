@@ -1,4 +1,3 @@
-import dash
 import datetime
 import json
 import pathlib
@@ -18,9 +17,9 @@ def reduce_cols(df, downsample):
     -------
     pandas.core.frame.DataFrame
         A pandas dataframe with a reduced number of columns
-    """    
+    """
     title_col = df.iloc[:, 0]  # always keep title col
-    last_col = df.iloc[:, - 1]  # always keep data for latest day
+    last_col = df.iloc[:, -1]  # always keep data for latest day
     cols_to_reduce = df.iloc[:, 1:-1]
 
     ncols = cols_to_reduce.shape[1]
@@ -47,7 +46,7 @@ def reduce_rows(df, downsample):
     -------
     pandas.core.frame.DataFrame
         A pandas dataframe with a reduced number of rows
-    """ 
+    """
     df = df[df['cases_mtl_0-4'].notna()]  # drop rows with no age data
     last_row = df.iloc[-1, :]  # always keep data for latest day
     rows_to_reduce = df.iloc[0:-1, :]
@@ -58,16 +57,6 @@ def reduce_rows(df, downsample):
     new_rows = reduced_rows.append(last_row)
     return new_rows
 
-
-app = dash.Dash(__name__, meta_tags=[{'name' : 'viewport',
-                                      'content' : 'width=device-width',
-                                      'description' : 'COVID-19 Montreal Dashboard / Tableau de bord COVID-19 Montréal'
-                                      }
-                                    ]
-                                )
-app.title = 'COVID-19 MTL'
-server = app.server
-app.config.suppress_callback_exceptions = True
 
 # get relative data folder
 PATH = pathlib.Path(__file__).parent
