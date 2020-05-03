@@ -32,7 +32,8 @@ def lock(lock_dir):
     lockf = os.path.join(lock_dir, 'scraper.pid')
     if not os.path.isfile(lockf):
         logging.debug('Lock file {} not present.  Creating.'.format(lockf))
-        open(lockf, 'w') # create the empty file
+        # create the empty file
+        open(lockf, 'w').close()
     logging.debug('Acquiring lock: {}'.format(lockf))
     fd = os.open(lockf, os.O_RDONLY)
     fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
