@@ -131,4 +131,4 @@ dmypy.json
 .pyre/
 
 # lockfile for the Web scraper
-app/data/scaper.pid
+app/data/scraper.pid
