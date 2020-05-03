@@ -1,3 +1,6 @@
 dash == 1.10.*
 pandas == 1.0.*
 gunicorn
+requests
+lxml
+bs4

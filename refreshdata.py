@@ -8,7 +8,7 @@ import fcntl
 from datetime import datetime
 from argparse import ArgumentParser
 
-import requests # TODO: add these to requirements.in after merging with merwork
+import requests
 import lxml
 import bs4
 
