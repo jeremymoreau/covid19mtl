@@ -346,6 +346,63 @@ def generate_layout(labels):
     })
     testing_qc_fig = add_ylog_menu(testing_qc_fig, data_qc['negative_tests_qc'], labels)
 
+     # Confirmed deaths by location (QC)
+    deaths_loc_qc_fig = go.Figure({
+        'data': [
+            {
+                'type': 'scatter',
+                'x': data_death_loc['Date'],
+                'y': data_death_loc['Hospital_Loc'],
+                'mode': 'lines+markers',
+                'marker': {'color': '#001F97'},
+                'name': labels['Hospital_Loc_label'],
+                'hoverlabel': {'namelength': 25},
+            },
+            {
+                'type': 'scatter',
+                'mode': 'lines+markers',
+                'marker': {'color': '#0083CB'},
+                'x': data_death_loc['Date'],
+                'y': data_death_loc['Senior_Loc'],
+                'name': labels['Senior_Loc_label'],
+                'hoverlabel': {'namelength': 25},
+            },
+            {
+                'type': 'scatter',
+                'mode': 'lines+markers',
+                'marker': {'color': '#0083CB'},
+                'x': data_death_loc['Date'],
+                'y': data_death_loc['Home'],
+                'name': labels['Home_label'],
+                'hoverlabel': {'namelength': 25},
+            },
+            {
+
+                'type': 'scatter',
+                'mode': 'lines+markers',
+                'marker': {'color': '#0083CB'},
+                'x': data_death_loc['Date'],
+                'y': data_death_loc['Unknown_Loc'],
+                'name': labels['Unknown_Loc'],
+                'hoverlabel': {'namelength': 25},
+            }
+        ],
+        'layout': {
+            'autosize': True,
+            'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
+            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'yaxis': {'title': {'text': labels['deaths_loc_qc_y_label']}, 'gridcolor': '#f5f5f5'},
+            'margin': {"r": 0, "t": 10, "l": 30, "b": 50},
+            'plot_bgcolor': 'rgba(255,255,255,1)',
+            'paper_bgcolor': 'rgba(255,255,255,1)',
+            'hovermode': 'x',
+            'hoverlabel': {'font': {'color': '#ffffff'}},
+            'dragmode': False
+        }
+    })
+    deaths_loc_qc_fig = add_ylog_menu(deaths_loc_qc_fig, data_death_loc[
+        'deaths_by_loc_qc'], labels)
+
     # modebar buttons to remove
     modebar_buttons_to_remove = ['select2d',
                                 'lasso2d',
@@ -627,6 +684,35 @@ def generate_layout(labels):
                         ],
                         className="four columns",
                         id="total_testing_col",
+                    ),
+                ],
+                className="row flex-display third-row",
+            ),
+
+            # bottom 4 box (death_loc)
+            html.Div(
+                [
+                    html.Div(
+                        [
+                            html.Div(
+                                [
+                                    html.H6(
+                                        [labels['deaths_loc_label']], id='deaths_loc'),
+                                    dcc.Graph(
+                                        figure=deaths_loc_qc_fig,
+                                        id='deaths_loc_fig_qc',
+                                        responsive=True,
+                                        config={
+                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                        }
+                                    ),
+                                ],
+                                id="deaths_loc_box",
+                                className="pretty_container",
+                            ),
+                        ],
+                        className="four columns",
+                        id="death_loc_col"
                     ),
                 ],
                 className="row flex-display third-row",

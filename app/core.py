@@ -83,6 +83,10 @@ data_mtl = pd.read_csv(DATA_PATH.joinpath('data_mtl.csv'), encoding='utf-8', na_
 # QC data
 data_qc = pd.read_csv(DATA_PATH.joinpath('data_qc.csv'), encoding='utf-8', na_values='na')
 
+# Deaths by location data
+data_death_loc = pd.read_csv(DATA_PATH.joinpath('data_death_loc.csv'),
+                             encoding='utf-8', na_values='na')
+
 # Last update date
 # Display 1 day after the latest data as data from the previous day are posted
 latest_mtl_date = datetime.date.fromisoformat(data_mtl['date'].iloc[-1]) + datetime.timedelta(days=1)
