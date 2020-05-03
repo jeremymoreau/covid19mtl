@@ -1,0 +1,194 @@
+# French translations for PROJECT.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-05-03 11:43-0400\n"
+"PO-Revision-Date: 2020-05-02 22:48-0400\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+
+msgid "linear_label"
+msgstr "Échelle linéaire"
+
+msgid "log_label"
+msgstr "Échelle logarithmique"
+
+msgid "montreal_map_colourbar_date_label"
+msgstr "Date"
+
+msgid "montreal_map_colourbar_borough_label"
+msgstr "Arrondissement/Ville"
+
+msgid "montreal_map_colourbar_cases_per_1000_label"
+msgstr "Cas par 1000<br>habitants"
+
+msgid "date_slider_label"
+msgstr "Date: "
+
+msgid "montreal_map_hovertemplate"
+msgstr "<br>Arrondissement/Ville: %{location}<br>Cas par 1000 habitants: %{z}"
+
+msgid "confirmed_cases_qc_label"
+msgstr "Québec (cumul)"
+
+msgid "active_cases_qc_label"
+msgstr "Québec (cas actifs)"
+
+msgid "confirmed_cases_mtl_label"
+msgstr "Montréal (cumul)"
+
+msgid "new_confirmed_cases_qc_label"
+msgstr "Québec  (nouveaux cas)"
+
+msgid "new_confirmed_cases_mtl_label"
+msgstr "Montréal (nouveaux cas)"
+
+msgid "date_label"
+msgstr "Date"
+
+msgid "confirmed_cases_y_label"
+msgstr "Cas confirmés"
+
+msgid "age_per100000_label"
+msgstr "Répartition des cas par 100 000<br>habitants dans chaque groupe d'âge"
+
+msgid "age_total_label"
+msgstr "Répartition des cas<br>parmi les groupes d'âge"
+
+msgid "age_label"
+msgstr "Âge"
+
+msgid "age_fig_hovertemplate"
+msgstr "%: %{y}"
+
+msgid "deaths_fig_qc_label"
+msgstr "Québec (cumul)"
+
+msgid "deaths_fig_mtl_label"
+msgstr "Montréal (cumul)"
+
+msgid "new_deaths_qc_label"
+msgstr "Québec (nouveaux décès)"
+
+msgid "new_deaths_mtl_label"
+msgstr "Montréal (nouveaux décès)"
+
+msgid "deaths_qc_y_label"
+msgstr "Décès"
+
+msgid "hospitalisations_label"
+msgstr "Hospitalisations (QC)"
+
+msgid "intensive_care_label"
+msgstr "Soins intensifs (QC)"
+
+msgid "hospitalisations_y_label"
+msgstr "Hospitalisations (QC)"
+
+msgid "negative_tests_qc_label"
+msgstr "Analyses négatives (cumul)"
+
+msgid "positive_cases_qc_label"
+msgstr "Cas confirmés (cumul)"
+
+msgid "new_negative_tests_qc_label"
+msgstr "Analyses négatives (nouveaux cas)"
+
+msgid "testing_qc_y_label"
+msgstr "Cas (QC)"
+
+msgid "language0"
+msgstr "English"
+
+msgid "language_link0"
+msgstr "/en"
+
+msgid "language1"
+msgstr "Español"
+
+msgid "language_link1"
+msgstr "/es"
+
+msgid "language2"
+msgstr "中文"
+
+msgid "language_link2"
+msgstr "/zh"
+
+msgid "app-title"
+msgstr "Tableau de bord COVID-19 Montréal"
+
+msgid "app-subtitle"
+msgstr "Dernière mise à jour: %(date)s"
+
+msgid "cases_montreal_label"
+msgstr "Cas (Montréal)"
+
+msgid "deaths_montreal_label"
+msgstr "Décès (Montréal)"
+
+msgid "cases_qc_label"
+msgstr "Cas (QC)"
+
+msgid "deaths_qc_label"
+msgstr "Décès (QC)"
+
+msgid "recovered_qc_label"
+msgstr "Rétablis (QC)"
+
+msgid "negative_tests_qc_box_label"
+msgstr "Analyses négatives (QC)"
+
+msgid "infobox"
+msgstr ""
+"    ###### Ressources utiles\n"
+"\n"
+"    - [Outil d'auto-évaluation des symptômes COVID-19](https://ca.thrive.health/covid19/fr)\n"
+"    - [Santé Montréal](https://santemontreal.qc.ca/population/coronavirus-covid-19/)\n"
+"    - [Centre d'expertise et de référence en santé publique](https://www.inspq.qc.ca/covid-19/donnees)\n"
+"    - [La maladie à coronavirus (COVID-19) au Québec](https://www.quebec.ca/sante/problemes-de-sante/a-z/coronavirus-2019/situation-coronavirus-quebec/)\n"
+"    - [COVID-19 Gouvernement du Canada](https://www.canada.ca/fr/sante-publique/services/maladies/maladie-coronavirus-covid-19.html)\n"
+"    - [Aplatir.ca](https://fr.flatten.ca/)\n"
+"\n"
+"    Si la COVID-19 vous inquiète ou si vous présentez des symptômes comme de la toux ou de la fièvre, vous pouvez contacter, sans frais, le (514) 644-4545 "
+"pour la région de Montréal,  le (418) 644-4545 pour la région de Québec et le 1 (877) 644-4545 ailleurs au Québec."
+
+msgid "montreal_map_label"
+msgstr "Cas pour 1000 habitants (Île de Montréal)"
+
+msgid "total_cases_label"
+msgstr "Cas confirmés"
+
+msgid "age_group_label"
+msgstr "Cas confirmés selon le groupe d'âge"
+
+msgid "deaths_fig_label"
+msgstr "Décès"
+
+msgid "total_hospitalisations_label"
+msgstr "Hospitalisations (QC)"
+
+msgid "total_testing_label"
+msgstr "Tests diagnostiques (QC)"
+
+msgid "footer_left"
+msgstr ""
+"Données: [Santé Montréal](https://santemontreal.qc.ca/population/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / Créé avec "
+"[Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)"
+
+msgid "footer_right"
+msgstr ""
+"Créé par [Jeremy Moreau](https://jeremymoreau.com/) ([IR-CUSM](https://rimuhc.ca/fr/home), McGill) / [CC BY "
+"4.0](https://creativecommons.org/licenses/by/4.0/deed.fr)"
+

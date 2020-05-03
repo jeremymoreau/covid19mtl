@@ -1,0 +1,178 @@
+# English translations for PROJECT.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-05-03 11:43-0400\n"
+"PO-Revision-Date: 2020-05-02 22:49-0400\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+
+msgid "linear_label"
+msgstr ""
+
+msgid "log_label"
+msgstr ""
+
+msgid "montreal_map_colourbar_date_label"
+msgstr ""
+
+msgid "montreal_map_colourbar_borough_label"
+msgstr ""
+
+msgid "montreal_map_colourbar_cases_per_1000_label"
+msgstr ""
+
+msgid "date_slider_label"
+msgstr ""
+
+msgid "montreal_map_hovertemplate"
+msgstr ""
+
+msgid "confirmed_cases_qc_label"
+msgstr ""
+
+msgid "active_cases_qc_label"
+msgstr ""
+
+msgid "confirmed_cases_mtl_label"
+msgstr ""
+
+msgid "new_confirmed_cases_qc_label"
+msgstr ""
+
+msgid "new_confirmed_cases_mtl_label"
+msgstr ""
+
+msgid "date_label"
+msgstr ""
+
+msgid "confirmed_cases_y_label"
+msgstr ""
+
+msgid "age_per100000_label"
+msgstr ""
+
+msgid "age_total_label"
+msgstr ""
+
+msgid "age_label"
+msgstr ""
+
+msgid "age_fig_hovertemplate"
+msgstr ""
+
+msgid "deaths_fig_qc_label"
+msgstr ""
+
+msgid "deaths_fig_mtl_label"
+msgstr ""
+
+msgid "new_deaths_qc_label"
+msgstr ""
+
+msgid "new_deaths_mtl_label"
+msgstr ""
+
+msgid "deaths_qc_y_label"
+msgstr ""
+
+msgid "hospitalisations_label"
+msgstr ""
+
+msgid "intensive_care_label"
+msgstr ""
+
+msgid "hospitalisations_y_label"
+msgstr ""
+
+msgid "negative_tests_qc_label"
+msgstr ""
+
+msgid "positive_cases_qc_label"
+msgstr ""
+
+msgid "new_negative_tests_qc_label"
+msgstr ""
+
+msgid "testing_qc_y_label"
+msgstr ""
+
+msgid "language0"
+msgstr ""
+
+msgid "language_link0"
+msgstr ""
+
+msgid "language1"
+msgstr ""
+
+msgid "language_link1"
+msgstr ""
+
+msgid "language2"
+msgstr ""
+
+msgid "language_link2"
+msgstr ""
+
+msgid "app-title"
+msgstr "Title EN"
+
+msgid "app-subtitle"
+msgstr "Cool subtitle yeah"
+
+msgid "cases_montreal_label"
+msgstr ""
+
+msgid "deaths_montreal_label"
+msgstr ""
+
+msgid "cases_qc_label"
+msgstr ""
+
+msgid "deaths_qc_label"
+msgstr ""
+
+msgid "recovered_qc_label"
+msgstr ""
+
+msgid "negative_tests_qc_box_label"
+msgstr ""
+
+msgid "infobox"
+msgstr ""
+
+msgid "montreal_map_label"
+msgstr ""
+
+msgid "total_cases_label"
+msgstr ""
+
+msgid "age_group_label"
+msgstr ""
+
+msgid "deaths_fig_label"
+msgstr ""
+
+msgid "total_hospitalisations_label"
+msgstr ""
+
+msgid "total_testing_label"
+msgstr ""
+
+msgid "footer_left"
+msgstr ""
+
+msgid "footer_right"
+msgstr ""

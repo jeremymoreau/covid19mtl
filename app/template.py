@@ -9,22 +9,21 @@ from .core import (
     latest_deaths_mtl, latest_deaths_qc,
     latest_hospitalisations_qc, latest_icu_qc,
     latest_negative_tests_qc, latest_recovered_qc,
-    mtl_age_data, mtl_geojson,
+    latest_update_date, mtl_age_data, mtl_geojson,
 )
+from .i18n import lazy_gettext as _
 
 
-def add_ylog_menu(fig, y_data, labels):
+def add_ylog_menu(fig, y_data):
     """Add a dropdown menu to select between log and linear scales
-    
+
     Parameters
     ----------
     fig : plotly.graph_objs._figure.Figure
         Plotly line chart
     y_data : pandas.core.series.Series
         Pandas series containing the y axis data
-    labels : dict
-        Dict containing the labels to display in the dropdown
-    
+
     Returns
     -------
     plotly.graph_objs._figure.Figure
@@ -36,7 +35,7 @@ def add_ylog_menu(fig, y_data, labels):
             dict(
                 active=0,
                 buttons=list([
-                    dict(label=labels['linear_label'],
+                    dict(label=_('linear_label'),
                          method='update',
                          args=[{'visible': [True, True]},
                                {'yaxis': {
@@ -44,11 +43,11 @@ def add_ylog_menu(fig, y_data, labels):
                                             'gridcolor' : '#f5f5f5'
                                             }
                                 }]),
-                    dict(label=labels['log_label'],
+                    dict(label=_('log_label'),
                          method='update',
                          args=[{'visible': [True, True]},
                                {'yaxis': {
-                                            'type': 'log', 
+                                            'type': 'log',
                                             'nticks': nticks_log,
                                             'gridcolor' : '#f5f5f5'
                                             }
@@ -65,7 +64,7 @@ def add_ylog_menu(fig, y_data, labels):
     return fig
 
 
-def generate_layout(labels):
+def create_layout():
     ##### Figures #####
     # get max cases value
     cases_max_val = cases_per1000_long['cases_per_1000'].max()
@@ -73,14 +72,18 @@ def generate_layout(labels):
     mtlmap_fig = px.choropleth_mapbox(cases_per1000_long, geojson=mtl_geojson, locations='borough', color='cases_per_1000',
                     featureidkey="properties.borough", animation_frame='date', animation_group='borough',
                     mapbox_style='carto-positron', range_color=[0, cases_max_val],
-                    zoom=9, center = {'lat': 45.55, 'lon': -73.75},
-                    labels=labels['montreal_map_colourbar_labels'])
+                    zoom=9, center={'lat': 45.55, 'lon': -73.75},
+                    labels={
+                        'date': ('montreal_map_colourbar_date_label'),
+                        'borough': ('montreal_map_colourbar_borough_label'),
+                        'cases_per_1000': ('montreal_map_colourbar_cases_per_1000_label'),
+                    })
 
     # set the default frame to the latest date
     mtlmap_fig.layout.sliders[0]['active'] = len(mtlmap_fig.frames) - 1  # slider
     mtlmap_fig.update_traces(z=mtlmap_fig.frames[-1].data[0].z)  # frame
 
-    mtlmap_fig.layout.sliders[0]['currentvalue']['prefix'] = labels['date_slider_label']
+    mtlmap_fig.layout.sliders[0]['currentvalue']['prefix'] = _('date_slider_label')
     mtlmap_fig.layout.sliders[0]['xanchor'] = 'left'
     mtlmap_fig.layout.sliders[0]['pad'] = {'b': 10, 't': 0, 'l': 50}
     mtlmap_fig.layout.updatemenus[0]['xanchor'] = 'left'
@@ -102,10 +105,10 @@ def generate_layout(labels):
         })
     # Update hoverlabel for all frames
     mtlmap_fig.update_traces({
-        'hovertemplate': labels['montreal_map_hovertemplate']
+        'hovertemplate': _('montreal_map_hovertemplate')
         })
     for frame in mtlmap_fig.frames:
-        frame['data'][0]['hovertemplate'] = labels['montreal_map_hovertemplate']
+        frame['data'][0]['hovertemplate'] = _('montreal_map_hovertemplate')
 
 
     # Confirmed cases
@@ -117,7 +120,7 @@ def generate_layout(labels):
                 'y' : data_qc['cases_qc'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#001F97'},
-                'name': labels['confirmed_cases_qc_label'],
+                'name': _('confirmed_cases_qc_label'),
                 'hoverlabel': {'namelength': 25},
             },
             {
@@ -127,7 +130,7 @@ def generate_layout(labels):
                 'mode': 'lines',
                 'marker': {'color': '#001F97'},
                 'line': {'dash': 'dash'},
-                'name': labels['active_cases_qc_label'],
+                'name': _('active_cases_qc_label'),
                 'hoverlabel': {'namelength': 25},
             },
             {
@@ -136,7 +139,7 @@ def generate_layout(labels):
                 'y' : data_mtl['cases_mtl'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#D6142C'},
-                'name': labels['confirmed_cases_mtl_label'],
+                'name': _('confirmed_cases_mtl_label'),
                 'hoverlabel': {'namelength': 25},
             },
             {
@@ -145,7 +148,7 @@ def generate_layout(labels):
                 'y' : data_qc['new_cases_qc'],
                 'mode': 'lines',
                 'marker': {'color': '#00104f'},
-                'name': labels['new_confirmed_cases_qc_label'],
+                'name': _('new_confirmed_cases_qc_label'),
                 'hoverlabel': {'namelength': 25},
             },
             {
@@ -154,7 +157,7 @@ def generate_layout(labels):
                 'y' : data_mtl['new_cases_mtl'],
                 'mode': 'lines',
                 'marker': {'color': '#780b18'},
-                'name': labels['new_confirmed_cases_mtl_label'],
+                'name': _('new_confirmed_cases_mtl_label'),
                 'hoverlabel': {'namelength': 25},
             }
 
@@ -162,8 +165,8 @@ def generate_layout(labels):
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
-            'yaxis': {'title': {'text': labels['confirmed_cases_y_label']}, 'gridcolor' : '#f5f5f5'},
+            'xaxis': {'tickformat': '%m-%d', 'title': {'text': _('date_label')}},
+            'yaxis': {'title': {'text': _('confirmed_cases_y_label')}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":10,"l":60,"b":50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
             'paper_bgcolor': 'rgba(255,255,255,1)',
@@ -171,11 +174,11 @@ def generate_layout(labels):
             'dragmode': False
         }
     })
-    cases_fig = add_ylog_menu(cases_fig, data_qc['cases_qc'], labels)
+    cases_fig = add_ylog_menu(cases_fig, data_qc['cases_qc'])
 
     # Age histogram
     mtl_age_data_copy = mtl_age_data.copy()
-    mtl_age_data_copy['per100000'] = [labels['age_per100000_label'] if '100000' in x else labels['age_total_label'] for x in mtl_age_data['age_group']]
+    mtl_age_data_copy['per100000'] = [_('age_per100000_label') if '100000' in x else _('age_total_label') for x in mtl_age_data['age_group']]
     mtl_age_data_copy['age_group'] = [x.split('_')[2] for x in mtl_age_data_copy['age_group']]
     # Get max value
     max_count = max(mtl_age_data_copy['percent'])
@@ -184,7 +187,7 @@ def generate_layout(labels):
                 range_y=[0, max_count + 0.25*max_count], barmode='group')
     age_fig.update_layout({
         'legend' : {'bgcolor': 'rgba(255,255,255,1)', 'x': 0, 'y': 1, 'title' : ''},
-        'xaxis' : {'title': {'text': labels['age_label']}},
+        'xaxis' : {'title': {'text': _('age_label')}},
         'yaxis' : {'title': {'text': '%'}, 'gridcolor' : '#f5f5f5'},
         'margin': {"r":0,"t":10,"l":0,"b":0},
         'plot_bgcolor': 'rgba(255,255,255,1)',
@@ -200,15 +203,15 @@ def generate_layout(labels):
     age_fig.update_traces(y=age_fig.frames[-1].data[1].y, selector=dict(marker_color='#EF553B'))  # frame
 
     age_fig.layout.sliders[0]['pad'] = {'r': 30, 'b': 10, 't': 65}
-    age_fig.layout.sliders[0]['currentvalue']['prefix'] = labels['date_slider_label']
+    age_fig.layout.sliders[0]['currentvalue']['prefix'] = _('date_slider_label')
     age_fig.layout.updatemenus[0]['pad'] = {'r': 10, 't': 75}
     # Update hoverlabel for all frames
     age_fig.update_traces({
-        'hovertemplate': labels['age_fig_hovertemplate']
+        'hovertemplate': _('age_fig_hovertemplate')
         })
     for frame in age_fig.frames:
-        frame['data'][0]['hovertemplate'] = labels['age_fig_hovertemplate']
-        frame['data'][1]['hovertemplate'] = labels['age_fig_hovertemplate']
+        frame['data'][0]['hovertemplate'] = _('age_fig_hovertemplate')
+        frame['data'][1]['hovertemplate'] = _('age_fig_hovertemplate')
 
     # Deaths (QC)
     deaths_qc_fig = go.Figure({
@@ -219,7 +222,7 @@ def generate_layout(labels):
                 'y' : data_qc['deaths_qc'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#001F97'},
-                'name': labels['deaths_fig_qc_label'],
+                'name': _('deaths_fig_qc_label'),
                 'hoverlabel': {'namelength': 25},
             },
             {
@@ -228,7 +231,7 @@ def generate_layout(labels):
                 'y' : data_mtl['deaths_mtl'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#D6142C'},
-                'name': labels['deaths_fig_mtl_label'],
+                'name': _('deaths_fig_mtl_label'),
                 'hoverlabel': {'namelength': 25},
             },
             {
@@ -237,7 +240,7 @@ def generate_layout(labels):
                 'y' : data_qc['new_deaths_qc'],
                 'mode': 'lines',
                 'marker': {'color': '#00104f'},
-                'name': labels['new_deaths_qc_label'],
+                'name': _('new_deaths_qc_label'),
                 'hoverlabel': {'namelength': 25},
             },
             {
@@ -246,15 +249,15 @@ def generate_layout(labels):
                 'y' : data_mtl['new_deaths_mtl'],
                 'mode': 'lines',
                 'marker': {'color': '#780b18'},
-                'name': labels['new_deaths_mtl_label'],
+                'name': _('new_deaths_mtl_label'),
                 'hoverlabel': {'namelength': 25},
             }
         ],
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
-            'yaxis': {'title': {'text': labels['deaths_qc_y_label']}, 'gridcolor' : '#f5f5f5'},
+            'xaxis': {'tickformat': '%m-%d', 'title': {'text': _('date_label')}},
+            'yaxis': {'title': {'text': _('deaths_qc_y_label')}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":10,"l":30,"b":50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
             'paper_bgcolor': 'rgba(255,255,255,1)',
@@ -262,7 +265,7 @@ def generate_layout(labels):
             'dragmode': False
         }
     })
-    deaths_qc_fig = add_ylog_menu(deaths_qc_fig, data_qc['deaths_qc'], labels)
+    deaths_qc_fig = add_ylog_menu(deaths_qc_fig, data_qc['deaths_qc'])
 
     # Hospitalisations (QC)
     hospitalisations_qc_fig = go.Figure({
@@ -273,7 +276,7 @@ def generate_layout(labels):
                 'y' : data_qc['hospitalisations_qc'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#F87E3F'},
-                'name': labels['hospitalisations_label'],
+                'name': _('hospitalisations_label'),
                 'hoverlabel': {'namelength': 25},
             },
             {
@@ -282,15 +285,15 @@ def generate_layout(labels):
                 'marker': {'color': '#0083CB'},
                 'x' : data_qc['date'],
                 'y' : data_qc['icu_qc'],
-                'name': labels['intensive_care_label'],
+                'name': _('intensive_care_label'),
                 'hoverlabel': {'namelength': 25},
             }
         ],
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
-            'yaxis': {'title': {'text': labels['hospitalisations_y_label']}, 'gridcolor' : '#f5f5f5'},
+            'xaxis': {'tickformat': '%m-%d', 'title': {'text': _('date_label')}},
+            'yaxis': {'title': {'text': _('hospitalisations_y_label')}, 'gridcolor' : '#f5f5f5'},
             'margin': {"r":0,"t":10,"l":30,"b":50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
             'paper_bgcolor': 'rgba(255,255,255,1)',
@@ -299,7 +302,7 @@ def generate_layout(labels):
             'dragmode': False
         }
     })
-    hospitalisations_qc_fig = add_ylog_menu(hospitalisations_qc_fig, data_qc['hospitalisations_qc'], labels)
+    hospitalisations_qc_fig = add_ylog_menu(hospitalisations_qc_fig, data_qc['hospitalisations_qc'])
 
     # Testing (QC)
     testing_qc_fig = go.Figure({
@@ -310,7 +313,7 @@ def generate_layout(labels):
                 'y' : data_qc['negative_tests_qc'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#39b686'},
-                'name': labels['negative_tests_qc_label'],
+                'name': _('negative_tests_qc_label'),
                 'hoverlabel': {'namelength': 25},
             },
             {
@@ -319,7 +322,7 @@ def generate_layout(labels):
                 'x' : data_qc['date'],
                 'y' : data_qc['cases_qc'],
                 'marker': {'color': '#c51515'},
-                'name': labels['positive_cases_qc_label'],
+                'name': _('positive_cases_qc_label'),
                 'hoverlabel': {'namelength': 25},
             },
             {
@@ -328,15 +331,15 @@ def generate_layout(labels):
                 'y' : data_qc['new_negative_tests_qc'],
                 'mode': 'lines',
                 'marker': {'color': '#206e50'},
-                'name': labels['new_negative_tests_qc_label'],
+                'name': _('new_negative_tests_qc_label'),
                 'hoverlabel': {'namelength': 25},
             }
         ],
         'layout': {
         'autosize': True,
         'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-        'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
-        'yaxis': {'title': {'text': labels['testing_qc_y_label']}, 'gridcolor' : '#f5f5f5'},
+        'xaxis': {'tickformat': '%m-%d', 'title': {'text': _('date_label')}},
+        'yaxis': {'title': {'text': _('testing_qc_y_label')}, 'gridcolor' : '#f5f5f5'},
         'margin': {"r":0,"t":10,"l":60,"b":50},
         'plot_bgcolor': 'rgba(255,255,255,1)',
         'paper_bgcolor': 'rgba(255,255,255,1)',
@@ -344,7 +347,7 @@ def generate_layout(labels):
         'dragmode': False
         }
     })
-    testing_qc_fig = add_ylog_menu(testing_qc_fig, data_qc['negative_tests_qc'], labels)
+    testing_qc_fig = add_ylog_menu(testing_qc_fig, data_qc['negative_tests_qc'])
 
     # modebar buttons to remove
     modebar_buttons_to_remove = ['select2d',
@@ -370,9 +373,9 @@ def generate_layout(labels):
                                 [
                                     # Load in a new tab because some figures do not resize properly otherwise
                                     # TODO: Fix this bug
-                                    html.A([labels['language0']], href=labels['language_link0'], target='_blank', className='lang_link'),
-                                    html.A([labels['language1']], href=labels['language_link1'], target='_blank', className='lang_link'),
-                                    html.A([labels['language2']], href=labels['language_link2'], target='_blank', className='lang_link'),
+                                    html.A([_('language0')], href=_('language_link0'), target='_blank', className='lang_link'),
+                                    html.A([_('language1')], href=_('language_link1'), target='_blank', className='lang_link'),
+                                    html.A([_('language2')], href=_('language_link2'), target='_blank', className='lang_link'),
                                 ],
                                 id="language_select_link"
                             )
@@ -389,21 +392,20 @@ def generate_layout(labels):
                     # title
                     html.Div(
                         [
+                            # FIXME use header with h1 + p
                             html.Div(
-                                [   
-                                    # title
+                                [
                                     html.H3(
-                                        [labels['title']],
+                                        [_('app-title')],
                                         id="title_text",
-                                        style={"margin-bottom": "0px"},
-                                        ),
-                                    #subtitle
+                                        style={"margin-bottom": "0"},
+                                    ),
                                     html.H6(
-                                        [labels['subtitle']],
+                                        [_('app-subtitle', date=latest_update_date)],
                                         id="last_update_text",
                                     ),
-                                ]
-                            )
+                                ],
+                            ),
                         ],
                         className="twelve column",
                         id="title",
@@ -418,42 +420,42 @@ def generate_layout(labels):
                     html.Div(
                         [
                             html.Div(
-                                [html.H3(latest_cases_mtl, id="cases_mtl_text"), html.P([labels['cases_montreal_label']], id='cases_montreal_label')],
+                                [html.H3(latest_cases_mtl, id="cases_mtl_text"), html.P([_('cases_montreal_label')], id='cases_montreal_label')],
                                 id="cases_mtl",
                                 className="mini_container",
                             ),
                             html.Div(
-                                [html.H3(latest_deaths_mtl, id="deaths_mtl_text"), html.P([labels['deaths_montreal_label']], id='deaths_montreal_label')],
+                                [html.H3(latest_deaths_mtl, id="deaths_mtl_text"), html.P([_('deaths_montreal_label')], id='deaths_montreal_label')],
                                 id="deaths_mtl",
                                 className="mini_container",
                             ),
                             html.Div(
-                                [html.H3(latest_cases_qc, id="cases_qc_text"), html.P([labels['cases_qc_label']], id='cases_qc_label')],
+                                [html.H3(latest_cases_qc, id="cases_qc_text"), html.P([_('cases_qc_label')], id='cases_qc_label')],
                                 id="cases_qc",
                                 className="mini_container",
                             ),
                             html.Div(
-                                [html.H3(latest_deaths_qc, id="deaths_qc_text"), html.P([labels['deaths_qc_label']], id='deaths_qc_label')],
+                                [html.H3(latest_deaths_qc, id="deaths_qc_text"), html.P([_('deaths_qc_label')], id='deaths_qc_label')],
                                 id="deaths_qc",
                                 className="mini_container",
                             ),
                             html.Div(
-                                [html.H3(latest_hospitalisations_qc, id="hospitalisations_qc_text"), html.P([labels['hospitalisations_label']], id='hospitalisations_qc_label')],
+                                [html.H3(latest_hospitalisations_qc, id="hospitalisations_qc_text"), html.P([_('hospitalisations_label')], id='hospitalisations_qc_label')],
                                 id="hospitalisations_qc",
                                 className="mini_container",
                             ),
                             html.Div(
-                                [html.H3(latest_icu_qc, id="icu_qc_text"), html.P([labels['intensive_care_label']], id='icu_qc_label')],
+                                [html.H3(latest_icu_qc, id="icu_qc_text"), html.P([_('intensive_care_label')], id='icu_qc_label')],
                                 id="icu_qc",
                                 className="mini_container",
                             ),
                             html.Div(
-                                [html.H3(latest_recovered_qc, id="recovered_qc_text"), html.P([labels['recovered_qc_label']], id='recovered_qc_label')],
+                                [html.H3(latest_recovered_qc, id="recovered_qc_text"), html.P([_('recovered_qc_label')], id='recovered_qc_label')],
                                 id="recovered_qc",
                                 className="mini_container",
                             ),
                             html.Div(
-                                [html.H3(latest_negative_tests_qc, id="negative_tests_qc_text"), html.P([labels['negative_tests_qc_box_label']], id='negative_tests_qc_label')],
+                                [html.H3(latest_negative_tests_qc, id="negative_tests_qc_text"), html.P([_('negative_tests_qc_box_label')], id='negative_tests_qc_label')],
                                 id="negative_tests_qc",
                                 className="mini_container",
                             ),
@@ -469,7 +471,7 @@ def generate_layout(labels):
                     # infobox
                     html.Div(
                         [
-                            dcc.Markdown([labels['infobox']], id='infobox_text')
+                            dcc.Markdown([_('infobox')], id='infobox_text')
                         ],
                         className="pretty_container four columns",
                         id="infobox_container",
@@ -481,7 +483,7 @@ def generate_layout(labels):
                                     html.Div([
 
                                         html.Div([
-                                            html.H6([labels['montreal_map_label']], id='montreal_map_label')
+                                            html.H6([_('montreal_map_label')], id='montreal_map_label')
                                         ]),
                                         dcc.Graph(
                                             figure=mtlmap_fig,
@@ -517,7 +519,7 @@ def generate_layout(labels):
                             html.Div(
                                 [
                                     html.Div([
-                                        html.H6([labels['total_cases_label']], id='total_cases_label'),
+                                        html.H6([_('total_cases_label')], id='total_cases_label'),
                                     ]),
                                     dcc.Graph(
                                         figure=cases_fig,
@@ -540,7 +542,7 @@ def generate_layout(labels):
                         [
                             html.Div(
                                 [
-                                    html.H6([labels['age_group_label']], id='age_group'),
+                                    html.H6([_('age_group_label')], id='age_group'),
                                     dcc.Graph(
                                         figure=age_fig,
                                         id='age_fig_mtl',
@@ -567,7 +569,7 @@ def generate_layout(labels):
                         [
                             html.Div(
                                 [
-                                    html.H6([labels['deaths_fig_label']], id='total_deaths'),
+                                    html.H6([_('deaths_fig_label')], id='total_deaths'),
                                     dcc.Graph(
                                             figure=deaths_qc_fig,
                                             id='deaths_fig_qc',
@@ -589,7 +591,7 @@ def generate_layout(labels):
                         [
                             html.Div(
                                 [
-                                    html.H6([labels['total_hospitalisations_label']], id='total_hospitalisations'),
+                                    html.H6([_('total_hospitalisations_label')], id='total_hospitalisations'),
                                     dcc.Graph(
                                         figure=hospitalisations_qc_fig,
                                         id='hospitalisations_fig_qc',
@@ -611,7 +613,7 @@ def generate_layout(labels):
                         [
                             html.Div(
                                 [
-                                    html.H6([labels['total_testing_label']], id='total_testing'),
+                                    html.H6([_('total_testing_label')], id='total_testing'),
                                     dcc.Graph(
                                         figure=testing_qc_fig,
                                         id='testing_fig_qc',
@@ -635,13 +637,13 @@ def generate_layout(labels):
             # footer
             html.Div([
                 html.Div([
-                    dcc.Markdown([labels['footer_left']], id="footer_left_text"),
+                    dcc.Markdown([_('footer_left')], id="footer_left_text"),
                 ],
                 id="footer_left",
                 className="six column"
                 ),
                 html.Div([
-                    dcc.Markdown([labels['footer_right']], id="footer_right_text"),
+                    dcc.Markdown([_('footer_right')], id="footer_right_text"),
                 ],
                 id="footer_right",
                 className="six column"

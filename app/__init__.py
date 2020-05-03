@@ -2,11 +2,33 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
+from flask import Flask, request
+from flask_babel import Babel
 
-from .languages import app_en, app_fr, app_zh, app_es
+from .template import create_layout
+
+# Regular Flask config
+flapp = Flask(__name__)
+babel = Babel(flapp, default_locale='fr', configure_jinja=False)
+# XXX investigate if translations are reloaded every request
+
+languages = {'en', 'es', 'zh'}
+default_language = 'fr'
 
 
-app = dash.Dash(__name__, meta_tags=[
+@babel.localeselector
+def get_locale():
+    referrer_url = request.headers.get('Referer', '/')
+    code = referrer_url.rpartition('/')[-1]
+
+    if code in languages:
+        return code
+    else:
+        return default_language
+
+
+# Dash-specific config
+app = dash.Dash(__name__, server=flapp, meta_tags=[
     {'name': 'viewport', 'content': 'width=device-width'},
     {'name': 'description', 'content': 'COVID-19 Montreal Dashboard / Tableau de bord COVID-19 Montréal'},
 ])
@@ -20,20 +42,10 @@ app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Div(id='page-content')
 ])
+page_layout = create_layout()
 
 
 @app.callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/':
-        return app_fr.layout
-    elif pathname == '/fr':
-        return app_fr.layout
-    elif pathname == '/en':
-        return app_en.layout
-    elif pathname == '/zh':
-        return app_zh.layout
-    elif pathname == '/es':
-        return app_es.layout
-    else:
-        return '404: Page Not Found'
+    return page_layout

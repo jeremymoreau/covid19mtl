@@ -1,3 +1,5 @@
 dash == 1.10.*
+flask-babel
 pandas == 1.0.*
+
 gunicorn
