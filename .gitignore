@@ -130,5 +130,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# lockfile for the Web scraper
+# COVID-19 Web scraper
 app/data/scraper.pid
+app/data/sources/*.csv
+app/data/sources/*.html
