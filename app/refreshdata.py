@@ -26,6 +26,7 @@ SOURCES = { #'cases.csv': '',
 DATA_DIR = 'data'
 NB_RETRIES = 3
 CHARSET_PAT = re.compile(r'charset=((\w|-)+)')
+NUM_PAT = re.compile(r'\*?((?:\d| |,)+)')
 
 
 def lock(lock_dir):
@@ -85,6 +86,18 @@ def save_df(filename, data):
     logging.info('Saved a new version of {}'.format(filename))
 
 
+def norm_cell(text):
+    ''' Normalize a data cell.
+    Return the text with numbers in machine processable form and text labels 
+    stripped from their formating. '''
+    match = NUM_PAT.match(text)
+    if match:
+        text = match.group(1).strip().replace(',', '.').replace(' ', '')
+    # normalize whitespaces
+    text = ' '.join(text.split())
+    return text
+
+
 def parse_data_mtl(data_dir):
     ''' Extract numerical data from the main Montréal data HTML page '''
     nb_tables = 4  # the number this parser expects
@@ -116,7 +129,7 @@ def parse_data_mtl(data_dir):
     for filename, t in zip(file_names, data_tables):
         rows = []
         for tr in t.select('tr'):
-            rows.append([td.text for td in tr.select('th,td')])
+            rows.append([norm_cell(td.text) for td in tr.select('th,td')])
         fq_path = os.path.join(data_dir, 'processed', filename)
 
         with open(fq_path, 'w') as f:
