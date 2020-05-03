@@ -29,6 +29,10 @@ To add a dependency or change the version of an existing one, edit `requirements
 and run `pip-compile`, adapt the code of the app if that's needed, then commit all
 changes.
 
+## License
+
+The COVID-19 MTL project is available under the [MIT License](https://github.com/jeremymoreau/covid19mtl/blob/master/LICENSE.txt). The hosted version at https://covid19mtl.ca is [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), but you are not required to apply this license to forks of this code (though it is encouraged as a CC license will make it clear that anyone is free to copy the plots/images and post them elswhere).
+
 ## Contributors
 
 - Chinese translation: [Shangge Jiang](https://ca.linkedin.com/in/shangge-vivien-jiang-83418a117)
