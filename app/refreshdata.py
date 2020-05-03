@@ -5,6 +5,7 @@ import os
 import sys
 import fcntl
 import csv
+import logging
 
 from datetime import datetime
 from argparse import ArgumentParser
@@ -30,8 +31,9 @@ def lock(lock_dir):
 
     lockf = os.path.join(lock_dir, 'scraper.pid')
     if not os.path.isfile(lockf):
-
+        logging.debug('Lock file {} not present.  Creating.'.format(lockf))
         open(lockf, 'w') # create the empty file
+    logging.debug('Acquiring lock: {}'.format(lockf))
     fd = os.open(lockf, os.O_RDONLY)
     fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
 
@@ -65,6 +67,7 @@ def save_df(filename, data):
     # it's all good if we made it this far, save the new file 
     with open(filename, 'wb') as f:
         f.write(data)
+    logging.info('Saved a new version of {}'.format(filename))
 
 
 def parse_data_mtl(data_dir):
@@ -100,10 +103,22 @@ def parse_data_mtl(data_dir):
         for tr in t.select('tr'):
             rows.append([td.text for td in tr.select('th,td')])
         fq_path = os.path.join(data_dir, 'processed', filename)
-        print(rows)
+
         with open(fq_path, 'w') as f:
             writer = csv.writer(f)
             writer.writerows(rows)
+
+
+def init_logging(args):
+    format = '%(asctime)s:%(levelname)s'
+    level = logging.WARNING
+    if args.verbose:
+        level = logging.INFO
+    if args.debug:
+        format += ':%(name)s'
+        level = logging.DEBUG
+    format += ':%(message)s'
+    logging.basicConfig(filename=args.log_file, format=format, level=level)
 
 
 def main():
@@ -112,7 +127,14 @@ def main():
     parser.add_argument('-d', '--data-dir', default=data_dir)
     parser.add_argument('-l', '--local', action='store_true', default=False, 
                         help='Do not fetch remote file, only process local copies')
+    parser.add_argument('-v', '--verbose', action='store_true', default=False, 
+                        help='Increase verbosity')
+    parser.add_argument('-D', '--debug', action='store_true', default=False, 
+                        help='Show debugging information')
+    parser.add_argument('-L', '--log-file', default=None, 
+                        help='Append progress to LOG_FILE')
     args = parser.parse_args()
+    init_logging(args)
 
     lock(args.data_dir)
 
@@ -124,6 +146,7 @@ def main():
     parse_data_mtl(args.data_dir)
 
     return 0
+
 
 if __name__ == '__main__':
     sys.exit(main())
