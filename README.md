@@ -31,7 +31,7 @@ changes.
 
 ## License
 
-The COVID-19 MTL project is available under the [MIT License](https://github.com/jeremymoreau/covid19mtl/blob/master/LICENSE.txt). The hosted version at https://covid19mtl.ca is [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), but you are not required to apply this license to forks of this code (though it is encouraged as a CC license will make it clear that anyone is free to copy the plots/images and post them elswhere).
+The COVID-19 MTL project is available under the [MIT License](https://github.com/jeremymoreau/covid19mtl/blob/master/LICENSE.txt). The hosted version at https://covid19mtl.ca is [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), but you are not required to apply this license to forks of this code (though it is encouraged as a CC license will make it clear that anyone is free to copy the plots/images and post them elsewhere).
 
 ## Contributors
 
