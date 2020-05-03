@@ -6,6 +6,7 @@ import sys
 import fcntl
 import csv
 import logging
+import re
 
 from datetime import datetime
 from argparse import ArgumentParser
@@ -24,6 +25,8 @@ SOURCES = { #'cases.csv': '',
             'data_qc.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/combine.csv'}
 DATA_DIR = 'data'
 NB_RETRIES = 3
+CHARSET_PAT = re.compile(r'charset=((\w|-)+)')
+
 
 def lock(lock_dir):
     ''' Lock the data directory to prenvent concurent runs of the scraper, 
@@ -32,14 +35,24 @@ def lock(lock_dir):
     lockf = os.path.join(lock_dir, 'scraper.pid')
     if not os.path.isfile(lockf):
         logging.debug('Lock file {} not present.  Creating.'.format(lockf))
-        # create the empty file
+        # create the file, empty
         open(lockf, 'w').close()
     logging.debug('Acquiring lock: {}'.format(lockf))
     fd = os.open(lockf, os.O_RDONLY)
     fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
 
     # No unlocking needed.  fcntl() locks are released then the process exits.
-    open(lockf, 'w').write('{}'.format(os.getpid))
+    with open(lockf, 'w') as f:
+        f.write('{}'.format(os.getpid))
+
+def normalize_encoding(data, content_type=None):
+    encoding='utf-8'
+    if content_type:
+        match = CHARSET_PAT.search(content_type)
+        if match:
+            encoding = match.group(1)
+    text = data.decode(encoding)
+    return text.encode('utf-8')
 
 
 def fetch(url):
@@ -49,7 +62,8 @@ def fetch(url):
         resp = requests.get(url)
         if resp.status_code != 200:
             next
-        return resp.content
+        ctype = resp.headers.get('Content-Type')
+        return normalize_encoding(resp.content, ctype)
     raise RuntimeError('Failed to retrieve {}'.format(url))
 
 
@@ -57,7 +71,7 @@ def save_df(filename, data):
     ''' Save a datafile if it's newer and at least as big as what we cached.  
     Raise ValueError otherwise.'''
     if os.path.isfile(filename):
-        # TODO: double check that this independent of the encoding
+        # This test works because all encodings are normalized to UTF-8 at fetch time.
         if os.path.getsize(filename) > len(data):
             msg = '{} is smaller than the cached version we have on disk.'.format(filename)
             raise ValueError(msg)
