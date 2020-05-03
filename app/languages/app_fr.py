@@ -1,5 +1,5 @@
-from app import latest_update_date
-from template import generate_layout
+from ..core import latest_update_date
+from ..template import generate_layout
 
 ##### Label text (FR) #####
 # TODO: Make markdown links open in new tab
