@@ -9,7 +9,7 @@ from .core import (
     latest_deaths_mtl, latest_deaths_qc,
     latest_hospitalisations_qc, latest_icu_qc,
     latest_negative_tests_qc, latest_recovered_qc,
-    mtl_age_data, mtl_geojson,
+    mtl_age_data, mtl_geojson, data_qc_death_loc
 )
 
 
@@ -351,8 +351,8 @@ def generate_layout(labels):
         'data': [
             {
                 'type': 'scatter',
-                'x': data_death_loc['Date'],
-                'y': data_death_loc['Hospital_Loc'],
+                'x': data_qc_death_loc['date'],
+                'y': data_qc_death_loc['chsld'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#001F97'},
                 'name': labels['Hospital_Loc_label'],
@@ -362,8 +362,8 @@ def generate_layout(labels):
                 'type': 'scatter',
                 'mode': 'lines+markers',
                 'marker': {'color': '#0083CB'},
-                'x': data_death_loc['Date'],
-                'y': data_death_loc['Senior_Loc'],
+                'x': data_qc_death_loc['date'],
+                'y': data_qc_death_loc['psr'],
                 'name': labels['Senior_Loc_label'],
                 'hoverlabel': {'namelength': 25},
             },
@@ -371,8 +371,8 @@ def generate_layout(labels):
                 'type': 'scatter',
                 'mode': 'lines+markers',
                 'marker': {'color': '#0083CB'},
-                'x': data_death_loc['Date'],
-                'y': data_death_loc['Home'],
+                'x': data_qc_death_loc['date'],
+                'y': data_qc_death_loc['home'],
                 'name': labels['Home_label'],
                 'hoverlabel': {'namelength': 25},
             },
@@ -381,8 +381,8 @@ def generate_layout(labels):
                 'type': 'scatter',
                 'mode': 'lines+markers',
                 'marker': {'color': '#0083CB'},
-                'x': data_death_loc['Date'],
-                'y': data_death_loc['Unknown_Loc'],
+                'x': data_qc_death_loc['date'],
+                'y': data_qc_death_loc['other_or_unknown'],
                 'name': labels['Unknown_Loc'],
                 'hoverlabel': {'namelength': 25},
             }
@@ -400,7 +400,7 @@ def generate_layout(labels):
             'dragmode': False
         }
     })
-    deaths_loc_qc_fig = add_ylog_menu(deaths_loc_qc_fig, data_death_loc[
+    deaths_loc_qc_fig = add_ylog_menu(deaths_loc_qc_fig, data_qc_death_loc[
         'deaths_by_loc_qc'], labels)
 
     # modebar buttons to remove
