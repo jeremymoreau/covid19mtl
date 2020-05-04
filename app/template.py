@@ -521,6 +521,7 @@ def generate_layout(labels):
                 ],
                 className="row",
             ),
+            # 1st row: two boxes
             html.Div(
                 [
                     # infobox
@@ -565,7 +566,7 @@ def generate_layout(labels):
                 ],
                 className="row flex-display",
             ),
-            # middle 2 boxes
+            # 2nd row: 2 boxes
             html.Div(
                 [
                     # left box
@@ -616,7 +617,7 @@ def generate_layout(labels):
                 ],
                 className="row flex-display",
             ),
-            # bottom 3 boxes
+            # 3rd row: 3 boxes
             html.Div(
                 [
                     # left box
@@ -689,15 +690,39 @@ def generate_layout(labels):
                 className="row flex-display third-row",
             ),
 
-            # bottom 4 box (death_loc)
+            # 4th row: 2 boxes
             html.Div(
                 [
+                    # left box
                     html.Div(
                         [
                             html.Div(
                                 [
                                     html.H6(
-                                        [labels['deaths_loc_fig_qc_label']], id='deaths_loc'),
+                                        [labels['deaths_loc_fig_qc_label']], id='deaths_loc_mtl_label'),
+                                    dcc.Graph(
+                                        figure=deaths_loc_qc_fig,
+                                        id='deaths_loc_fig_mtl',
+                                        responsive=True,
+                                        config={
+                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                        }
+                                    ),
+                                ],
+                                id="mtl_deaths_loc_box",
+                                className="pretty_container",
+                            ),
+                        ],
+                        className="six columns",
+                        id="mtl_deaths_loc_col"
+                    ),
+                    # right box
+                    html.Div(
+                        [
+                            html.Div(
+                                [
+                                    html.H6(
+                                        [labels['deaths_loc_fig_qc_label']], id='deaths_loc_qc_label'),
                                     dcc.Graph(
                                         figure=deaths_loc_qc_fig,
                                         id='deaths_loc_fig_qc',
@@ -707,12 +732,12 @@ def generate_layout(labels):
                                         }
                                     ),
                                 ],
-                                id="deaths_loc_box",
+                                id="qc_deaths_loc_box",
                                 className="pretty_container",
                             ),
                         ],
-                        className="four columns",
-                        id="death_loc_col"
+                        className="six columns",
+                        id="qc_deaths_loc_col"
                     ),
                 ],
                 className="row flex-display third-row",

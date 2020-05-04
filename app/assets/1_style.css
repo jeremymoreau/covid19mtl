@@ -146,6 +146,19 @@ p {
   margin-right: 0px;
 }
 
+#mtl_deaths_loc_box {
+  margin-left: 0px;
+  margin-right: 6px;
+}
+#mtl_deaths_loc_col {
+  margin-left: 0px;
+  display: inline-grid;
+}
+#qc_deaths_loc_box {
+  margin-left: 6px;
+  margin-right: 0px;
+}
+
 #footer p {
   font-size: 1.2rem !important;
 }
