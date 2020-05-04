@@ -37,6 +37,10 @@ The COVID-19 MTL project is available under the [MIT License](https://github.com
 
 - Chinese translation: [Shangge Jiang](https://ca.linkedin.com/in/shangge-vivien-jiang-83418a117)
 - Spanish translation: [Zaida Escila Martínez Moreno](https://github.com/ZaidaEMtzMo)
+- Montreal Python 76 Hackathon:
+  - [Yannick Gingras](https://github.com/ygingras) (web scraper)
+  - [Éric Araujo](https://github.com/merwok) (refactoring and optimisations)
+  - [Yen Kha](https://github.com/yenk) (new figure: Deaths by place of residence QC)
 
 ## Screenshot
 
