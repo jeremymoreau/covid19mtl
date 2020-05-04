@@ -777,13 +777,19 @@ def generate_layout(labels):
                     dcc.Markdown([labels['footer_left']], id="footer_left_text"),
                 ],
                 id="footer_left",
-                className="six column"
+                className="four column"
+                ),
+                html.Div([
+                    dcc.Markdown([labels['footer_centre']], id="footer_centre_text"),
+                ],
+                id="footer_centre",
+                className="four column"
                 ),
                 html.Div([
                     dcc.Markdown([labels['footer_right']], id="footer_right_text"),
                 ],
                 id="footer_right",
-                className="six column"
+                className="four column"
                 )
             ],
             id="footer",

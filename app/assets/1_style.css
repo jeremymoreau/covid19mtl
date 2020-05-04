@@ -165,6 +165,9 @@ p {
 #footer a {
   font-size: 1.2rem !important;
 }
+#footer_centre {
+  text-align: center;
+}
 #footer_right {
   text-align: right;
 }
