@@ -9,7 +9,8 @@ from .core import (
     latest_deaths_mtl, latest_deaths_qc,
     latest_hospitalisations_qc, latest_icu_qc,
     latest_negative_tests_qc, latest_recovered_qc,
-    mtl_age_data, mtl_geojson, data_qc_death_loc
+    mtl_age_data, mtl_geojson, data_qc_death_loc,
+    data_mtl_death_loc
 )
 
 
@@ -346,6 +347,33 @@ def generate_layout(labels):
     })
     testing_qc_fig = add_ylog_menu(testing_qc_fig, data_qc['negative_tests_qc'], labels)
 
+    # Confirmed deaths by place of residence (MTL)
+    deaths_loc_mtl_fig = go.Figure({
+        'data': [
+            {
+                'type': 'pie',
+                'labels': labels['deaths_loc_fig_mtl_pie_labels'],
+                'values': data_mtl_death_loc.iloc[-1, 1:-1].tolist(),  # only display latest day for now
+                'marker': {'colors': ['rgb(213, 94, 0)', 'rgb(0, 114, 178)',
+                                    'rgb(0, 158, 115)', 'rgb(204, 121, 167)',
+                                    'rgb(240, 228, 66)', 'rgb(230, 159, 0)',
+                                    'rgb(0, 0, 0)']},
+            }
+        ],
+        'layout': {
+            'autosize': True,
+            'legend': {
+                'orientation': 'h',
+                'bgcolor': 'rgba(255,255,255,0)',
+                'xanchor': 'left', 'x': -0.1, 'y': -0.05,
+            },
+            'plot_bgcolor': 'rgba(255,255,255,1)',
+            'paper_bgcolor': 'rgba(255,255,255,1)',
+            'margin': {'t': 10, 'r': 10, 'b': 10, 'l': 10},
+            'dragmode': False,
+        }
+    })
+
     # Confirmed deaths by place of residence (QC)
     deaths_loc_qc_fig = go.Figure({
         'data': [
@@ -354,14 +382,14 @@ def generate_layout(labels):
                 'x': data_qc_death_loc['date'],
                 'y': data_qc_death_loc['chsld'],
                 'mode': 'lines+markers',
-                'marker': {'color': '#001F97'},
+                'marker': {'color': 'rgb(0, 114, 178)'},
                 'name': labels['chsld_label'],
                 'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
                 'mode': 'lines+markers',
-                'marker': {'color': '#0083CB'},
+                'marker': {'color': 'rgb(240, 228, 66)'},
                 'x': data_qc_death_loc['date'],
                 'y': data_qc_death_loc['psr'],
                 'name': labels['psr_label'],
@@ -370,7 +398,7 @@ def generate_layout(labels):
             {
                 'type': 'scatter',
                 'mode': 'lines+markers',
-                'marker': {'color': '#0083CB'},
+                'marker': {'color': 'rgb(0, 158, 115)'},
                 'x': data_qc_death_loc['date'],
                 'y': data_qc_death_loc['home'],
                 'name': labels['home_label'],
@@ -380,7 +408,7 @@ def generate_layout(labels):
 
                 'type': 'scatter',
                 'mode': 'lines+markers',
-                'marker': {'color': '#0083CB'},
+                'marker': {'color': 'rgb(230, 159, 0)'},
                 'x': data_qc_death_loc['date'],
                 'y': data_qc_death_loc['other_or_unknown'],
                 'name': labels['other_or_unknown_label'],
@@ -391,7 +419,7 @@ def generate_layout(labels):
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
-            'yaxis': {'title': {'text': labels['deaths_fig_qc_label']}, 'gridcolor': '#f5f5f5'},
+            'yaxis': {'title': {'text': labels['deaths_loc_fig_qc_y_label']}, 'gridcolor': '#f5f5f5'},
             'margin': {"r": 0, "t": 10, "l": 30, "b": 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
             'paper_bgcolor': 'rgba(255,255,255,1)',
@@ -699,9 +727,9 @@ def generate_layout(labels):
                             html.Div(
                                 [
                                     html.H6(
-                                        [labels['deaths_loc_fig_qc_label']], id='deaths_loc_mtl_label'),
+                                        [labels['deaths_loc_fig_mtl_label']], id='deaths_loc_mtl_label'),
                                     dcc.Graph(
-                                        figure=deaths_loc_qc_fig,
+                                        figure=deaths_loc_mtl_fig,
                                         id='deaths_loc_fig_mtl',
                                         responsive=True,
                                         config={
