@@ -70,7 +70,13 @@ labels = {
     'date_label' : '日期',
     'age_label' : '年龄',
     'linear_label' : '线性尺度',
-    'log_label' : '对数尺度'
+    'log_label' : '对数尺度',
+    # Confirmed deaths by place of residence (QC) fig
+    'deaths_loc_fig_qc_label' : 'Cumulative deaths by place of residence (QC)', 
+    'chsld_label' : 'Long-term care centres (CHSLD)',
+    'psr_label' : "Private seniors' residence",
+    'home_label' : 'Home',
+    'other_or_unknown_label' : 'Other or unknown'
 }
 
 layout = generate_layout(labels)

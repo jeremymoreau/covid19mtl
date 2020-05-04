@@ -70,7 +70,13 @@ labels = {
     'date_label' : 'Date',
     'age_label' : 'Age',
     'linear_label' : 'Échelle linéaire',
-    'log_label' : 'Échelle logarithmique'
+    'log_label' : 'Échelle logarithmique',
+    # Confirmed deaths by place of residence (QC) fig
+    'deaths_loc_fig_qc_label' : 'Nombre cumulatif de décès selon le milieu de vie (QC)', 
+    'chsld_label' : 'Centres d’hébergement et de soins de longue durée (CHSLD)',
+    'psr_label' : 'Résidence privée pour aînés',
+    'home_label' : 'Domicile',
+    'other_or_unknown_label' : 'Autres ou Inconnus'
 }
 
 layout = generate_layout(labels)
