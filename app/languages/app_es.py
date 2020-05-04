@@ -20,7 +20,7 @@ labels = {
     'negative_tests_qc_box_label' : 'Pruebas negativas (QC)',
     'montreal_map_label' : 'Casos por cada 1000 habitantes (Isla de Montreal)',
     'total_cases_label' : 'Casos confirmados',
-    'age_group_label' : 'Casos por grupo de edad',
+    'age_group_label' : 'Casos por grupo de edad (MTL)',
     'total_deaths_label' : 'Muertes (QC)',
     'total_hospitalisations_label': 'Hospitalizaciones (QC)',
     'total_testing_label' : 'Pruebas diagnósticas (QC)',
@@ -70,7 +70,24 @@ labels = {
     'date_label' : 'Fecha',
     'age_label' : 'Edad',
     'linear_label' : 'Escala lineal',
-    'log_label' : 'Escala logarítmica'
+    'log_label' : 'Escala logarítmica',
+    # Confirmed deaths by place of residence (MTL) fig
+    'deaths_loc_fig_mtl_label' : 'Deaths by place of residence (MTL)',
+    'deaths_loc_fig_mtl_pie_labels': ['Hospital',
+                                      'Long-term care<br>centres (CHSLD)',
+                                      'Home',
+                                      'Intermediate resource',
+                                      "Private seniors' residence",
+                                      'Other',
+                                      'Unknown'
+                                        ],
+    # Confirmed deaths by place of residence (QC) fig
+    'deaths_loc_fig_qc_label' : 'Deaths by place of residence (QC)', 
+    'chsld_label' : 'Long-term care<br>centres (CHSLD)',
+    'psr_label' : "Private seniors' residence",
+    'home_label' : 'Home',
+    'other_or_unknown_label' : 'Other or unknown',
+    'deaths_loc_fig_qc_y_label': 'Deaths (cumulative, QC)'
 }
 
 layout = generate_layout(labels)
