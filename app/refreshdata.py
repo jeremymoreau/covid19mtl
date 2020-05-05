@@ -8,7 +8,7 @@ import csv
 import logging
 import re
 
-from datetime import datetime
+from datetime import date, datetime
 from argparse import ArgumentParser
 
 import requests
@@ -88,7 +88,7 @@ def save_df(filename, data, strict=True):
         # This test works because all encodings are normalized to UTF-8 at fetch time.
         old_size = os.path.getsize(filename)
         new_size = len(data)
-        if old_size > new_size and not strict:
+        if old_size > new_size and strict:
             msg = ('New data for {} is smaller than the cached version we have'
                    ' on disk ({} vs {} bytes).  Use --force to save it anyway.'
                    ).format(filename, new_size, old_size)
@@ -153,6 +153,35 @@ def parse_data_mtl(data_dir):
             writer.writerows(rows)
 
 
+def merge_trend(day_file, trend_file, target_col, strict=True):
+    ''' Merge a single day worth of data into the trends file. '''
+    # Trend files have one record per day.  Some are vertical (one row per 
+    # day), some are horizontal (one column per day).
+    dayrows = list(csv.reader(open(day_file, 'r')))
+    trendrows = list(csv.reader(open(trend_file, 'r')))
+
+    try:
+        colid = dayrows[0].index(target_col)
+    except ValueError as e:
+        logging.fatal('Can\'t find column "{}" in {}'.format(target_col, day_file))
+        raise e
+
+    # TODO: do not merge if we already have record for today
+    headers = trendrows[0] + [date.today().isoformat()]
+    newrows = [headers]
+    for dayrow, trendrow in zip(dayrows[1:], trendrows[1:]):
+        if dayrow[0] != trendrow[0] and strict:
+            msg = ('Column name mismatch "{}" != "{}". '
+                   'Use --force to ignore').format(dayrow[0], trendrow[0])
+            raise ValueError(msg)
+        trendrow.append(dayrow[colid])
+        newrows.append(trendrow)
+
+    backup(trend_file)
+    writer = csv.writer(open(trend_file, 'w'))
+    writer.writerows(newrows)
+
+
 def init_logging(args):
     format = '%(asctime)s:%(levelname)s'
     level = logging.WARNING
@@ -188,10 +217,14 @@ def main():
         for file, url in SOURCES.items():
             data = fetch(url)
             fq_path = os.path.join(args.data_dir, 'sources', file)
-            save_df(fq_path, data, args.force)
+            save_df(fq_path, data, not args.force)
 
     parse_data_mtl(args.data_dir)
 
+    merge_trend(os.path.join(args.data_dir, 'processed', 'mtl_borough.csv'), 
+                os.path.join(args.data_dir, 'processed', 'mtl_borough_trend.csv'),
+                'Number of confirmed cases', 
+                not args.force)
     return 0
 
 
