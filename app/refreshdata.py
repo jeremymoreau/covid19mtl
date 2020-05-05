@@ -17,7 +17,7 @@ import bs4
 
 # Data sources mapping
 # {filename: url}
-SOURCES = { 'data_mtl.html': 'https://santemontreal.qc.ca/population/coronavirus-covid-19/',
+SOURCES = { 'data_mtl.html': 'https://santemontreal.qc.ca/en/public/coronavirus-covid-19/',
 
             # The main page for these 3 dataset is https://www.inspq.qc.ca/covid-19/donnees 
             'data_qc.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/combine.csv',
@@ -109,6 +109,7 @@ def norm_cell(text):
         text = match.group(1).strip().replace(',', '.').replace(' ', '')
     # normalize whitespaces
     text = ' '.join(text.split())
+    text = text.strip('¹²³⁴⁵⁶⁷⁸⁹')
     return text
 
 
@@ -130,7 +131,7 @@ def parse_data_mtl(data_dir):
         #  ex: <td bgcolor="#A1C8E7">
         if t.find('td', attrs=dict(bgcolor='#A1C8E7')):
             continue
-        if t.find('p') or t.find('h4'):
+        if t.find('h4') or (len(t.find_all('p')) > 1):
             continue
         data_tables.append(t)
 
