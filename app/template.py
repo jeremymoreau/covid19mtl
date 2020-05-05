@@ -552,49 +552,83 @@ def generate_layout(labels):
             # 1st row: two boxes
             html.Div(
                 [
-                    # infobox
+                    # left box
                     html.Div(
                         [
                             dcc.Markdown([labels['infobox']], id='infobox_text')
                         ],
-                        className="pretty_container four columns",
+                        className='grid-item',
                         id="infobox_container",
                     ),
+                    # right box
                     html.Div(
                         [
-                            html.Div(
-                                [
-                                    html.Div([
-
-                                        html.Div([
-                                            html.H6([labels['montreal_map_label']], id='montreal_map_label')
-                                        ]),
-                                        dcc.Graph(
-                                            figure=mtlmap_fig,
-                                            id='montreal_map',
-                                            config={
-                                                'modeBarButtonsToRemove': [
-                                                    'select2d',
-                                                    'lasso2d',
-                                                    'hoverClosestGeo',
-                                                    ],
-                                                'scrollZoom' : True
-                                                }
-                                            ),
-
-                                    ]),
-                                ],
-                                id="countGraphContainer",
-                                className="pretty_container",
+                            html.H6(
+                                [labels['montreal_map_label']],
                             ),
+                            dcc.Graph(
+                                figure=mtlmap_fig,
+                                id='montreal_map',
+                                config={
+                                    'modeBarButtonsToRemove': [
+                                        'select2d',
+                                        'lasso2d',
+                                        'hoverClosestGeo',
+                                        ],
+                                    'scrollZoom' : True
+                                    }
+                                ),
                         ],
-                        id="right-column",
-                        className="eight columns",
+                        className='grid-item'
                     ),
                 ],
-                className="row flex-display",
+                className='grid-container-onethird-twothirds-cols',
             ),
-            
+            # html.Div(
+            #     [
+            #         # infobox
+            #         html.Div(
+            #             [
+            #                 dcc.Markdown([labels['infobox']], id='infobox_text')
+            #             ],
+            #             className="pretty_container four columns",
+            #             id="infobox_container",
+            #         ),
+            #         html.Div(
+            #             [
+            #                 html.Div(
+            #                     [
+            #                         html.Div([
+
+            #                             html.Div([
+            #                                 html.H6([labels['montreal_map_label']], id='montreal_map_label')
+            #                             ]),
+            #                             dcc.Graph(
+            #                                 figure=mtlmap_fig,
+            #                                 id='montreal_map',
+            #                                 config={
+            #                                     'modeBarButtonsToRemove': [
+            #                                         'select2d',
+            #                                         'lasso2d',
+            #                                         'hoverClosestGeo',
+            #                                         ],
+            #                                     'scrollZoom' : True
+            #                                     }
+            #                                 ),
+
+            #                         ]),
+            #                     ],
+            #                     id="countGraphContainer",
+            #                     className="pretty_container",
+            #                 ),
+            #             ],
+            #             id="right-column",
+            #             className="eight columns",
+            #         ),
+            #     ],
+            #     className="row flex-display",
+            # ),
+
             # 2nd row: 2 boxes
             html.Div(
                 [

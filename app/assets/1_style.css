@@ -94,6 +94,12 @@ p {
   column-gap: 15px;
   margin-bottom: 15px;
 }
+.grid-container-onethird-twothirds-cols {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  column-gap: 15px;
+  margin-bottom: 15px;
+}
 .grid-container-three-cols {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -163,11 +169,11 @@ p {
   margin-right: 0px;
 }
 
-#infobox_container {
+/* #infobox_container {
   margin-left: 0px;
   margin-top: 5px;
   display: inline-grid;
-}
+} */
 #total_hospitalisations_col {
   display: inline-grid;
 }
