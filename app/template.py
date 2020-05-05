@@ -724,51 +724,40 @@ def generate_layout(labels):
                     # left box
                     html.Div(
                         [
-                            html.Div(
-                                [
-                                    html.H6(
-                                        [labels['deaths_loc_fig_mtl_label']], id='deaths_loc_mtl_label'),
-                                    dcc.Graph(
-                                        figure=deaths_loc_mtl_fig,
-                                        id='deaths_loc_fig_mtl',
-                                        responsive=True,
-                                        config={
-                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                        }
-                                    ),
-                                ],
-                                id="mtl_deaths_loc_box",
-                                className="pretty_container",
+
+                            html.H6(
+                                [labels['deaths_loc_fig_mtl_label']],
+                            ),
+                            dcc.Graph(
+                                figure=deaths_loc_mtl_fig,
+                                id='deaths_loc_fig_mtl',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                }
                             ),
                         ],
-                        className="six columns",
-                        id="mtl_deaths_loc_col"
+                        className="grid-item"
                     ),
                     # right box
                     html.Div(
                         [
-                            html.Div(
-                                [
-                                    html.H6(
-                                        [labels['deaths_loc_fig_qc_label']], id='deaths_loc_qc_label'),
-                                    dcc.Graph(
-                                        figure=deaths_loc_qc_fig,
-                                        id='deaths_loc_fig_qc',
-                                        responsive=True,
-                                        config={
-                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                        }
-                                    ),
-                                ],
-                                id="qc_deaths_loc_box",
-                                className="pretty_container",
+                            html.H6(
+                                [labels['deaths_loc_fig_qc_label']],
+                            ),
+                            dcc.Graph(
+                                figure=deaths_loc_qc_fig,
+                                id='deaths_loc_fig_qc',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                }
                             ),
                         ],
-                        className="six columns",
-                        id="qc_deaths_loc_col"
+                        className="grid-item"
                     ),
                 ],
-                className="row flex-display third-row",
+                className="row grid-container-two-cols",
             ),
 
             # footer

@@ -1,23 +1,8 @@
-.js-plotly-plot .plotly .modebar {
-  padding-top: 0px !important;
-  top: -10px !important;
-  margin-right: 0px;
-}
-
+/* general */
 body {
   background-color: #f2f2f2;
   margin: 5%;
 }
-.lang_link{
-  margin-left: 1.5rem;
-}
-
-#infobox_container > div > ul {
-  list-style-position: outside;
-  padding-left: 20px;
-  text-align: left
-}
-
 a {
   text-decoration: none !important;
   font-size: 1.7rem;
@@ -29,46 +14,14 @@ a:hover {
 a:active {
   color: #cc4444;
 }
-
 p {
   font-size: 1.7rem;
 }
 
-.two.columns {
-  width: 16.25%;
-}
 
-.column,
-.columns {
-  margin-left: 0.5%;
-}
-
-.pretty_container {
-  border-radius: 5px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #d3d3d3;
-  background-color: #ffffff;
-  margin: 10px;
-  padding: 15px;
-  position: relative;
-}
-
-.mini_container {
-  border-radius: 5px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #d3d3d3;
-  background-color: #ffffff;
-  margin: 0px;
-  padding: 15px;
-  position: relative;
-}
-#info-container {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 15px;
-  margin-top: 15px;
+/* header */
+.lang_link{
+  margin-left: 1.5rem;
 }
 #language_select {
   text-align: right;
@@ -87,6 +40,25 @@ p {
 #last_update_text {
   margin-bottom: 0px;
   font-size: 1.7rem;
+}
+
+
+/* mini info boxes */
+.mini_container {
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #d3d3d3;
+  background-color: #ffffff;
+  margin: 0px;
+  padding: 15px;
+  position: relative;
+}
+#info-container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 15px;
+  margin-top: 15px;
 }
 #cases_mtl {
   color:#c51515;
@@ -113,6 +85,71 @@ p {
 #negative_tests_qc {
   color: #39b686;
 }
+
+/* main grid */
+.grid-container-two-cols {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 15px;
+}
+.grid-container-three-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 15px;
+}
+.grid-item {
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #d3d3d3;
+  background-color: #ffffff;
+  margin: 0px;
+  padding: 15px;
+}
+
+
+/* Plotly modebar  */
+.js-plotly-plot .plotly .modebar {
+  padding-top: 0px !important;
+  top: -10px !important;
+  margin-right: 0px;
+}
+
+/* useful resources box */
+#infobox_container > div > ul {
+  list-style-position: outside;
+  padding-left: 20px;
+  text-align: left
+}
+
+
+
+/* .two.columns {
+  width: 16.25%;
+}
+.column,
+.columns {
+  margin-left: 0.5%;
+} */
+.pretty_container {
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #d3d3d3;
+  background-color: #ffffff;
+  margin: 10px;
+  padding: 15px;
+  position: relative;
+}
+
+
+
+
+
+
+
 #total_cases_box {
   margin-left: 0px;
   margin-right: 6px;
@@ -146,7 +183,7 @@ p {
   margin-right: 0px;
 }
 
-#mtl_deaths_loc_box {
+/* #mtl_deaths_loc_box {
   margin-left: 0px;
   margin-right: 6px;
 }
@@ -157,7 +194,7 @@ p {
 #qc_deaths_loc_box {
   margin-left: 6px;
   margin-right: 0px;
-}
+} */
 
 #footer p {
   font-size: 1.2rem !important;
