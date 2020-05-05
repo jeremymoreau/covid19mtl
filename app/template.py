@@ -443,112 +443,82 @@ def generate_layout(labels):
     ##### App layout #####
     layout = html.Div(
         [
-            dcc.Store(id="aggregate_data"),
-            # empty Div to trigger javascript file for graph resizing
-            html.Div(id="output-clientside"),
             # language select
             html.Div(
                 [
-                    html.Div(
-                        [
-                            html.Div(
-                                [
-                                    # Load in a new tab because some figures do not resize properly otherwise
-                                    # TODO: Fix this bug
-                                    html.A([labels['language0']], href=labels['language_link0'], target='_blank', className='lang_link'),
-                                    html.A([labels['language1']], href=labels['language_link1'], target='_blank', className='lang_link'),
-                                    html.A([labels['language2']], href=labels['language_link2'], target='_blank', className='lang_link'),
-                                ],
-                                id="language_select_link"
-                            )
-                        ],
-                        className="twelve column",
-                        id="language_select",
-                    ),
-                        ],
-                id="language_select_header",
-                className="row flex-display",
+                    # Load in a new tab because some figures do not resize properly otherwise
+                    # TODO: Fix this bug
+                    html.A([labels['language0']], href=labels['language_link0'], target='_blank', className='lang-link'),
+                    html.A([labels['language1']], href=labels['language_link1'], target='_blank', className='lang-link'),
+                    html.A([labels['language2']], href=labels['language_link2'], target='_blank', className='lang-link'),
+                ],
+                id='language-container',
             ),
+
+            # page title
             html.Div(
                 [
                     # title
-                    html.Div(
-                        [
-                            html.Div(
-                                [   
-                                    # title
-                                    html.H3(
-                                        [labels['title']],
-                                        id="title_text",
-                                        style={"margin-bottom": "0px"},
-                                        ),
-                                    #subtitle
-                                    html.H6(
-                                        [labels['subtitle']],
-                                        id="last_update_text",
-                                    ),
-                                ]
-                            )
-                        ],
-                        className="twelve column",
-                        id="title",
+                    html.H3(
+                        [labels['title']],
+                        id='title',
+                        ),
+                    #subtitle
+                    html.H6(
+                        [labels['subtitle']],
+                        id='subtitle',
                     ),
                 ],
-                id="header",
-                className="row flex-display",
+                id='title-container',
             ),
+
+            # mini info boxes
             html.Div(
                 [
-
                     html.Div(
-                        [
-                            html.Div(
-                                [html.H3(latest_cases_mtl, id="cases_mtl_text"), html.P([labels['cases_montreal_label']], id='cases_montreal_label')],
-                                id="cases_mtl",
-                                className="mini_container",
-                            ),
-                            html.Div(
-                                [html.H3(latest_deaths_mtl, id="deaths_mtl_text"), html.P([labels['deaths_montreal_label']], id='deaths_montreal_label')],
-                                id="deaths_mtl",
-                                className="mini_container",
-                            ),
-                            html.Div(
-                                [html.H3(latest_cases_qc, id="cases_qc_text"), html.P([labels['cases_qc_label']], id='cases_qc_label')],
-                                id="cases_qc",
-                                className="mini_container",
-                            ),
-                            html.Div(
-                                [html.H3(latest_deaths_qc, id="deaths_qc_text"), html.P([labels['deaths_qc_label']], id='deaths_qc_label')],
-                                id="deaths_qc",
-                                className="mini_container",
-                            ),
-                            html.Div(
-                                [html.H3(latest_hospitalisations_qc, id="hospitalisations_qc_text"), html.P([labels['hospitalisations_label']], id='hospitalisations_qc_label')],
-                                id="hospitalisations_qc",
-                                className="mini_container",
-                            ),
-                            html.Div(
-                                [html.H3(latest_icu_qc, id="icu_qc_text"), html.P([labels['intensive_care_label']], id='icu_qc_label')],
-                                id="icu_qc",
-                                className="mini_container",
-                            ),
-                            html.Div(
-                                [html.H3(latest_recovered_qc, id="recovered_qc_text"), html.P([labels['recovered_qc_label']], id='recovered_qc_label')],
-                                id="recovered_qc",
-                                className="mini_container",
-                            ),
-                            html.Div(
-                                [html.H3(latest_negative_tests_qc, id="negative_tests_qc_text"), html.P([labels['negative_tests_qc_box_label']], id='negative_tests_qc_label')],
-                                id="negative_tests_qc",
-                                className="mini_container",
-                            ),
-                        ],
-                        id="info-container",
-                        className="row",
+                        [html.H3(latest_cases_mtl, id='cases_mtl_text'), html.P([labels['cases_montreal_label']], id='cases_montreal_label')],
+                        id='cases_mtl',
+                        className='mini_container',
+                    ),
+                    html.Div(
+                        [html.H3(latest_deaths_mtl, id='deaths_mtl_text'), html.P([labels['deaths_montreal_label']], id='deaths_montreal_label')],
+                        id='deaths_mtl',
+                        className='mini_container',
+                    ),
+                    html.Div(
+                        [html.H3(latest_cases_qc, id='cases_qc_text'), html.P([labels['cases_qc_label']], id='cases_qc_label')],
+                        id='cases_qc',
+                        className='mini_container',
+                    ),
+                    html.Div(
+                        [html.H3(latest_deaths_qc, id='deaths_qc_text'), html.P([labels['deaths_qc_label']], id='deaths_qc_label')],
+                        id='deaths_qc',
+                        className='mini_container',
+                    ),
+                    html.Div(
+                        [html.H3(latest_hospitalisations_qc, id='hospitalisations_qc_text'), html.P([labels['hospitalisations_label']], id='hospitalisations_qc_label')],
+                        id='hospitalisations_qc',
+                        className='mini_container',
+                    ),
+                    html.Div(
+                        [html.H3(latest_icu_qc, id='icu_qc_text'), html.P([labels['intensive_care_label']], id='icu_qc_label')],
+                        id='icu_qc',
+                        className='mini_container',
+                    ),
+                    html.Div(
+                        [html.H3(latest_recovered_qc, id='recovered_qc_text'), html.P([labels['recovered_qc_label']], id='recovered_qc_label')],
+                        id='recovered_qc',
+                        className='mini_container',
+                    ),
+                    html.Div(
+                        [html.H3(latest_negative_tests_qc, id='negative_tests_qc_text'), html.P([labels['negative_tests_qc_box_label']], id='negative_tests_qc_label')],
+                        id='negative_tests_qc',
+                        className='mini_container',
                     ),
                 ],
-                className="row",
+                id='info-container'
             ),
+
             # 1st row: two boxes
             html.Div(
                 [
@@ -558,7 +528,7 @@ def generate_layout(labels):
                             dcc.Markdown([labels['infobox']], id='infobox_text')
                         ],
                         className='grid-item',
-                        id="infobox_container",
+                        id='infobox_container',
                     ),
                     # right box
                     html.Div(
@@ -569,6 +539,7 @@ def generate_layout(labels):
                             dcc.Graph(
                                 figure=mtlmap_fig,
                                 id='montreal_map',
+                                responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': [
                                         'select2d',
@@ -584,50 +555,6 @@ def generate_layout(labels):
                 ],
                 className='grid-container-onethird-twothirds-cols',
             ),
-            # html.Div(
-            #     [
-            #         # infobox
-            #         html.Div(
-            #             [
-            #                 dcc.Markdown([labels['infobox']], id='infobox_text')
-            #             ],
-            #             className="pretty_container four columns",
-            #             id="infobox_container",
-            #         ),
-            #         html.Div(
-            #             [
-            #                 html.Div(
-            #                     [
-            #                         html.Div([
-
-            #                             html.Div([
-            #                                 html.H6([labels['montreal_map_label']], id='montreal_map_label')
-            #                             ]),
-            #                             dcc.Graph(
-            #                                 figure=mtlmap_fig,
-            #                                 id='montreal_map',
-            #                                 config={
-            #                                     'modeBarButtonsToRemove': [
-            #                                         'select2d',
-            #                                         'lasso2d',
-            #                                         'hoverClosestGeo',
-            #                                         ],
-            #                                     'scrollZoom' : True
-            #                                     }
-            #                                 ),
-
-            #                         ]),
-            #                     ],
-            #                     id="countGraphContainer",
-            #                     className="pretty_container",
-            #                 ),
-            #             ],
-            #             id="right-column",
-            #             className="eight columns",
-            #         ),
-            #     ],
-            #     className="row flex-display",
-            # ),
 
             # 2nd row: 2 boxes
             html.Div(
@@ -775,30 +702,28 @@ def generate_layout(labels):
             # footer
             html.Div([
                 html.Div([
-                    dcc.Markdown([labels['footer_left']], id="footer_left_text"),
+                    dcc.Markdown([labels['footer_left']]),
                 ],
-                id="footer_left",
-                className="four column"
+                id='footer-left',
+                className='footer-item'
                 ),
                 html.Div([
-                    dcc.Markdown([labels['footer_centre']], id="footer_centre_text"),
+                    dcc.Markdown([labels['footer_centre']]),
                 ],
-                id="footer_centre",
-                className="four column"
+                id='footer-centre',
+                className='footer-item'
                 ),
                 html.Div([
-                    dcc.Markdown([labels['footer_right']], id="footer_right_text"),
+                    dcc.Markdown([labels['footer_right']]),
                 ],
-                id="footer_right",
-                className="four column"
+                id='footer-right',
+                className='footer-item'
                 )
             ],
-            id="footer",
-            className="row flex-display",
+            id='footer'
             )
 
         ],
-        id="mainContainer",
-        style={"display": "flex", "flex-direction": "column"},
+        id='main-container'
     )
     return layout
