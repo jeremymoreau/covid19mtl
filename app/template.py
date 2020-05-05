@@ -9,7 +9,8 @@ from .core import (
     latest_deaths_mtl, latest_deaths_qc,
     latest_hospitalisations_qc, latest_icu_qc,
     latest_negative_tests_qc, latest_recovered_qc,
-    mtl_age_data, mtl_geojson,
+    mtl_age_data, mtl_geojson, data_qc_death_loc,
+    data_mtl_death_loc
 )
 
 
@@ -346,6 +347,90 @@ def generate_layout(labels):
     })
     testing_qc_fig = add_ylog_menu(testing_qc_fig, data_qc['negative_tests_qc'], labels)
 
+    # Confirmed deaths by place of residence (MTL)
+    deaths_loc_mtl_fig = go.Figure({
+        'data': [
+            {
+                'type': 'pie',
+                'labels': labels['deaths_loc_fig_mtl_pie_labels'],
+                'values': data_mtl_death_loc.iloc[-1, 1:-1].tolist(),  # only display latest day for now
+                'marker': {'colors': ['rgb(213, 94, 0)', 'rgb(0, 114, 178)',
+                                    'rgb(0, 158, 115)', 'rgb(204, 121, 167)',
+                                    'rgb(240, 228, 66)', 'rgb(230, 159, 0)',
+                                    'rgb(0, 0, 0)']},
+            }
+        ],
+        'layout': {
+            'autosize': True,
+            'legend': {
+                'orientation': 'h',
+                'bgcolor': 'rgba(255,255,255,0)',
+                'xanchor': 'left', 'x': -0.1, 'y': -0.05,
+            },
+            'plot_bgcolor': 'rgba(255,255,255,1)',
+            'paper_bgcolor': 'rgba(255,255,255,1)',
+            'margin': {'t': 10, 'r': 10, 'b': 10, 'l': 10},
+            'dragmode': False,
+        }
+    })
+
+    # Confirmed deaths by place of residence (QC)
+    deaths_loc_qc_fig = go.Figure({
+        'data': [
+            {
+                'type': 'scatter',
+                'x': data_qc_death_loc['date'],
+                'y': data_qc_death_loc['chsld'],
+                'mode': 'lines+markers',
+                'marker': {'color': 'rgb(0, 114, 178)'},
+                'name': labels['chsld_label'],
+                'hoverlabel': {'namelength': 25},
+            },
+            {
+                'type': 'scatter',
+                'mode': 'lines+markers',
+                'marker': {'color': 'rgb(240, 228, 66)'},
+                'x': data_qc_death_loc['date'],
+                'y': data_qc_death_loc['psr'],
+                'name': labels['psr_label'],
+                'hoverlabel': {'namelength': 25},
+            },
+            {
+                'type': 'scatter',
+                'mode': 'lines+markers',
+                'marker': {'color': 'rgb(0, 158, 115)'},
+                'x': data_qc_death_loc['date'],
+                'y': data_qc_death_loc['home'],
+                'name': labels['home_label'],
+                'hoverlabel': {'namelength': 25},
+            },
+            {
+
+                'type': 'scatter',
+                'mode': 'lines+markers',
+                'marker': {'color': 'rgb(230, 159, 0)'},
+                'x': data_qc_death_loc['date'],
+                'y': data_qc_death_loc['other_or_unknown'],
+                'name': labels['other_or_unknown_label'],
+                'hoverlabel': {'namelength': 25},
+            }
+        ],
+        'layout': {
+            'autosize': True,
+            'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
+            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'yaxis': {'title': {'text': labels['deaths_loc_fig_qc_y_label']}, 'gridcolor': '#f5f5f5'},
+            'margin': {"r": 0, "t": 10, "l": 30, "b": 50},
+            'plot_bgcolor': 'rgba(255,255,255,1)',
+            'paper_bgcolor': 'rgba(255,255,255,1)',
+            'hovermode': 'x',
+            'hoverlabel': {'font': {'color': '#ffffff'}},
+            'dragmode': False
+        }
+    })
+    deaths_loc_qc_fig = add_ylog_menu(deaths_loc_qc_fig, data_qc_death_loc[
+        'chsld'], labels)
+
     # modebar buttons to remove
     modebar_buttons_to_remove = ['select2d',
                                 'lasso2d',
@@ -464,6 +549,7 @@ def generate_layout(labels):
                 ],
                 className="row",
             ),
+            # 1st row: two boxes
             html.Div(
                 [
                     # infobox
@@ -508,7 +594,7 @@ def generate_layout(labels):
                 ],
                 className="row flex-display",
             ),
-            # middle 2 boxes
+            # 2nd row: 2 boxes
             html.Div(
                 [
                     # left box
@@ -559,7 +645,7 @@ def generate_layout(labels):
                 ],
                 className="row flex-display",
             ),
-            # bottom 3 boxes
+            # 3rd row: 3 boxes
             html.Div(
                 [
                     # left box
@@ -632,19 +718,78 @@ def generate_layout(labels):
                 className="row flex-display third-row",
             ),
 
+            # 4th row: 2 boxes
+            html.Div(
+                [
+                    # left box
+                    html.Div(
+                        [
+                            html.Div(
+                                [
+                                    html.H6(
+                                        [labels['deaths_loc_fig_mtl_label']], id='deaths_loc_mtl_label'),
+                                    dcc.Graph(
+                                        figure=deaths_loc_mtl_fig,
+                                        id='deaths_loc_fig_mtl',
+                                        responsive=True,
+                                        config={
+                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                        }
+                                    ),
+                                ],
+                                id="mtl_deaths_loc_box",
+                                className="pretty_container",
+                            ),
+                        ],
+                        className="six columns",
+                        id="mtl_deaths_loc_col"
+                    ),
+                    # right box
+                    html.Div(
+                        [
+                            html.Div(
+                                [
+                                    html.H6(
+                                        [labels['deaths_loc_fig_qc_label']], id='deaths_loc_qc_label'),
+                                    dcc.Graph(
+                                        figure=deaths_loc_qc_fig,
+                                        id='deaths_loc_fig_qc',
+                                        responsive=True,
+                                        config={
+                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                        }
+                                    ),
+                                ],
+                                id="qc_deaths_loc_box",
+                                className="pretty_container",
+                            ),
+                        ],
+                        className="six columns",
+                        id="qc_deaths_loc_col"
+                    ),
+                ],
+                className="row flex-display third-row",
+            ),
+
             # footer
             html.Div([
                 html.Div([
                     dcc.Markdown([labels['footer_left']], id="footer_left_text"),
                 ],
                 id="footer_left",
-                className="six column"
+                className="four column"
+                ),
+                html.Div([
+                    dcc.Markdown([labels['footer_centre']], id="footer_centre_text"),
+                ],
+                id="footer_centre",
+                className="four column"
                 ),
                 html.Div([
                     dcc.Markdown([labels['footer_right']], id="footer_right_text"),
                 ],
                 id="footer_right",
-                className="six column"
+                className="four column"
                 )
             ],
             id="footer",

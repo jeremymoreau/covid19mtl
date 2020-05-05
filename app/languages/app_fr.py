@@ -20,11 +20,13 @@ labels = {
     'negative_tests_qc_box_label' : 'Analyses négatives (QC)',
     'montreal_map_label' : 'Cas pour 1000 habitants (Île de Montréal)',
     'total_cases_label' : 'Cas confirmés',
-    'age_group_label' : "Cas confirmés selon le groupe d'âge",
+    'age_group_label' : "Cas confirmés selon le groupe d'âge (MTL)",
     'total_deaths_label' : 'Décès (QC)',
     'total_hospitalisations_label': 'Hospitalisations (QC)',
     'total_testing_label' : 'Tests diagnostiques (QC)',
+    # footer
     'footer_left' : 'Données: [Santé Montréal](https://santemontreal.qc.ca/population/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / Créé avec [Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
+    'footer_centre': 'Hébergement offert par [DigitalOcean](https://www.digitalocean.com/community/pages/covid-19)',
     'footer_right' : 'Créé par [Jeremy Moreau](https://jeremymoreau.com/) ([IR-CUSM](https://rimuhc.ca/fr/home), McGill) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.fr)',
     'infobox' : """
     ###### Ressources utiles
@@ -70,7 +72,24 @@ labels = {
     'date_label' : 'Date',
     'age_label' : 'Age',
     'linear_label' : 'Échelle linéaire',
-    'log_label' : 'Échelle logarithmique'
+    'log_label' : 'Échelle logarithmique',
+    # Confirmed deaths by place of residence (MTL) fig
+    'deaths_loc_fig_mtl_label' : 'Décès selon le milieu de vie (MTL)',
+    'deaths_loc_fig_mtl_pie_labels': ['Centre hospitalier',
+                                      "Centres d'hébergement<br>et de soins de longue<br>durée (CHSLD)",
+                                      'Domicile',
+                                      'Ressource intermédiaire',
+                                      'Résidence privée<br>pour aînés',
+                                      'Autres',
+                                      'Inconnus'
+                                        ],
+    # Confirmed deaths by place of residence (QC) fig
+    'deaths_loc_fig_qc_label' : 'Décès selon le milieu de vie (QC)', 
+    'chsld_label' : "Centres d'hébergement et de<br>soins de longue durée (CHSLD)",
+    'psr_label' : 'Résidence privée pour aînés',
+    'home_label' : 'Domicile',
+    'other_or_unknown_label' : 'Autres ou Inconnus',
+    'deaths_loc_fig_qc_y_label': 'Décès (cumul, QC)'
 }
 
 layout = generate_layout(labels)

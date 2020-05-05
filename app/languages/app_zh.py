@@ -20,11 +20,13 @@ labels = {
     'negative_tests_qc_box_label' : '检测阴性（魁省）',
     'montreal_map_label' : '病例／1000人（蒙特利尔岛）',
     'total_cases_label' : '确诊病例',
-    'age_group_label' : '不同年龄组确诊病例',
+    'age_group_label' : '不同年龄组确诊病例（蒙特利尔）',
     'total_deaths_label' : '死亡（魁省）',
     'total_hospitalisations_label': '入院人数（魁省）',
     'total_testing_label' : '检测人数（魁省）',
+    # footer
     'footer_left' : '数据来源: [Santé Montréal](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / 使用软件[Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
+    'footer_centre': 'Hosting sponsored by [DigitalOcean](https://www.digitalocean.com/community/pages/covid-19)',
     'footer_right' : '作者[Jeremy Moreau](https://jeremymoreau.com/) ([RI-MUHC](https://rimuhc.ca/), McGill) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh)',
     'infobox' : """
     ###### 相关资源
@@ -70,7 +72,24 @@ labels = {
     'date_label' : '日期',
     'age_label' : '年龄',
     'linear_label' : '线性尺度',
-    'log_label' : '对数尺度'
+    'log_label' : '对数尺度',
+    # Confirmed deaths by place of residence (MTL) fig
+    'deaths_loc_fig_mtl_label' : 'Deaths by place of residence (MTL)',
+    'deaths_loc_fig_mtl_pie_labels': ['Hospital',
+                                      'Long-term care<br>centres (CHSLD)',
+                                      'Home',
+                                      'Intermediate resource',
+                                      "Private seniors' residence",
+                                      'Other',
+                                      'Unknown'
+                                        ],
+    # Confirmed deaths by place of residence (QC) fig
+    'deaths_loc_fig_qc_label' : 'Deaths by place of residence (QC)', 
+    'chsld_label' : 'Long-term care<br>centres (CHSLD)',
+    'psr_label' : "Private seniors' residence",
+    'home_label' : 'Home',
+    'other_or_unknown_label' : 'Other or unknown',
+    'deaths_loc_fig_qc_y_label': 'Deaths (cumulative, QC)'
 }
 
 layout = generate_layout(labels)
