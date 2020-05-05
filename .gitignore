@@ -4,6 +4,9 @@
 # Excel
 ~$*
 
+# Libre Calc
+.~lock.*#
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -75,16 +75,23 @@ def backup(filename):
         return
     time_tag = datetime.utcnow().isoformat()
     base, ext = os.path.splitext(filename) 
-    os.link(filename, '{}-{}{}'.format(base, time_tag, ext))
+    os.rename(filename, '{}-{}{}'.format(base, time_tag, ext))
 
 
-def save_df(filename, data):
+def save_df(filename, data, strict=True):
     ''' Save a datafile if it's newer and at least as big as what we cached.  
-    Raise ValueError otherwise.'''
+    Raise ValueError otherwise.
+
+    If strict=False, sanity tests are bypassed and retrieved data is always 
+    saved.'''
     if os.path.isfile(filename):
         # This test works because all encodings are normalized to UTF-8 at fetch time.
-        if os.path.getsize(filename) > len(data):
-            msg = '{} is smaller than the cached version we have on disk.'.format(filename)
+        old_size = os.path.getsize(filename)
+        new_size = len(data)
+        if old_size > new_size and not strict:
+            msg = ('New data for {} is smaller than the cached version we have'
+                   ' on disk ({} vs {} bytes).  Use --force to save it anyway.'
+                   ).format(filename, new_size, old_size)
             raise ValueError(msg)
         backup(filename)
     # it's all good if we made it this far, save the new file 
@@ -169,6 +176,8 @@ def main():
                         help='Show debugging information')
     parser.add_argument('-L', '--log-file', default=None, 
                         help='Append progress to LOG_FILE')
+    parser.add_argument('-f', '--force', action='store_true', default=False, 
+                        help='By pass sanity checks')
     args = parser.parse_args()
     init_logging(args)
 
@@ -177,7 +186,8 @@ def main():
     if not args.local:
         for file, url in SOURCES.items():
             data = fetch(url)
-            save_df(os.path.join(args.data_dir, 'sources', file), data)
+            fq_path = os.path.join(args.data_dir, 'sources', file)
+            save_df(fq_path, data, args.force)
 
     parse_data_mtl(args.data_dir)
 
