@@ -594,128 +594,106 @@ def generate_layout(labels):
                 ],
                 className="row flex-display",
             ),
+            
             # 2nd row: 2 boxes
             html.Div(
                 [
                     # left box
                     html.Div(
                         [
-                            html.Div(
-                                [
-                                    html.Div([
-                                        html.H6([labels['total_cases_label']], id='total_cases_label'),
-                                    ]),
-                                    dcc.Graph(
-                                        figure=cases_fig,
-                                        id='confirmed_cases_fig',
-                                        responsive=True,
-                                        config={
-                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                            }
-                                        ),
-                                ],
-                                id="total_cases_box",
-                                className="pretty_container",
+
+                            html.H6(
+                                [labels['total_cases_label']],
+                            ),
+                            dcc.Graph(
+                                figure=cases_fig,
+                                id='cases_fig',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                }
                             ),
                         ],
-                        id="total_cases_col",
-                        className="six columns",
+                        className='grid-item'
                     ),
                     # right box
                     html.Div(
                         [
-                            html.Div(
-                                [
-                                    html.H6([labels['age_group_label']], id='age_group'),
-                                    dcc.Graph(
-                                        figure=age_fig,
-                                        id='age_fig_mtl',
-                                        responsive=True,
-                                        config={
-                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                            }
-                                        ),
-                                ],
-                                id="age_group_box",
-                                className="pretty_container",
+                            html.H6(
+                                [labels['age_group_label']],
+                            ),
+                            dcc.Graph(
+                                figure=age_fig,
+                                id='age_fig',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                }
                             ),
                         ],
-                        className="six columns",
+                        className='grid-item'
                     ),
                 ],
-                className="row flex-display",
+                className='grid-container-two-cols',
             ),
+
             # 3rd row: 3 boxes
             html.Div(
                 [
                     # left box
                     html.Div(
                         [
-                            html.Div(
-                                [
-                                    html.H6([labels['deaths_fig_label']], id='total_deaths'),
-                                    dcc.Graph(
-                                            figure=deaths_qc_fig,
-                                            id='deaths_fig_qc',
-                                            responsive=True,
-                                        config={
-                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                            }
-                                        ),
-                                ],
-                                id="total_deaths_box",
-                                className="pretty_container",
+
+                            html.H6(
+                                [labels['deaths_fig_label']],
+                            ),
+                            dcc.Graph(
+                                figure=deaths_qc_fig,
+                                id='deaths_qc_fig',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                }
                             ),
                         ],
-                        className="four columns",
-                        id="total_deaths_col",
+                        className='grid-item'
                     ),
                     # middle box
                     html.Div(
                         [
-                            html.Div(
-                                [
-                                    html.H6([labels['total_hospitalisations_label']], id='total_hospitalisations'),
-                                    dcc.Graph(
-                                        figure=hospitalisations_qc_fig,
-                                        id='hospitalisations_fig_qc',
-                                        responsive=True,
-                                    config={
-                                        'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                        }
-                                        ),
-                                ],
-                                id="total_hospitalisations_box",
-                                className="pretty_container",
+                            html.H6(
+                                [labels['total_hospitalisations_label']]
+                            ),
+                            dcc.Graph(
+                                figure=hospitalisations_qc_fig,
+                                id='hospitalisations_qc_fig',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                }
                             ),
                         ],
-                        className="four columns",
-                        id="total_hospitalisations_col",
+                        className='grid-item'
                     ),
-                    # left
+                    # right box
                     html.Div(
                         [
-                            html.Div(
-                                [
-                                    html.H6([labels['total_testing_label']], id='total_testing'),
-                                    dcc.Graph(
-                                        figure=testing_qc_fig,
-                                        id='testing_fig_qc',
-                                        responsive=True,
-                                        config={
-                                            'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                            }
-                                        ),
-                                ],
-                                id="total_testing_box",
-                                className="pretty_container",
+                            html.H6(
+                                [labels['total_testing_label']],
+                            ),
+                            dcc.Graph(
+                                figure=testing_qc_fig,
+                                id='testing_qc_fig',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                }
                             ),
                         ],
-                        className="four columns",
-                        id="total_testing_col",
+                        className='grid-item'
                     ),
                 ],
-                className="row flex-display third-row",
+                className='grid-container-three-cols',
             ),
 
             # 4th row: 2 boxes
@@ -737,7 +715,7 @@ def generate_layout(labels):
                                 }
                             ),
                         ],
-                        className="grid-item"
+                        className='grid-item'
                     ),
                     # right box
                     html.Div(
@@ -754,10 +732,10 @@ def generate_layout(labels):
                                 }
                             ),
                         ],
-                        className="grid-item"
+                        className='grid-item'
                     ),
                 ],
-                className="row grid-container-two-cols",
+                className='grid-container-two-cols',
             ),
 
             # footer

@@ -86,18 +86,19 @@ p {
   color: #39b686;
 }
 
+
 /* main grid */
 .grid-container-two-cols {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  margin-top: 15px;
+  column-gap: 15px;
+  margin-bottom: 15px;
 }
 .grid-container-three-cols {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  margin-top: 15px;
+  column-gap: 15px;
+  margin-bottom: 15px;
 }
 .grid-item {
   border-radius: 5px;
@@ -126,6 +127,9 @@ p {
 
 
 
+
+
+
 /* .two.columns {
   width: 16.25%;
 }
@@ -143,11 +147,6 @@ p {
   padding: 15px;
   position: relative;
 }
-
-
-
-
-
 
 
 #total_cases_box {
