@@ -14,6 +14,7 @@ from argparse import ArgumentParser
 import requests
 import lxml
 import bs4
+import pytz
 
 # Data sources mapping
 # {filename: url}
@@ -27,6 +28,7 @@ DATA_DIR = 'data'
 NB_RETRIES = 3
 CHARSET_PAT = re.compile(r'charset=((\w|-)+)')
 NUM_PAT = re.compile(r'\*?((?:\d| |,)+)')
+TIMEZONE = pytz.timezone('America/Montreal')
 
 
 def lock(lock_dir):
@@ -73,7 +75,7 @@ def backup(filename):
     Do nothing if the file does not exists. '''
     if not os.path.isfile(filename):
         return
-    time_tag = datetime.utcnow().isoformat()
+    time_tag = datetime.now(tz=TIMEZONE).isoformat().replace(':', '.')  # : -> . for Windows
     base, ext = os.path.splitext(filename) 
     os.rename(filename, '{}-{}{}'.format(base, time_tag, ext))
 
