@@ -162,6 +162,10 @@ def merge_trend(day_file, trend_file, target_col, strict=True):
     dayrows = list(csv.reader(open(day_file, 'r')))
     trendrows = list(csv.reader(open(trend_file, 'r')))
 
+    # remove empty rows if any
+    dayrows = [row for row in dayrows if row]
+    trendrows = [row for row in trendrows if row]
+
     try:
         colid = dayrows[0].index(target_col)
     except ValueError as e:
