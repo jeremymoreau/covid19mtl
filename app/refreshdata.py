@@ -3,7 +3,7 @@
 
 import os
 import sys
-import fcntl
+#import fcntl
 import csv
 import logging
 import re
@@ -211,7 +211,7 @@ def main():
     args = parser.parse_args()
     init_logging(args)
 
-    lock(args.data_dir)
+    #lock(args.data_dir)
 
     if not args.local:
         for file, url in SOURCES.items():
