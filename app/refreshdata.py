@@ -159,8 +159,10 @@ def merge_trend(day_file, trend_file, target_col, strict=True):
     ''' Merge a single day worth of data into the trends file. '''
     # Trend files have one record per day.  Some are vertical (one row per 
     # day), some are horizontal (one column per day).
-    dayrows = list(csv.reader(open(day_file, 'r')))
-    trendrows = list(csv.reader(open(trend_file, 'r')))
+    with open(day_file, 'r', encoding='utf-8') as f:
+        dayrows = list(csv.reader(f))
+    with open(trend_file, 'r', encoding='utf-8') as f:
+        trendrows = list(csv.reader(f))
 
     # remove empty rows if any
     dayrows = [row for row in dayrows if row]
