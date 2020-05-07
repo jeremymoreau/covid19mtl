@@ -26,7 +26,7 @@ labels = {
     'total_testing_label' : 'Pruebas diagnósticas (QC)',
     # footer
     'footer_left' : 'Datos: [Santé Montréal](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / Construido con [Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
-    'footer_centre': 'Hosting sponsored by [DigitalOcean](https://www.digitalocean.com/community/pages/covid-19)',
+    'footer_centre': 'Patrocinado por [DigitalOcean](https://www.digitalocean.com/community/pages/covid-19)',
     'footer_right' : 'Hecho por [Jeremy Moreau](https://jeremymoreau.com/) ([RI-MUHC](https://rimuhc.ca/), McGill) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)',
     'infobox' : """
     ###### Enlaces importantes
@@ -38,7 +38,7 @@ labels = {
     - [Gobierno de Canadá: COVID-19 (inglés y francés)](https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19.html)
     - [Flatten.ca: auto-reporte de estado de salud (inglés y francés)](https://flatten.ca/)
 
-    Si se encuentra preocupado por el COVID-19 o presenta síntomas como tos o fiebre, llame sin costo al (514) 644-4545 en el área de Montreal, al (418) 644-4545 en la región de la Ciudad de Quebec y al 1 (877) 644-4545 en cualquier otra parte de la Provincia de Quebec.
+    Si está preocupado por el COVID-19 o presenta síntomas como tos o fiebre, llame sin costo al (514) 644-4545 en el área de Montreal, al (418) 644-4545 en la región de la Ciudad de Quebec y al 1 (877) 644-4545 en cualquier otra parte de la Provincia de Quebec.
     """,
     'montreal_map_colourbar_labels' : {
                                         'date': 'Fecha', 
@@ -74,22 +74,22 @@ labels = {
     'linear_label' : 'Escala lineal',
     'log_label' : 'Escala logarítmica',
     # Confirmed deaths by place of residence (MTL) fig
-    'deaths_loc_fig_mtl_label' : 'Deaths by place of residence (MTL)',
+    'deaths_loc_fig_mtl_label' : 'Muertes por lugar de residencia (MTL)',
     'deaths_loc_fig_mtl_pie_labels': ['Hospital',
-                                      'Long-term care<br>centres (CHSLD)',
-                                      'Home',
-                                      'Intermediate resource',
-                                      "Private seniors' residence",
-                                      'Other',
-                                      'Unknown'
+                                      'Centros de cuidado<br>a largo plazo (CHSLD)',
+                                      'Hogar',
+                                      'Centro de atención<br>intermedio',
+                                      "Casa hogar para<br>adultos mayores",
+                                      'Otro',
+                                      'Desconocido'
                                         ],
     # Confirmed deaths by place of residence (QC) fig
-    'deaths_loc_fig_qc_label' : 'Deaths by place of residence (QC)', 
-    'chsld_label' : 'Long-term care<br>centres (CHSLD)',
-    'psr_label' : "Private seniors' residence",
-    'home_label' : 'Home',
-    'other_or_unknown_label' : 'Other or unknown',
-    'deaths_loc_fig_qc_y_label': 'Deaths (cumulative, QC)'
+    'deaths_loc_fig_qc_label' : 'Muertes por lugar de residencia (QC)', 
+    'chsld_label' : 'Centros de cuidado<br>a largo plazo (CHSLD)',
+    'psr_label' : "Casa hogar para adultos mayores",
+    'home_label' : 'Hogar',
+    'other_or_unknown_label' : 'Otro o desconocido',
+    'deaths_loc_fig_qc_y_label': 'Muertes (acumulativo, QC)'
 }
 
 layout = generate_layout(labels)
