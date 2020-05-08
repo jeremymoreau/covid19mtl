@@ -10,6 +10,7 @@ import re
 
 from datetime import date, datetime
 from argparse import ArgumentParser
+from charset_normalizer import CharsetNormalizerMatches as cnm
 
 import requests
 import lxml
@@ -56,6 +57,34 @@ def normalize_encoding(data, content_type=None):
             encoding = match.group(1)
     text = data.decode(encoding)
     return text.encode('utf-8')
+
+
+def normalise_to_utf8(bytes_or_filepath):
+    """Convert any text input with unknown encoding to utf-8.
+
+    Parameters
+    ----------
+    bytes_or_filepath : bytes or str
+        A binary string or path to any text file in any encoding.
+
+    Returns
+    -------
+    str
+        A string with correct utf-8 encoding.
+
+    Raises
+    ------
+    TypeError
+        Input is not of type bytes or a valid path to an existing file.
+    """    
+    if type(bytes_or_filepath) == bytes:
+        utf8_str = str(cnm.from_bytes(bytes_or_filepath).best().first())
+    elif os.path.isfile(bytes_or_filepath):
+        utf8_str = str(cnm.from_path(bytes_or_filepath).best().first())
+    else:
+        raise TypeError('Input must be bytes or a valid file path')
+        
+    return utf8_str
 
 
 def fetch(url):
