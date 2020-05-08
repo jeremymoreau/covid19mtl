@@ -7,6 +7,7 @@ import sys
 import csv
 import logging
 import re
+import io
 
 from datetime import date, datetime
 from argparse import ArgumentParser
@@ -16,6 +17,7 @@ import requests
 import lxml
 import bs4
 import pytz
+import pandas as pd
 
 # Data sources mapping
 # {filename: url}
@@ -184,6 +186,58 @@ def parse_data_mtl(data_dir):
             writer.writerows(rows)
 
 
+def append_mtl_borough_csv(day_file, trend_file, target_col):
+    """Append daily MTL borough data to historical MTL borough csv trend file.
+
+    Trend file will be overwritten with new updated file and a backup of the
+    original trend file will be saved in the same dir.
+
+    Parameters
+    ----------
+    day_file : str
+        Absolute path of daily MTL borough data csv
+    trend_file : str
+        Absolute path of historical MTL borough csv trend file
+    target_col : str
+        Name of column to append to from day_file to trend_file
+    """    
+    # Normalise input to utf-8
+    day_str = normalise_to_utf8(day_file)
+    trend_str = normalise_to_utf8(trend_file)
+    
+    # Convert csv str to pandas df
+    day_df = pd.read_csv(io.StringIO(day_str))
+    trend_df = pd.read_csv(io.StringIO(trend_str))
+    
+    # Select column to append
+    new_data_col = day_df[target_col]
+    
+    # Cleanup new_data_col
+    ## Remove '.' thousands separator and any space
+    new_data_col = new_data_col.str.replace('.', '').str.replace(' ', '')
+    ## Remove '<' char. Note: this is somewhat inaccurate, as <5 counts
+    ## will be reporte as 5, but we cannot have any strings in the data.
+    new_data_col = new_data_col.str.replace('<', '')
+    ## Enforce int type (will raise ValueError if any unexpected chars remain)
+    new_data_col = new_data_col.astype(int)
+    ## Remove last row (total count)
+    new_data_col = new_data_col[:-1]
+    
+    # TODO: function should take current_date as a param (date should be extracted from webpage)
+    current_date = date.today().isoformat()
+    
+    # Check that new date not already appended
+    if trend_df.columns[-1] == date:
+        logging.warn(f'{current_date} has already been appended to {trend_file}')
+    else:
+        # Append new col of data
+        trend_df[current_date] = new_data_col
+        
+    # Backup old trend file then overwrite with new file
+    backup(trend_file)
+    trend_df.to_csv(trend_file)
+
+
 def merge_trend(day_file, trend_file, target_col, strict=True):
     ''' Merge a single day worth of data into the trends file. '''
     # Trend files have one record per day.  Some are vertical (one row per 
@@ -258,10 +312,9 @@ def main():
 
     parse_data_mtl(args.data_dir)
 
-    merge_trend(os.path.join(args.data_dir, 'processed', 'mtl_borough.csv'), 
+    append_mtl_borough_csv(os.path.join(args.data_dir, 'processed', 'mtl_borough.csv'), 
                 os.path.join(args.data_dir, 'processed', 'mtl_borough_trend.csv'),
-                'Number of confirmed cases', 
-                not args.force)
+                'Number of confirmed cases')
     return 0
 
 
