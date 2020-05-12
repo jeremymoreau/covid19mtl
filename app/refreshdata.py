@@ -166,6 +166,8 @@ def parse_data_mtl(data_dir):
             continue
         if t.find('h4') or (len(t.find_all('p')) > 1):
             continue
+        if t.find('strong') and (len(t.find_all('br')) > 4):
+            continue
         data_tables.append(t)
 
     if len(data_tables) != nb_tables:

@@ -7,34 +7,41 @@
 beautifulsoup4==4.9.0     # via bs4
 brotli==1.0.7             # via flask-compress
 bs4==0.0.1                # via -r requirements.in
+cached-property==1.5.1    # via charset-normalizer
 certifi==2020.4.5.1       # via requests
 chardet==3.0.4            # via requests
+charset-normalizer==1.3.4  # via -r requirements.in
 click==7.1.2              # via flask
 dash-core-components==1.9.0  # via dash
 dash-html-components==1.0.3  # via dash
 dash-table==4.6.2         # via dash
 dash==1.10.0              # via -r requirements.in
 dash_renderer==1.3.0      # via dash
+dragonmapper==0.2.6       # via charset-normalizer
 flask-compress==1.5.0     # via dash
 flask==1.1.2              # via dash, flask-compress
 future==0.18.2            # via dash
 gunicorn==20.0.4          # via -r requirements.in
+hanzidentifier==1.0.2     # via dragonmapper
 idna==2.9                 # via requests
 itsdangerous==1.1.0       # via flask
 jinja2==2.11.2            # via flask
+loguru==0.4.1             # via charset-normalizer
 lxml==4.5.0               # via -r requirements.in
 markupsafe==1.1.1         # via jinja2
 numpy==1.18.3             # via pandas
 pandas==1.0.3             # via -r requirements.in
 plotly==4.6.0             # via dash
+prettytable==0.7.2        # via charset-normalizer
 python-dateutil==2.8.1    # via pandas
-pytz==2020.1              # via pandas
+pytz==2020.1              # via -r requirements.in, pandas
 requests==2.23.0          # via -r requirements.in
 retrying==1.3.3           # via plotly
 six==1.14.0               # via plotly, python-dateutil, retrying
 soupsieve==2.0            # via beautifulsoup4
 urllib3==1.25.9           # via requests
 werkzeug==1.0.1           # via flask
+zhon==1.1.5               # via charset-normalizer, dragonmapper, hanzidentifier
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
