@@ -4,6 +4,9 @@
 # Excel
 ~$*
 
+# Libre Calc
+.~lock.*#
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -129,3 +132,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# COVID-19 Web scraper
+app/data/scraper.pid
+app/data/sources/*.csv
+app/data/sources/*.html
