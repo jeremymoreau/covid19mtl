@@ -21,12 +21,24 @@ import pandas as pd
 
 # Data sources mapping
 # {filename: url}
-SOURCES = { 'data_mtl.html': 'https://santemontreal.qc.ca/en/public/coronavirus-covid-19/',
+SOURCES = { 
+    # Montreal
+    # HTML
+    'data_mtl.html': 'https://santemontreal.qc.ca/en/public/coronavirus-covid-19/',
+    # CSV
+    'data_mtl_ciuss.csv': 'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/ciusss.csv',
+    'data_mtl_municipal.csv': 'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/municipal.csv',
+    'data_mtl_age.csv': 'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/grage.csv',
 
-            # The main page for these 3 dataset is https://www.inspq.qc.ca/covid-19/donnees 
-            'data_qc.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/combine.csv',
-            'data_qc_case_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls.csv',
-            'data_qc_death_loc_by_reg.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa.csv'}
+    # INSPQ
+    # HTML
+    'INSPQ_main.html': 'https://www.inspq.qc.ca/covid-19/donnees',
+    'INSPQ_region.html': 'https://www.inspq.qc.ca/covid-19/donnees/details',
+    # CSV
+    'data_qc.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/combine.csv',
+    'data_qc_cases_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls.csv',
+    'data_qc_death_loc_by_region.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa.csv'
+    }
 DATA_DIR = 'data'
 NB_RETRIES = 3
 CHARSET_PAT = re.compile(r'charset=((\w|-)+)')
@@ -96,8 +108,9 @@ def fetch(url):
         resp = requests.get(url)
         if resp.status_code != 200:
             next
-        ctype = resp.headers.get('Content-Type')
-        return normalize_encoding(resp.content, ctype)
+        # ctype = resp.headers.get('Content-Type')
+        # return normalize_encoding(resp.content, ctype)
+        return normalise_to_utf8(resp.content)
     raise RuntimeError('Failed to retrieve {}'.format(url))
 
 
@@ -111,7 +124,7 @@ def backup(filename):
     os.rename(filename, '{}-{}{}'.format(base, time_tag, ext))
 
 
-def save_df(filename, data, strict=True):
+def save_datafile(filename, data, strict=False):
     ''' Save a datafile if it's newer and at least as big as what we cached.  
     Raise ValueError otherwise.
 
@@ -128,7 +141,7 @@ def save_df(filename, data, strict=True):
             raise ValueError(msg)
         backup(filename)
     # it's all good if we made it this far, save the new file 
-    with open(filename, 'wb') as f:
+    with open(filename, 'w', encoding='utf-8') as f:
         f.write(data)
     logging.info('Saved a new version of {}'.format(filename))
 
@@ -307,16 +320,23 @@ def main():
     #lock(args.data_dir)
 
     if not args.local:
+        # Create folder name after current date
+        date_tag = datetime.now(tz=TIMEZONE).date().isoformat()
+        data_save_dir = os.path.join(args.data_dir, 'sources', date_tag)
+        if not os.path.isdir(data_save_dir):
+            os.mkdir(data_save_dir)
+
+        # Download all source data files
         for file, url in SOURCES.items():
             data = fetch(url)
-            fq_path = os.path.join(args.data_dir, 'sources', file)
-            save_df(fq_path, data, not args.force)
+            fq_path = os.path.join(data_save_dir, file)
+            save_datafile(fq_path, data, not args.force)
 
-    parse_data_mtl(args.data_dir)
+    # parse_data_mtl(args.data_dir)
 
-    append_mtl_borough_csv(os.path.join(args.data_dir, 'processed', 'mtl_borough.csv'), 
-                os.path.join(args.data_dir, 'processed', 'mtl_borough_trend.csv'),
-                'Number of confirmed cases')
+    # append_mtl_borough_csv(os.path.join(args.data_dir, 'processed', 'mtl_borough.csv'), 
+    #             os.path.join(args.data_dir, 'processed', 'mtl_borough_trend.csv'),
+    #             'Number of confirmed cases')
     return 0
 
 
