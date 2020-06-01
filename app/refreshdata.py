@@ -19,31 +19,57 @@ import bs4
 import pytz
 import pandas as pd
 
+DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
+NB_RETRIES = 3
+CHARSET_PAT = re.compile(r'charset=((\w|-)+)')
+NUM_PAT = re.compile(r'\*?((?:\d| |,)+)')
+TIMEZONE = pytz.timezone('America/Montreal')
+
+
+def get_month_fr():
+    """Return the current date in the format dateMonth in French (e.g. 31mai)
+
+    Returns
+    -------
+    str
+        Current dateMonth string in French.
+    """
+    date_tuple = datetime.now(tz=TIMEZONE).timetuple()
+    fr_months = {1: 'janvier', 2:'février', 3:'mars', 4:'avril',
+                 5:'mai', 6:'juin', 7:'juillet', 8:'août',
+                 9:'septembre', 10:'octobre', 11:'novembre', 12:'décembre'}
+    
+    return str(date_tuple[2]) + fr_months[date_tuple[1]]
+
+
 # Data sources mapping
 # {filename: url}
 SOURCES = { 
     # Montreal
     # HTML
     'data_mtl.html': 'https://santemontreal.qc.ca/en/public/coronavirus-covid-19/',
-    # CSV
-    'data_mtl_ciuss.csv': 'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/ciusss.csv',
-    'data_mtl_municipal.csv': 'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/municipal.csv',
-    'data_mtl_age.csv': 'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/grage.csv',
+    # CSV (Note: ";" separated)
+    'data_mtl_ciuss.csv':
+    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/ciusss' + get_month_fr() + '.csv',
+    'data_mtl_municipal.csv':
+    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/municipal' + get_month_fr() + '.csv',
+    'data_mtl_age.csv':
+    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/grage' + get_month_fr() + '.csv',
+    'data_mtl_sex.csv':
+    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/sexe' + get_month_fr() + '.csv',
+    'data_mtl_new_cases.csv':
+    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/courbe' + get_month_fr() + '.csv',
+    
 
     # INSPQ
     # HTML
     'INSPQ_main.html': 'https://www.inspq.qc.ca/covid-19/donnees',
     'INSPQ_region.html': 'https://www.inspq.qc.ca/covid-19/donnees/details',
-    # CSV
+    # CSV (Note: "," separated)
     'data_qc.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/combine.csv',
     'data_qc_cases_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls.csv',
     'data_qc_death_loc_by_region.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa.csv'
     }
-DATA_DIR = 'data'
-NB_RETRIES = 3
-CHARSET_PAT = re.compile(r'charset=((\w|-)+)')
-NUM_PAT = re.compile(r'\*?((?:\d| |,)+)')
-TIMEZONE = pytz.timezone('America/Montreal')
 
 
 def lock(lock_dir):
@@ -62,6 +88,7 @@ def lock(lock_dir):
     # No unlocking needed.  fcntl() locks are released then the process exits.
     with open(lockf, 'w') as f:
         f.write('{}'.format(os.getpid))
+
 
 def normalize_encoding(data, content_type=None):
     encoding='utf-8'
@@ -201,8 +228,8 @@ def parse_data_mtl(data_dir):
             writer.writerows(rows)
 
 
-def append_mtl_borough_csv(day_file, trend_file, target_col):
-    """Append daily MTL borough data to historical MTL borough csv trend file.
+def append_mtl_cases_csv(day_file, trend_file, target_col):
+    """Append daily MTL borough data to cases.csv file.
 
     Trend file will be overwritten with new updated file and a backup of the
     original trend file will be saved in the same dir.
@@ -302,8 +329,7 @@ def init_logging(args):
 
 def main():
     parser = ArgumentParser('refreshdata', description=__doc__)
-    data_dir = os.path.join(os.path.dirname(__file__), DATA_DIR)
-    parser.add_argument('-d', '--data-dir', default=data_dir)
+    parser.add_argument('-d', '--data-dir', default=DATA_DIR)
     parser.add_argument('-l', '--local', action='store_true', default=False, 
                         help='Do not fetch remote file, only process local copies')
     parser.add_argument('-v', '--verbose', action='store_true', default=False, 
@@ -319,6 +345,7 @@ def main():
 
     #lock(args.data_dir)
 
+    # Download all source files into data/sources/YYYY-MM-DD/
     if not args.local:
         # Create folder name after current date
         date_tag = datetime.now(tz=TIMEZONE).date().isoformat()
@@ -332,11 +359,26 @@ def main():
             fq_path = os.path.join(data_save_dir, file)
             save_datafile(fq_path, data, not args.force)
 
-    # parse_data_mtl(args.data_dir)
+    # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
 
+    # Replace data_qc_death_loc
+
+    # Append row to data_mtl_death_loc.csv
+
+    # Append col to cases.csv
     # append_mtl_borough_csv(os.path.join(args.data_dir, 'processed', 'mtl_borough.csv'), 
     #             os.path.join(args.data_dir, 'processed', 'mtl_borough_trend.csv'),
     #             'Number of confirmed cases')
+
+    # Append col to cases_per1000.csv
+
+    # Append row to data_mtl.csv
+
+    # Append row to data_qc.csv
+
+    # parse_data_mtl(args.data_dir)
+
+
     return 0
 
 
