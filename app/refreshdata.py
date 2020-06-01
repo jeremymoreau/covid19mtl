@@ -329,6 +329,8 @@ def init_logging(args):
 
 
 def backup_processed_dir():
+    """Copy all files from data/processed to data/processed_backups/YYYY-MM-DD{_v#}
+    """
     date_tag = datetime.now(tz=TIMEZONE).date().isoformat()
     processed_dir = os.path.join(DATA_DIR, 'processed')
     backups_dir  = os.path.join(DATA_DIR, 'processed_backups')
@@ -343,47 +345,66 @@ def backup_processed_dir():
     else:
         os.mkdir(current_bkp_dir)
 
-    # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
+    # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD{_v#}
     for file in os.listdir(processed_dir):
         file_path = os.path.join(processed_dir, file)
         shutil.copy(file_path, current_bkp_dir)
 
-    
+
+def download_source_file(sources):
+    """Download files from URL
+
+    Downloaded files will be downloaded into data/sources/YYYY-MM-DD{_v#}/
+
+    Parameters
+    ----------
+    sources : dict
+        dict in the format {filename:source} where source is a URL and filename is the name of
+        the file in which to save the downloaded data.
+    """
+    # create data/sources/YYYY-MM-DD{_v#}/ dir
+    date_tag = datetime.now(tz=TIMEZONE).date().isoformat()
+    sources_dir = os.path.join(DATA_DIR, 'sources')
+    current_sources_dir = os.path.join(sources_dir, date_tag)
+    i = 1
+    while os.path.isdir(current_sources_dir):
+        i += 1
+        current_sources_dirname = date_tag + '_v' + str(i)  
+        current_sources_dir = os.path.join(sources_dir, current_sources_dirname)    
+    else:
+        os.mkdir(current_sources_dir)
+
+    # Download all source data files to sources dir
+    for file, url in sources.items():
+        data = fetch(url)
+        fq_path = os.path.join(current_sources_dir, file)
+        save_datafile(fq_path, data, True)
+
 
 def main():
     parser = ArgumentParser('refreshdata', description=__doc__)
-    parser.add_argument('-d', '--data-dir', default=DATA_DIR)
+    # parser.add_argument('-d', '--data-dir', default=DATA_DIR)
     parser.add_argument('-l', '--local', action='store_true', default=False, 
                         help='Do not fetch remote file, only process local copies')
-    parser.add_argument('-v', '--verbose', action='store_true', default=False, 
-                        help='Increase verbosity')
-    parser.add_argument('-D', '--debug', action='store_true', default=False, 
-                        help='Show debugging information')
-    parser.add_argument('-L', '--log-file', default=None, 
-                        help='Append progress to LOG_FILE')
-    parser.add_argument('-f', '--force', action='store_true', default=False, 
-                        help='By pass sanity checks')
+    # parser.add_argument('-v', '--verbose', action='store_true', default=False, 
+    #                     help='Increase verbosity')
+    # parser.add_argument('-D', '--debug', action='store_true', default=False, 
+    #                     help='Show debugging information')
+    # parser.add_argument('-L', '--log-file', default=None, 
+    #                     help='Append progress to LOG_FILE')
+    # parser.add_argument('-f', '--force', action='store_true', default=False, 
+    #                     help='By pass sanity checks')
     args = parser.parse_args()
     init_logging(args)
 
     #lock(args.data_dir)
 
-    # Download all source files into data/sources/YYYY-MM-DD/
-    # if not args.local:
-    #     # Create folder name after current date
-    #     date_tag = datetime.now(tz=TIMEZONE).date().isoformat()
-    #     data_save_dir = os.path.join(args.data_dir, 'sources', date_tag)
-    #     if not os.path.isdir(data_save_dir):
-    #         os.mkdir(data_save_dir)
-
-    #     # Download all source data files
-    #     for file, url in SOURCES.items():
-    #         data = fetch(url)
-    #         fq_path = os.path.join(data_save_dir, file)
-    #         save_datafile(fq_path, data, not args.force)
+    # Download all source files into data/sources/YYYY-MM-DD{_v#}/
+    if not args.local:
+        download_source_file(SOURCES)
 
     # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
-    backup_processed_dir()
+    # backup_processed_dir()
 
     # Replace data_qc_death_loc
 
