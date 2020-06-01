@@ -329,20 +329,25 @@ def init_logging(args):
     logging.basicConfig(filename=args.log_file, format=format, level=level)
 
 
-def backup_processed_dir():
+def backup_processed_dir(processed_dir, processed_backups_dir):
     """Copy all files from data/processed to data/processed_backups/YYYY-MM-DD{_v#}
+
+     Parameters
+    ----------
+    processed_dir : dict
+        Absolute path of dir that contains processed files to backup.
+    processed_backups_dir : str
+        Absolute path of dir in which to save the backup.
     """
     date_tag = datetime.now(tz=TIMEZONE).date().isoformat()
-    processed_dir = os.path.join(DATA_DIR, 'processed')
-    backups_dir  = os.path.join(DATA_DIR, 'processed_backups')
 
     # make backup dir
-    current_bkp_dir = os.path.join(backups_dir, date_tag)
+    current_bkp_dir = os.path.join(processed_backups_dir, date_tag)
     i = 1
     while os.path.isdir(current_bkp_dir):
         i += 1
         current_bkp_dirname = date_tag + '_v' + str(i)  
-        current_bkp_dir = os.path.join(backups_dir, current_bkp_dirname)    
+        current_bkp_dir = os.path.join(processed_backups_dir, current_bkp_dirname)    
     else:
         os.mkdir(current_bkp_dir)
 
@@ -352,7 +357,7 @@ def backup_processed_dir():
         shutil.copy(file_path, current_bkp_dir)
 
 
-def download_source_file(sources):
+def download_source_files(sources, sources_dir):
     """Download files from URL
 
     Downloaded files will be downloaded into data/sources/YYYY-MM-DD{_v#}/
@@ -362,10 +367,12 @@ def download_source_file(sources):
     sources : dict
         dict in the format {filename:source} where source is a URL and filename is the name of
         the file in which to save the downloaded data.
+    sources_dir : str
+        Absolute path of dir in which to save downloaded files.
     """
     # create data/sources/YYYY-MM-DD{_v#}/ dir
     date_tag = datetime.now(tz=TIMEZONE).date().isoformat()
-    sources_dir = os.path.join(DATA_DIR, 'sources')
+
     current_sources_dir = os.path.join(sources_dir, date_tag)
     i = 1
     while os.path.isdir(current_sources_dir):
@@ -418,16 +425,17 @@ def main():
 
     #lock(args.data_dir)
 
-    # sources and processed dir paths
+    # sources, processed, and processed_backups dir paths
     sources_dir = os.path.join(DATA_DIR, 'sources')
     processed_dir = os.path.join(DATA_DIR, 'processed')
+    processed_backups_dir  = os.path.join(DATA_DIR, 'processed_backups')
 
     # Download all source files into data/sources/YYYY-MM-DD{_v#}/
     if not args.no_download:
-        download_source_file(SOURCES)
+        download_source_files(SOURCES, sources_dir)
 
     # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
-    backup_processed_dir()
+    backup_processed_dir(processed_dir, processed_backups_dir)
 
     # Replace data_qc_death_loc
     update_data_qc(sources_dir, processed_dir)
