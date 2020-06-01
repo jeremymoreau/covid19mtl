@@ -230,58 +230,6 @@ def parse_data_mtl(data_dir):
             writer.writerows(rows)
 
 
-def append_mtl_cases_csv(day_file, trend_file, target_col):
-    """Append daily MTL borough data to cases.csv file.
-
-    Trend file will be overwritten with new updated file and a backup of the
-    original trend file will be saved in the same dir.
-
-    Parameters
-    ----------
-    day_file : str
-        Absolute path of daily MTL borough data csv
-    trend_file : str
-        Absolute path of historical MTL borough csv trend file
-    target_col : str
-        Name of column to append to from day_file to trend_file
-    """    
-    # Normalise input to utf-8
-    day_str = normalise_to_utf8(day_file)
-    trend_str = normalise_to_utf8(trend_file)
-    
-    # Convert csv str to pandas df
-    day_df = pd.read_csv(io.StringIO(day_str))
-    trend_df = pd.read_csv(io.StringIO(trend_str))
-    
-    # Select column to append
-    new_data_col = day_df[target_col]
-    
-    # Cleanup new_data_col
-    ## Remove '.' thousands separator and any space
-    new_data_col = new_data_col.str.replace('.', '').str.replace(' ', '')
-    ## Remove '<' char. Note: this is somewhat inaccurate, as <5 counts
-    ## will be reporte as 5, but we cannot have any strings in the data.
-    new_data_col = new_data_col.str.replace('<', '')
-    ## Enforce int type (will raise ValueError if any unexpected chars remain)
-    new_data_col = new_data_col.astype(int)
-    ## Remove last row (total count)
-    new_data_col = new_data_col[:-1]
-    
-    # TODO: function should take current_date as a param (date should be extracted from webpage)
-    current_date = date.today().isoformat()
-    
-    # Check that new date not already appended
-    if trend_df.columns[-1] == date:
-        logging.warn(f'{current_date} has already been appended to {trend_file}')
-    else:
-        # Append new col of data
-        trend_df[current_date] = new_data_col
-        
-    # Backup old trend file then overwrite with new file
-    backup(trend_file)
-    trend_df.to_csv(trend_file)
-
-
 def merge_trend(day_file, trend_file, target_col, strict=True):
     ''' Merge a single day worth of data into the trends file. '''
     # Trend files have one record per day.  Some are vertical (one row per 
@@ -389,11 +337,39 @@ def download_source_files(sources, sources_dir):
         save_datafile(fq_path, data, True)
 
 
-def update_data_qc(sources_dir, processed_dir):
+def get_latest_source_dir(sources_dir):
+    """Get the latest source dir in data/sources.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+
+    Returns
+    -------
+    str
+        Name of latest source dir (e.g. 2020-06-01_v2) in data/sources/
+    """
     source_dirs = os.listdir(sources_dir)
     source_dirs.sort()
     latest_source_dir = source_dirs[-1]
-    lastest_source_file = os.path.join(sources_dir, latest_source_dir, 'data_qc.csv')
+
+    return latest_source_dir
+
+
+def update_data_qc_csv(sources_dir, processed_dir):
+    """Replace old copy of data_qc.csv in processed_dir with latest version.
+
+    data_qc.csv file will be overwritten with the new updated file.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    """    
+    lastest_source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc.csv')
 
     # read latest data/sources/*/data_qc.csv
     qc_df = pd.read_csv(lastest_source_file)
@@ -405,6 +381,59 @@ def update_data_qc(sources_dir, processed_dir):
 
     # overwrite previous data/processed/data_qc.csv
     qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'))
+
+
+def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
+    """Append daily MTL borough data to cases.csv file.
+
+    cases.csv file will be overwritten with the new updated file.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    target_col : str
+        Name of column to append to rightmost column from day_csv to cases_csv
+    date : str
+        ISO-8601 formatted date string to use as column name in cases_csv
+    """    
+    # # Normalise input to utf-8
+    # day_str = normalise_to_utf8(day_file)
+    # trend_str = normalise_to_utf8(cases_file)
+    
+    # Convert csv str to pandas df
+    # day_df = pd.read_csv(io.StringIO(day_str))
+    # trend_df = pd.read_csv(io.StringIO(trend_str))
+    day_csv = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_mtl_municipal.csv')
+    cases_csv = os.path.join(processed_dir, 'cases.csv')
+    day_df = pd.read_csv(day_csv, sep=';')
+    cases_df = pd.read_csv(cases_csv)
+    
+    # Select column to append
+    new_data_col = day_df[target_col]
+    
+    # Cleanup new_data_col
+    ## Remove '.' thousands separator and any space
+    new_data_col = new_data_col.str.replace('.', '').str.replace(' ', '')
+    ## Remove '<' char. Note: this is somewhat inaccurate, as <5 counts
+    ## will be reporte as 5, but we cannot have any strings in the data.
+    new_data_col = new_data_col.str.replace('<', '')
+    ## Enforce int type (will raise ValueError if any unexpected chars remain)
+    new_data_col = new_data_col.astype(int)
+    ## Remove last row (total count)
+    new_data_col = new_data_col[:-1]
+    
+    # check if column already exists in cases_csv, append column if it doesn't
+    if cases_df.columns[-1] == date:
+        print(f'{date} has already been appended to {cases_csv}')
+    else:
+        # Append new col of data
+        cases_df[date] = new_data_col
+        
+    # Overwrite cases.csv
+    cases_df.to_csv(cases_csv)
 
 
 def main():
@@ -422,8 +451,10 @@ def main():
     #                     help='By pass sanity checks')
     args = parser.parse_args()
     # init_logging(args)
-
     #lock(args.data_dir)
+
+    # Today's date
+    date = datetime.now(tz=TIMEZONE).date().isoformat()
 
     # sources, processed, and processed_backups dir paths
     sources_dir = os.path.join(DATA_DIR, 'sources')
@@ -438,12 +469,13 @@ def main():
     backup_processed_dir(processed_dir, processed_backups_dir)
 
     # Replace data_qc_death_loc
-    update_data_qc(sources_dir, processed_dir)
+    update_data_qc_csv(sources_dir, processed_dir)
 
+    # Append col to cases.csv
+    append_mtl_cases_csv(sources_dir, processed_dir, 'Nombre de cas confirmés', date)
 
     # Append row to data_mtl_death_loc.csv
 
-    # Append col to cases.csv
     # append_mtl_borough_csv(os.path.join(args.data_dir, 'processed', 'mtl_borough.csv'), 
     #             os.path.join(args.data_dir, 'processed', 'mtl_borough_trend.csv'),
     #             'Number of confirmed cases')
