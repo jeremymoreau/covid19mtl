@@ -2,6 +2,7 @@
 """ Refresh data files for the Covid19 Mtl dashboard """
 
 import os
+import shutil
 import sys
 #import fcntl
 import csv
@@ -327,6 +328,28 @@ def init_logging(args):
     logging.basicConfig(filename=args.log_file, format=format, level=level)
 
 
+def backup_processed_dir():
+    date_tag = datetime.now(tz=TIMEZONE).date().isoformat()
+    processed_dir = os.path.join(DATA_DIR, 'processed')
+    backups_dir  = os.path.join(DATA_DIR, 'processed_backups')
+
+    # make backup dir
+    current_bkp_dir = os.path.join(backups_dir, date_tag)
+    i = 1
+    while os.path.isdir(current_bkp_dir):
+        i += 1
+        current_bkp_dirname = date_tag + '_v' + str(i)  
+        current_bkp_dir = os.path.join(backups_dir, current_bkp_dirname)    
+    else:
+        os.mkdir(current_bkp_dir)
+
+    # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
+    for file in os.listdir(processed_dir):
+        file_path = os.path.join(processed_dir, file)
+        shutil.copy(file_path, current_bkp_dir)
+
+    
+
 def main():
     parser = ArgumentParser('refreshdata', description=__doc__)
     parser.add_argument('-d', '--data-dir', default=DATA_DIR)
@@ -346,20 +369,21 @@ def main():
     #lock(args.data_dir)
 
     # Download all source files into data/sources/YYYY-MM-DD/
-    if not args.local:
-        # Create folder name after current date
-        date_tag = datetime.now(tz=TIMEZONE).date().isoformat()
-        data_save_dir = os.path.join(args.data_dir, 'sources', date_tag)
-        if not os.path.isdir(data_save_dir):
-            os.mkdir(data_save_dir)
+    # if not args.local:
+    #     # Create folder name after current date
+    #     date_tag = datetime.now(tz=TIMEZONE).date().isoformat()
+    #     data_save_dir = os.path.join(args.data_dir, 'sources', date_tag)
+    #     if not os.path.isdir(data_save_dir):
+    #         os.mkdir(data_save_dir)
 
-        # Download all source data files
-        for file, url in SOURCES.items():
-            data = fetch(url)
-            fq_path = os.path.join(data_save_dir, file)
-            save_datafile(fq_path, data, not args.force)
+    #     # Download all source data files
+    #     for file, url in SOURCES.items():
+    #         data = fetch(url)
+    #         fq_path = os.path.join(data_save_dir, file)
+    #         save_datafile(fq_path, data, not args.force)
 
     # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
+    backup_processed_dir()
 
     # Replace data_qc_death_loc
 
