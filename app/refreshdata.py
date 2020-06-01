@@ -384,7 +384,7 @@ def download_source_file(sources):
 def main():
     parser = ArgumentParser('refreshdata', description=__doc__)
     # parser.add_argument('-d', '--data-dir', default=DATA_DIR)
-    parser.add_argument('-l', '--local', action='store_true', default=False, 
+    parser.add_argument('-n', '--no-download', action='store_true', default=False, 
                         help='Do not fetch remote file, only process local copies')
     # parser.add_argument('-v', '--verbose', action='store_true', default=False, 
     #                     help='Increase verbosity')
@@ -395,12 +395,12 @@ def main():
     # parser.add_argument('-f', '--force', action='store_true', default=False, 
     #                     help='By pass sanity checks')
     args = parser.parse_args()
-    init_logging(args)
+    # init_logging(args)
 
     #lock(args.data_dir)
 
     # Download all source files into data/sources/YYYY-MM-DD{_v#}/
-    if not args.local:
+    if not args.no_download:
         download_source_file(SOURCES)
 
     # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
