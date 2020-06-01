@@ -19,6 +19,7 @@ import lxml
 import bs4
 import pytz
 import pandas as pd
+pd.options.mode.chained_assignment = None
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 NB_RETRIES = 3
@@ -381,6 +382,24 @@ def download_source_file(sources):
         save_datafile(fq_path, data, True)
 
 
+def update_data_qc(sources_dir, processed_dir):
+    source_dirs = os.listdir(sources_dir)
+    source_dirs.sort()
+    latest_source_dir = source_dirs[-1]
+    lastest_source_file = os.path.join(sources_dir, latest_source_dir, 'data_qc.csv')
+
+    # read latest data/sources/*/data_qc.csv
+    qc_df = pd.read_csv(lastest_source_file)
+    # convert date to ISO-8601
+    qc_df['Date'] = pd.to_datetime(qc_df['Date'])
+    # create column with all hospitalisation counts (old and new methods)
+    qc_df['hospitalisations_all'] = qc_df['Hospitalisations']
+    qc_df['hospitalisations_all'][qc_df['hospitalisations_all'].isnull()] = qc_df['Hospitalisations (nouvelle méthode)']
+
+    # overwrite previous data/processed/data_qc.csv
+    qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'))
+
+
 def main():
     parser = ArgumentParser('refreshdata', description=__doc__)
     # parser.add_argument('-d', '--data-dir', default=DATA_DIR)
@@ -399,14 +418,20 @@ def main():
 
     #lock(args.data_dir)
 
+    # sources and processed dir paths
+    sources_dir = os.path.join(DATA_DIR, 'sources')
+    processed_dir = os.path.join(DATA_DIR, 'processed')
+
     # Download all source files into data/sources/YYYY-MM-DD{_v#}/
     if not args.no_download:
         download_source_file(SOURCES)
 
     # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
-    # backup_processed_dir()
+    backup_processed_dir()
 
     # Replace data_qc_death_loc
+    update_data_qc(sources_dir, processed_dir)
+
 
     # Append row to data_mtl_death_loc.csv
 
