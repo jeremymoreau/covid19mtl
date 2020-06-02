@@ -373,7 +373,7 @@ def update_data_qc_csv(sources_dir, processed_dir):
     lastest_source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc.csv')
 
     # read latest data/sources/*/data_qc.csv
-    qc_df = pd.read_csv(lastest_source_file)
+    qc_df = pd.read_csv(lastest_source_file, encoding='utf-8')
     # convert date to ISO-8601
     qc_df['Date'] = pd.to_datetime(qc_df['Date'])
     # create column with all hospitalisation counts (old and new methods)
@@ -381,7 +381,7 @@ def update_data_qc_csv(sources_dir, processed_dir):
     qc_df['hospitalisations_all'][qc_df['hospitalisations_all'].isnull()] = qc_df['Hospitalisations (nouvelle méthode)']
 
     # overwrite previous data/processed/data_qc.csv
-    qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), index=False)
+    qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8')
 
 
 def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
@@ -409,8 +409,8 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     # trend_df = pd.read_csv(io.StringIO(trend_str))
     day_csv = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_mtl_municipal.csv')
     cases_csv = os.path.join(processed_dir, 'cases.csv')
-    day_df = pd.read_csv(day_csv, sep=';', index_col=0)
-    cases_df = pd.read_csv(cases_csv, index_col=0)
+    day_df = pd.read_csv(day_csv, sep=';', index_col=0, encoding='utf-8')
+    cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8')
     
     # Select column to append
     new_data_col = day_df.iloc[:, target_col]
@@ -434,14 +434,14 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
         cases_df[date] = list(new_data_col)
         
     # Overwrite cases.csv
-    cases_df.to_csv(cases_csv, index=False)
+    cases_df.to_csv(cases_csv, encoding='utf-8')
 
 
 def append_mtl_cases_per1000_csv(processed_dir):
     cases_csv = os.path.join(processed_dir, 'cases.csv')
     cases_per1000_csv = os.path.join(processed_dir, 'cases_per1000.csv')
-    cases_df = pd.read_csv(cases_csv, index_col=[0])
-    cases_per1000_df = pd.read_csv(cases_per1000_csv, index_col=[0])
+    cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8')
+    cases_per1000_df = pd.read_csv(cases_per1000_csv, index_col=0, encoding='utf-8')
     
     # remove Unnamed columns
     cases_df = cases_df.loc[:, ~cases_df.columns.str.contains('^Unnamed')]
@@ -463,14 +463,16 @@ def append_mtl_cases_per1000_csv(processed_dir):
         print(f'{latest_date} has already been appended to {cases_per1000_csv}')
 
     # Overwrite cases_per1000.csv
-    cases_per1000_df.to_csv(cases_per1000_csv, index=False)
+    cases_per1000_df.to_csv(cases_per1000_csv, encoding='utf-8')
 
 
 def main():
     parser = ArgumentParser('refreshdata', description=__doc__)
-    # parser.add_argument('-d', '--data-dir', default=DATA_DIR)
-    parser.add_argument('-n', '--no-download', action='store_true', default=False, 
+    parser.add_argument('-nd', '--no-download', action='store_true', default=False, 
                         help='Do not fetch remote file, only process local copies')
+    parser.add_argument('-nb', '--no-backup', action='store_true', default=False, 
+                        help='Do not backup files in data/processed')
+    # parser.add_argument('-d', '--data-dir', default=DATA_DIR)
     # parser.add_argument('-v', '--verbose', action='store_true', default=False, 
     #                     help='Increase verbosity')
     # parser.add_argument('-D', '--debug', action='store_true', default=False, 
@@ -492,13 +494,15 @@ def main():
     processed_dir = os.path.join(DATA_DIR, 'processed')
     processed_backups_dir  = os.path.join(DATA_DIR, 'processed_backups')
 
-    # Download all source files into data/sources/YYYY-MM-DD{_v#}/
-    # if not args.no_download:
-    #     download_source_files(SOURCES, sources_dir)
+    # download all source files into data/sources/YYYY-MM-DD{_v#}/
+    if not args.no_download:
+        download_source_files(SOURCES, sources_dir)
 
     # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
-    backup_processed_dir(processed_dir, processed_backups_dir)
+    if not args.no_backup:
+        backup_processed_dir(processed_dir, processed_backups_dir)
 
+    ## Update data/processed files from latest data/sources files
     # Replace data_qc_death_loc
     update_data_qc_csv(sources_dir, processed_dir)
 
@@ -510,17 +514,9 @@ def main():
 
     # Append row to data_mtl_death_loc.csv
 
-    # append_mtl_borough_csv(os.path.join(args.data_dir, 'processed', 'mtl_borough.csv'), 
-    #             os.path.join(args.data_dir, 'processed', 'mtl_borough_trend.csv'),
-    #             'Number of confirmed cases')
-
-
     # Append row to data_mtl.csv
 
     # Append row to data_qc.csv
-
-    # parse_data_mtl(args.data_dir)
-
 
     return 0
 
