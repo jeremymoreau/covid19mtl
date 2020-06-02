@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Exclude data dir from github linguist
+app/data/** linguist-vendored
