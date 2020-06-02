@@ -159,16 +159,16 @@ def save_datafile(filename, data, strict=False):
 
     If strict=False, sanity tests are bypassed and retrieved data is always 
     saved.'''
-    if os.path.isfile(filename):
-        # This test works because all encodings are normalized to UTF-8 at fetch time.
-        old_size = os.path.getsize(filename)
-        new_size = len(data)
-        if old_size > new_size and strict:
-            msg = ('New data for {} is smaller than the cached version we have'
-                   ' on disk ({} vs {} bytes).  Use --force to save it anyway.'
-                   ).format(filename, new_size, old_size)
-            raise ValueError(msg)
-        backup(filename)
+    # if os.path.isfile(filename):
+    #     # This test works because all encodings are normalized to UTF-8 at fetch time.
+    #     old_size = os.path.getsize(filename)
+    #     new_size = len(data)
+    #     if old_size > new_size and strict:
+    #         msg = ('New data for {} is smaller than the cached version we have'
+    #                ' on disk ({} vs {} bytes).  Use --force to save it anyway.'
+    #                ).format(filename, new_size, old_size)
+    #         raise ValueError(msg)
+    #     backup(filename)
     # it's all good if we made it this far, save the new file 
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(data)
