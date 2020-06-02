@@ -10,7 +10,7 @@ import logging
 import re
 import io
 
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from argparse import ArgumentParser
 from charset_normalizer import CharsetNormalizerMatches as cnm
 
@@ -74,32 +74,32 @@ SOURCES = {
     }
 
 
-def lock(lock_dir):
-    ''' Lock the data directory to prenvent concurent runs of the scraper, 
-    which would be risky for data corruption. '''
+# def lock(lock_dir):
+#     ''' Lock the data directory to prenvent concurent runs of the scraper, 
+#     which would be risky for data corruption. '''
 
-    lockf = os.path.join(lock_dir, 'scraper.pid')
-    if not os.path.isfile(lockf):
-        logging.debug('Lock file {} not present.  Creating.'.format(lockf))
-        # create the file, empty
-        open(lockf, 'w').close()
-    logging.debug('Acquiring lock: {}'.format(lockf))
-    fd = os.open(lockf, os.O_RDONLY)
-    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+#     lockf = os.path.join(lock_dir, 'scraper.pid')
+#     if not os.path.isfile(lockf):
+#         logging.debug('Lock file {} not present.  Creating.'.format(lockf))
+#         # create the file, empty
+#         open(lockf, 'w').close()
+#     logging.debug('Acquiring lock: {}'.format(lockf))
+#     fd = os.open(lockf, os.O_RDONLY)
+#     fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
 
-    # No unlocking needed.  fcntl() locks are released then the process exits.
-    with open(lockf, 'w') as f:
-        f.write('{}'.format(os.getpid))
+#     # No unlocking needed.  fcntl() locks are released then the process exits.
+#     with open(lockf, 'w') as f:
+#         f.write('{}'.format(os.getpid))
 
 
-def normalize_encoding(data, content_type=None):
-    encoding='utf-8'
-    if content_type:
-        match = CHARSET_PAT.search(content_type)
-        if match:
-            encoding = match.group(1)
-    text = data.decode(encoding)
-    return text.encode('utf-8')
+# def normalize_encoding(data, content_type=None):
+#     encoding='utf-8'
+#     if content_type:
+#         match = CHARSET_PAT.search(content_type)
+#         if match:
+#             encoding = match.group(1)
+#     text = data.decode(encoding)
+#     return text.encode('utf-8')
 
 
 def normalise_to_utf8(bytes_or_filepath):
@@ -143,14 +143,14 @@ def fetch(url):
     raise RuntimeError('Failed to retrieve {}'.format(url))
 
 
-def backup(filename):
-    ''' Hard link a file to a date-tagged name.  
-    Do nothing if the file does not exists. '''
-    if not os.path.isfile(filename):
-        return
-    time_tag = datetime.now(tz=TIMEZONE).isoformat().replace(':', '.')  # : -> . for Windows
-    base, ext = os.path.splitext(filename) 
-    os.rename(filename, '{}-{}{}'.format(base, time_tag, ext))
+# def backup(filename):
+#     ''' Hard link a file to a date-tagged name.  
+#     Do nothing if the file does not exists. '''
+#     if not os.path.isfile(filename):
+#         return
+#     time_tag = datetime.now(tz=TIMEZONE).isoformat().replace(':', '.')  # : -> . for Windows
+#     base, ext = os.path.splitext(filename) 
+#     os.rename(filename, '{}-{}{}'.format(base, time_tag, ext))
 
 
 def save_datafile(filename, data, strict=False):
@@ -175,106 +175,106 @@ def save_datafile(filename, data, strict=False):
     logging.info('Saved a new version of {}'.format(filename))
 
 
-def norm_cell(text):
-    ''' Normalize a data cell.
-    Return the text with numbers in machine processable form and text labels 
-    stripped from their formating. '''
-    match = NUM_PAT.match(text)
-    if match:
-        text = match.group(1).strip().replace(',', '.').replace(' ', '')
-    # normalize whitespaces
-    text = ' '.join(text.split())
-    text = text.strip('¹²³⁴⁵⁶⁷⁸⁹')
-    return text
+# def norm_cell(text):
+#     ''' Normalize a data cell.
+#     Return the text with numbers in machine processable form and text labels 
+#     stripped from their formating. '''
+#     match = NUM_PAT.match(text)
+#     if match:
+#         text = match.group(1).strip().replace(',', '.').replace(' ', '')
+#     # normalize whitespaces
+#     text = ' '.join(text.split())
+#     text = text.strip('¹²³⁴⁵⁶⁷⁸⁹')
+#     return text
 
 
-def parse_data_mtl(data_dir):
-    ''' Extract numerical data from the main Montréal data HTML page '''
-    nb_tables = 4  # the number this parser expects
-    # we save each table in its own file without doing any data validation
-    file_names = ['mtl_ciusss.csv', 
-                  'mtl_borough.csv', 
-                  'mtl_ages.csv', 
-                  'mtl_gender.csv']
-    source = os.path.join(data_dir, 'sources', 'data_mtl.html')
-    soup = bs4.BeautifulSoup(open(source, 'rb'), 'lxml')
+# def parse_data_mtl(data_dir):
+#     ''' Extract numerical data from the main Montréal data HTML page '''
+#     nb_tables = 4  # the number this parser expects
+#     # we save each table in its own file without doing any data validation
+#     file_names = ['mtl_ciusss.csv', 
+#                   'mtl_borough.csv', 
+#                   'mtl_ages.csv', 
+#                   'mtl_gender.csv']
+#     source = os.path.join(data_dir, 'sources', 'data_mtl.html')
+#     soup = bs4.BeautifulSoup(open(source, 'rb'), 'lxml')
 
-    tables = soup.select('table.contenttable')
-    data_tables = []
-    for t in tables: 
-        # Some table have text instead of data, but they are easy to spot
-        #  ex: <td bgcolor="#A1C8E7">
-        if t.find('td', attrs=dict(bgcolor='#A1C8E7')):
-            continue
-        if t.find('h4') or (len(t.find_all('p')) > 1):
-            continue
-        if t.find('strong') and (len(t.find_all('br')) > 4):
-            continue
-        data_tables.append(t)
+#     tables = soup.select('table.contenttable')
+#     data_tables = []
+#     for t in tables: 
+#         # Some table have text instead of data, but they are easy to spot
+#         #  ex: <td bgcolor="#A1C8E7">
+#         if t.find('td', attrs=dict(bgcolor='#A1C8E7')):
+#             continue
+#         if t.find('h4') or (len(t.find_all('p')) > 1):
+#             continue
+#         if t.find('strong') and (len(t.find_all('br')) > 4):
+#             continue
+#         data_tables.append(t)
 
-    if len(data_tables) != nb_tables:
-        msg = ('data_mtl.html changed! '
-               'We found {} data tables rather than {}.'
-               ).format(len(data_tables), nb_tables)
-        raise ValueError(msg)
+#     if len(data_tables) != nb_tables:
+#         msg = ('data_mtl.html changed! '
+#                'We found {} data tables rather than {}.'
+#                ).format(len(data_tables), nb_tables)
+#         raise ValueError(msg)
 
-    for filename, t in zip(file_names, data_tables):
-        rows = []
-        for tr in t.select('tr'):
-            rows.append([norm_cell(td.text) for td in tr.select('th,td')])
-        fq_path = os.path.join(data_dir, 'processed', filename)
+#     for filename, t in zip(file_names, data_tables):
+#         rows = []
+#         for tr in t.select('tr'):
+#             rows.append([norm_cell(td.text) for td in tr.select('th,td')])
+#         fq_path = os.path.join(data_dir, 'processed', filename)
 
-        backup(fq_path)
-        with open(fq_path, 'w') as f:
-            writer = csv.writer(f)
-            writer.writerows(rows)
-
-
-def merge_trend(day_file, trend_file, target_col, strict=True):
-    ''' Merge a single day worth of data into the trends file. '''
-    # Trend files have one record per day.  Some are vertical (one row per 
-    # day), some are horizontal (one column per day).
-    with open(day_file, 'r', encoding='utf-8') as f:
-        dayrows = list(csv.reader(f))
-    with open(trend_file, 'r', encoding='utf-8') as f:
-        trendrows = list(csv.reader(f))
-
-    # remove empty rows if any
-    dayrows = [row for row in dayrows if row]
-    trendrows = [row for row in trendrows if row]
-
-    try:
-        colid = dayrows[0].index(target_col)
-    except ValueError as e:
-        logging.fatal('Can\'t find column "{}" in {}'.format(target_col, day_file))
-        raise e
-
-    # TODO: do not merge if we already have record for today
-    headers = trendrows[0] + [date.today().isoformat()]
-    newrows = [headers]
-    for dayrow, trendrow in zip(dayrows[1:], trendrows[1:]):
-        if dayrow[0] != trendrow[0] and strict:
-            msg = ('Column name mismatch "{}" != "{}". '
-                   'Use --force to ignore').format(dayrow[0], trendrow[0])
-            raise ValueError(msg)
-        trendrow.append(dayrow[colid])
-        newrows.append(trendrow)
-
-    backup(trend_file)
-    writer = csv.writer(open(trend_file, 'w'))
-    writer.writerows(newrows)
+#         backup(fq_path)
+#         with open(fq_path, 'w') as f:
+#             writer = csv.writer(f)
+#             writer.writerows(rows)
 
 
-def init_logging(args):
-    format = '%(asctime)s:%(levelname)s'
-    level = logging.WARNING
-    if args.verbose:
-        level = logging.INFO
-    if args.debug:
-        format += ':%(name)s'
-        level = logging.DEBUG
-    format += ':%(message)s'
-    logging.basicConfig(filename=args.log_file, format=format, level=level)
+# def merge_trend(day_file, trend_file, target_col, strict=True):
+#     ''' Merge a single day worth of data into the trends file. '''
+#     # Trend files have one record per day.  Some are vertical (one row per 
+#     # day), some are horizontal (one column per day).
+#     with open(day_file, 'r', encoding='utf-8') as f:
+#         dayrows = list(csv.reader(f))
+#     with open(trend_file, 'r', encoding='utf-8') as f:
+#         trendrows = list(csv.reader(f))
+
+#     # remove empty rows if any
+#     dayrows = [row for row in dayrows if row]
+#     trendrows = [row for row in trendrows if row]
+
+#     try:
+#         colid = dayrows[0].index(target_col)
+#     except ValueError as e:
+#         logging.fatal('Can\'t find column "{}" in {}'.format(target_col, day_file))
+#         raise e
+
+#     # TODO: do not merge if we already have record for today
+#     headers = trendrows[0] + [date.today().isoformat()]
+#     newrows = [headers]
+#     for dayrow, trendrow in zip(dayrows[1:], trendrows[1:]):
+#         if dayrow[0] != trendrow[0] and strict:
+#             msg = ('Column name mismatch "{}" != "{}". '
+#                    'Use --force to ignore').format(dayrow[0], trendrow[0])
+#             raise ValueError(msg)
+#         trendrow.append(dayrow[colid])
+#         newrows.append(trendrow)
+
+#     backup(trend_file)
+#     writer = csv.writer(open(trend_file, 'w'))
+#     writer.writerows(newrows)
+
+
+# def init_logging(args):
+#     format = '%(asctime)s:%(levelname)s'
+#     level = logging.WARNING
+#     if args.verbose:
+#         level = logging.INFO
+#     if args.debug:
+#         format += ':%(name)s'
+#         level = logging.DEBUG
+#     format += ':%(message)s'
+#     logging.basicConfig(filename=args.log_file, format=format, level=level)
 
 
 def backup_processed_dir(processed_dir, processed_backups_dir):
@@ -318,8 +318,9 @@ def download_source_files(sources, sources_dir):
     sources_dir : str
         Absolute path of dir in which to save downloaded files.
     """
-    # create data/sources/YYYY-MM-DD{_v#}/ dir
-    date_tag = datetime.now(tz=TIMEZONE).date().isoformat()
+    # create data/sources/YYYY-MM-DD{_v#}/ dir, use previous day date (data is reported for previous day)
+    yesterday_date = datetime.now(tz=TIMEZONE) - timedelta(days=1)
+    date_tag = yesterday_date.date().isoformat()
 
     current_sources_dir = os.path.join(sources_dir, date_tag)
     i = 1
@@ -380,7 +381,7 @@ def update_data_qc_csv(sources_dir, processed_dir):
     qc_df['hospitalisations_all'][qc_df['hospitalisations_all'].isnull()] = qc_df['Hospitalisations (nouvelle méthode)']
 
     # overwrite previous data/processed/data_qc.csv
-    qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'))
+    qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), index=False)
 
 
 def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
@@ -394,8 +395,8 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
         Absolute path of sources dir.
     processed_dir : str
         Absolute path of processed dir.
-    target_col : str
-        Name of column to append to rightmost column from day_csv to cases_csv
+    target_col : int
+        Index of target col to select.
     date : str
         ISO-8601 formatted date string to use as column name in cases_csv
     """    
@@ -408,11 +409,11 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     # trend_df = pd.read_csv(io.StringIO(trend_str))
     day_csv = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_mtl_municipal.csv')
     cases_csv = os.path.join(processed_dir, 'cases.csv')
-    day_df = pd.read_csv(day_csv, sep=';')
-    cases_df = pd.read_csv(cases_csv)
+    day_df = pd.read_csv(day_csv, sep=';', index_col=0)
+    cases_df = pd.read_csv(cases_csv, index_col=0)
     
     # Select column to append
-    new_data_col = day_df[target_col]
+    new_data_col = day_df.iloc[:, target_col]
     
     # Cleanup new_data_col
     ## Remove '.' thousands separator and any space
@@ -430,10 +431,39 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
         print(f'{date} has already been appended to {cases_csv}')
     else:
         # Append new col of data
-        cases_df[date] = new_data_col
+        cases_df[date] = list(new_data_col)
         
     # Overwrite cases.csv
-    cases_df.to_csv(cases_csv)
+    cases_df.to_csv(cases_csv, index=False)
+
+
+def append_mtl_cases_per1000_csv(processed_dir):
+    cases_csv = os.path.join(processed_dir, 'cases.csv')
+    cases_per1000_csv = os.path.join(processed_dir, 'cases_per1000.csv')
+    cases_df = pd.read_csv(cases_csv, index_col=[0])
+    cases_per1000_df = pd.read_csv(cases_per1000_csv, index_col=[0])
+    
+    # remove Unnamed columns
+    cases_df = cases_df.loc[:, ~cases_df.columns.str.contains('^Unnamed')]
+    cases_per1000_df = cases_per1000_df.loc[:, ~cases_per1000_df.columns.str.contains('^Unnamed')]
+
+    # latest data date
+    latest_date = cases_df.columns[-1]
+
+    # population of borough/linked city
+    borough_pop = [134245, 42796, 3823, 19324, 166520, 32448, 48899, 18980,
+                   6973, 20151, 44489, 76853, 18413, 136024, 3850, 84234, 5050,
+                   20276, 23954, 69297, 104000, 31380, 106743, 139590, 4958, 98828,
+                   78305, 921, 78151, 69229, 89170, 143853, 20312]
+
+    if not latest_date in cases_per1000_df.columns:
+        day_cases_per1000 = cases_df[latest_date][:-1]/borough_pop*1000
+        cases_per1000_df[latest_date] = list(day_cases_per1000.round(1))
+    else:
+        print(f'{latest_date} has already been appended to {cases_per1000_csv}')
+
+    # Overwrite cases_per1000.csv
+    cases_per1000_df.to_csv(cases_per1000_csv, index=False)
 
 
 def main():
@@ -453,8 +483,9 @@ def main():
     # init_logging(args)
     #lock(args.data_dir)
 
-    # Today's date
-    date = datetime.now(tz=TIMEZONE).date().isoformat()
+    # Yesterday's date (data is reported for previous day)
+    yesterday_date = datetime.now(tz=TIMEZONE) - timedelta(days=1)
+    yesterday_date = yesterday_date.date().isoformat()
 
     # sources, processed, and processed_backups dir paths
     sources_dir = os.path.join(DATA_DIR, 'sources')
@@ -462,8 +493,8 @@ def main():
     processed_backups_dir  = os.path.join(DATA_DIR, 'processed_backups')
 
     # Download all source files into data/sources/YYYY-MM-DD{_v#}/
-    if not args.no_download:
-        download_source_files(SOURCES, sources_dir)
+    # if not args.no_download:
+    #     download_source_files(SOURCES, sources_dir)
 
     # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
     backup_processed_dir(processed_dir, processed_backups_dir)
@@ -472,7 +503,10 @@ def main():
     update_data_qc_csv(sources_dir, processed_dir)
 
     # Append col to cases.csv
-    append_mtl_cases_csv(sources_dir, processed_dir, 'Nombre de cas confirmés', date)
+    append_mtl_cases_csv(sources_dir, processed_dir, 0, yesterday_date)
+
+    # Append col to cases_per1000.csv
+    append_mtl_cases_per1000_csv(processed_dir)
 
     # Append row to data_mtl_death_loc.csv
 
@@ -480,7 +514,6 @@ def main():
     #             os.path.join(args.data_dir, 'processed', 'mtl_borough_trend.csv'),
     #             'Number of confirmed cases')
 
-    # Append col to cases_per1000.csv
 
     # Append row to data_mtl.csv
 
