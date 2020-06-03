@@ -23,8 +23,8 @@ pd.options.mode.chained_assignment = None
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 NB_RETRIES = 3
-CHARSET_PAT = re.compile(r'charset=((\w|-)+)')
-NUM_PAT = re.compile(r'\*?((?:\d| |,)+)')
+# CHARSET_PAT = re.compile(r'charset=((\w|-)+)')
+# NUM_PAT = re.compile(r'\*?((?:\d| |,)+)')
 TIMEZONE = pytz.timezone('America/Montreal')
 
 
@@ -133,7 +133,7 @@ def normalise_to_utf8(bytes_or_filepath):
 def fetch(url):
     ''' Get the data at `url`.  Our data sources are notoriously unreliable, 
     so we retry a few times. '''
-    for i in range(NB_RETRIES):
+    for _ in range(NB_RETRIES):
         resp = requests.get(url)
         if resp.status_code != 200:
             next
@@ -381,7 +381,7 @@ def update_data_qc_csv(sources_dir, processed_dir):
     qc_df['hospitalisations_all'][qc_df['hospitalisations_all'].isnull()] = qc_df['Hospitalisations (nouvelle méthode)']
 
     # overwrite previous data/processed/data_qc.csv
-    qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8')
+    qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8', index=False)
 
 
 def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
