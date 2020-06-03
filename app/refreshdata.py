@@ -471,12 +471,11 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
     mtl_day_list = mtl_day_df.iloc[0, 1:9].astype(int).to_list()  # CH, CHSLD, Domicile, RI, RPA, Autre, Inconnu, Décès (n)
     
     if not date in mtl_death_loc_df['date']:
-        print(date)
         mtl_day_list.insert(0, date)
         mtl_death_loc_df.loc[mtl_death_loc_df.index.max() + 1, :] = mtl_day_list
 
         # Overwrite cases_per1000.csv
-        mtl_death_loc_df.to_csv(mtl_death_loc_csv, encoding='utf-8')
+        mtl_death_loc_df.to_csv(mtl_death_loc_csv, encoding='utf-8', index=False)
     else:
         print(f'{date} has already been appended to {mtl_death_loc_csv}')
     return mtl_death_loc_df
@@ -531,7 +530,7 @@ def main():
     append_mtl_cases_per1000_csv(processed_dir)
 
     # Append row to data_mtl_death_loc.csv
-    append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
+    # append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
     
     # Append row to data_mtl.csv
 
