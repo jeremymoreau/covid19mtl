@@ -378,7 +378,8 @@ def update_data_qc_csv(sources_dir, processed_dir):
     qc_df['Date'] = pd.to_datetime(qc_df['Date'])
     # create column with all hospitalisation counts (old and new methods)
     qc_df['hospitalisations_all'] = qc_df['Hospitalisations']
-    qc_df['hospitalisations_all'][qc_df['hospitalisations_all'].isnull()] = qc_df['Hospitalisations (nouvelle méthode)']
+    hospitalisations_new_method = qc_df.filter(regex=r'Hospitalisations \(nouvelle').iloc[:,0]
+    qc_df['hospitalisations_all'] = qc_df['Hospitalisations'].combine_first(hospitalisations_new_method)
 
     # overwrite previous data/processed/data_qc.csv
     qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8', index=False)
