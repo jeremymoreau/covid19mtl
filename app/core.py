@@ -80,7 +80,7 @@ data_mtl = pd.read_csv(DATA_PATH.joinpath('data_mtl.csv'), encoding='utf-8', na_
 data_qc = pd.read_csv(DATA_PATH.joinpath('data_qc.csv'), encoding='utf-8', na_values='na')
 
 # MTL deaths by location data
-data_mtl_death_loc = pd.read_csv(DATA_PATH.joinpath('data_mtl_death_loc.csv'),
+data_mtl_death_loc = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl_death_loc.csv'),
                                 encoding='utf-8', na_values='na')
 
 # QC deaths by location data
