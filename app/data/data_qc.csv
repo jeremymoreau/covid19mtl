@@ -1,4 +1,4 @@
-﻿date,cases_qc,new_cases_qc,active_cases_qc,deaths_qc,new_deaths_qc,hospitalisations_qc,icu_qc,negative_tests_qc,new_negative_tests_qc,recovered_qc
+date,cases_qc,new_cases_qc,active_cases_qc,deaths_qc,new_deaths_qc,hospitalisations_qc,icu_qc,negative_tests_qc,new_negative_tests_qc,recovered_qc
 2020-03-03,1,1,1,0,0,0,0,203,na,na
 2020-03-04,2,1,2,0,0,0,0,242,39,na
 2020-03-05,3,1,3,0,0,0,0,260,18,na
@@ -92,3 +92,4 @@
 2020-06-01,51593,239,30077,4713,52,1175,161,404814,5317,16803
 2020-06-02,51884,291,29992,4794,81,1141,158,410793,5979,17098
 2020-06-03,52143,259,29922,4885,91,1076,146,417256,6463,17336
+2020-06-04,52398,255,29699,4935,50,1030,131,424619,7363,17764
