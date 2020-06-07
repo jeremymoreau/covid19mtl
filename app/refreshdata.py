@@ -376,10 +376,24 @@ def update_data_qc_csv(sources_dir, processed_dir):
     qc_df = pd.read_csv(lastest_source_file, encoding='utf-8')
     # convert date to ISO-8601
     qc_df['Date'] = pd.to_datetime(qc_df['Date'])
+
     # create column with all hospitalisation counts (old and new methods)
     qc_df['hospitalisations_all'] = qc_df['Hospitalisations']
     hospitalisations_new_method = qc_df.filter(regex=r'Hospitalisations \(nouvelle').iloc[:,0]
-    qc_df['hospitalisations_all'] = qc_df['Hospitalisations'].combine_first(hospitalisations_new_method)
+    qc_df['hospitalisations_qc'] = qc_df['Hospitalisations'].combine_first(hospitalisations_new_method)
+
+    # rename columns
+    qc_df.columns = qc_df.columns.str.replace('Date', 'date')
+    qc_df.columns = qc_df.columns.str.replace('Cumul de cas confirm.*', 'cases_qc')
+    qc_df.columns = qc_df.columns.str.replace('Nombre cumulatif de d.*', 'deaths_qc')
+    qc_df.columns = qc_df.columns.str.replace('Soins intensifs', 'icu_qc')
+    qc_df.columns = qc_df.columns.str.replace('Cumul des personnes avec des analyses n.*', 'negative_tests_qc')
+    qc_df.columns = qc_df.columns.str.replace('Nouveaux d.*', 'new_deaths_qc')
+    qc_df.columns = qc_df.columns.str.replace('Cas actifs', 'active_cases_qc')
+    qc_df.columns = qc_df.columns.str.replace('Nouveaux cas', 'new_cases_qc')
+
+    # add new test column
+    qc_df['new_negative_tests_qc'] = qc_df['negative_tests_qc'] - qc_df['negative_tests_qc'].shift(1)
 
     # overwrite previous data/processed/data_qc.csv
     qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8', index=False)
@@ -511,12 +525,12 @@ def main():
     processed_backups_dir  = os.path.join(DATA_DIR, 'processed_backups')
 
     # download all source files into data/sources/YYYY-MM-DD{_v#}/
-    if not args.no_download:
-        download_source_files(SOURCES, sources_dir)
+    # if not args.no_download:
+    #     download_source_files(SOURCES, sources_dir)
 
-    # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
-    if not args.no_backup:
-        backup_processed_dir(processed_dir, processed_backups_dir)
+    # # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
+    # if not args.no_backup:
+    #     backup_processed_dir(processed_dir, processed_backups_dir)
 
     ## Update data/processed files from latest data/sources files
     # Replace data_qc
