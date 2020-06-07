@@ -375,7 +375,7 @@ def update_data_qc_csv(sources_dir, processed_dir):
     # read latest data/sources/*/data_qc.csv
     qc_df = pd.read_csv(lastest_source_file, encoding='utf-8')
     # convert date to ISO-8601
-    qc_df['Date'] = pd.to_datetime(qc_df['Date'])
+    qc_df['Date'] = pd.to_datetime(qc_df['Date'], dayfirst=True, format='%d/%m/%Y')
 
     # create column with all hospitalisation counts (old and new methods)
     qc_df['hospitalisations_all'] = qc_df['Hospitalisations']
@@ -525,12 +525,12 @@ def main():
     processed_backups_dir  = os.path.join(DATA_DIR, 'processed_backups')
 
     # download all source files into data/sources/YYYY-MM-DD{_v#}/
-    # if not args.no_download:
-    #     download_source_files(SOURCES, sources_dir)
+    if not args.no_download:
+        download_source_files(SOURCES, sources_dir)
 
-    # # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
-    # if not args.no_backup:
-    #     backup_processed_dir(processed_dir, processed_backups_dir)
+    # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
+    if not args.no_backup:
+        backup_processed_dir(processed_dir, processed_backups_dir)
 
     ## Update data/processed files from latest data/sources files
     # Replace data_qc
