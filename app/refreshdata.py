@@ -482,7 +482,7 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
     day_df = pd.read_csv(day_csv, sep=',', index_col=0, encoding='utf-8')
     mtl_death_loc_df = pd.read_csv(mtl_death_loc_csv, encoding='utf-8')
     
-    mtl_day_df = day_df[day_df['RSS'].str.contains('Montr')]
+    mtl_day_df = day_df[day_df['RSS'].str.contains('Montr', na=False)]
     mtl_day_list = mtl_day_df.iloc[0, 1:9].astype(int).to_list()  # CH, CHSLD, Domicile, RI, RPA, Autre, Inconnu, Décès (n)
     
     if not date in mtl_death_loc_df['date']:
