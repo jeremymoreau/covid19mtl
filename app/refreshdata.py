@@ -49,18 +49,19 @@ def get_month_fr():
 SOURCES = { 
     # Montreal
     # HTML
-    'data_mtl.html': 'https://santemontreal.qc.ca/en/public/coronavirus-covid-19/',
+    'data_mtl.html':
+    'https://santemontreal.qc.ca/en/public/coronavirus-covid-19/situation-of-the-coronavirus-covid-19-in-montreal',
     # CSV (Note: ";" separated)
     'data_mtl_ciuss.csv':
-    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/ciusss' + '.csv',
+    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/ciusss.csv',
     'data_mtl_municipal.csv':
-    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/municipal' + '.csv',
+    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/municipal.csv',
     'data_mtl_age.csv':
-    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/grage' + '.csv',
+    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/grage.csv',
     'data_mtl_sex.csv':
-    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/sexe' + '.csv',
+    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/sexe.csv',
     'data_mtl_new_cases.csv':
-    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/courbe' + '.csv',
+    'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/courbe.csv',
     
 
     # INSPQ
