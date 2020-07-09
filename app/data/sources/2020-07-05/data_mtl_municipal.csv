@@ -1,36 +1,36 @@
 Arrondissement ou ville liée;Nombre de cas confirmés;Répartition des cas (%);Taux de cas pour 100 000 personnes;Nombre de décès;Taux de mortalité pour 100 000 personnes
-AhuntsicCartierville;2346;8,8;1747,6;354;263,7
-Anjou;702;2,6;1640,3;50;116,8
+AhuntsicCartierville;2352;8,8;1752;354;263,7
+Anjou;705;2,6;1647,4;51;119,2
 Baie D'urfé;31;0,1;*810,9;< 5;n.p.
-Beaconsfield;60;0,2;310,5;7;n.p.
-Côte-des-NeigesNotre-Dame-de-Grâce;2182;8,2;1310,4;260;156,1
+Beaconsfield;61;0,2;315,7;8;n.p.
+Côte-des-NeigesNotre-Dame-de-Grâce;2187;8,2;1313,4;260;156,1
 Côte-Saint-Luc;519;1,9;1599,5;61;188
 Dollard-des-Ormeaux;419;1,6;856,9;79;161,6
 Dorval;192;0,7;1011,6;48;252,9
 Hampstead;53;0,2;760,1;< 5;n.p.
 Kirkland;116;0,4;575,7;23;*114,1
-Lachine;628;2,4;1411,6;104;233,8
-LaSalle;1199;4,5;1560,1;176;229
-L'Île-BizardSainte-Geneviève;212;0,8;1151,4;46;249,8
-MercierHochelaga-Maisonneuve;2282;8,5;1677,6;371;272,7
+Lachine;631;2,4;1418,3;104;233,8
+LaSalle;1203;4,5;1565,3;177;230,3
+L'Île-BizardSainte-Geneviève;211;0,8;1145,9;45;244,4
+MercierHochelaga-Maisonneuve;2294;8,6;1686,5;373;274,2
 Montréal Est;44;0,2;1142,9;5;n.p.
-Montréal-Nord;2560;9,6;3039,2;245;290,9
+Montréal-Nord;2564;9,6;3043,9;246;292
 Montréal-Ouest;20;0,1;*396;< 5;n.p.
-Mont-Royal;280;1;1380,9;73;360
+Mont-Royal;282;1,1;1390,8;73;360
 Outremont;271;1;1131,3;10;*41,7
-PierrefondsRoxboro;536;2;773,5;34;*49,1
-Plateau Mont-Royal;893;3,3;858,7;137;131,7
-Pointe-Claire;222;0,8;707,5;42;133,8
-Rivière-des-PrairiesPointe-aux-Trembles;2161;8,1;2024,5;235;220,2
-RosemontLa Petite Patrie;1561;5,8;1118,3;234;167,6
+PierrefondsRoxboro;542;2;782,1;34;*49,1
+Plateau Mont-Royal;895;3,3;860,6;136;130,8
+Pointe-Claire;221;0,8;704,3;41;130,7
+Rivière-des-PrairiesPointe-aux-Trembles;2167;8,1;2030,1;236;221,1
+RosemontLa Petite Patrie;1565;5,8;1121,1;233;166,9
 Sainte-Anne-de-Bellevue;18;0,1;*363;< 5;n.p.
-Saint-Laurent;1083;4,1;1095,8;116;117,4
-Saint-Léonard;1104;4,1;1409,9;63;80,5
+Saint-Laurent;1083;4;1095,8;115;116,4
+Saint-Léonard;1108;4,1;1415;62;79,2
 Senneville;< 5;0;n.p.;0;
-Sud-Ouest;907;3,4;1160,6;176;225,2
-Verdun;951;3,6;1373,7;150;216,7
-Ville-Marie;812;3;910,6;84;94,2
-VilleraySaint-MichelParc-Extension;2169;8,1;1507,8;131;91,1
-Westmount;184;0,7;905,9;23;*113,2
-Territoire à confirmer;630;;;50;
-Total à Montréal;27349;;1324;3396;164,4
+Sud-Ouest;908;3,4;1161,9;177;226,5
+Verdun;955;3,6;1379,5;157;226,8
+Ville-Marie;816;3;915,1;86;96,4
+VilleraySaint-MichelParc-Extension;2177;8,1;1513,4;131;91,1
+Westmount;185;0,7;910,8;24;*118,2
+Territoire à confirmer;628;;;50;
+Total à Montréal;27425;;1327,6;3408;165
