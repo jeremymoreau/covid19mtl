@@ -546,7 +546,7 @@ def main():
     append_mtl_cases_per1000_csv(processed_dir)
 
     # Append row to data_mtl_death_loc.csv
-    append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
+    # append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
     
     # Append row to data_mtl.csv
 
