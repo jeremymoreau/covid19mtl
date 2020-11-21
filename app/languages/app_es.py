@@ -87,7 +87,7 @@ labels = {
     # Confirmed deaths by place of residence (QC) fig
     'deaths_loc_fig_qc_label': 'Muertes por lugar de residencia (QC)',
     'chsld_label': 'Centros de cuidado<br>a largo plazo (CHSLD)',
-    'psr_label': "Casa hogar para adultos mayores",
+    'psr_label': 'Casa hogar para adultos mayores',
     'home_label': 'Hogar',
     'other_or_unknown_label': 'Otro o desconocido',
     'deaths_loc_fig_qc_y_label': 'Muertes (acumulativo, QC)'

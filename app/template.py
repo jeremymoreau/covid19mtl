@@ -3,15 +3,13 @@ import dash_html_components as html
 
 import app.figures as figures
 
-from .core import (
-    cases_per1000_long, data_mtl, data_mtl_death_loc, data_qc,
-    data_qc_death_loc, latest_cases_mtl, latest_cases_qc, latest_deaths_mtl,
-    latest_deaths_qc, latest_hospitalisations_qc, latest_icu_qc,
-    latest_negative_tests_qc, latest_recovered_qc, mtl_age_data, mtl_geojson)
+from .core import (cases_per1000_long, data_mtl, data_mtl_death_loc, data_qc, data_qc_death_loc, latest_cases_mtl,
+                   latest_cases_qc, latest_deaths_mtl, latest_deaths_qc, latest_hospitalisations_qc, latest_icu_qc,
+                   latest_negative_tests_qc, latest_recovered_qc, mtl_age_data, mtl_geojson)
 
 
 def generate_layout(labels):
-    ##### Figures #####
+    # Figures #####
     mtlmap_fig = figures.mtl_cases_map_fig(cases_per1000_long, mtl_geojson, labels)
     cases_fig = figures.cases_fig(data_mtl, data_qc, labels)
     age_fig = figures.mtl_age_hist_fig(mtl_age_data, labels)
@@ -23,14 +21,14 @@ def generate_layout(labels):
 
     # Plotly modebar buttons to remove
     modebar_buttons_to_remove = ['select2d',
-                                'lasso2d',
-                                'autoScale2d',
-                                'hoverCompareCartesian',
-                                'hoverClosestCartesian',
-                                'toggleSpikelines'
-                                ]
+                                 'lasso2d',
+                                 'autoScale2d',
+                                 'hoverCompareCartesian',
+                                 'hoverClosestCartesian',
+                                 'toggleSpikelines'
+                                 ]
 
-    ##### App layout #####
+    # App layout #####
     layout = html.Div(
         [
             # language select
@@ -52,8 +50,8 @@ def generate_layout(labels):
                     html.H3(
                         [labels['title']],
                         id='title',
-                        ),
-                    #subtitle
+                    ),
+                    # subtitle
                     html.H6(
                         [labels['subtitle']],
                         id='subtitle',
@@ -143,10 +141,10 @@ def generate_layout(labels):
                                         'select2d',
                                         'lasso2d',
                                         'hoverClosestGeo',
-                                        ],
-                                    'scrollZoom' : True
-                                    }
-                                ),
+                                    ],
+                                    'scrollZoom': True
+                                }
+                            ),
                         ],
                         className='grid-item'
                     ),
@@ -302,23 +300,23 @@ def generate_layout(labels):
                 html.Div([
                     dcc.Markdown([labels['footer_left']]),
                 ],
-                id='footer-left',
-                className='footer-item'
+                    id='footer-left',
+                    className='footer-item'
                 ),
                 html.Div([
                     dcc.Markdown([labels['footer_centre']]),
                 ],
-                id='footer-centre',
-                className='footer-item'
+                    id='footer-centre',
+                    className='footer-item'
                 ),
                 html.Div([
                     dcc.Markdown([labels['footer_right']]),
                 ],
-                id='footer-right',
-                className='footer-item'
+                    id='footer-right',
+                    className='footer-item'
                 )
             ],
-            id='footer'
+                id='footer'
             )
 
         ],

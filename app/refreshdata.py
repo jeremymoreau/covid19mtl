@@ -1,24 +1,18 @@
 #!/usr/bin/env python3
 """ Refresh data files for the Covid19 Mtl dashboard """
 
+import logging
 import os
 import shutil
 import sys
-#import fcntl
-import csv
-import logging
-import re
-import io
-
-from datetime import date, datetime, timedelta
 from argparse import ArgumentParser
+from datetime import datetime, timedelta
+
+import pandas as pd
+import pytz
+import requests
 from charset_normalizer import CharsetNormalizerMatches as cnm
 
-import requests
-import lxml
-import bs4
-import pytz
-import pandas as pd
 pd.options.mode.chained_assignment = None
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
@@ -37,16 +31,16 @@ def get_month_fr():
         Current dateMonth string in French.
     """
     date_tuple = datetime.now(tz=TIMEZONE).timetuple()
-    fr_months = {1: 'janvier', 2:'février', 3:'mars', 4:'avril',
-                 5:'mai', 6:'juin', 7:'juillet', 8:'août',
-                 9:'septembre', 10:'octobre', 11:'novembre', 12:'décembre'}
-    
+    fr_months = {1: 'janvier', 2: 'février', 3: 'mars', 4: 'avril',
+                 5: 'mai', 6: 'juin', 7: 'juillet', 8: 'août',
+                 9: 'septembre', 10: 'octobre', 11: 'novembre', 12: 'décembre'}
+
     return str(date_tuple[2]) + fr_months[date_tuple[1]]
 
 
 # Data sources mapping
 # {filename: url}
-SOURCES = { 
+SOURCES = {
     # Montreal
     # HTML
     'data_mtl.html':
@@ -62,7 +56,7 @@ SOURCES = {
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/sexe.csv',
     'data_mtl_new_cases.csv':
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/courbe.csv',
-    
+
 
     # INSPQ
     # HTML
@@ -72,11 +66,11 @@ SOURCES = {
     'data_qc.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/combine.csv',
     'data_qc_cases_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls.csv',
     'data_qc_death_loc_by_region.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa.csv'
-    }
+}
 
 
 # def lock(lock_dir):
-#     ''' Lock the data directory to prenvent concurent runs of the scraper, 
+#     ''' Lock the data directory to prenvent concurent runs of the scraper,
 #     which would be risky for data corruption. '''
 
 #     lockf = os.path.join(lock_dir, 'scraper.pid')
@@ -120,20 +114,20 @@ def normalise_to_utf8(bytes_or_filepath):
     ------
     TypeError
         Input is not of type bytes or a valid path to an existing file.
-    """    
+    """
     if type(bytes_or_filepath) == bytes:
         utf8_str = str(cnm.from_bytes(bytes_or_filepath).best().first())
     elif os.path.isfile(bytes_or_filepath):
         utf8_str = str(cnm.from_path(bytes_or_filepath).best().first())
     else:
         raise TypeError('Input must be bytes or a valid file path')
-        
+
     return utf8_str
 
 
 def fetch(url):
-    ''' Get the data at `url`.  Our data sources are notoriously unreliable, 
-    so we retry a few times. '''
+    """ Get the data at `url`.  Our data sources are notoriously unreliable,
+    so we retry a few times. """
     for _ in range(NB_RETRIES):
         resp = requests.get(url)
         if resp.status_code != 200:
@@ -145,21 +139,21 @@ def fetch(url):
 
 
 # def backup(filename):
-#     ''' Hard link a file to a date-tagged name.  
+#     ''' Hard link a file to a date-tagged name.
 #     Do nothing if the file does not exists. '''
 #     if not os.path.isfile(filename):
 #         return
 #     time_tag = datetime.now(tz=TIMEZONE).isoformat().replace(':', '.')  # : -> . for Windows
-#     base, ext = os.path.splitext(filename) 
+#     base, ext = os.path.splitext(filename)
 #     os.rename(filename, '{}-{}{}'.format(base, time_tag, ext))
 
 
 def save_datafile(filename, data, strict=False):
-    ''' Save a datafile if it's newer and at least as big as what we cached.  
+    """ Save a datafile if it's newer and at least as big as what we cached.
     Raise ValueError otherwise.
 
-    If strict=False, sanity tests are bypassed and retrieved data is always 
-    saved.'''
+    If strict=False, sanity tests are bypassed and retrieved data is always
+    saved. """
     # if os.path.isfile(filename):
     #     # This test works because all encodings are normalized to UTF-8 at fetch time.
     #     old_size = os.path.getsize(filename)
@@ -170,7 +164,7 @@ def save_datafile(filename, data, strict=False):
     #                ).format(filename, new_size, old_size)
     #         raise ValueError(msg)
     #     backup(filename)
-    # it's all good if we made it this far, save the new file 
+    # it's all good if we made it this far, save the new file
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(data)
     logging.info('Saved a new version of {}'.format(filename))
@@ -178,7 +172,7 @@ def save_datafile(filename, data, strict=False):
 
 # def norm_cell(text):
 #     ''' Normalize a data cell.
-#     Return the text with numbers in machine processable form and text labels 
+#     Return the text with numbers in machine processable form and text labels
 #     stripped from their formating. '''
 #     match = NUM_PAT.match(text)
 #     if match:
@@ -193,16 +187,16 @@ def save_datafile(filename, data, strict=False):
 #     ''' Extract numerical data from the main Montréal data HTML page '''
 #     nb_tables = 4  # the number this parser expects
 #     # we save each table in its own file without doing any data validation
-#     file_names = ['mtl_ciusss.csv', 
-#                   'mtl_borough.csv', 
-#                   'mtl_ages.csv', 
+#     file_names = ['mtl_ciusss.csv',
+#                   'mtl_borough.csv',
+#                   'mtl_ages.csv',
 #                   'mtl_gender.csv']
 #     source = os.path.join(data_dir, 'sources', 'data_mtl.html')
 #     soup = bs4.BeautifulSoup(open(source, 'rb'), 'lxml')
 
 #     tables = soup.select('table.contenttable')
 #     data_tables = []
-#     for t in tables: 
+#     for t in tables:
 #         # Some table have text instead of data, but they are easy to spot
 #         #  ex: <td bgcolor="#A1C8E7">
 #         if t.find('td', attrs=dict(bgcolor='#A1C8E7')):
@@ -233,7 +227,7 @@ def save_datafile(filename, data, strict=False):
 
 # def merge_trend(day_file, trend_file, target_col, strict=True):
 #     ''' Merge a single day worth of data into the trends file. '''
-#     # Trend files have one record per day.  Some are vertical (one row per 
+#     # Trend files have one record per day.  Some are vertical (one row per
 #     # day), some are horizontal (one column per day).
 #     with open(day_file, 'r', encoding='utf-8') as f:
 #         dayrows = list(csv.reader(f))
@@ -295,8 +289,8 @@ def backup_processed_dir(processed_dir, processed_backups_dir):
     i = 1
     while os.path.isdir(current_bkp_dir):
         i += 1
-        current_bkp_dirname = date_tag + '_v' + str(i)  
-        current_bkp_dir = os.path.join(processed_backups_dir, current_bkp_dirname)    
+        current_bkp_dirname = date_tag + '_v' + str(i)
+        current_bkp_dir = os.path.join(processed_backups_dir, current_bkp_dirname)
     else:
         os.mkdir(current_bkp_dir)
 
@@ -327,8 +321,8 @@ def download_source_files(sources, sources_dir):
     i = 1
     while os.path.isdir(current_sources_dir):
         i += 1
-        current_sources_dirname = date_tag + '_v' + str(i)  
-        current_sources_dir = os.path.join(sources_dir, current_sources_dirname)    
+        current_sources_dirname = date_tag + '_v' + str(i)
+        current_sources_dir = os.path.join(sources_dir, current_sources_dirname)
     else:
         os.mkdir(current_sources_dir)
 
@@ -370,7 +364,7 @@ def update_data_qc_csv(sources_dir, processed_dir):
         Absolute path of sources dir.
     processed_dir : str
         Absolute path of processed dir.
-    """    
+    """
     lastest_source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc.csv')
 
     # read latest data/sources/*/data_qc.csv
@@ -415,34 +409,34 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
         Index of target col to select.
     date : str
         ISO-8601 formatted date string to use as column name in cases_csv
-    """    
+    """
     # Load csv files
     day_csv = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_mtl_municipal.csv')
     cases_csv = os.path.join(processed_dir, 'cases.csv')
     day_df = pd.read_csv(day_csv, sep=';', index_col=0, encoding='utf-8')
     cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8')
-    
+
     # Select column to append
     new_data_col = day_df.iloc[:, target_col]
-    
+
     # Cleanup new_data_col
-    ## Remove '.' thousands separator and any space
+    # Remove '.' thousands separator and any space
     new_data_col = new_data_col.str.replace('.', '').str.replace(' ', '')
-    ## Remove '<' char. Note: this is somewhat inaccurate, as <5 counts
-    ## will be reporte as 5, but we cannot have any strings in the data.
+    # Remove '<' char. Note: this is somewhat inaccurate, as <5 counts
+    # will be reporte as 5, but we cannot have any strings in the data.
     new_data_col = new_data_col.str.replace('<', '')
-    ## Enforce int type (will raise ValueError if any unexpected chars remain)
+    # Enforce int type (will raise ValueError if any unexpected chars remain)
     new_data_col = new_data_col.astype(int)
-    ## Remove last row (total count)
+    # Remove last row (total count)
     new_data_col = new_data_col[:-1]
-    
+
     # check if column already exists in cases_csv, append column if it doesn't
     if cases_df.columns[-1] == date:
         print(f'{date} has already been appended to {cases_csv}')
     else:
         # Append new col of data
         cases_df[date] = list(new_data_col)
-        
+
     # Overwrite cases.csv
     cases_df.to_csv(cases_csv, encoding='utf-8')
 
@@ -452,7 +446,7 @@ def append_mtl_cases_per1000_csv(processed_dir):
     cases_per1000_csv = os.path.join(processed_dir, 'cases_per1000.csv')
     cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8')
     cases_per1000_df = pd.read_csv(cases_per1000_csv, index_col=0, encoding='utf-8')
-    
+
     # remove Unnamed columns
     cases_df = cases_df.loc[:, ~cases_df.columns.str.contains('^Unnamed')]
     cases_per1000_df = cases_per1000_df.loc[:, ~cases_per1000_df.columns.str.contains('^Unnamed')]
@@ -466,8 +460,8 @@ def append_mtl_cases_per1000_csv(processed_dir):
                    20276, 23954, 69297, 104000, 31380, 106743, 139590, 4958, 98828,
                    78305, 921, 78151, 69229, 89170, 143853, 20312]
 
-    if not latest_date in cases_per1000_df.columns:
-        day_cases_per1000 = cases_df[latest_date][:-1]/borough_pop*1000
+    if latest_date not in cases_per1000_df.columns:
+        day_cases_per1000 = cases_df[latest_date][:-1] / borough_pop * 1000
         cases_per1000_df[latest_date] = list(day_cases_per1000.round(1))
     else:
         print(f'{latest_date} has already been appended to {cases_per1000_csv}')
@@ -482,11 +476,12 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
     mtl_death_loc_csv = os.path.join(processed_dir, 'data_mtl_death_loc.csv')
     day_df = pd.read_csv(day_csv, sep=',', index_col=0, encoding='utf-8')
     mtl_death_loc_df = pd.read_csv(mtl_death_loc_csv, encoding='utf-8')
-    
+
     mtl_day_df = day_df[day_df['RSS'].str.contains('Montr', na=False)]
-    mtl_day_list = mtl_day_df.iloc[0, 1:9].astype(int).to_list()  # CH, CHSLD, Domicile, RI, RPA, Autre, Inconnu, Décès (n)
-    
-    if not date in mtl_death_loc_df['date']:
+    # CH, CHSLD, Domicile, RI, RPA, Autre, Inconnu, Décès (n)
+    mtl_day_list = mtl_day_df.iloc[0, 1:9].astype(int).to_list()
+
+    if date not in mtl_death_loc_df['date']:
         mtl_day_list.insert(0, date)
         mtl_death_loc_df.loc[mtl_death_loc_df.index.max() + 1, :] = mtl_day_list
 
@@ -499,31 +494,31 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
 
 def main():
     parser = ArgumentParser('refreshdata', description=__doc__)
-    parser.add_argument('-nd', '--no-download', action='store_true', default=False, 
+    parser.add_argument('-nd', '--no-download', action='store_true', default=False,
                         help='Do not fetch remote file, only process local copies')
-    parser.add_argument('-nb', '--no-backup', action='store_true', default=False, 
+    parser.add_argument('-nb', '--no-backup', action='store_true', default=False,
                         help='Do not backup files in data/processed')
     # parser.add_argument('-d', '--data-dir', default=DATA_DIR)
-    # parser.add_argument('-v', '--verbose', action='store_true', default=False, 
+    # parser.add_argument('-v', '--verbose', action='store_true', default=False,
     #                     help='Increase verbosity')
-    # parser.add_argument('-D', '--debug', action='store_true', default=False, 
+    # parser.add_argument('-D', '--debug', action='store_true', default=False,
     #                     help='Show debugging information')
-    # parser.add_argument('-L', '--log-file', default=None, 
+    # parser.add_argument('-L', '--log-file', default=None,
     #                     help='Append progress to LOG_FILE')
-    # parser.add_argument('-f', '--force', action='store_true', default=False, 
+    # parser.add_argument('-f', '--force', action='store_true', default=False,
     #                     help='By pass sanity checks')
     args = parser.parse_args()
     # init_logging(args)
-    #lock(args.data_dir)
+    # lock(args.data_dir)
 
     # Yesterday's date (data is reported for previous day)
-    yesterday_date = datetime.now(tz=TIMEZONE) - timedelta(days=1)
-    yesterday_date = yesterday_date.date().isoformat()
+    yesterday = datetime.now(tz=TIMEZONE) - timedelta(days=1)
+    yesterday_date = yesterday.date().isoformat()
 
     # sources, processed, and processed_backups dir paths
     sources_dir = os.path.join(DATA_DIR, 'sources')
     processed_dir = os.path.join(DATA_DIR, 'processed')
-    processed_backups_dir  = os.path.join(DATA_DIR, 'processed_backups')
+    processed_backups_dir = os.path.join(DATA_DIR, 'processed_backups')
 
     # download all source files into data/sources/YYYY-MM-DD{_v#}/
     if not args.no_download:
@@ -533,7 +528,7 @@ def main():
     if not args.no_backup:
         backup_processed_dir(processed_dir, processed_backups_dir)
 
-    ## Update data/processed files from latest data/sources files
+    # Update data/processed files from latest data/sources files
     # Replace data_qc
     update_data_qc_csv(sources_dir, processed_dir)
 
@@ -547,7 +542,7 @@ def main():
 
     # Append row to data_mtl_death_loc.csv
     # append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
-    
+
     # Append row to data_mtl.csv
 
     return 0
