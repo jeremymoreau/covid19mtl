@@ -3,6 +3,6 @@ pandas == 1.0.*
 gunicorn
 requests
 lxml
-bs4
+beautifulsoup4
 pytz
 charset_normalizer == 1.3.*
