@@ -30,7 +30,7 @@ labels = {
     'footer_right' : 'Made by [Jeremy Moreau](https://jeremymoreau.com/) ([RI-MUHC](https://rimuhc.ca/), McGill) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)',
     'infobox' : """
     ###### Useful resources
-    
+
     - [COVID-19 Symptom Self-Assessment Tool](https://ca.thrive.health/covid19/en)
     - [Santé Montréal](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/)
     - [Public health expertise and reference centre (French only)](https://www.inspq.qc.ca/covid-19/donnees)
@@ -41,7 +41,7 @@ labels = {
     If you are worried about COVID-19 or display symptoms such as a cough or fever, you can call toll free (514) 644-4545 in the Montreal area, (418) 644-4545 in the Quebec City region, and 1 (877) 644-4545 elsewhere in Quebec.
     """,
     'montreal_map_colourbar_labels' : {
-                                        'date': 'Date', 
+                                        'date': 'Date',
                                         'borough': 'Borough/City',
                                         'cases_per_1000': 'Cases per 1000<br>population'
                                         },
@@ -84,7 +84,7 @@ labels = {
                                       'Unknown'
                                         ],
     # Confirmed deaths by place of residence (QC) fig
-    'deaths_loc_fig_qc_label' : 'Deaths by place of residence (QC)', 
+    'deaths_loc_fig_qc_label' : 'Deaths by place of residence (QC)',
     'chsld_label' : 'Long-term care<br>centres (CHSLD)',
     'psr_label' : "Private seniors' residence",
     'home_label' : 'Home',

@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 
 def add_ylog_menu(fig, y_data, labels):
     """Add a dropdown menu to select between log and linear scales
-    
+
     Parameters
     ----------
     fig : plotly.graph_objs._figure.Figure
@@ -13,7 +13,7 @@ def add_ylog_menu(fig, y_data, labels):
         Pandas series containing the y axis data
     labels : dict
         Dict containing the labels to display in the dropdown
-    
+
     Returns
     -------
     plotly.graph_objs._figure.Figure
@@ -37,7 +37,7 @@ def add_ylog_menu(fig, y_data, labels):
                          method='update',
                          args=[{'visible': [True, True]},
                                {'yaxis': {
-                                            'type': 'log', 
+                                            'type': 'log',
                                             'nticks': nticks_log,
                                             'gridcolor' : '#f5f5f5'
                                             }

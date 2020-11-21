@@ -30,7 +30,7 @@ labels = {
     'footer_right' : '作者[Jeremy Moreau](https://jeremymoreau.com/) ([RI-MUHC](https://rimuhc.ca/), McGill) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh)',
     'infobox' : """
     ###### 相关资源
-    
+
     - [新型冠状病毒症状自我评估工具](https://ca.thrive.health/covid19/en)
     - [蒙特利尔市公共卫生部门](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/)
     - [公共卫生专业知识和参考资料（法语）](https://www.inspq.qc.ca/covid-19/donnees)
@@ -41,7 +41,7 @@ labels = {
     如果您对新型冠状病毒（COVID19）有所担心或疑问，或者出现咳嗽／发烧等症状，可拨打蒙特利尔地区的免费电话(514) 644-454-545，魁北克市地区的免费电话(418) 644-454545，或魁北克其他地区的免费电话(877) 644-4545。
     """,
     'montreal_map_colourbar_labels' : {
-                                        'date': '日期', 
+                                        'date': '日期',
                                         'borough': '区／市',
                                         'cases_per_1000': '病例／1000人'
                                         },
@@ -84,7 +84,7 @@ labels = {
                                       'Unknown'
                                         ],
     # Confirmed deaths by place of residence (QC) fig
-    'deaths_loc_fig_qc_label' : 'Deaths by place of residence (QC)', 
+    'deaths_loc_fig_qc_label' : 'Deaths by place of residence (QC)',
     'chsld_label' : 'Long-term care<br>centres (CHSLD)',
     'psr_label' : "Private seniors' residence",
     'home_label' : 'Home',

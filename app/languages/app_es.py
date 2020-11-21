@@ -30,7 +30,7 @@ labels = {
     'footer_right' : 'Hecho por [Jeremy Moreau](https://jeremymoreau.com/) ([RI-MUHC](https://rimuhc.ca/), McGill) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)',
     'infobox' : """
     ###### Enlaces importantes
-    
+
     - [Herramienta de autoevaluación de síntomas COVID-19 (inglés y francés)](https://ca.thrive.health/covid19/en)
     - [Información de COVID-19 para Montreal (inglés y francés)](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/)
     - [Centro de experiencia y de consulta en salud pública (sólo francés)](https://www.inspq.qc.ca/covid-19/donnees)
@@ -41,7 +41,7 @@ labels = {
     Si está preocupado por el COVID-19 o presenta síntomas como tos o fiebre, llame sin costo al (514) 644-4545 en el área de Montreal, al (418) 644-4545 en la región de la Ciudad de Quebec y al 1 (877) 644-4545 en cualquier otra parte de la Provincia de Quebec.
     """,
     'montreal_map_colourbar_labels' : {
-                                        'date': 'Fecha', 
+                                        'date': 'Fecha',
                                         'borough': 'Vecindario/Ciudad',
                                         'cases_per_1000': 'Casos por cada 1000<br>habitantes'
                                         },
@@ -84,7 +84,7 @@ labels = {
                                       'Desconocido'
                                         ],
     # Confirmed deaths by place of residence (QC) fig
-    'deaths_loc_fig_qc_label' : 'Muertes por lugar de residencia (QC)', 
+    'deaths_loc_fig_qc_label' : 'Muertes por lugar de residencia (QC)',
     'chsld_label' : 'Centros de cuidado<br>a largo plazo (CHSLD)',
     'psr_label' : "Casa hogar para adultos mayores",
     'home_label' : 'Hogar',

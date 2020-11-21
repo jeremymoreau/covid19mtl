@@ -41,7 +41,7 @@ labels = {
     Si la COVID-19 vous inquiète ou si vous présentez des symptômes comme de la toux ou de la fièvre, vous pouvez contacter, sans frais, le (514) 644-4545 pour la région de Montréal,  le (418) 644-4545 pour la région de Québec et le 1 (877) 644-4545 ailleurs au Québec.
     """,
     'montreal_map_colourbar_labels' : {
-                                        'date': 'Date', 
+                                        'date': 'Date',
                                         'borough': 'Arrondissement/Ville',
                                         'cases_per_1000': 'Cas par 1000<br>habitants'
                                         },
@@ -84,7 +84,7 @@ labels = {
                                       'Inconnus'
                                         ],
     # Confirmed deaths by place of residence (QC) fig
-    'deaths_loc_fig_qc_label' : 'Décès selon le milieu de vie (QC)', 
+    'deaths_loc_fig_qc_label' : 'Décès selon le milieu de vie (QC)',
     'chsld_label' : "Centres d'hébergement et de<br>soins de longue durée (CHSLD)",
     'psr_label' : 'Résidence privée pour aînés',
     'home_label' : 'Domicile',
