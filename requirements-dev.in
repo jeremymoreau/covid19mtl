@@ -1,0 +1,7 @@
+-c requirements.txt
+
+pip-tools
+flake8
+flake8-isort
+flake8-quotes
+mypy
