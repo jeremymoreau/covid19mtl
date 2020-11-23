@@ -14,7 +14,7 @@ Here are the steps to follow if you want to run COVID-19 MTL locally for testing
 1. Clone this repository then navigate to the checkout
 2. Create a virtual environment: `python3.8 -m venv .venv`
 3. Activate the environment: `. .venv/bin/activate` (the command is `.`, meaning source or include)
-4. Install dependencies: `pip install -r requirements.txt requirements-dev.txt`
+4. Install dependencies: `pip install -r requirements.txt -r requirements-dev.txt`
 5. Run the app!  `python -m app`
 
 ## Managing dependencies
