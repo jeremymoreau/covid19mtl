@@ -137,7 +137,7 @@ def fetch(url):
     for _ in range(NB_RETRIES):
         resp = requests.get(url)
         if resp.status_code != 200:
-            next
+            continue
         # ctype = resp.headers.get('Content-Type')
         # return normalize_encoding(resp.content, ctype)
         return normalise_to_utf8(resp.content)
