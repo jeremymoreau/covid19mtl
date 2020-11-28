@@ -46,12 +46,12 @@ def get_month_fr():
 
 # Data sources mapping
 # {filename: url}
-SOURCES = { 
+SOURCES = {
     # Montreal
     # HTML
     'data_mtl.html':
     'https://santemontreal.qc.ca/en/public/coronavirus-covid-19/situation-of-the-coronavirus-covid-19-in-montreal',
-    # CSV (Note: ";" separated)
+    # CSV (Note: ";" separated; Encoding: windows-1252/cp1252)
     'data_mtl_ciuss.csv':
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/ciusss.csv',
     'data_mtl_municipal.csv':
@@ -67,12 +67,15 @@ SOURCES = {
     # INSPQ
     # HTML
     'INSPQ_main.html': 'https://www.inspq.qc.ca/covid-19/donnees',
-    'INSPQ_region.html': 'https://www.inspq.qc.ca/covid-19/donnees/details',
-    # CSV (Note: "," separated)
-    'data_qc.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/combine.csv',
-    'data_qc_cases_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls.csv',
-    'data_qc_death_loc_by_region.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa.csv'
-    }
+    'INSPQ_region.html': 'https://www.inspq.qc.ca/covid-19/donnees/regions',
+    'INSPQ_par_region.html': 'https://www.inspq.qc.ca/covid-19/donnees/par-region',
+    # CSV (Note: "," separated; Encoding: UTF-8)
+    'data_qc.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/covid19-hist.csv',
+    'data_qc_regions.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/regions.csv',
+    'data_qc_manual.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/manual-data.csv',
+    'data_qc_cases_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls-new.csv',
+    'data_qc_death_loc_by_region.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa-new.csv'
+}
 
 
 # def lock(lock_dir):
