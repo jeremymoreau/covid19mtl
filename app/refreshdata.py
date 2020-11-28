@@ -12,7 +12,6 @@ import io
 
 from datetime import date, datetime, timedelta
 from argparse import ArgumentParser
-from charset_normalizer import CharsetNormalizerMatches as cnm
 
 import requests
 import lxml
@@ -106,34 +105,6 @@ SOURCES = {
 #     return text.encode('utf-8')
 
 
-def normalise_to_utf8(bytes_or_filepath):
-    """Convert any text input with unknown encoding to utf-8.
-
-    Parameters
-    ----------
-    bytes_or_filepath : bytes or str
-        A binary string or path to any text file in any encoding.
-
-    Returns
-    -------
-    str
-        A string with correct utf-8 encoding.
-
-    Raises
-    ------
-    TypeError
-        Input is not of type bytes or a valid path to an existing file.
-    """    
-    if type(bytes_or_filepath) == bytes:
-        utf8_str = str(cnm.from_bytes(bytes_or_filepath).best().first())
-    elif os.path.isfile(bytes_or_filepath):
-        utf8_str = str(cnm.from_path(bytes_or_filepath).best().first())
-    else:
-        raise TypeError('Input must be bytes or a valid file path')
-        
-    return utf8_str
-
-
 def fetch(url):
     ''' Get the data at `url`.  Our data sources are notoriously unreliable, 
     so we retry a few times. '''
@@ -141,9 +112,13 @@ def fetch(url):
         resp = requests.get(url)
         if resp.status_code != 200:
             continue
-        # ctype = resp.headers.get('Content-Type')
-        # return normalize_encoding(resp.content, ctype)
-        return normalise_to_utf8(resp.content)
+
+        # try to decode with utf-8 first,
+        # otherwise assume windows-1252
+        try:
+            return resp.content.decode('utf-8')
+        except UnicodeDecodeError:
+            return resp.content.decode('cp1252')
     raise RuntimeError('Failed to retrieve {}'.format(url))
 
 
