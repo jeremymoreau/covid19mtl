@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Refresh data files for the Covid19 Mtl dashboard """
 
-import logging
+# import logging
 import os
 import shutil
 import sys
@@ -11,7 +11,6 @@ from datetime import datetime, timedelta
 import pandas as pd
 import pytz
 import requests
-from charset_normalizer import CharsetNormalizerMatches as cnm
 
 pd.options.mode.chained_assignment = None
 
@@ -82,7 +81,6 @@ def fetch(url):
         except UnicodeDecodeError:
             return resp.content.decode('cp1252')
     raise RuntimeError('Failed to retrieve {}'.format(url))
-
 
 
 def save_datafile(filename, data):
