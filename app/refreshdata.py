@@ -53,8 +53,23 @@ SOURCES = {
 
 
 def fetch(url):
-    """ Get the data at `url`.  Our data sources are notoriously unreliable,
-    so we retry a few times. """
+    """Get the data at `url`. Our data sources are unreliable, so we retry a few times.
+
+    Parameters
+    ----------
+    url : str
+        URL of data to fetch (csv or html file).
+
+    Returns
+    -------
+    str
+        utf-8 or cp1252 decoded string.
+
+    Raises
+    ------
+    RuntimeError
+        Failed to retrieve data from URL.
+    """
     for _ in range(NB_RETRIES):
         resp = requests.get(url)
         if resp.status_code != 200:
@@ -70,13 +85,19 @@ def fetch(url):
 
 
 
-def save_datafile(filename, data, strict=False):
-    """ Save a datafile if it's newer and at least as big as what we cached.
-    Raise ValueError otherwise.
+def save_datafile(filename, data):
+    """Save `data` to `filename`
+
+    Parameters
+    ----------
+    filename : str
+        Absolute path of file where data is to be saved.
+    data : str
+        Data to be saved
     """
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(data)
-    logging.info('Saved a new version of {}'.format(filename))
+    # logging.info('Saved a new version of {}'.format(filename))
 
 
 # def init_logging(args):
@@ -149,7 +170,7 @@ def download_source_files(sources, sources_dir):
     for file, url in sources.items():
         data = fetch(url)
         fq_path = os.path.join(current_sources_dir, file)
-        save_datafile(fq_path, data, True)
+        save_datafile(fq_path, data)
 
 
 def get_latest_source_dir(sources_dir):
@@ -325,6 +346,13 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
 
 
 def append_mtl_cases_per1000_csv(processed_dir):
+    """Append new column of data to cases_per1000.csv
+
+    Parameters
+    ----------
+    processed_dir : str
+        Absolute path to processed data dir.
+    """
     cases_csv = os.path.join(processed_dir, 'cases.csv')
     cases_per1000_csv = os.path.join(processed_dir, 'cases_per1000.csv')
     cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8')
@@ -358,6 +386,22 @@ def append_mtl_cases_per1000_csv(processed_dir):
 
 
 def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
+    """Append new row of data to data_mtl_death_loc.csv
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path to source data dir.
+    processed_dir : str
+        Absolute path to processed data dir.
+    date : str
+        Date of data to append (yyyy-mm-dd).
+
+    Returns
+    -------
+    pandas.DataFrame
+        Pandas DataFrame containing new table with appended row of data.
+    """
     # Load csv files
     day_csv = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc_death_loc_by_region.csv')
     mtl_death_loc_csv = os.path.join(processed_dir, 'data_mtl_death_loc.csv')
