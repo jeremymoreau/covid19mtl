@@ -16,6 +16,7 @@ Here are the steps to follow if you want to run COVID-19 MTL locally for testing
 3. Activate the environment: `. .venv/bin/activate` (the command is `.`, meaning source or include)
 4. Install dependencies: `pip install -r requirements.txt -r requirements-dev.txt`
 5. Run the app!  `python -m app`
+6. Optional: Run the data refresh script to download new data `python refreshdata.py`
 
 ## Managing dependencies
 
@@ -35,6 +36,7 @@ The COVID-19 MTL project is available under the [MIT License](https://github.com
 
 ## Contributors
 
+- Fixing all the things: [Matthias Schoettle](https://github.com/mschoettle)
 - Chinese translation: [Shangge Jiang](https://ca.linkedin.com/in/shangge-vivien-jiang-83418a117)
 - Spanish translation: [Zaida Escila Martínez Moreno](https://github.com/ZaidaEMtzMo)
 - Montreal Python 76 Hackathon:
