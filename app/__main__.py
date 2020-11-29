@@ -1,5 +1,3 @@
-"""Development server"""
-
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -41,4 +39,5 @@ def display_page(pathname):
 
 
 if __name__ == '__main__':
+    # Development server
     app.run_server(debug=True)
