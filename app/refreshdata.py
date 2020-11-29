@@ -353,26 +353,78 @@ def update_data_qc_csv(sources_dir, processed_dir):
 
     # read latest data/sources/*/data_qc.csv
     qc_df = pd.read_csv(lastest_source_file, encoding='utf-8')
-    # convert date to ISO-8601
-    qc_df['Date'] = pd.to_datetime(qc_df['Date'], dayfirst=True, format='%d/%m/%Y')
+    # cut off first rows with 'Date inconnue'
+    qc_df = qc_df[qc_df['Date'] != 'Date inconnue']
+
+    # filter out all rows except Régions & RS99 (Ensemble du Québec) which contains total numbers for QC
+    qc_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS99')]
+    #
 
     # create column with all hospitalisation counts (old and new methods)
-    qc_df['hospitalisations_all'] = qc_df['Hospitalisations']
-    hospitalisations_new_method = qc_df.filter(regex=r'Hospitalisations \(nouvelle').iloc[:,0]
-    qc_df['hospitalisations_qc'] = qc_df['Hospitalisations'].combine_first(hospitalisations_new_method)
+    # qc_df['hospitalisations_all'] = qc_df['Hospitalisations']
+    # hospitalisations_new_method = qc_df.filter(regex=r'Hospitalisations \(nouvelle').iloc[:, 0]
+    # qc_df['hospitalisations_qc'] = qc_df['Hospitalisations'].combine_first(hospitalisations_new_method)
+
+    column_mappings = {
+        'Date': 'date',
+        # 'cas_cum_lab_n': '',
+        # 'cas_cum_epi_n': '',
+        'cas_cum_tot_n': 'cases_qc',
+        # 'cas_cum_tot_t': '',
+        # 'cas_quo_tot_t': '',
+        # 'cas_quo_lab_n': '',
+        # 'cas_quo_epi_n': '',
+        'cas_quo_tot_n': 'new_cases_qc',
+        'act_cum_tot_n': 'active_cases_qc',
+        # 'act_cum_tot_t': '',
+        # 'cas_quo_tot_m': '',
+        # 'cas_quo_tot_tm': '',
+        # 'ret_cum_tot_n': '',
+        'ret_quo_tot_n': 'new_deaths_qc',
+        'dec_cum_tot_n': 'deaths_qc',
+        # 'dec_cum_tot_t': '',
+        # 'dec_quo_tot_t': '',
+        # 'dec_cum_chs_n': '',
+        # 'dec_cum_rpa_n': '',
+        # 'dec_cum_dom_n': '',
+        # 'dec_cum_aut_n': '',
+        # 'dec_quo_tot_n': '',
+        # 'dec_quo_chs_n': '',
+        # 'dec_quo_rpa_n': '',
+        # 'dec_quo_dom_n': '',
+        # 'dec_quo_aut_n': '',
+        # 'dec_quo_tot_m': '',
+        # 'dec_quo_tot_tm': '',
+        # 'hos_cum_reg_n': '',
+        # 'hos_cum_si_n': '',
+        # 'hos_cum_tot_n': '',
+        # 'hos_cum_tot_t': '',
+        # 'hos_quo_tot_t': '',
+        # 'hos_quo_reg_n': '',
+        # 'hos_quo_si_n': '',
+        # 'hos_quo_tot_n': '',
+        # 'hos_quo_tot_m': '',
+        # 'psi_cum_tes_n': '',
+        # 'psi_cum_pos_n': '',
+        'psi_cum_inf_n': 'negative_tests_qc',
+        # 'psi_quo_pos_n': '',
+        'psi_quo_inf_n': 'new_negative_tests_qc',
+        # 'psi_quo_tes_n': '',
+        # 'psi_quo_pos_t': '',
+    }
 
     # rename columns
-    qc_df.columns = qc_df.columns.str.replace('Date', 'date')
-    qc_df.columns = qc_df.columns.str.replace('Cumul de cas confirm.*', 'cases_qc')
-    qc_df.columns = qc_df.columns.str.replace('Nombre cumulatif de d.*', 'deaths_qc')
-    qc_df.columns = qc_df.columns.str.replace('Soins intensifs', 'icu_qc')
-    qc_df.columns = qc_df.columns.str.replace('Cumul des personnes avec des analyses n.*', 'negative_tests_qc')
-    qc_df.columns = qc_df.columns.str.replace('Nouveaux d.*', 'new_deaths_qc')
-    qc_df.columns = qc_df.columns.str.replace('Cas actifs', 'active_cases_qc')
-    qc_df.columns = qc_df.columns.str.replace('Nouveaux cas', 'new_cases_qc')
+    for (old, new) in column_mappings.items():
+        qc_df.columns = qc_df.columns.str.replace(old, new)
 
-    # add new test column
-    qc_df['new_negative_tests_qc'] = qc_df['negative_tests_qc'] - qc_df['negative_tests_qc'].shift(1)
+        # convert columns to int
+        if new != 'date':
+            qc_df[new] = qc_df[new].astype(int)
+
+    # add columns expected in UI
+    # TODO: needs to be replaced
+    qc_df['hospitalisations_qc'] = 0
+    qc_df['icu_qc'] = 0
 
     # overwrite previous data/processed/data_qc.csv
     qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8', index=False)
