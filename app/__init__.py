@@ -3,8 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 
-from .languages import app_en, app_fr, app_zh, app_es
-
+from .languages import app_en, app_es, app_fr, app_zh
 
 app = dash.Dash(__name__, meta_tags=[
     {'name': 'viewport', 'content': 'width=device-width'},
