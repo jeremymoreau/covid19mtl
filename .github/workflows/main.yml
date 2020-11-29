@@ -1,0 +1,22 @@
+name: Auto-deploy to Dokku
+
+on:
+  push:
+    branches:
+      - deploy
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Dokku deploy
+      uses: vitalyliber/dokku-github-action@v6.1
+      env:
+        PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        HOST: ${{ secrets.DOKKU_IP }}
+        PROJECT: covid19mtl.ca
+        APP_CONFIG: ${{ secrets.APP_CONFIG }}
+        FORCE_DEPLOY: true
