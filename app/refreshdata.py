@@ -454,16 +454,19 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     
     # Select column to append
     new_data_col = day_df.iloc[:, target_col]
-    
-    # Cleanup new_data_col
-    ## Remove '.' thousands separator and any space
-    new_data_col = new_data_col.str.replace('.', '').str.replace(' ', '')
-    ## Remove '<' char. Note: this is somewhat inaccurate, as <5 counts
-    ## will be reporte as 5, but we cannot have any strings in the data.
-    new_data_col = new_data_col.str.replace('<', '')
-    ## Enforce int type (will raise ValueError if any unexpected chars remain)
-    new_data_col = new_data_col.astype(int)
-    ## Remove last row (total count)
+
+    # convert string to int if present
+    if new_data_col.dtype != int:
+        # Cleanup new_data_col
+        # Remove '.' thousands separator and any space
+        new_data_col = new_data_col.str.replace('.', '').str.replace(' ', '')
+        # Remove '<' char. Note: this is somewhat inaccurate, as <5 counts
+        # will be reported as 5, but we cannot have any strings in the data.
+        new_data_col = new_data_col.str.replace('<', '')
+        # Enforce int type (will raise ValueError if any unexpected chars remain)
+        new_data_col = new_data_col.astype(int)
+
+    # Remove last row (total count)
     new_data_col = new_data_col[:-1]
     
     # check if column already exists in cases_csv, append column if it doesn't
@@ -472,7 +475,22 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     else:
         # Append new col of data
         cases_df[date] = list(new_data_col)
-        
+
+        # check whether the exact same data already exists for a previous day
+        # data is not updated on Sat (for Fri) and Sun (for Sat) and still shows previous days data
+        # replace it with 'na' if it is the same
+        # see: issue #34
+        already_exists = False
+        # need to go back several columns in case the previous one has 'na'
+        for i in range(len(cases_df.columns) - 1, 1, -1):
+            if pd.Series.all(cases_df[date] == cases_df[cases_df.columns[i - 1]]):
+                already_exists = True
+                break
+
+        if already_exists:
+            print(f'the same data of {date} already exists for a previous day, replacing with "na"')
+            cases_df[cases_df.columns[-1]] = 'na'
+
     # Overwrite cases.csv
     cases_df.to_csv(cases_csv, encoding='utf-8')
 
@@ -496,9 +514,13 @@ def append_mtl_cases_per1000_csv(processed_dir):
                    20276, 23954, 69297, 104000, 31380, 106743, 139590, 4958, 98828,
                    78305, 921, 78151, 69229, 89170, 143853, 20312]
 
-    if not latest_date in cases_per1000_df.columns:
-        day_cases_per1000 = cases_df[latest_date][:-1]/borough_pop*1000
-        cases_per1000_df[latest_date] = list(day_cases_per1000.round(1))
+    if latest_date not in cases_per1000_df.columns:
+        # ignore columns with 'na'
+        if pd.Series.all(cases_df[latest_date] == 'na'):
+            cases_per1000_df[latest_date] = 'na'
+        else:
+            day_cases_per1000 = cases_df[latest_date][:-1] / borough_pop * 1000
+            cases_per1000_df[latest_date] = list(day_cases_per1000.round(1))
     else:
         print(f'{latest_date} has already been appended to {cases_per1000_csv}')
 
@@ -570,7 +592,7 @@ def main():
     # Scrape latest number of recovered cases for QC
 
     # Append col to cases.csv
-    append_mtl_cases_csv(sources_dir, processed_dir, 0, yesterday_date)
+    append_mtl_cases_csv(sources_dir, processed_dir, 3, yesterday_date)
 
     # Append col to cases_per1000.csv
     append_mtl_cases_per1000_csv(processed_dir)
