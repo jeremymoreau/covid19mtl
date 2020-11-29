@@ -1,9 +1,9 @@
-name: Auto-deploy master to Dokku
+name: Auto-deploy to Dokku
 
 on:
   push:
     branches:
-      - master
+      - deploy
 
 jobs:
   build:
