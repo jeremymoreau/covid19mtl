@@ -19,3 +19,4 @@ jobs:
         HOST: ${{ secrets.DOKKU_IP }}
         PROJECT: covid19mtl.ca
         APP_CONFIG: ${{ secrets.APP_CONFIG }}
+        FORCE_DEPLOY: true
