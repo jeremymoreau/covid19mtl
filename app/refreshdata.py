@@ -12,7 +12,6 @@ import io
 
 from datetime import date, datetime, timedelta
 from argparse import ArgumentParser
-from charset_normalizer import CharsetNormalizerMatches as cnm
 
 import requests
 import lxml
@@ -46,12 +45,12 @@ def get_month_fr():
 
 # Data sources mapping
 # {filename: url}
-SOURCES = { 
+SOURCES = {
     # Montreal
     # HTML
     'data_mtl.html':
     'https://santemontreal.qc.ca/en/public/coronavirus-covid-19/situation-of-the-coronavirus-covid-19-in-montreal',
-    # CSV (Note: ";" separated)
+    # CSV (Note: ";" separated; Encoding: windows-1252/cp1252)
     'data_mtl_ciuss.csv':
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/ciusss.csv',
     'data_mtl_municipal.csv':
@@ -67,12 +66,15 @@ SOURCES = {
     # INSPQ
     # HTML
     'INSPQ_main.html': 'https://www.inspq.qc.ca/covid-19/donnees',
-    'INSPQ_region.html': 'https://www.inspq.qc.ca/covid-19/donnees/details',
-    # CSV (Note: "," separated)
-    'data_qc.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/combine.csv',
-    'data_qc_cases_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls.csv',
-    'data_qc_death_loc_by_region.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa.csv'
-    }
+    'INSPQ_region.html': 'https://www.inspq.qc.ca/covid-19/donnees/regions',
+    'INSPQ_par_region.html': 'https://www.inspq.qc.ca/covid-19/donnees/par-region',
+    # CSV (Note: "," separated; Encoding: UTF-8)
+    'data_qc.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/covid19-hist.csv',
+    'data_qc_regions.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/regions.csv',
+    'data_qc_manual.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/manual-data.csv',
+    'data_qc_cases_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls-new.csv',
+    'data_qc_death_loc_by_region.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa-new.csv'
+}
 
 
 # def lock(lock_dir):
@@ -103,34 +105,6 @@ SOURCES = {
 #     return text.encode('utf-8')
 
 
-def normalise_to_utf8(bytes_or_filepath):
-    """Convert any text input with unknown encoding to utf-8.
-
-    Parameters
-    ----------
-    bytes_or_filepath : bytes or str
-        A binary string or path to any text file in any encoding.
-
-    Returns
-    -------
-    str
-        A string with correct utf-8 encoding.
-
-    Raises
-    ------
-    TypeError
-        Input is not of type bytes or a valid path to an existing file.
-    """    
-    if type(bytes_or_filepath) == bytes:
-        utf8_str = str(cnm.from_bytes(bytes_or_filepath).best().first())
-    elif os.path.isfile(bytes_or_filepath):
-        utf8_str = str(cnm.from_path(bytes_or_filepath).best().first())
-    else:
-        raise TypeError('Input must be bytes or a valid file path')
-        
-    return utf8_str
-
-
 def fetch(url):
     ''' Get the data at `url`.  Our data sources are notoriously unreliable, 
     so we retry a few times. '''
@@ -138,9 +112,13 @@ def fetch(url):
         resp = requests.get(url)
         if resp.status_code != 200:
             continue
-        # ctype = resp.headers.get('Content-Type')
-        # return normalize_encoding(resp.content, ctype)
-        return normalise_to_utf8(resp.content)
+
+        # try to decode with utf-8 first,
+        # otherwise assume windows-1252
+        try:
+            return resp.content.decode('utf-8')
+        except UnicodeDecodeError:
+            return resp.content.decode('cp1252')
     raise RuntimeError('Failed to retrieve {}'.format(url))
 
 
@@ -375,26 +353,78 @@ def update_data_qc_csv(sources_dir, processed_dir):
 
     # read latest data/sources/*/data_qc.csv
     qc_df = pd.read_csv(lastest_source_file, encoding='utf-8')
-    # convert date to ISO-8601
-    qc_df['Date'] = pd.to_datetime(qc_df['Date'], dayfirst=True, format='%d/%m/%Y')
+    # cut off first rows with 'Date inconnue'
+    qc_df = qc_df[qc_df['Date'] != 'Date inconnue']
+
+    # filter out all rows except Régions & RS99 (Ensemble du Québec) which contains total numbers for QC
+    qc_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS99')]
+    #
 
     # create column with all hospitalisation counts (old and new methods)
-    qc_df['hospitalisations_all'] = qc_df['Hospitalisations']
-    hospitalisations_new_method = qc_df.filter(regex=r'Hospitalisations \(nouvelle').iloc[:,0]
-    qc_df['hospitalisations_qc'] = qc_df['Hospitalisations'].combine_first(hospitalisations_new_method)
+    # qc_df['hospitalisations_all'] = qc_df['Hospitalisations']
+    # hospitalisations_new_method = qc_df.filter(regex=r'Hospitalisations \(nouvelle').iloc[:, 0]
+    # qc_df['hospitalisations_qc'] = qc_df['Hospitalisations'].combine_first(hospitalisations_new_method)
+
+    column_mappings = {
+        'Date': 'date',
+        # 'cas_cum_lab_n': '',
+        # 'cas_cum_epi_n': '',
+        'cas_cum_tot_n': 'cases_qc',
+        # 'cas_cum_tot_t': '',
+        # 'cas_quo_tot_t': '',
+        # 'cas_quo_lab_n': '',
+        # 'cas_quo_epi_n': '',
+        'cas_quo_tot_n': 'new_cases_qc',
+        'act_cum_tot_n': 'active_cases_qc',
+        # 'act_cum_tot_t': '',
+        # 'cas_quo_tot_m': '',
+        # 'cas_quo_tot_tm': '',
+        # 'ret_cum_tot_n': '',
+        'ret_quo_tot_n': 'new_deaths_qc',
+        'dec_cum_tot_n': 'deaths_qc',
+        # 'dec_cum_tot_t': '',
+        # 'dec_quo_tot_t': '',
+        # 'dec_cum_chs_n': '',
+        # 'dec_cum_rpa_n': '',
+        # 'dec_cum_dom_n': '',
+        # 'dec_cum_aut_n': '',
+        # 'dec_quo_tot_n': '',
+        # 'dec_quo_chs_n': '',
+        # 'dec_quo_rpa_n': '',
+        # 'dec_quo_dom_n': '',
+        # 'dec_quo_aut_n': '',
+        # 'dec_quo_tot_m': '',
+        # 'dec_quo_tot_tm': '',
+        # 'hos_cum_reg_n': '',
+        # 'hos_cum_si_n': '',
+        # 'hos_cum_tot_n': '',
+        # 'hos_cum_tot_t': '',
+        # 'hos_quo_tot_t': '',
+        # 'hos_quo_reg_n': '',
+        # 'hos_quo_si_n': '',
+        # 'hos_quo_tot_n': '',
+        # 'hos_quo_tot_m': '',
+        # 'psi_cum_tes_n': '',
+        # 'psi_cum_pos_n': '',
+        'psi_cum_inf_n': 'negative_tests_qc',
+        # 'psi_quo_pos_n': '',
+        'psi_quo_inf_n': 'new_negative_tests_qc',
+        # 'psi_quo_tes_n': '',
+        # 'psi_quo_pos_t': '',
+    }
 
     # rename columns
-    qc_df.columns = qc_df.columns.str.replace('Date', 'date')
-    qc_df.columns = qc_df.columns.str.replace('Cumul de cas confirm.*', 'cases_qc')
-    qc_df.columns = qc_df.columns.str.replace('Nombre cumulatif de d.*', 'deaths_qc')
-    qc_df.columns = qc_df.columns.str.replace('Soins intensifs', 'icu_qc')
-    qc_df.columns = qc_df.columns.str.replace('Cumul des personnes avec des analyses n.*', 'negative_tests_qc')
-    qc_df.columns = qc_df.columns.str.replace('Nouveaux d.*', 'new_deaths_qc')
-    qc_df.columns = qc_df.columns.str.replace('Cas actifs', 'active_cases_qc')
-    qc_df.columns = qc_df.columns.str.replace('Nouveaux cas', 'new_cases_qc')
+    for (old, new) in column_mappings.items():
+        qc_df.columns = qc_df.columns.str.replace(old, new)
 
-    # add new test column
-    qc_df['new_negative_tests_qc'] = qc_df['negative_tests_qc'] - qc_df['negative_tests_qc'].shift(1)
+        # convert columns to int
+        if new != 'date':
+            qc_df[new] = qc_df[new].astype(int)
+
+    # add columns expected in UI
+    # TODO: needs to be replaced
+    qc_df['hospitalisations_qc'] = 0
+    qc_df['icu_qc'] = 0
 
     # overwrite previous data/processed/data_qc.csv
     qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8', index=False)
@@ -424,16 +454,19 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     
     # Select column to append
     new_data_col = day_df.iloc[:, target_col]
-    
-    # Cleanup new_data_col
-    ## Remove '.' thousands separator and any space
-    new_data_col = new_data_col.str.replace('.', '').str.replace(' ', '')
-    ## Remove '<' char. Note: this is somewhat inaccurate, as <5 counts
-    ## will be reporte as 5, but we cannot have any strings in the data.
-    new_data_col = new_data_col.str.replace('<', '')
-    ## Enforce int type (will raise ValueError if any unexpected chars remain)
-    new_data_col = new_data_col.astype(int)
-    ## Remove last row (total count)
+
+    # convert string to int if present
+    if new_data_col.dtype != int:
+        # Cleanup new_data_col
+        # Remove '.' thousands separator and any space
+        new_data_col = new_data_col.str.replace('.', '').str.replace(' ', '')
+        # Remove '<' char. Note: this is somewhat inaccurate, as <5 counts
+        # will be reported as 5, but we cannot have any strings in the data.
+        new_data_col = new_data_col.str.replace('<', '')
+        # Enforce int type (will raise ValueError if any unexpected chars remain)
+        new_data_col = new_data_col.astype(int)
+
+    # Remove last row (total count)
     new_data_col = new_data_col[:-1]
     
     # check if column already exists in cases_csv, append column if it doesn't
@@ -442,7 +475,22 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     else:
         # Append new col of data
         cases_df[date] = list(new_data_col)
-        
+
+        # check whether the exact same data already exists for a previous day
+        # data is not updated on Sat (for Fri) and Sun (for Sat) and still shows previous days data
+        # replace it with 'na' if it is the same
+        # see: issue #34
+        already_exists = False
+        # need to go back several columns in case the previous one has 'na'
+        for i in range(len(cases_df.columns) - 1, 1, -1):
+            if pd.Series.all(cases_df[date] == cases_df[cases_df.columns[i - 1]]):
+                already_exists = True
+                break
+
+        if already_exists:
+            print(f'the same data of {date} already exists for a previous day, replacing with "na"')
+            cases_df[cases_df.columns[-1]] = 'na'
+
     # Overwrite cases.csv
     cases_df.to_csv(cases_csv, encoding='utf-8')
 
@@ -466,9 +514,13 @@ def append_mtl_cases_per1000_csv(processed_dir):
                    20276, 23954, 69297, 104000, 31380, 106743, 139590, 4958, 98828,
                    78305, 921, 78151, 69229, 89170, 143853, 20312]
 
-    if not latest_date in cases_per1000_df.columns:
-        day_cases_per1000 = cases_df[latest_date][:-1]/borough_pop*1000
-        cases_per1000_df[latest_date] = list(day_cases_per1000.round(1))
+    if latest_date not in cases_per1000_df.columns:
+        # ignore columns with 'na'
+        if pd.Series.all(cases_df[latest_date] == 'na'):
+            cases_per1000_df[latest_date] = 'na'
+        else:
+            day_cases_per1000 = cases_df[latest_date][:-1] / borough_pop * 1000
+            cases_per1000_df[latest_date] = list(day_cases_per1000.round(1))
     else:
         print(f'{latest_date} has already been appended to {cases_per1000_csv}')
 
@@ -484,13 +536,19 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
     mtl_death_loc_df = pd.read_csv(mtl_death_loc_csv, encoding='utf-8')
     
     mtl_day_df = day_df[day_df['RSS'].str.contains('Montr', na=False)]
-    mtl_day_list = mtl_day_df.iloc[0, 1:9].astype(int).to_list()  # CH, CHSLD, Domicile, RI, RPA, Autre, Inconnu, Décès (n)
-    
-    if not date in mtl_death_loc_df['date']:
+    # CH, CHSLD, Domicile, RI, RPA, Autre, Décès (n)
+    # drop the last column (Deces (%))
+    mtl_day_list = mtl_day_df.iloc[0, 1:8].astype(int).to_list()
+
+    if date not in mtl_death_loc_df['date']:
         mtl_day_list.insert(0, date)
+        # add placeholder for (removed) Inccnnue column
+        # required since target df has this column
+        mtl_day_list.insert(7, 0)
+
         mtl_death_loc_df.loc[mtl_death_loc_df.index.max() + 1, :] = mtl_day_list
 
-        # Overwrite cases_per1000.csv
+        # Overwrite data_mtl_death_loc.csv
         mtl_death_loc_df.to_csv(mtl_death_loc_csv, encoding='utf-8', index=False)
     else:
         print(f'{date} has already been appended to {mtl_death_loc_csv}')
@@ -540,7 +598,7 @@ def main():
     # Scrape latest number of recovered cases for QC
 
     # Append col to cases.csv
-    append_mtl_cases_csv(sources_dir, processed_dir, 0, yesterday_date)
+    append_mtl_cases_csv(sources_dir, processed_dir, 3, yesterday_date)
 
     # Append col to cases_per1000.csv
     append_mtl_cases_per1000_csv(processed_dir)
