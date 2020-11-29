@@ -14,7 +14,7 @@ import requests
 
 pd.options.mode.chained_assignment = None
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
+DATA_DIR = os.path.join(os.path.dirname(__file__), 'app', 'data')
 NB_RETRIES = 3
 TIMEZONE = pytz.timezone('America/Montreal')
 # Data sources mapping
