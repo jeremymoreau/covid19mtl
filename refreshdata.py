@@ -191,6 +191,30 @@ def get_latest_source_dir(sources_dir):
     return latest_source_dir
 
 
+def get_source_dir_for_date(sources_dir, date):
+    """Get the last source dir in data/sources for the given date.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    date : str
+        ISO-8601 formatted date string.
+
+    Returns
+    -------
+    str
+        Name of latest source dir (e.g. 2020-06-01_v2) in data/sources/
+    """
+    # get all directories with starting with the date
+    source_dirs = [directory for directory in Path(sources_dir).glob(f'{date}*/')]
+
+    # take the last one from the sorted list
+    latest_source_dir = sorted(source_dirs)[-1]
+
+    return latest_source_dir.name
+
+
 def update_data_qc_csv(sources_dir, processed_dir):
     """Replace old copy of data_qc.csv in processed_dir with latest version.
 
@@ -295,7 +319,7 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
         ISO-8601 formatted date string to use as column name in cases_csv
     """
     # Load csv files
-    day_csv = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_mtl_municipal.csv')
+    day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_mtl_municipal.csv')
     cases_csv = os.path.join(processed_dir, 'cases.csv')
     day_df = pd.read_csv(day_csv, sep=';', index_col=0, encoding='utf-8')
     cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8')
@@ -401,7 +425,7 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
         Pandas DataFrame containing new table with appended row of data.
     """
     # Load csv files
-    day_csv = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc_death_loc_by_region.csv')
+    day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_death_loc_by_region.csv')
     mtl_death_loc_csv = os.path.join(processed_dir, 'data_mtl_death_loc.csv')
     day_df = pd.read_csv(day_csv, sep=',', index_col=0, encoding='utf-8')
     mtl_death_loc_df = pd.read_csv(mtl_death_loc_csv, encoding='utf-8')
