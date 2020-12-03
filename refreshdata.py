@@ -7,6 +7,7 @@ import shutil
 import sys
 from argparse import ArgumentParser
 from datetime import datetime, timedelta
+from pathlib import Path
 
 import pandas as pd
 import pytz
@@ -256,10 +257,10 @@ def update_data_qc_csv(sources_dir, processed_dir):
         'dec_cum_tot_n': 'deaths_qc',
         # 'dec_cum_tot_t': '',
         # 'dec_quo_tot_t': '',
-        # 'dec_cum_chs_n': '',
-        # 'dec_cum_rpa_n': '',
-        # 'dec_cum_dom_n': '',
-        # 'dec_cum_aut_n': '',
+        'dec_cum_chs_n': 'deaths_qc_chsld',
+        'dec_cum_rpa_n': 'deaths_qc_psr',
+        'dec_cum_dom_n': 'deaths_qc_home',
+        'dec_cum_aut_n': 'deaths_qc_other',
         'dec_quo_tot_n': 'new_deaths_qc',
         # 'dec_quo_chs_n': '',
         # 'dec_quo_rpa_n': '',
