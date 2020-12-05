@@ -485,6 +485,28 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
     return mtl_death_loc_df
 
 
+def append_mtl_data_csv(sources_dir, processed_dir, date):
+    # Load csv files
+    cases_csv = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_mtl_new_cases.csv')
+    # replace column names, ignore empty last column
+    cases_df = pd.read_csv(
+        cases_csv,
+        sep=';',
+        header=0,
+        names=['date', 'new_cases', 'total_cases'],
+        usecols=[0, 1, 2],
+        encoding='utf-8'
+    )
+    mtl_csv = os.path.join(processed_dir, 'data_mtl.csv')
+    # mtl_df = pd.read_csv(mtl_csv, index_col=0, encoding='utf-8')
+
+    # remove rows with all NaN
+    cases_df.dropna(how='all', inplace=True)
+
+    # Overwrite mtl_data.csv
+    cases_df.to_csv(mtl_csv, encoding='utf-8', index=False)
+
+
 def main():
     parser = ArgumentParser('refreshdata', description=__doc__)
     parser.add_argument('-nd', '--no-download', action='store_true', default=False,
@@ -538,6 +560,7 @@ def main():
     # append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
 
     # Append row to data_mtl.csv
+    append_mtl_data_csv(sources_dir, processed_dir, yesterday_date)
 
     return 0
 
