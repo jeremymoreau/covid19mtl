@@ -521,6 +521,7 @@ def main():
 
     # Update data/processed files from latest data/sources files
     # Replace data_qc
+    update_data_qc_csv(sources_dir, processed_dir)
 
     # Replace data_qc_hospitalisations
     update_hospitalisations_qc_csv(sources_dir, processed_dir)
