@@ -216,27 +216,18 @@ def get_source_dir_for_date(sources_dir, date):
     return latest_source_dir.name
 
 
-def update_data_qc_csv(sources_dir, processed_dir):
-    """Replace old copy of data_qc.csv in processed_dir with latest version.
-
-    data_qc.csv file will be overwritten with the new updated file.
+def load_data_qc_csv(source_file):
+    """Returns pandas DataFrame with data from QC CSV.
+    Performs simple cleaning and renaming of columns.
 
     Parameters
     ----------
-    sources_dir : str
-        Absolute path of sources dir.
-    processed_dir : str
-        Absolute path of processed dir.
+    source_file : str
+        Absolute path of source file.
     """
-    lastest_source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc.csv')
-
-    # read latest data/sources/*/data_qc.csv
-    qc_df = pd.read_csv(lastest_source_file, encoding='utf-8')
+    qc_df = pd.read_csv(source_file, encoding='utf-8')
     # cut off first rows with 'Date inconnue'
     qc_df = qc_df[qc_df['Date'] != 'Date inconnue']
-
-    # filter out all rows except Régions & RS99 (Ensemble du Québec) which contains total numbers for QC
-    qc_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS99')]
 
     column_mappings = {
         'Date': 'date',
@@ -293,6 +284,29 @@ def update_data_qc_csv(sources_dir, processed_dir):
         # convert columns to int
         if new != 'date':
             qc_df[new] = qc_df[new].astype(int)
+
+    return qc_df
+
+
+def update_data_qc_csv(sources_dir, processed_dir):
+    """Replace old copy of data_qc.csv in processed_dir with latest version.
+
+    data_qc.csv file will be overwritten with the new updated file.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    """
+    # read latest data/sources/*/data_qc.csv
+    lastest_source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc.csv')
+
+    qc_df = load_data_qc_csv(lastest_source_file)
+
+    # filter out all rows except Régions & RS99 (Ensemble du Québec) which contains total numbers for QC
+    qc_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS99')]
 
     # overwrite previous data/processed/data_qc.csv
     qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8', index=False)
