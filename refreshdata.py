@@ -499,26 +499,28 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
     return mtl_death_loc_df
 
 
-def append_mtl_data_csv(sources_dir, processed_dir, date):
-    # Load csv files
-    cases_csv = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_mtl_new_cases.csv')
-    # replace column names, ignore empty last column
-    cases_df = pd.read_csv(
-        cases_csv,
-        sep=';',
-        header=0,
-        names=['date', 'new_cases', 'total_cases'],
-        usecols=[0, 1, 2],
-        encoding='utf-8'
-    )
-    mtl_csv = os.path.join(processed_dir, 'data_mtl.csv')
-    # mtl_df = pd.read_csv(mtl_csv, index_col=0, encoding='utf-8')
+def append_mtl_data_csv(sources_dir, processed_dir):
+    """Replace old copy of data_mtl.csv in processed_dir with latest version of MTL data.
 
-    # remove rows with all NaN
-    cases_df.dropna(how='all', inplace=True)
+    data_mtl.csv file will be overwritten with the new updated file.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    """
+    # use data_qc.csv
+    qc_csv = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc.csv')
+    mtl_csv = os.path.join(processed_dir, 'data_mtl.csv')
+
+    qc_df = load_data_qc_csv(qc_csv)
+
+    mtl_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS06')]
 
     # Overwrite mtl_data.csv
-    cases_df.to_csv(mtl_csv, encoding='utf-8', index=False)
+    mtl_df.to_csv(mtl_csv, encoding='utf-8', index=False)
 
 
 def main():
@@ -574,7 +576,7 @@ def main():
     # append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
 
     # Append row to data_mtl.csv
-    append_mtl_data_csv(sources_dir, processed_dir, yesterday_date)
+    append_mtl_data_csv(sources_dir, processed_dir)
 
     return 0
 
