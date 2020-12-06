@@ -110,7 +110,7 @@ def cases_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['cases_qc'],
+                'y': data_qc['cases'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#001F97'},
                 'name': labels['confirmed_cases_qc_label'],
@@ -119,7 +119,7 @@ def cases_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['active_cases_qc'],
+                'y': data_qc['active_cases'],
                 'mode': 'lines',
                 'marker': {'color': '#001F97'},
                 'line': {'dash': 'dash'},
@@ -129,7 +129,7 @@ def cases_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['cases_mtl'],
+                'y': data_mtl['cases'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#D6142C'},
                 'name': labels['confirmed_cases_mtl_label'],
@@ -138,7 +138,7 @@ def cases_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['new_cases_qc'],
+                'y': data_qc['new_cases'],
                 'mode': 'lines',
                 'marker': {'color': '#00104f'},
                 'name': labels['new_confirmed_cases_qc_label'],
@@ -147,7 +147,7 @@ def cases_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['new_cases_mtl'],
+                'y': data_mtl['new_cases'],
                 'mode': 'lines',
                 'marker': {'color': '#780b18'},
                 'name': labels['new_confirmed_cases_mtl_label'],
@@ -168,7 +168,7 @@ def cases_fig(data_mtl, data_qc, labels):
             'dragmode': False
         }
     })
-    cases_fig = add_ylog_menu(cases_fig, data_qc['cases_qc'], labels)
+    cases_fig = add_ylog_menu(cases_fig, data_qc['cases'], labels)
 
     return cases_fig
 
@@ -234,7 +234,7 @@ def deaths_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['deaths_qc'],
+                'y': data_qc['deaths'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#001F97'},
                 'name': labels['deaths_fig_qc_label'],
@@ -243,7 +243,7 @@ def deaths_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['deaths_mtl'],
+                'y': data_mtl['deaths'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#D6142C'},
                 'name': labels['deaths_fig_mtl_label'],
@@ -252,7 +252,7 @@ def deaths_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['new_deaths_qc'],
+                'y': data_qc['new_deaths'],
                 'mode': 'lines',
                 'marker': {'color': '#00104f'},
                 'name': labels['new_deaths_qc_label'],
@@ -261,7 +261,7 @@ def deaths_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['new_deaths_mtl'],
+                'y': data_mtl['new_deaths'],
                 'mode': 'lines',
                 'marker': {'color': '#780b18'},
                 'name': labels['new_deaths_mtl_label'],
@@ -283,7 +283,7 @@ def deaths_fig(data_mtl, data_qc, labels):
             'dragmode': False
         }
     })
-    deaths_fig = add_ylog_menu(deaths_fig, data_qc['deaths_qc'], labels)
+    deaths_fig = add_ylog_menu(deaths_fig, data_qc['deaths'], labels)
 
     return deaths_fig
 
@@ -340,7 +340,7 @@ def qc_testing_fig(data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['negative_tests_qc'],
+                'y': data_qc['negative_tests'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#39b686'},
                 'name': labels['negative_tests_qc_label'],
@@ -350,7 +350,7 @@ def qc_testing_fig(data_qc, labels):
                 'type': 'scatter',
                 'mode': 'lines+markers',
                 'x': data_qc['date'],
-                'y': data_qc['cases_qc'],
+                'y': data_qc['cases'],
                 'marker': {'color': '#c51515'},
                 'name': labels['positive_cases_qc_label'],
                 'hoverlabel': {'namelength': 25},
@@ -358,7 +358,7 @@ def qc_testing_fig(data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['new_negative_tests_qc'],
+                'y': data_qc['new_negative_tests'],
                 'mode': 'lines',
                 'marker': {'color': '#206e50'},
                 'name': labels['new_negative_tests_qc_label'],
@@ -377,7 +377,7 @@ def qc_testing_fig(data_qc, labels):
             'dragmode': False
         }
     })
-    testing_qc_fig = add_ylog_menu(testing_qc_fig, data_qc['negative_tests_qc'], labels)
+    testing_qc_fig = add_ylog_menu(testing_qc_fig, data_qc['negative_tests'], labels)
 
     return testing_qc_fig
 
@@ -424,7 +424,7 @@ def qc_deaths_loc_fig(data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['deaths_qc_chsld'],
+                'y': data_qc['deaths_chsld'],
                 'mode': 'lines+markers',
                 'marker': {'color': 'rgb(0, 114, 178)'},
                 'name': labels['chsld_label'],
@@ -435,7 +435,7 @@ def qc_deaths_loc_fig(data_qc, labels):
                 'mode': 'lines+markers',
                 'marker': {'color': 'rgb(240, 228, 66)'},
                 'x': data_qc['date'],
-                'y': data_qc['deaths_qc_psr'],
+                'y': data_qc['deaths_psr'],
                 'name': labels['psr_label'],
                 'hoverlabel': {'namelength': 25},
             },
@@ -444,7 +444,7 @@ def qc_deaths_loc_fig(data_qc, labels):
                 'mode': 'lines+markers',
                 'marker': {'color': 'rgb(0, 158, 115)'},
                 'x': data_qc['date'],
-                'y': data_qc['deaths_qc_home'],
+                'y': data_qc['deaths_home'],
                 'name': labels['home_label'],
                 'hoverlabel': {'namelength': 25},
             },
@@ -454,7 +454,7 @@ def qc_deaths_loc_fig(data_qc, labels):
                 'mode': 'lines+markers',
                 'marker': {'color': 'rgb(230, 159, 0)'},
                 'x': data_qc['date'],
-                'y': data_qc['deaths_qc_other'],
+                'y': data_qc['deaths_other'],
                 'name': labels['other_or_unknown_label'],
                 'hoverlabel': {'namelength': 25},
             }
@@ -476,6 +476,6 @@ def qc_deaths_loc_fig(data_qc, labels):
         }
     })
     deaths_loc_qc_fig = add_ylog_menu(deaths_loc_qc_fig, data_qc[
-        'deaths_qc_chsld'], labels)
+        'deaths_chsld'], labels)
 
     return deaths_loc_qc_fig
