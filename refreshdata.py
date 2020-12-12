@@ -484,7 +484,7 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
     # drop the last column (Deces (%))
     mtl_day_list = mtl_day_df.iloc[0, 1:8].astype(int).to_list()
 
-    if date not in mtl_death_loc_df['date']:
+    if date not in mtl_death_loc_df['date'].values:
         mtl_day_list.insert(0, date)
         # add placeholder for (removed) Inccnnue column
         # required since target df has this column
@@ -499,7 +499,7 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
     return mtl_death_loc_df
 
 
-def append_mtl_data_csv(sources_dir, processed_dir):
+def update_mtl_data_csv(sources_dir, processed_dir):
     """Replace old copy of data_mtl.csv in processed_dir with latest version of MTL data.
 
     data_mtl.csv file will be overwritten with the new updated file.
@@ -521,6 +521,68 @@ def append_mtl_data_csv(sources_dir, processed_dir):
 
     # Overwrite mtl_data.csv
     mtl_df.to_csv(mtl_csv, encoding='utf-8', index=False)
+
+
+def append_mtl_cases_by_age(sources_dir, processed_dir, date):
+    """Append new row of data to data_mtl_age.csv
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path to source data dir.
+    processed_dir : str
+        Absolute path to processed data dir.
+    date : str
+        Date of data to append (yyyy-mm-dd).
+    """
+    # Load csv files
+    day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_mtl_age.csv')
+    mtl_age_csv = os.path.join(processed_dir, 'data_mtl_age.csv')
+    # replace header with desired column names
+    # data format changed Oct 8th (new_cases added as first column)
+    day_df = pd.read_csv(
+        day_csv,
+        sep=';',
+        index_col=0,
+        header=0,
+        usecols=[0, 1, 2],
+        # usecols=[0, 1],
+        names=['age', 'new_cases', 'cases']
+        # names=['age', 'cases']
+    )
+    mtl_age_df = pd.read_csv(mtl_age_csv, encoding='utf-8')
+
+    # Remove last 2 row (total count and age missing (Manquant))
+    day_df = day_df[:-2]
+
+    # cases column might not be int due to 'Manquant' containing '< 5', convert to int
+    day_df['cases'] = day_df['cases'].astype(int)
+
+    # add per 100k column
+    age_population = [109740, 104385, 188185, 293225, 299675, 254475, 258875, 205005, 129680, 98805]
+
+    day_df['cases_per100k'] = day_df['cases'] / age_population * 100000
+
+    total_cases = day_df['cases'].sum()
+    total_cases_per100k = day_df['cases_per100k'].sum()
+
+    day_df['cases_norm'] = day_df['cases'] / total_cases * 100
+    day_df['cases_per100k_norm'] = day_df['cases_per100k'] / total_cases_per100k * 100
+
+    if date not in mtl_age_df['date'].values:
+        mtl_age_list = list(day_df['cases']) \
+            + list(day_df['cases_per100k'].round(1)) \
+            + list(day_df['cases_norm'].round(1)) \
+            + list(day_df['cases_per100k_norm'].round(1))
+        mtl_age_list.insert(0, date)
+
+        mtl_age_df.loc[mtl_age_df.index.max() + 1, :] = mtl_age_list
+
+        # Overwrite data_mtl_age.csv
+        mtl_age_df.to_csv(mtl_age_csv, encoding='utf-8', index=False)
+        pass
+    else:
+        print(f'{date} has already been appended to {mtl_age_csv}')
 
 
 def main():
@@ -575,8 +637,11 @@ def main():
     # Append row to data_mtl_death_loc.csv
     # append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
 
-    # Append row to data_mtl.csv
-    append_mtl_data_csv(sources_dir, processed_dir)
+    # Update data_mtl.csv
+    update_mtl_data_csv(sources_dir, processed_dir)
+
+    # Append row to data_mtl_age.csv
+    append_mtl_cases_by_age(sources_dir, processed_dir, yesterday_date)
 
     return 0
 
