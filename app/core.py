@@ -77,7 +77,7 @@ cases_per1000_long = pd.melt(reduce_cols(cases_per1000_df, 10), id_vars='borough
 
 # Montreal data
 data_mtl = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl.csv'), encoding='utf-8', na_values='na')
-data_mtl_by_age = pd.read_csv(DATA_PATH.joinpath('data_mtl.csv'), encoding='utf-8', na_values='na')
+data_mtl_by_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl_age.csv'), encoding='utf-8', na_values='na')
 
 # QC data
 data_qc = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc.csv'), encoding='utf-8', na_values='na')
@@ -108,7 +108,7 @@ latest_negative_tests_qc = str(int(data_qc['negative_tests'].dropna().iloc[-1]))
 latest_recovered_qc = str(int(data_qc['recovered'].dropna().iloc[-1]))
 
 # Make MTL histogram data tidy
-mtl_age_data = reduce_rows(data_mtl_by_age, 10).melt(
+mtl_age_data = reduce_rows(data_mtl_by_age, 7).melt(
     id_vars='date', value_vars=[
         'cases_mtl_0-4_norm', 'cases_mtl_5-9_norm',
         'cases_mtl_10-19_norm', 'cases_mtl_20-29_norm',
