@@ -403,6 +403,7 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
         # see: issue #34
         already_exists = False
         # need to go back several columns in case the previous one has 'na'
+        # TODO: can just check the previous two rows if na values are dropped (see append_mtl_age_csv)
         for i in range(len(cases_df.columns) - 1, 1, -1):
             if pd.Series.all(cases_df[date] == cases_df[cases_df.columns[i - 1]]):
                 already_exists = True
@@ -546,11 +547,12 @@ def append_mtl_cases_by_age(sources_dir, processed_dir, date):
         index_col=0,
         header=0,
         usecols=[0, 1, 2],
+        names=['age', 'new_cases', 'cases'],
+        # settings for dates < 2020-10-08
         # usecols=[0, 1],
-        names=['age', 'new_cases', 'cases']
         # names=['age', 'cases']
     )
-    mtl_age_df = pd.read_csv(mtl_age_csv, encoding='utf-8')
+    mtl_age_df = pd.read_csv(mtl_age_csv, encoding='utf-8', na_values='na')
 
     # Remove last 2 row (total count and age missing (Manquant))
     day_df = day_df[:-2]
@@ -570,6 +572,16 @@ def append_mtl_cases_by_age(sources_dir, processed_dir, date):
     day_df['cases_per100k_norm'] = day_df['cases_per100k'] / total_cases_per100k * 100
 
     if date not in mtl_age_df['date'].values:
+        # check whether this is actually new data and not data from a previous day (see issue #34)
+        # data is not updated on Sat (for Fri) and Sun (for Sat) and still shows previous days data
+        # replace it with 'na' if it is the same
+        already_exists = False
+        # check with last row that has actual values
+        # compare new data with existing data without date column
+        if pd.Series.all(day_df['cases'] == list(mtl_age_df.dropna().iloc[-1, 1:11])):
+            already_exists = True
+
+        # combine columns and append it to mtl_age_df
         mtl_age_list = list(day_df['cases']) \
             + list(day_df['cases_per100k'].round(1)) \
             + list(day_df['cases_norm'].round(1)) \
@@ -578,9 +590,12 @@ def append_mtl_cases_by_age(sources_dir, processed_dir, date):
 
         mtl_age_df.loc[mtl_age_df.index.max() + 1, :] = mtl_age_list
 
+        if already_exists:
+            print(f'the same data of {date} already exists for a previous day, replacing with "na"')
+            mtl_age_df.iloc[-1, 1:] = 'na'
+
         # Overwrite data_mtl_age.csv
-        mtl_age_df.to_csv(mtl_age_csv, encoding='utf-8', index=False)
-        pass
+        mtl_age_df.to_csv(mtl_age_csv, encoding='utf-8', index=False, na_rep='na')
     else:
         print(f'{date} has already been appended to {mtl_age_csv}')
 
