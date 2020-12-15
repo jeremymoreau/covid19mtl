@@ -288,14 +288,14 @@ def deaths_fig(data_mtl, data_qc, labels):
     return deaths_fig
 
 
-def qc_hospitalisations_fig(data_qc, labels):
+def qc_hospitalisations_fig(data_qc_hosp, labels):
     # Hospitalisations (QC)
     hospitalisations_qc_fig = go.Figure({
         'data': [
             {
                 'type': 'scatter',
-                'x': data_qc['date'],
-                'y': data_qc['hospitalisations_qc'],
+                'x': data_qc_hosp['date'],
+                'y': data_qc_hosp['hospitalisations_all'],
                 'mode': 'lines+markers',
                 'marker': {'color': '#F87E3F'},
                 'name': labels['hospitalisations_label'],
@@ -305,8 +305,8 @@ def qc_hospitalisations_fig(data_qc, labels):
                 'type': 'scatter',
                 'mode': 'lines+markers',
                 'marker': {'color': '#0083CB'},
-                'x': data_qc['date'],
-                'y': data_qc['icu_qc'],
+                'x': data_qc_hosp['date'],
+                'y': data_qc_hosp['icu'],
                 'name': labels['intensive_care_label'],
                 'hoverlabel': {'namelength': 25},
             }
@@ -328,7 +328,7 @@ def qc_hospitalisations_fig(data_qc, labels):
         }
     })
     hospitalisations_qc_fig = add_ylog_menu(hospitalisations_qc_fig,
-                                            data_qc['hospitalisations_qc'], labels)
+                                            data_qc_hosp['hospitalisations_all'], labels)
 
     return hospitalisations_qc_fig
 

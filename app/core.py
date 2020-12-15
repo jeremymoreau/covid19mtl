@@ -80,6 +80,7 @@ data_mtl = pd.read_csv(DATA_PATH.joinpath('data_mtl.csv'), encoding='utf-8', na_
 
 # QC data
 data_qc = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc.csv'), encoding='utf-8', na_values='na')
+data_qc_hosp = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_hospitalisations.csv'), encoding='utf-8')
 
 # MTL deaths by location data
 data_mtl_death_loc = pd.read_csv(
@@ -99,8 +100,8 @@ latest_deaths_mtl = str(int(data_mtl['deaths_mtl'].dropna().iloc[-1]))
 
 latest_cases_qc = str(int(data_qc['cases_qc'].dropna().iloc[-1]))
 latest_deaths_qc = str(int(data_qc['deaths_qc'].dropna().iloc[-1]))
-latest_hospitalisations_qc = str(int(data_qc['hospitalisations_qc'].dropna().iloc[-1]))
-latest_icu_qc = str(int(data_qc['icu_qc'].dropna().iloc[-1]))
+latest_hospitalisations_qc = str(int(data_qc_hosp['hospitalisations_all'].dropna().iloc[-1]))
+latest_icu_qc = str(int(data_qc_hosp['icu'].dropna().iloc[-1]))
 latest_negative_tests_qc = str(int(data_qc['negative_tests_qc'].dropna().iloc[-1]))
 
 latest_recovered_qc = str(int(data_qc['recovered_qc'].dropna().iloc[-1]))

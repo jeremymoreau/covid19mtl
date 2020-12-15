@@ -294,13 +294,47 @@ def update_data_qc_csv(sources_dir, processed_dir):
         if new != 'date':
             qc_df[new] = qc_df[new].astype(int)
 
-    # add columns expected in UI
-    # TODO: needs to be replaced
-    qc_df['hospitalisations_qc'] = 0
-    qc_df['icu_qc'] = 0
-
     # overwrite previous data/processed/data_qc.csv
     qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8', index=False)
+
+
+def update_hospitalisations_qc_csv(sources_dir, processed_dir):
+    """Takes data_qc_manual_date.csv and extracts historic hospitalisation data.
+
+    data_qc_hospitalisations.csv file will be overwritten with the new updated file.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    """
+    lastest_source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc_manual_data.csv')
+
+    # read latest data/sources/*/data_qc_manual_data.csv
+    manual_df = pd.read_csv(lastest_source_file, encoding='utf-8')
+
+    # get data after "Hospits et volumétrie"
+    # see: https://stackoverflow.com/a/38707263
+    index = (manual_df["Tuiles de l'accueil"] == 'Hospits et volumétrie').idxmax()
+    filtered_df = manual_df[index + 1:]
+    # drop columns with all NaN
+    filtered_df.dropna(axis=1, how='all', inplace=True)
+
+    # create new dataframe with proper header
+    # to use existing columns: filtered_df.iloc[0]
+    columns = ['date', 'hospitalisations', 'icu', 'hospitalisations (old)', 'tests']
+    hosp_df = pd.DataFrame(filtered_df.values[1:], columns=columns)
+
+    # convert date to ISO-8601
+    hosp_df['date'] = pd.to_datetime(hosp_df['date'], dayfirst=True, format='%d/%m/%Y')
+
+    # add column with all hospitalisation counts (old and new methods)
+    hosp_df['hospitalisations_all'] = hosp_df['hospitalisations'].combine_first(hosp_df['hospitalisations (old)'])
+
+    # overwrite previous data/processed/data_qc_hospitalisations.csv
+    hosp_df.to_csv(os.path.join(processed_dir, 'data_qc_hospitalisations.csv'), encoding='utf-8', index=False)
 
 
 def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
@@ -488,6 +522,9 @@ def main():
     # Update data/processed files from latest data/sources files
     # Replace data_qc
     update_data_qc_csv(sources_dir, processed_dir)
+
+    # Replace data_qc_hospitalisations
+    update_hospitalisations_qc_csv(sources_dir, processed_dir)
 
     # Scrape latest number of recovered cases for QC
 
