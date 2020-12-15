@@ -417,14 +417,14 @@ def mtl_deaths_loc_fig(data_mtl_death_loc, labels):
     return deaths_loc_mtl_fig
 
 
-def qc_deaths_loc_fig(data_qc_death_loc, labels):
+def qc_deaths_loc_fig(data_qc, labels):
     # Confirmed deaths by place of residence (QC)
     deaths_loc_qc_fig = go.Figure({
         'data': [
             {
                 'type': 'scatter',
-                'x': data_qc_death_loc['date'],
-                'y': data_qc_death_loc['chsld'],
+                'x': data_qc['date'],
+                'y': data_qc['deaths_qc_chsld'],
                 'mode': 'lines+markers',
                 'marker': {'color': 'rgb(0, 114, 178)'},
                 'name': labels['chsld_label'],
@@ -434,8 +434,8 @@ def qc_deaths_loc_fig(data_qc_death_loc, labels):
                 'type': 'scatter',
                 'mode': 'lines+markers',
                 'marker': {'color': 'rgb(240, 228, 66)'},
-                'x': data_qc_death_loc['date'],
-                'y': data_qc_death_loc['psr'],
+                'x': data_qc['date'],
+                'y': data_qc['deaths_qc_psr'],
                 'name': labels['psr_label'],
                 'hoverlabel': {'namelength': 25},
             },
@@ -443,8 +443,8 @@ def qc_deaths_loc_fig(data_qc_death_loc, labels):
                 'type': 'scatter',
                 'mode': 'lines+markers',
                 'marker': {'color': 'rgb(0, 158, 115)'},
-                'x': data_qc_death_loc['date'],
-                'y': data_qc_death_loc['home'],
+                'x': data_qc['date'],
+                'y': data_qc['deaths_qc_home'],
                 'name': labels['home_label'],
                 'hoverlabel': {'namelength': 25},
             },
@@ -453,8 +453,8 @@ def qc_deaths_loc_fig(data_qc_death_loc, labels):
                 'type': 'scatter',
                 'mode': 'lines+markers',
                 'marker': {'color': 'rgb(230, 159, 0)'},
-                'x': data_qc_death_loc['date'],
-                'y': data_qc_death_loc['other_or_unknown'],
+                'x': data_qc['date'],
+                'y': data_qc['deaths_qc_other'],
                 'name': labels['other_or_unknown_label'],
                 'hoverlabel': {'namelength': 25},
             }
@@ -475,7 +475,7 @@ def qc_deaths_loc_fig(data_qc_death_loc, labels):
             'dragmode': False
         }
     })
-    deaths_loc_qc_fig = add_ylog_menu(deaths_loc_qc_fig, data_qc_death_loc[
-        'chsld'], labels)
+    deaths_loc_qc_fig = add_ylog_menu(deaths_loc_qc_fig, data_qc[
+        'deaths_qc_chsld'], labels)
 
     return deaths_loc_qc_fig
