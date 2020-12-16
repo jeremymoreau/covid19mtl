@@ -3,7 +3,7 @@ import dash_html_components as html
 
 import app.figures as figures
 
-from .core import (cases_per1000_long, data_mtl, data_mtl_death_loc, data_qc, data_qc_death_loc, latest_cases_mtl,
+from .core import (cases_per1000_long, data_mtl, data_mtl_death_loc, data_qc, data_qc_hosp, latest_cases_mtl,
                    latest_cases_qc, latest_deaths_mtl, latest_deaths_qc, latest_hospitalisations_qc, latest_icu_qc,
                    latest_negative_tests_qc, latest_recovered_qc, mtl_age_data, mtl_geojson)
 
@@ -14,10 +14,10 @@ def generate_layout(labels):
     cases_fig = figures.cases_fig(data_mtl, data_qc, labels)
     age_fig = figures.mtl_age_hist_fig(mtl_age_data, labels)
     deaths_fig = figures.deaths_fig(data_mtl, data_qc, labels)
-    hospitalisations_qc_fig = figures.qc_hospitalisations_fig(data_qc, labels)
+    hospitalisations_qc_fig = figures.qc_hospitalisations_fig(data_qc_hosp, labels)
     testing_qc_fig = figures.qc_testing_fig(data_qc, labels)
     deaths_loc_mtl_fig = figures.mtl_deaths_loc_fig(data_mtl_death_loc, labels)
-    deaths_loc_qc_fig = figures.qc_deaths_loc_fig(data_qc_death_loc, labels)
+    deaths_loc_qc_fig = figures.qc_deaths_loc_fig(data_qc, labels)
 
     # Plotly modebar buttons to remove
     modebar_buttons_to_remove = ['select2d',
