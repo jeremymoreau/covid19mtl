@@ -1,0 +1,13 @@
+Groupe d'âge;Nombre de cas confirmés;Répartition des cas (%);Taux de cas pour 100 000 personnes;Nombre de décès;Taux de mortalité pour 100 000 personnes
+0-4 ans;535;1,5;487,1;0;
+5-9 ans;519;1,4;482,4;0;
+10-19 ans;2055;5,7;1033,1;0;
+20-29 ans;5957;16,6;1829,7;< 5;n.p.
+30-39 ans;5052;14,1;1539,2;< 5;n.p.
+40-49 ans;4876;13,6;1756,5;15;*5,4
+50-59 ans;4309;12;1679,9;69;26,9
+60-69 ans;2883;8;1332,7;225;104
+70-79 ans;2626;7,3;1817,2;597;413,1
+80 ans et +;7035;19,6;6993,7;2574;2558,9
+Manquant;92;;;;
+Total;35939;;1739,8;3487;168,8

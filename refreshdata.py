@@ -216,52 +216,43 @@ def get_source_dir_for_date(sources_dir, date):
     return latest_source_dir.name
 
 
-def update_data_qc_csv(sources_dir, processed_dir):
-    """Replace old copy of data_qc.csv in processed_dir with latest version.
-
-    data_qc.csv file will be overwritten with the new updated file.
+def load_data_qc_csv(source_file):
+    """Returns pandas DataFrame with data from QC CSV.
+    Performs simple cleaning and renaming of columns.
 
     Parameters
     ----------
-    sources_dir : str
-        Absolute path of sources dir.
-    processed_dir : str
-        Absolute path of processed dir.
+    source_file : str
+        Absolute path of source file.
     """
-    lastest_source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc.csv')
-
-    # read latest data/sources/*/data_qc.csv
-    qc_df = pd.read_csv(lastest_source_file, encoding='utf-8')
+    qc_df = pd.read_csv(source_file, encoding='utf-8')
     # cut off first rows with 'Date inconnue'
     qc_df = qc_df[qc_df['Date'] != 'Date inconnue']
-
-    # filter out all rows except Régions & RS99 (Ensemble du Québec) which contains total numbers for QC
-    qc_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS99')]
 
     column_mappings = {
         'Date': 'date',
         # 'cas_cum_lab_n': '',
         # 'cas_cum_epi_n': '',
-        'cas_cum_tot_n': 'cases_qc',
+        'cas_cum_tot_n': 'cases',
         # 'cas_cum_tot_t': '',
         # 'cas_quo_tot_t': '',
         # 'cas_quo_lab_n': '',
         # 'cas_quo_epi_n': '',
-        'cas_quo_tot_n': 'new_cases_qc',
-        'act_cum_tot_n': 'active_cases_qc',
+        'cas_quo_tot_n': 'new_cases',
+        'act_cum_tot_n': 'active_cases',
         # 'act_cum_tot_t': '',
         # 'cas_quo_tot_m': '',
         # 'cas_quo_tot_tm': '',
-        'ret_cum_tot_n': 'recovered_qc',
-        'ret_quo_tot_n': 'new_recovered_qc',
-        'dec_cum_tot_n': 'deaths_qc',
+        'ret_cum_tot_n': 'recovered',
+        'ret_quo_tot_n': 'new_recovered',
+        'dec_cum_tot_n': 'deaths',
         # 'dec_cum_tot_t': '',
         # 'dec_quo_tot_t': '',
-        'dec_cum_chs_n': 'deaths_qc_chsld',
-        'dec_cum_rpa_n': 'deaths_qc_psr',
-        'dec_cum_dom_n': 'deaths_qc_home',
-        'dec_cum_aut_n': 'deaths_qc_other',
-        'dec_quo_tot_n': 'new_deaths_qc',
+        'dec_cum_chs_n': 'deaths_chsld',
+        'dec_cum_rpa_n': 'deaths_psr',
+        'dec_cum_dom_n': 'deaths_home',
+        'dec_cum_aut_n': 'deaths_other',
+        'dec_quo_tot_n': 'new_deaths',
         # 'dec_quo_chs_n': '',
         # 'dec_quo_rpa_n': '',
         # 'dec_quo_dom_n': '',
@@ -279,9 +270,9 @@ def update_data_qc_csv(sources_dir, processed_dir):
         # 'hos_quo_tot_m': '',
         # 'psi_cum_tes_n': '',
         # 'psi_cum_pos_n': '',
-        'psi_cum_inf_n': 'negative_tests_qc',
+        'psi_cum_inf_n': 'negative_tests',
         # 'psi_quo_pos_n': '',
-        'psi_quo_inf_n': 'new_negative_tests_qc',
+        'psi_quo_inf_n': 'new_negative_tests',
         # 'psi_quo_tes_n': '',
         # 'psi_quo_pos_t': '',
     }
@@ -293,6 +284,29 @@ def update_data_qc_csv(sources_dir, processed_dir):
         # convert columns to int
         if new != 'date':
             qc_df[new] = qc_df[new].astype(int)
+
+    return qc_df
+
+
+def update_data_qc_csv(sources_dir, processed_dir):
+    """Replace old copy of data_qc.csv in processed_dir with latest version.
+
+    data_qc.csv file will be overwritten with the new updated file.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    """
+    # read latest data/sources/*/data_qc.csv
+    lastest_source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc.csv')
+
+    qc_df = load_data_qc_csv(lastest_source_file)
+
+    # filter out all rows except Régions & RS99 (Ensemble du Québec) which contains total numbers for QC
+    qc_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS99')]
 
     # overwrite previous data/processed/data_qc.csv
     qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8', index=False)
@@ -389,6 +403,7 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
         # see: issue #34
         already_exists = False
         # need to go back several columns in case the previous one has 'na'
+        # TODO: can just check the previous two rows if na values are dropped (see append_mtl_age_csv)
         for i in range(len(cases_df.columns) - 1, 1, -1):
             if pd.Series.all(cases_df[date] == cases_df[cases_df.columns[i - 1]]):
                 already_exists = True
@@ -470,7 +485,7 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
     # drop the last column (Deces (%))
     mtl_day_list = mtl_day_df.iloc[0, 1:8].astype(int).to_list()
 
-    if date not in mtl_death_loc_df['date']:
+    if date not in mtl_death_loc_df['date'].values:
         mtl_day_list.insert(0, date)
         # add placeholder for (removed) Inccnnue column
         # required since target df has this column
@@ -483,6 +498,106 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
     else:
         print(f'{date} has already been appended to {mtl_death_loc_csv}')
     return mtl_death_loc_df
+
+
+def update_mtl_data_csv(sources_dir, processed_dir):
+    """Replace old copy of data_mtl.csv in processed_dir with latest version of MTL data.
+
+    data_mtl.csv file will be overwritten with the new updated file.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    """
+    # use data_qc.csv
+    qc_csv = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc.csv')
+    mtl_csv = os.path.join(processed_dir, 'data_mtl.csv')
+
+    qc_df = load_data_qc_csv(qc_csv)
+
+    mtl_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS06')]
+
+    # Overwrite mtl_data.csv
+    mtl_df.to_csv(mtl_csv, encoding='utf-8', index=False)
+
+
+def append_mtl_cases_by_age(sources_dir, processed_dir, date):
+    """Append new row of data to data_mtl_age.csv
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path to source data dir.
+    processed_dir : str
+        Absolute path to processed data dir.
+    date : str
+        Date of data to append (yyyy-mm-dd).
+    """
+    # Load csv files
+    day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_mtl_age.csv')
+    mtl_age_csv = os.path.join(processed_dir, 'data_mtl_age.csv')
+    # replace header with desired column names
+    # data format changed Oct 8th (new_cases added as first column)
+    day_df = pd.read_csv(
+        day_csv,
+        sep=';',
+        index_col=0,
+        header=0,
+        usecols=[0, 1, 2],
+        names=['age', 'new_cases', 'cases'],
+        # settings for dates < 2020-10-08
+        # usecols=[0, 1],
+        # names=['age', 'cases']
+    )
+    mtl_age_df = pd.read_csv(mtl_age_csv, encoding='utf-8', na_values='na')
+
+    # Remove last 2 row (total count and age missing (Manquant))
+    day_df = day_df[:-2]
+
+    # cases column might not be int due to 'Manquant' containing '< 5', convert to int
+    day_df['cases'] = day_df['cases'].astype(int)
+
+    # add per 100k column
+    age_population = [109740, 104385, 188185, 293225, 299675, 254475, 258875, 205005, 129680, 98805]
+
+    day_df['cases_per100k'] = day_df['cases'] / age_population * 100000
+
+    total_cases = day_df['cases'].sum()
+    total_cases_per100k = day_df['cases_per100k'].sum()
+
+    day_df['cases_norm'] = day_df['cases'] / total_cases * 100
+    day_df['cases_per100k_norm'] = day_df['cases_per100k'] / total_cases_per100k * 100
+
+    if date not in mtl_age_df['date'].values:
+        # check whether this is actually new data and not data from a previous day (see issue #34)
+        # data is not updated on Sat (for Fri) and Sun (for Sat) and still shows previous days data
+        # replace it with 'na' if it is the same
+        already_exists = False
+        # check with last row that has actual values
+        # compare new data with existing data without date column
+        if pd.Series.all(day_df['cases'] == list(mtl_age_df.dropna().iloc[-1, 1:11])):
+            already_exists = True
+
+        # combine columns and append it to mtl_age_df
+        mtl_age_list = list(day_df['cases']) \
+            + list(day_df['cases_per100k'].round(1)) \
+            + list(day_df['cases_norm'].round(1)) \
+            + list(day_df['cases_per100k_norm'].round(1))
+        mtl_age_list.insert(0, date)
+
+        mtl_age_df.loc[mtl_age_df.index.max() + 1, :] = mtl_age_list
+
+        if already_exists:
+            print(f'the same data of {date} already exists for a previous day, replacing with "na"')
+            mtl_age_df.iloc[-1, 1:] = 'na'
+
+        # Overwrite data_mtl_age.csv
+        mtl_age_df.to_csv(mtl_age_csv, encoding='utf-8', index=False, na_rep='na')
+    else:
+        print(f'{date} has already been appended to {mtl_age_csv}')
 
 
 def main():
@@ -537,7 +652,11 @@ def main():
     # Append row to data_mtl_death_loc.csv
     # append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
 
-    # Append row to data_mtl.csv
+    # Update data_mtl.csv
+    update_mtl_data_csv(sources_dir, processed_dir)
+
+    # Append row to data_mtl_age.csv
+    append_mtl_cases_by_age(sources_dir, processed_dir, yesterday_date)
 
     return 0
 
