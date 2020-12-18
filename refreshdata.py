@@ -228,6 +228,8 @@ def load_data_qc_csv(source_file):
     qc_df = pd.read_csv(source_file, encoding='utf-8')
     # cut off first rows with 'Date inconnue'
     qc_df = qc_df[qc_df['Date'] != 'Date inconnue']
+    # filter out rows that do not contain an integer value (Groupe d'âge, INC, Inconnue)
+    qc_df = qc_df[qc_df['cas_cum_tot_n'] != '           .']
 
     column_mappings = {
         'Date': 'date',
