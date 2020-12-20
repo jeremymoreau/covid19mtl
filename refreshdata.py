@@ -228,11 +228,9 @@ def load_data_qc_csv(source_file):
     source_file : str
         Absolute path of source file.
     """
-    qc_df = pd.read_csv(source_file, encoding='utf-8')
+    qc_df = pd.read_csv(source_file, encoding='utf-8', na_values=['', '         .  '])
     # cut off first rows with 'Date inconnue'
     qc_df = qc_df[qc_df['Date'] != 'Date inconnue']
-    # filter out rows that do not contain an integer value (Groupe d'âge, INC, Inconnue)
-    qc_df = qc_df[qc_df['cas_cum_tot_n'] != '           .']
 
     column_mappings = {
         'Date': 'date',
@@ -314,7 +312,7 @@ def update_data_qc_csv(sources_dir, processed_dir):
     qc_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS99')]
 
     # overwrite previous data/processed/data_qc.csv
-    qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8', index=False)
+    qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8', index=False, na_rep='na')
 
 
 def update_hospitalisations_qc_csv(sources_dir, processed_dir):
@@ -526,7 +524,7 @@ def update_mtl_data_csv(sources_dir, processed_dir):
     mtl_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS06')]
 
     # Overwrite mtl_data.csv
-    mtl_df.to_csv(mtl_csv, encoding='utf-8', index=False)
+    mtl_df.to_csv(mtl_csv, encoding='utf-8', index=False, na_rep='na')
 
 
 def append_mtl_cases_by_age(sources_dir, processed_dir, date):
