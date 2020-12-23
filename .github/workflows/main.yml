@@ -2,8 +2,8 @@ name: Auto-deploy to Dokku
 
 on:
   push:
-    branches:
-      - deploy
+    tags:
+      - '*'
 
 jobs:
   build:
