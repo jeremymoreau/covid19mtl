@@ -1,7 +1,7 @@
 COVID-19 MTL
 ============
 
-A simple dashboard to display up-to-date epidemiological data on COVID-19 in Montreal.
+A simple dashboard to display up-to-date epidemiological data on COVID-19 in Montreal. 
 
 View the application at [covid19mtl.ca](https://covid19mtl.ca/en)
 
