@@ -48,7 +48,18 @@ SOURCES = {
     'data_qc_regions.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/regions.csv',
     'data_qc_manual_data.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/manual-data.csv',
     'data_qc_cases_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls-new.csv',
-    'data_qc_death_loc_by_region.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa-new.csv'
+    'data_qc_death_loc_by_region.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa-new.csv',
+    # Quebec.ca/coronavirus
+    # HTML
+    'QC_situation.html':
+    'https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/situation-coronavirus-in-quebec/',
+    # CSV
+    'data_qc_outbreaks.csv':
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/eclosions-par-milieu-en.csv',
+    'data_qc_vaccines.csv':
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/doses-vaccins-en.csv',
+    'data_qc_7days.csv':
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours-en.csv',
 }
 
 
@@ -225,7 +236,7 @@ def load_data_qc_csv(source_file):
     source_file : str
         Absolute path of source file.
     """
-    qc_df = pd.read_csv(source_file, encoding='utf-8')
+    qc_df = pd.read_csv(source_file, encoding='utf-8', na_values=['', '         .  '])
     # cut off first rows with 'Date inconnue'
     qc_df = qc_df[qc_df['Date'] != 'Date inconnue']
 
@@ -309,7 +320,7 @@ def update_data_qc_csv(sources_dir, processed_dir):
     qc_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS99')]
 
     # overwrite previous data/processed/data_qc.csv
-    qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8', index=False)
+    qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8', index=False, na_rep='na')
 
 
 def update_hospitalisations_qc_csv(sources_dir, processed_dir):
@@ -417,7 +428,7 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     cases_df.to_csv(cases_csv, encoding='utf-8')
 
 
-def append_mtl_cases_per1000_csv(processed_dir):
+def append_mtl_cases_per1000_csv(processed_dir, date: str):
     """Append new column of data to cases_per1000.csv
 
     Parameters
@@ -435,7 +446,7 @@ def append_mtl_cases_per1000_csv(processed_dir):
     cases_per1000_df = cases_per1000_df.loc[:, ~cases_per1000_df.columns.str.contains('^Unnamed')]
 
     # latest data date
-    latest_date = cases_df.columns[-1]
+    latest_date = cases_df[date]
 
     # population of borough/linked city
     borough_pop = [134245, 42796, 3823, 19324, 166520, 32448, 48899, 18980,
@@ -443,15 +454,15 @@ def append_mtl_cases_per1000_csv(processed_dir):
                    20276, 23954, 69297, 104000, 31380, 106743, 139590, 4958, 98828,
                    78305, 921, 78151, 69229, 89170, 143853, 20312]
 
-    if latest_date not in cases_per1000_df.columns:
+    if date not in cases_per1000_df.columns:
         # ignore columns with 'na'
-        if pd.Series.all(cases_df[latest_date] == 'na'):
-            cases_per1000_df[latest_date] = 'na'
+        if pd.Series.all(latest_date == 'na'):
+            cases_per1000_df[date] = 'na'
         else:
-            day_cases_per1000 = cases_df[latest_date][:-1] / borough_pop * 1000
-            cases_per1000_df[latest_date] = list(day_cases_per1000.round(1))
+            day_cases_per1000 = latest_date[:-1] / borough_pop * 1000
+            cases_per1000_df[date] = list(day_cases_per1000.round(1))
     else:
-        print(f'{latest_date} has already been appended to {cases_per1000_csv}')
+        print(f'{date} has already been appended to {cases_per1000_csv}')
 
     # Overwrite cases_per1000.csv
     cases_per1000_df.to_csv(cases_per1000_csv, encoding='utf-8')
@@ -521,7 +532,7 @@ def update_mtl_data_csv(sources_dir, processed_dir):
     mtl_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS06')]
 
     # Overwrite mtl_data.csv
-    mtl_df.to_csv(mtl_csv, encoding='utf-8', index=False)
+    mtl_df.to_csv(mtl_csv, encoding='utf-8', index=False, na_rep='na')
 
 
 def append_mtl_cases_by_age(sources_dir, processed_dir, date):
@@ -647,10 +658,10 @@ def main():
     append_mtl_cases_csv(sources_dir, processed_dir, 3, yesterday_date)
 
     # Append col to cases_per1000.csv
-    append_mtl_cases_per1000_csv(processed_dir)
+    append_mtl_cases_per1000_csv(processed_dir, yesterday_date)
 
     # Append row to data_mtl_death_loc.csv
-    # append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
+    append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
 
     # Update data_mtl.csv
     update_mtl_data_csv(sources_dir, processed_dir)
