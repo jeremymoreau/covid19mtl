@@ -55,7 +55,7 @@ SOURCES = {
     'https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/situation-coronavirus-in-quebec/',
     # CSV
     'data_qc_outbreaks.csv':
-    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/eclosions-par-milieu-en.csv',
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/eclosions-par-milieu-en.csv',  # noqa: E501
     'data_qc_vaccines.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/doses-vaccins-en.csv',
     'data_qc_7days.csv':
@@ -388,7 +388,7 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     new_data_col = day_df.iloc[:, target_col]
 
     # convert string to int if present
-    if new_data_col.dtype != int:
+    if not pd.api.types.is_numeric_dtype(new_data_col.dtype):
         # Cleanup new_data_col
         # Remove '.' thousands separator and any space
         new_data_col = new_data_col.str.replace('.', '').str.replace(' ', '')
