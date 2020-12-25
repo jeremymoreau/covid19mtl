@@ -10,13 +10,16 @@ cd $SCRIPT_DIR
 # activate virtual environment
 source .venv/bin/activate
 
-# download sources, backup current data and update processed CSVs
-python refreshdata.py
-
 # pull in case there were commits
+echo "pulling latest state of repo..."
 git pull
 
+# download sources, backup current data and update processed CSVs
+echo "downloading data, processing files..."
+python refreshdata.py
+
 # create version tag, increment if it already exists
+echo "determining version tag..."
 TODAY=`date +%Y.%m.%d`
 YESTERDAY=`date -v-1d +"%Y-%m-%d"`
 VERSION_TAG="v$TODAY.0"
@@ -27,6 +30,7 @@ while [[ $REMOTE_TAGS == *$VERSION_TAG* ]]; do
   VERSION_TAG="v$TODAY.$i"
 done
 
+echo "committing and pushing changes..."
 # add updated files to index
 git add $DATA_DIR/processed/*.csv
 git add $DATA_DIR/processed_backups/*.csv
