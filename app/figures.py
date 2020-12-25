@@ -479,3 +479,44 @@ def qc_deaths_loc_fig(data_qc, labels):
         'deaths_chsld'], labels)
 
     return deaths_loc_qc_fig
+
+
+def cases_vs_newcases_fig(data_mtl, data_qc, labels):
+    cases_vs_newcases_fig = go.Figure({
+        'data': [
+
+            {
+                'type': 'scatter',
+                'x': data_mtl['cases'],
+                'y': data_mtl['new_cases'],
+                'customdata': data_mtl['date'],
+                'mode': 'lines',
+                'name': labels['cases_vs_newcases_legend_mtl'],
+                'marker': {'color': '#D6142C'},
+                'hovertemplate': labels['cases_vs_newcases_hovertemplate'],
+            },
+            {
+                'type': 'scatter',
+                'x': data_qc['cases'],
+                'y': data_qc['new_cases'],
+                'customdata': data_qc['date'],
+                'mode': 'lines',
+                'name': labels['cases_vs_newcases_legend_qc'],
+                'marker': {'color': '#001F97'},
+                'hovertemplate': labels['cases_vs_newcases_hovertemplate'],
+            },
+        ],
+        'layout': {
+            'xaxis': {'type': 'log', 'title': {'text': labels['cases_vs_newcases_xlabel']}},
+            'yaxis': {'type': 'log', 'title': {'text': labels['cases_vs_newcases_ylabel']}, 'gridcolor': '#f5f5f5'},
+            'autosize': True,
+            'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
+            'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
+            'plot_bgcolor': 'rgba(255,255,255,1)',
+            'paper_bgcolor': 'rgba(255,255,255,1)',
+            'hovermode': 'closest',
+            'dragmode': False
+        }
+    })
+
+    return cases_vs_newcases_fig

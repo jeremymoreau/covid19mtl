@@ -18,6 +18,7 @@ def generate_layout(labels):
     testing_qc_fig = figures.qc_testing_fig(data_qc, labels)
     deaths_loc_mtl_fig = figures.mtl_deaths_loc_fig(data_mtl_death_loc, labels)
     deaths_loc_qc_fig = figures.qc_deaths_loc_fig(data_qc, labels)
+    cases_vs_newcases_fig = figures.cases_vs_newcases_fig(data_mtl, data_qc, labels)
 
     # Plotly modebar buttons to remove
     modebar_buttons_to_remove = ['select2d',
@@ -288,6 +289,48 @@ def generate_layout(labels):
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
                                 }
                             ),
+                        ],
+                        className='grid-item'
+                    ),
+                ],
+                className='grid-container-two-cols',
+            ),
+
+            # 5th row: 2 boxes
+            html.Div(
+                [
+                    # left box
+                    html.Div(
+                        [
+
+                            html.H6(
+                                [labels['cases_vs_newcases_label']],
+                            ),
+                            dcc.Graph(
+                                figure=cases_vs_newcases_fig,
+                                id='cases_vs_newcases_fig',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                }
+                            ),
+                        ],
+                        className='grid-item'
+                    ),
+                    # right box
+                    html.Div(
+                        [
+                            html.H6(
+                                [''],
+                            ),
+                            # dcc.Graph(
+                            #     figure=deaths_loc_qc_fig,
+                            #     id='placeholder_fig',
+                            #     responsive=True,
+                            #     config={
+                            #         'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                            #     }
+                            # ),
                         ],
                         className='grid-item'
                     ),
