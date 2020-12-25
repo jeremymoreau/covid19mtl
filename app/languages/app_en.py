@@ -27,7 +27,7 @@ labels = {
     # footer
     'footer_left': 'Data: [Santé Montréal](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / Built with [Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
     'footer_centre': 'Hosting sponsored by [DigitalOcean](https://www.digitalocean.com/community/pages/covid-19)',
-    'footer_right': 'Made by [Jeremy Moreau](https://jeremymoreau.com/) ([RI-MUHC](https://rimuhc.ca/), McGill) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)',
+    'footer_right': 'Made by [Jeremy Moreau](https://jeremymoreau.com/), [Matthias Schoettle](https://mattsch.com), and [Contributors](https://github.com/jeremymoreau/covid19mtl#contributors) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)',
     'infobox': """
     ###### Useful resources
 
@@ -90,7 +90,14 @@ labels = {
     'psr_label': "Private seniors' residence",
     'home_label': 'Home',
     'other_or_unknown_label': 'Other or unknown',
-    'deaths_loc_fig_qc_y_label': 'Deaths (cumulative, QC)'
+    'deaths_loc_fig_qc_y_label': 'Deaths (cumulative, QC)',
+    # Cases vs New Cases fig
+    'cases_vs_newcases_label': 'New cases vs. cumulative total confirmed cases',
+    'cases_vs_newcases_xlabel': 'Cumulative total confirmed cases (log)',
+    'cases_vs_newcases_ylabel': 'New cases (log)',
+    'cases_vs_newcases_legend_mtl': 'Montreal',
+    'cases_vs_newcases_legend_qc': 'Quebec',
+    'cases_vs_newcases_hovertemplate': 'Date: %{customdata} <br> New Cases: %{y}'
 }
 
 layout = generate_layout(labels)
