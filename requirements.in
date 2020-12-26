@@ -1,8 +1,7 @@
-dash == 1.11.*
-pandas == 1.0.*
+dash
+pandas
 gunicorn
 requests
 lxml
 beautifulsoup4
 pytz
-charset_normalizer == 1.3.*
