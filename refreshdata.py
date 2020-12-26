@@ -2,6 +2,7 @@
 """ Refresh data files for the Covid19 Mtl dashboard """
 
 # import logging
+import io
 import os
 import shutil
 import sys
@@ -10,6 +11,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 import numpy as np
+import dateparser
 import pandas as pd
 import pytz
 import requests
@@ -226,6 +228,28 @@ def get_source_dir_for_date(sources_dir, date):
     latest_source_dir = sorted(source_dirs)[-1]
 
     return latest_source_dir.name
+
+
+def get_qc_data_date():
+    content = fetch(SOURCES.get('data_qc_manual_data.csv'))
+
+    # directly load file from the web
+    df = pd.read_csv(io.StringIO(content))
+    # get cell with date
+    date_string = df.iloc[1, 6]
+
+    return dateparser.parse(date_string)
+
+
+def get_mtl_data_date():
+    content = fetch(SOURCES.get('data_mtl_new_cases.csv'))
+
+    # directly load file from the web
+    df = pd.read_csv(io.StringIO(content), sep=';', na_values=[''])
+    # drop last eows with NaN
+    df.dropna(how='all', inplace=True)
+
+    return df.iloc[-1, 0]
 
 
 def load_data_qc_csv(source_file):
