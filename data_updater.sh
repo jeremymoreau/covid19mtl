@@ -2,7 +2,7 @@
 # see: https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 set -Eeuo pipefail
 
-SCRIPT_DIR=`dirname $0`
+SCRIPT_DIR=$(dirname $0)
 DATA_DIR=$SCRIPT_DIR/app/data
 
 cd $SCRIPT_DIR
@@ -20,10 +20,9 @@ python refreshdata.py
 
 # create version tag, increment if it already exists
 echo "determining version tag..."
-TODAY=`date +%Y.%m.%d`
-YESTERDAY=`date -v-1d +"%Y-%m-%d"`
+TODAY=$(date +%Y.%m.%d)
 VERSION_TAG="v$TODAY.0"
-REMOTE_TAGS=`git ls-remote --tags origin`
+REMOTE_TAGS=$(git ls-remote --tags origin)
 
 while [[ $REMOTE_TAGS == *$VERSION_TAG* ]]; do
   i="$((${VERSION_TAG: -1}+1))"
@@ -31,6 +30,14 @@ while [[ $REMOTE_TAGS == *$VERSION_TAG* ]]; do
 done
 
 echo "committing and pushing changes..."
+
+# support Mac/BSD date and Linux/GNU date
+if [ "$(uname)" == "Darwin" ]; then
+    YESTERDAY=$(date -v-1d +"%Y-%m-%d")
+else
+    YESTERDAY=$(date +%Y-%m-%d -d "1 day ago")
+fi
+
 # add updated files to index
 git add $DATA_DIR/processed/*.csv
 git add $DATA_DIR/processed_backups/*.csv
