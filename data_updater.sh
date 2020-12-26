@@ -16,10 +16,18 @@ python refreshdata.py
 # pull in case there were commits
 git pull
 
-# add updated files to index
+# create version tag, increment if it already exists
 TODAY=`date +%Y.%m.%d`
-YESTERDAY=`date +%Y-%m-%d -d "1 day ago"`
+YESTERDAY=`date -v-1d +"%Y-%m-%d"`
+VERSION_TAG="v$TODAY.0"
+REMOTE_TAGS=`git ls-remote --tags origin`
 
+while [[ $REMOTE_TAGS == *$VERSION_TAG* ]]; do
+  i="$((${VERSION_TAG: -1}+1))"
+  VERSION_TAG="v$TODAY.$i"
+done
+
+# add updated files to index
 git add $DATA_DIR/processed/*.csv
 git add $DATA_DIR/processed_backups/*.csv
 git add $DATA_DIR/sources/$YESTERDAY*
@@ -28,5 +36,5 @@ git add $DATA_DIR/sources/$YESTERDAY*
 git commit -m "Automatic update: Data update for $YESTERDAY"
 git push
 
-git tag v$TODAY.0
+git tag $VERSION_TAG
 git push --tags
