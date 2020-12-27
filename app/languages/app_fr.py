@@ -18,7 +18,7 @@ labels = {
     'deaths_qc_label': 'Décès (QC)',
     'recovered_qc_label': 'Rétablis (QC)',
     'negative_tests_qc_box_label': 'Analyses négatives (QC)',
-    'montreal_map_label': 'Cas pour 1000 habitants (Île de Montréal)',
+    'montreal_map_label': 'Cas pour 100 000 habitants (Île de Montréal)',
     'total_cases_label': 'Cas confirmés',
     'age_group_label': "Cas confirmés selon le groupe d'âge (MTL)",
     'total_deaths_label': 'Décès (QC)',
@@ -43,9 +43,9 @@ labels = {
     'montreal_map_colourbar_labels': {
         'date': 'Date',
         'borough': 'Arrondissement/Ville',
-        'cases_per_1000': 'Cas par 1000<br>habitants'
+        'cases_per_100_000': 'Cas par 100 000<br>habitants'
     },
-    'montreal_map_hovertemplate': '<br>Arrondissement/Ville: %{location}<br>Cas par 1000 habitants: %{z}',
+    'montreal_map_hovertemplate': '<br>Arrondissement/Ville: %{location}<br>Cas par 100 000 habitants: %{z}',
     'confirmed_cases_y_label': 'Cas confirmés',
     'confirmed_cases_qc_label': 'Québec (cumul)',
     'active_cases_qc_label': 'Québec (cas actif)',

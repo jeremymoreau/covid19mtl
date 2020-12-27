@@ -54,13 +54,13 @@ def add_ylog_menu(fig, y_data, labels):
     return fig
 
 
-def mtl_cases_map_fig(cases_per1000_long, mtl_geojson, labels):
+def mtl_cases_map_fig(cases_per100_000_long, mtl_geojson, labels):
     # get max cases value
-    cases_max_val = cases_per1000_long['cases_per_1000'].max()
-    # Montreal cases per 1000 map
+    cases_max_val = cases_per100_000_long['cases_per_100_000'].max()
+    # Montreal cases per 100,000 map
     mtlmap_fig = px.choropleth_mapbox(
-        cases_per1000_long, geojson=mtl_geojson,
-        locations='borough', color='cases_per_1000',
+        cases_per100_000_long, geojson=mtl_geojson,
+        locations='borough', color='cases_per_100_000',
         featureidkey='properties.borough',
         animation_frame='date', animation_group='borough',
         mapbox_style='carto-positron', range_color=[0, cases_max_val],

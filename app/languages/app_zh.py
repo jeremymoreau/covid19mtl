@@ -18,7 +18,7 @@ labels = {
     'deaths_qc_label': '死亡（魁省）',
     'recovered_qc_label': '治愈（魁省）',
     'negative_tests_qc_box_label': '检测阴性（魁省）',
-    'montreal_map_label': '病例／1000人（蒙特利尔岛）',
+    'montreal_map_label': '病例／100 000人（蒙特利尔岛）',
     'total_cases_label': '确诊病例',
     'age_group_label': '不同年龄组确诊病例（蒙特利尔）',
     'total_deaths_label': '死亡（魁省）',
@@ -43,9 +43,9 @@ labels = {
     'montreal_map_colourbar_labels': {
         'date': '日期',
         'borough': '区／市',
-        'cases_per_1000': '病例／1000人'
+        'cases_per_100_000': '病例／100 000人'
     },
-    'montreal_map_hovertemplate': '<br>区／市: %{location}<br>病例／1000人: %{z}',
+    'montreal_map_hovertemplate': '<br>区／市: %{location}<br>病例／100 000人: %{z}',
     'confirmed_cases_y_label': '确诊病例',
     'confirmed_cases_qc_label': '累计确诊（魁省）',
     'confirmed_cases_mtl_label': '累计确诊（蒙特利尔）',

@@ -18,7 +18,7 @@ labels = {
     'deaths_qc_label': 'Muertes (QC)',
     'recovered_qc_label': 'Recuperados (QC)',
     'negative_tests_qc_box_label': 'Pruebas negativas (QC)',
-    'montreal_map_label': 'Casos por cada 1000 habitantes (Isla de Montreal)',
+    'montreal_map_label': 'Casos por cada 100 000 habitantes (Isla de Montreal)',
     'total_cases_label': 'Casos confirmados',
     'age_group_label': 'Casos por grupo de edad (MTL)',
     'total_deaths_label': 'Muertes (QC)',
@@ -43,9 +43,9 @@ labels = {
     'montreal_map_colourbar_labels': {
         'date': 'Fecha',
         'borough': 'Vecindario/Ciudad',
-        'cases_per_1000': 'Casos por cada 1000<br>habitantes'
+        'cases_per_100_000': 'Casos por cada 100 000<br>habitantes'
     },
-    'montreal_map_hovertemplate': '<br>Vecindario/Ciudad: %{location}<br>Casos por cada 1000 habitantes: %{z}',
+    'montreal_map_hovertemplate': '<br>Vecindario/Ciudad: %{location}<br>Casos por cada 100 000 habitantes: %{z}',
     'confirmed_cases_y_label': 'Casos confirmados',
     'confirmed_cases_qc_label': 'Quebec (acumulativo)',
     'confirmed_cases_mtl_label': 'Montreal (acumulativo)',

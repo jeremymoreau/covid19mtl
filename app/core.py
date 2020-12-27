@@ -72,8 +72,10 @@ with open(DATA_PATH.joinpath('montreal_shapefile.geojson'), encoding='utf-8') as
 # Montreal cases per borough
 cases_per1000_csv = DATA_PATH.joinpath('processed', 'cases_per1000.csv')
 cases_per1000_df = pd.read_csv(cases_per1000_csv, encoding='utf-8', na_values='na').dropna(axis=1, how='all')
-cases_per1000_long = pd.melt(reduce_cols(cases_per1000_df, 10), id_vars='borough',
-                             var_name='date', value_name='cases_per_1000')
+cases_per100_000_df = cases_per1000_df
+cases_per100_000_df.iloc[:, 1:] = cases_per100_000_df.iloc[:, 1:] / 100
+cases_per100_000_long = pd.melt(reduce_cols(cases_per100_000_df, 10), id_vars='borough',
+                                var_name='date', value_name='cases_per_100_000')
 
 # Montreal data
 data_mtl = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl.csv'), encoding='utf-8', na_values='na')
