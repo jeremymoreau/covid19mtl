@@ -23,6 +23,7 @@ labels = {
     'age_group_label': 'Cases by age group (MTL)',
     'total_deaths_label': 'Deaths (QC)',
     'total_hospitalisations_label': 'Hospitalisations (QC)',
+    'intensive_care_label': 'Intensive Care (QC)',
     'total_testing_label': 'Diagnostic tests (QC)',
     # footer
     'footer_left': 'Data: [Santé Montréal](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / Built with [Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
@@ -61,9 +62,13 @@ labels = {
     'deaths_fig_mtl_label': 'Montreal (cumulative)',
     'new_deaths_qc_label': 'Quebec (new deaths)',
     'new_deaths_mtl_label': 'Montreal (new deaths)',
-    'hospitalisations_y_label': 'Hospitalisations (QC)',
-    'hospitalisations_label': 'Hospitalisations (QC)',
-    'intensive_care_label': 'Intensive Care (QC)',
+    # hospitalisations fig
+    'hospitalisations_label': 'Hospitalisations',
+    'hospitalisations_y_label': 'Hospitalisations',
+    'intensive_care_qc': 'New intensive care admissions (QC)',
+    'intensive_care_mtl': 'New intensive care admissions (MTL)',
+    'hospitalisations_qc': 'Total new hospitalisations (QC)',
+    'hospitalisations_mtl': 'Total new hospitalisations(MTL)',
     # Test positivity fig
     'testing_label': 'Test positivity rate',
     'testing_y_label': 'Test positivity rate (QC)',

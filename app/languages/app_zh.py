@@ -23,6 +23,7 @@ labels = {
     'age_group_label': '不同年龄组确诊病例（蒙特利尔）',
     'total_deaths_label': '死亡（魁省）',
     'total_hospitalisations_label': '入院人数（魁省）',
+    'intensive_care_label': '重症患者 （魁省）',
     'total_testing_label': '检测人数（魁省）',
     # footer
     'footer_left': '数据来源: [Santé Montréal](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / 使用软件[Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
@@ -61,9 +62,13 @@ labels = {
     'deaths_fig_mtl_label': '累计死亡（蒙特利尔）',
     'new_deaths_qc_label': '新增死亡（魁省）',
     'new_deaths_mtl_label': '新增死亡（蒙特利尔）',
-    'hospitalisations_y_label': '累计入院人数（魁省）',
-    'hospitalisations_label': '入院人数（魁省）',
-    'intensive_care_label': '重症患者 （魁省）',
+    # hospitalisations fig
+    'hospitalisations_label': 'Hospitalisations',
+    'hospitalisations_y_label': 'Hospitalisations',
+    'intensive_care_qc': 'New intensive care admissions (QC)',
+    'intensive_care_mtl': 'New intensive care admissions (MTL)',
+    'hospitalisations_qc': 'Total new hospitalisations (QC)',
+    'hospitalisations_mtl': 'Total new hospitalisations(MTL)',
     # Test positivity fig
     'testing_label': 'Test positivity rate',
     'testing_y_label': 'Test positivity rate (QC)',
