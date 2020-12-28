@@ -15,7 +15,7 @@ def generate_layout(labels):
     age_fig = figures.mtl_age_hist_fig(mtl_age_data, labels)
     deaths_fig = figures.deaths_fig(data_mtl, data_qc, labels)
     hospitalisations_qc_fig = figures.qc_hospitalisations_fig(data_qc_hosp, labels)
-    testing_qc_fig = figures.qc_testing_fig(data_qc, labels)
+    testing_fig = figures.testing_fig(data_qc, data_mtl, labels)
     deaths_loc_mtl_fig = figures.mtl_deaths_loc_fig(data_mtl_death_loc, labels)
     deaths_loc_qc_fig = figures.qc_deaths_loc_fig(data_qc, labels)
     cases_vs_newcases_fig = figures.cases_vs_newcases_fig(data_mtl, data_qc, labels)
@@ -237,11 +237,11 @@ def generate_layout(labels):
                     html.Div(
                         [
                             html.H6(
-                                [labels['total_testing_label']],
+                                [labels['testing_label']],
                             ),
                             dcc.Graph(
-                                figure=testing_qc_fig,
-                                id='testing_qc_fig',
+                                figure=testing_fig,
+                                id='testing_fig',
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,

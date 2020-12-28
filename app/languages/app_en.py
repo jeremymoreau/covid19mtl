@@ -64,10 +64,12 @@ labels = {
     'hospitalisations_y_label': 'Hospitalisations (QC)',
     'hospitalisations_label': 'Hospitalisations (QC)',
     'intensive_care_label': 'Intensive Care (QC)',
-    'testing_qc_y_label': 'Cases (QC)',
-    'negative_tests_qc_label': 'Negative tests (cumulative)',
-    'new_negative_tests_qc_label': 'Negative tests (new cases)',
-    'positive_cases_qc_label': 'Confirmed positive cases (cumulative)',
+    # Test positivity fig
+    'testing_label': 'Test positivity rate',
+    'testing_y_label': 'Test positivity rate (QC)',
+    'testing_mtl': 'Montreal',
+    'testing_qc': 'Quebec',
+    #
     'date_slider_label': 'Date: ',
     'date_label': 'Date',
     'age_label': 'Age',

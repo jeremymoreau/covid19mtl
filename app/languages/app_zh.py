@@ -64,10 +64,12 @@ labels = {
     'hospitalisations_y_label': '累计入院人数（魁省）',
     'hospitalisations_label': '入院人数（魁省）',
     'intensive_care_label': '重症患者 （魁省）',
-    'testing_qc_y_label': '检测人数（魁省）',
-    'negative_tests_qc_label': '累计阴性检测',
-    'new_negative_tests_qc_label': '新增阴性检测',
-    'positive_cases_qc_label': '累计确诊',
+    # Test positivity fig
+    'testing_label': 'Test positivity rate',
+    'testing_y_label': 'Test positivity rate (QC)',
+    'testing_mtl': 'Montreal',
+    'testing_qc': 'Quebec',
+    #
     'date_slider_label': '日期: ',
     'date_label': '日期',
     'age_label': '年龄',
