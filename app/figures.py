@@ -254,7 +254,7 @@ def deaths_fig(data_mtl, data_qc, labels):
                 'x': data_qc['date'],
                 'y': data_qc['new_deaths'],
                 'mode': 'lines',
-                'marker': {'color': '#00104f'},
+                'marker': {'color': '#1bd1c2'},
                 'name': labels['new_deaths_qc_label'],
                 'hoverlabel': {'namelength': 25},
             },
@@ -263,7 +263,7 @@ def deaths_fig(data_mtl, data_qc, labels):
                 'x': data_mtl['date'],
                 'y': data_mtl['new_deaths'],
                 'mode': 'lines',
-                'marker': {'color': '#780b18'},
+                'marker': {'color': '#f7289d'},
                 'name': labels['new_deaths_mtl_label'],
                 'hoverlabel': {'namelength': 25},
             }
@@ -288,26 +288,44 @@ def deaths_fig(data_mtl, data_qc, labels):
     return deaths_fig
 
 
-def qc_hospitalisations_fig(data_qc_hosp, labels):
+def hospitalisations_fig(data_qc, data_mtl, labels):
     # Hospitalisations (QC)
-    hospitalisations_qc_fig = go.Figure({
+    hospitalisations_fig = go.Figure({
         'data': [
             {
                 'type': 'scatter',
-                'x': data_qc_hosp['date'],
-                'y': data_qc_hosp['hospitalisations_all'],
+                'x': data_qc['date'],
+                'y': data_qc['hos_quo_tot_n'],
                 'mode': 'lines',
-                'marker': {'color': '#F87E3F'},
-                'name': labels['hospitalisations_label'],
+                'marker': {'color': '#001F97'},
+                'name': labels['hospitalisations_qc'],
                 'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
                 'mode': 'lines',
-                'marker': {'color': '#0083CB'},
-                'x': data_qc_hosp['date'],
-                'y': data_qc_hosp['icu'],
-                'name': labels['intensive_care_label'],
+                'marker': {'color': '#1bd1c2'},
+                'x': data_qc['date'],
+                'y': data_qc['hos_quo_si_n'],
+                'name': labels['intensive_care_qc'],
+                'hoverlabel': {'namelength': 25},
+            },
+            {
+                'type': 'scatter',
+                'x': data_mtl['date'],
+                'y': data_mtl['hos_quo_tot_n'],
+                'mode': 'lines',
+                'marker': {'color': '#D6142C'},
+                'name': labels['hospitalisations_mtl'],
+                'hoverlabel': {'namelength': 25},
+            },
+            {
+                'type': 'scatter',
+                'mode': 'lines',
+                'marker': {'color': '#f7289d'},
+                'x': data_mtl['date'],
+                'y': data_mtl['hos_quo_si_n'],
+                'name': labels['intensive_care_mtl'],
                 'hoverlabel': {'namelength': 25},
             }
         ],
@@ -327,49 +345,40 @@ def qc_hospitalisations_fig(data_qc_hosp, labels):
             'dragmode': False
         }
     })
-    hospitalisations_qc_fig = add_ylog_menu(hospitalisations_qc_fig,
-                                            data_qc_hosp['hospitalisations_all'], labels)
+    hospitalisations_fig = add_ylog_menu(hospitalisations_fig,
+                                         data_qc['hos_quo_reg_n'], labels)
 
-    return hospitalisations_qc_fig
+    return hospitalisations_fig
 
 
-def qc_testing_fig(data_qc, labels):
+def testing_fig(data_qc, data_mtl, labels):
     # Testing (QC)
-    testing_qc_fig = go.Figure({
+    testing_fig = go.Figure({
         'data': [
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['negative_tests'],
+                'y': data_qc['psi_quo_pos_t'] / 100,  # divide by 100 because '%' tickformat multiplies by 100
                 'mode': 'lines',
-                'marker': {'color': '#39b686'},
-                'name': labels['negative_tests_qc_label'],
+                'marker': {'color': '#001F97'},
+                'name': labels['testing_qc'],
                 'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
+                'x': data_mtl['date'],
+                'y': data_mtl['psi_quo_pos_t'] / 100,  # divide by 100 because '%' tickformat multiplies by 100
                 'mode': 'lines',
-                'x': data_qc['date'],
-                'y': data_qc['cases'],
-                'marker': {'color': '#c51515'},
-                'name': labels['positive_cases_qc_label'],
+                'marker': {'color': '#D6142C'},
+                'name': labels['testing_mtl'],
                 'hoverlabel': {'namelength': 25},
             },
-            {
-                'type': 'scatter',
-                'x': data_qc['date'],
-                'y': data_qc['new_negative_tests'],
-                'mode': 'lines',
-                'marker': {'color': '#206e50'},
-                'name': labels['new_negative_tests_qc_label'],
-                'hoverlabel': {'namelength': 25},
-            }
         ],
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
-            'yaxis': {'title': {'text': labels['testing_qc_y_label']}, 'gridcolor': '#f5f5f5'},
+            'yaxis': {'title': {'text': labels['testing_y_label']}, 'gridcolor': '#f5f5f5', 'tickformat': ',.0%'},
             'margin': {'r': 0, 't': 10, 'l': 60, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
             'paper_bgcolor': 'rgba(255,255,255,1)',
@@ -377,9 +386,9 @@ def qc_testing_fig(data_qc, labels):
             'dragmode': False
         }
     })
-    testing_qc_fig = add_ylog_menu(testing_qc_fig, data_qc['negative_tests'], labels)
+    testing_fig = add_ylog_menu(testing_fig, data_qc['negative_tests'], labels)
 
-    return testing_qc_fig
+    return testing_fig
 
 
 def mtl_deaths_loc_fig(data_mtl_death_loc, labels):
