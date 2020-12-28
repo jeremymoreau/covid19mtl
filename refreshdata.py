@@ -403,7 +403,7 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
 
     # check if column already exists in cases_csv, append column if it doesn't
     if cases_df.columns[-1] == date:
-        print(f'{date} has already been appended to {cases_csv}')
+        print(f'MTL cases: {date} has already been appended to {cases_csv}')
     else:
         # Append new col of data
         cases_df[date] = list(new_data_col)
@@ -421,7 +421,7 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
                 break
 
         if already_exists:
-            print(f'the same data of {date} already exists for a previous day, replacing with "na"')
+            print(f'MTL cases: the data shown on {date} already exists for a previous day, replacing with "na"')
             cases_df[cases_df.columns[-1]] = 'na'
 
     # Overwrite cases.csv
@@ -507,8 +507,7 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
         # Overwrite data_mtl_death_loc.csv
         mtl_death_loc_df.to_csv(mtl_death_loc_csv, encoding='utf-8', index=False)
     else:
-        print(f'{date} has already been appended to {mtl_death_loc_csv}')
-    return mtl_death_loc_df
+        print(f'MTL death loc: {date} has already been appended to {mtl_death_loc_csv}')
 
 
 def update_mtl_data_csv(sources_dir, processed_dir):
@@ -602,13 +601,13 @@ def append_mtl_cases_by_age(sources_dir, processed_dir, date):
         mtl_age_df.loc[mtl_age_df.index.max() + 1, :] = mtl_age_list
 
         if already_exists:
-            print(f'the same data of {date} already exists for a previous day, replacing with "na"')
+            print(f'MTL cases by age: the data shown on {date} already exists for a previous day, replacing with "na"')
             mtl_age_df.iloc[-1, 1:] = 'na'
 
         # Overwrite data_mtl_age.csv
         mtl_age_df.to_csv(mtl_age_csv, encoding='utf-8', index=False, na_rep='na')
     else:
-        print(f'{date} has already been appended to {mtl_age_csv}')
+        print(f'MTL cases by age: {date} has already been appended to {mtl_age_csv}')
 
 
 def main():
