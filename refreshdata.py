@@ -428,8 +428,8 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     cases_df.to_csv(cases_csv, encoding='utf-8')
 
 
-def append_mtl_cases_per1000_csv(processed_dir, date: str):
-    """Append new column of data to cases_per1000.csv
+def append_mtl_cases_per100k_csv(processed_dir, date: str):
+    """Append new column of data to cases_per100k.csv
 
     Parameters
     ----------
@@ -437,16 +437,25 @@ def append_mtl_cases_per1000_csv(processed_dir, date: str):
         Absolute path to processed data dir.
     """
     cases_csv = os.path.join(processed_dir, 'cases.csv')
-    cases_per1000_csv = os.path.join(processed_dir, 'cases_per1000.csv')
-    cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8')
-    cases_per1000_df = pd.read_csv(cases_per1000_csv, index_col=0, encoding='utf-8')
+    cases_per100k_csv = os.path.join(processed_dir, 'data_mtl_boroughs.csv')
+    cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8', na_values='na')
+    # cases_per100k_df = pd.read_csv(cases_per100k_csv, index_col=0, encoding='utf-8')
 
-    # remove Unnamed columns
-    cases_df = cases_df.loc[:, ~cases_df.columns.str.contains('^Unnamed')]
-    cases_per1000_df = cases_per1000_df.loc[:, ~cases_per1000_df.columns.str.contains('^Unnamed')]
+    # drop to be confirmed (TBC) cases
+    cases_df = cases_df[:-1]
 
-    # latest data date
-    latest_date = cases_df[date]
+    # make date the index
+    # and drop rows with only NA
+    cases_df = cases_df.transpose().dropna(how='all').astype(int)
+
+    new_cases_df = cases_df.diff()
+    # replace NaN with 0 in first row
+    new_cases_df.iloc[0] = 0
+    new_cases_df = new_cases_df.astype(int)
+
+    seven_day_df = new_cases_df.rolling(window=7).sum()
+    # replace NaN with 0
+    seven_day_df = seven_day_df.fillna(0).astype(int)
 
     # population of borough/linked city
     borough_pop = [134245, 42796, 3823, 19324, 166520, 32448, 48899, 18980,
@@ -454,18 +463,44 @@ def append_mtl_cases_per1000_csv(processed_dir, date: str):
                    20276, 23954, 69297, 104000, 31380, 106743, 139590, 4958, 98828,
                    78305, 921, 78151, 69229, 89170, 143853, 20312]
 
-    if date not in cases_per1000_df.columns:
-        # ignore columns with 'na'
-        if pd.Series.all(latest_date == 'na'):
-            cases_per1000_df[date] = 'na'
-        else:
-            day_cases_per1000 = latest_date[:-1] / borough_pop * 1000
-            cases_per1000_df[date] = list(day_cases_per1000.round(1))
-    else:
-        print(f'{date} has already been appended to {cases_per1000_csv}')
+    seven_day_per100k_df = seven_day_df / borough_pop * 100000
 
-    # Overwrite cases_per1000.csv
-    cases_per1000_df.to_csv(cases_per1000_csv, encoding='utf-8')
+    # add suffixes to each df and join
+    cases_df = cases_df.add_suffix('_cases')
+    new_cases_df = new_cases_df.add_suffix('_new_cases')
+    seven_day_df = seven_day_df.add_suffix('_7day_incidence')
+    seven_day_per100k_df = seven_day_per100k_df.add_suffix('_7day_per100k_incidence')
+
+    combined = cases_df.join([new_cases_df, seven_day_df, seven_day_per100k_df])
+
+    # sort column names
+    combined.sort_index(axis=1, inplace=True)
+
+    # create multiindex by splitting on column names to have metrics per borough
+    combined.columns = combined.columns.str.split('_', 1, expand=True)
+    combined.to_csv(cases_per100k_csv, na_rep='na')
+
+    # remove Unnamed columns
+    # cases_df = cases_df.loc[:, ~cases_df.columns.str.contains('^Unnamed')]
+    # cases_per100k_df = cases_per100k_df.loc[:, ~cases_per100k_df.columns.str.contains('^Unnamed')]
+
+    # latest data date
+    # latest_date = cases_df.loc[date]
+
+
+
+    # if date not in cases_per100k_df.columns:
+    #     # ignore columns with 'na'
+    #     if pd.Series.all(latest_date == 'na'):
+    #         cases_per100k_df[date] = 'na'
+    #     else:
+    #         day_cases_per100k = latest_date[:-1] / borough_pop * 100000
+    #         cases_per100k_df[date] = list(day_cases_per100k.round(1))
+    # else:
+    #     print(f'{date} has already been appended to {cases_per100k_csv}')
+
+    # # Overwrite cases_per100k.csv
+    # cases_per100k_df.to_csv(cases_per100k_csv, encoding='utf-8', na_rep='na')
 
 
 def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
