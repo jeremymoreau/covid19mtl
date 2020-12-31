@@ -47,7 +47,9 @@ labels = {
         'cases_per_1000': '病例／1000人'
     },
     'montreal_map_hovertemplate': '<br>区／市: %{location}<br>病例／1000人: %{z}',
-    'confirmed_cases_y_label': '确诊病例',
+    # confirmed cases fig
+    'confirmed_cases_y_label': 'Cumulative cases',
+    'confirmed_cases_y2_label': 'New cases',
     'confirmed_cases_qc_label': '累计确诊（魁省）',
     'confirmed_cases_mtl_label': '累计确诊（蒙特利尔）',
     'active_cases_qc_label': '现存确诊 （魁省）',
@@ -56,8 +58,10 @@ labels = {
     'age_total_label': '各年龄组总病例分布情况',
     'age_per100000_label': '每10万人口不同年龄组病例分布情况',
     'age_fig_hovertemplate': '%: %{y}',
+    # deaths fig
     'deaths_fig_label': '死亡',
-    'deaths_qc_y_label': '死亡',
+    'deaths_qc_y_label': 'Cumulative deaths',
+    'deaths_qc_y2_label': 'New deaths',
     'deaths_fig_qc_label': '累计死亡（魁省）',
     'deaths_fig_mtl_label': '累计死亡（蒙特利尔）',
     'new_deaths_qc_label': '新增死亡（魁省）',

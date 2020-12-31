@@ -141,8 +141,9 @@ def cases_fig(data_mtl, data_qc, labels):
                 'type': 'scatter',
                 'x': data_qc['date'],
                 'y': data_qc['new_cases'],
+                'yaxis': 'y2',
                 'mode': 'lines',
-                'marker': {'color': '#00104f'},
+                'marker': {'color': '#1bd1c2'},
                 'name': labels['new_confirmed_cases_qc_label'],
                 'hoverlabel': {'namelength': 25},
             },
@@ -150,8 +151,9 @@ def cases_fig(data_mtl, data_qc, labels):
                 'type': 'scatter',
                 'x': data_mtl['date'],
                 'y': data_mtl['new_cases'],
+                'yaxis': 'y2',
                 'mode': 'lines',
-                'marker': {'color': '#780b18'},
+                'marker': {'color': '#f7289d'},
                 'name': labels['new_confirmed_cases_mtl_label'],
                 'hoverlabel': {'namelength': 25},
             }
@@ -161,8 +163,17 @@ def cases_fig(data_mtl, data_qc, labels):
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
-            'yaxis': {'title': {'text': labels['confirmed_cases_y_label']},
-                      'gridcolor': '#f5f5f5'},
+            'yaxis': {
+                'title': {'text': labels['confirmed_cases_y_label']},
+                'gridcolor': '#f5f5f5',
+                'rangemode': 'tozero',
+            },
+            'yaxis2': {
+                'title': {'text': labels['confirmed_cases_y2_label']},
+                'overlaying': 'y',
+                'rangemode': 'tozero',
+                'side': 'right'
+            },
             'margin': {'r': 0, 't': 10, 'l': 60, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
             'paper_bgcolor': 'rgba(255,255,255,1)',
@@ -255,6 +266,7 @@ def deaths_fig(data_mtl, data_qc, labels):
                 'type': 'scatter',
                 'x': data_qc['date'],
                 'y': data_qc['new_deaths'],
+                'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#1bd1c2'},
                 'name': labels['new_deaths_qc_label'],
@@ -264,6 +276,7 @@ def deaths_fig(data_mtl, data_qc, labels):
                 'type': 'scatter',
                 'x': data_mtl['date'],
                 'y': data_mtl['new_deaths'],
+                'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#f7289d'},
                 'name': labels['new_deaths_mtl_label'],
@@ -276,7 +289,14 @@ def deaths_fig(data_mtl, data_qc, labels):
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {
                 'title': {'text': labels['deaths_qc_y_label']},
-                'gridcolor': '#f5f5f5'
+                'gridcolor': '#f5f5f5',
+                'rangemode': 'tozero'
+            },
+            'yaxis2': {
+                'title': {'text': labels['deaths_qc_y2_label']},
+                'overlaying': 'y',
+                'rangemode': 'tozero',
+                'side': 'right'
             },
             'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',

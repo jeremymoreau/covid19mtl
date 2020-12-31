@@ -47,7 +47,9 @@ labels = {
         'cases_per_1000': 'Cases per 1000<br>population'
     },
     'montreal_map_hovertemplate': '<br>Borough/City: %{location}<br>Cases per 1000 population: %{z}',
-    'confirmed_cases_y_label': 'Confirmed cases',
+    # confirmed cases fig
+    'confirmed_cases_y_label': 'Cumulative cases',
+    'confirmed_cases_y2_label': 'New cases',
     'confirmed_cases_qc_label': 'Quebec (cumulative)',
     'active_cases_qc_label': 'Quebec (active cases)',
     'confirmed_cases_mtl_label': 'Montreal (cumulative)',
@@ -56,8 +58,10 @@ labels = {
     'age_total_label': 'Distribution of total<br>cases across age groups',
     'age_per100000_label': 'Distribution of cases per<br>100,000 population in age group',
     'age_fig_hovertemplate': '%: %{y}',
+    # deaths fig
     'deaths_fig_label': 'Deaths',
-    'deaths_qc_y_label': 'Deaths',
+    'deaths_qc_y_label': 'Cumulative deaths',
+    'deaths_qc_y2_label': 'New deaths',
     'deaths_fig_qc_label': 'Quebec (cumulative)',
     'deaths_fig_mtl_label': 'Montreal (cumulative)',
     'new_deaths_qc_label': 'Quebec (new deaths)',
