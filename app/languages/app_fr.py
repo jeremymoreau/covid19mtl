@@ -49,7 +49,7 @@ labels = {
     'montreal_map_hovertemplate': '<br>Arrondissement/Ville: %{location}<br>Cas par 1000 habitants: %{z}',
     # confirmed cases fig
     'confirmed_cases_y_label': 'Cas (cumul)',
-    'confirmed_cases_y2_label': 'Nouveaux  cas',
+    'confirmed_cases_y2_label': 'Nouveaux  cas (moyenne mobile 7 jours)',
     'confirmed_cases_qc_label': 'Québec (cumul)',
     'active_cases_qc_label': 'Québec (cas actif)',
     'confirmed_cases_mtl_label': 'Montréal (cumul)',
@@ -61,7 +61,7 @@ labels = {
     # deaths fig
     'deaths_fig_label': 'Décès',
     'deaths_qc_y_label': 'Décès (cumul)',
-    'deaths_qc_y2_label': 'Nouveaux décès',
+    'deaths_qc_y2_label': 'Nouveaux décès (moyenne mobile 7 jours)',
     'deaths_fig_qc_label': 'Québec (cumul)',
     'deaths_fig_mtl_label': 'Montréal (cumul)',
     'new_deaths_qc_label': 'Québec (nouveaux décès)',
@@ -69,7 +69,7 @@ labels = {
     # hospitalisations fig
     'hospitalisations_label': 'Hospitalisations',
     'hospitalisations_y_label': 'Hospitalisations en cours',
-    'hospitalisations_y2_label': 'Nouvelles hospitalisations',
+    'hospitalisations_y2_label': 'Nouvelles hospitalisations (moyenne mobile 7 jours)',
     'intensive_care_qc': 'Nouvelles admissions aux soins intensifs (QC)',
     'intensive_care_mtl': 'Nouvelles admissions aux soins intensifs (MTL)',
     'hospitalisations_qc': 'Nouvelles hospitalisations (QC)',
@@ -78,7 +78,7 @@ labels = {
     'hospitalisations_mtl': 'Nouvelles hospitalisations (MTL)',
     # Test positivity fig
     'testing_label': 'Taux de positivité des tests',
-    'testing_y_label': 'Taux de positivité (QC)',
+    'testing_y_label': 'Taux de positivité (moyenne mobile 7 jours)',
     'testing_mtl': 'Montréal',
     'testing_qc': 'Québec',
     #

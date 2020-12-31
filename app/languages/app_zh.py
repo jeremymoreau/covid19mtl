@@ -49,7 +49,7 @@ labels = {
     'montreal_map_hovertemplate': '<br>区／市: %{location}<br>病例／1000人: %{z}',
     # confirmed cases fig
     'confirmed_cases_y_label': 'Cumulative cases',
-    'confirmed_cases_y2_label': 'New cases',
+    'confirmed_cases_y2_label': 'New cases (7-day moving average)',
     'confirmed_cases_qc_label': '累计确诊（魁省）',
     'confirmed_cases_mtl_label': '累计确诊（蒙特利尔）',
     'active_cases_qc_label': '现存确诊 （魁省）',
@@ -61,7 +61,7 @@ labels = {
     # deaths fig
     'deaths_fig_label': '死亡',
     'deaths_qc_y_label': 'Cumulative deaths',
-    'deaths_qc_y2_label': 'New deaths',
+    'deaths_qc_y2_label': 'New deaths (7-day moving average)',
     'deaths_fig_qc_label': '累计死亡（魁省）',
     'deaths_fig_mtl_label': '累计死亡（蒙特利尔）',
     'new_deaths_qc_label': '新增死亡（魁省）',
@@ -69,7 +69,7 @@ labels = {
     # hospitalisations fig
     'hospitalisations_label': 'Hospitalisations',
     'hospitalisations_y_label': 'Active hospitalisations',
-    'hospitalisations_y2_label': 'New hospitalisations',
+    'hospitalisations_y2_label': 'New hospitalisations (7-day moving average)',
     'intensive_care_qc': 'New intensive care admissions (QC)',
     'intensive_care_mtl': 'New intensive care admissions (MTL)',
     'hospitalisations_qc': 'New hospitalisations (QC)',
@@ -78,7 +78,7 @@ labels = {
     'hospitalisations_mtl': 'New hospitalisations(MTL)',
     # Test positivity fig
     'testing_label': 'Test positivity rate',
-    'testing_y_label': 'Test positivity rate (QC)',
+    'testing_y_label': 'Test positivity rate (7-day moving average)',
     'testing_mtl': 'Montreal',
     'testing_qc': 'Quebec',
     #
