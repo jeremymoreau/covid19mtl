@@ -220,7 +220,48 @@ def generate_layout(labels):
                     html.Div(
                         [
                             html.H6(
-                                [labels['hospitalisations_label']]
+                                [labels['testing_label']],
+                            ),
+                            dcc.Graph(
+                                figure=testing_fig,
+                                id='testing_fig',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                }
+                            ),
+                        ],
+                        className='grid-item'
+                    ),
+                    # right box
+                    html.Div(
+                        [
+                            html.H6(
+                                ['']
+                            ),
+                            # dcc.Graph(
+                            #     figure=hospitalisations_fig,
+                            #     id='hospitalisations_fig',
+                            #     responsive=True,
+                            #     config={
+                            #         'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                            #     }
+                            # ),
+                        ],
+                        className='grid-item'
+                    ),
+                ],
+                className='grid-container-three-cols',
+            ),
+
+            # 4th row: 2 boxes
+            html.Div(
+                [
+                    # left box
+                    html.Div(
+                        [
+                            html.H6(
+                                [labels['hospitalisations_label']],
                             ),
                             dcc.Graph(
                                 figure=hospitalisations_fig,
@@ -237,11 +278,11 @@ def generate_layout(labels):
                     html.Div(
                         [
                             html.H6(
-                                [labels['testing_label']],
+                                [labels['cases_vs_newcases_label']],
                             ),
                             dcc.Graph(
-                                figure=testing_fig,
-                                id='testing_fig',
+                                figure=cases_vs_newcases_fig,
+                                id='cases_vs_newcases_fig',
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
@@ -251,10 +292,10 @@ def generate_layout(labels):
                         className='grid-item'
                     ),
                 ],
-                className='grid-container-three-cols',
+                className='grid-container-two-cols',
             ),
 
-            # 4th row: 2 boxes
+            # 5th row: 2 boxes
             html.Div(
                 [
                     # left box
@@ -289,48 +330,6 @@ def generate_layout(labels):
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
                                 }
                             ),
-                        ],
-                        className='grid-item'
-                    ),
-                ],
-                className='grid-container-two-cols',
-            ),
-
-            # 5th row: 2 boxes
-            html.Div(
-                [
-                    # left box
-                    html.Div(
-                        [
-
-                            html.H6(
-                                [labels['cases_vs_newcases_label']],
-                            ),
-                            dcc.Graph(
-                                figure=cases_vs_newcases_fig,
-                                id='cases_vs_newcases_fig',
-                                responsive=True,
-                                config={
-                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                }
-                            ),
-                        ],
-                        className='grid-item'
-                    ),
-                    # right box
-                    html.Div(
-                        [
-                            html.H6(
-                                [''],
-                            ),
-                            # dcc.Graph(
-                            #     figure=deaths_loc_qc_fig,
-                            #     id='placeholder_fig',
-                            #     responsive=True,
-                            #     config={
-                            #         'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                            #     }
-                            # ),
                         ],
                         className='grid-item'
                     ),
