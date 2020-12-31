@@ -30,7 +30,8 @@ def add_ylog_menu(fig, y_data, labels):
                          args=[{'visible': [True, True]},
                                {'yaxis': {
                                    'type': 'linear',
-                                   'gridcolor': '#f5f5f5'
+                                   'gridcolor': '#f5f5f5',
+                                   'title': str(fig.layout.yaxis.title.text)
                                }
                          }]),
                     dict(label=labels['log_label'],
@@ -39,7 +40,8 @@ def add_ylog_menu(fig, y_data, labels):
                                {'yaxis': {
                                    'type': 'log',
                                    'nticks': nticks_log,
-                                   'gridcolor': '#f5f5f5'
+                                   'gridcolor': '#f5f5f5',
+                                   'title': str(fig.layout.yaxis.title.text)
                                }
                          }]),
                 ]),
