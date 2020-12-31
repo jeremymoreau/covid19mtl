@@ -64,11 +64,14 @@ labels = {
     'new_deaths_mtl_label': 'Montréal (nouveaux décès)',
     # hospitalisations fig
     'hospitalisations_label': 'Hospitalisations',
-    'hospitalisations_y_label': 'Hospitalisations',
+    'hospitalisations_y_label': 'Hospitalisations en cours',
+    'hospitalisations_y2_label': 'Nouvelles hospitalisations',
     'intensive_care_qc': 'Nouvelles admissions aux soins intensifs (QC)',
     'intensive_care_mtl': 'Nouvelles admissions aux soins intensifs (MTL)',
-    'hospitalisations_qc': 'Nouvelles hospitalisations (total, QC)',
-    'hospitalisations_mtl': 'Nouvelles hospitalisations (total, MTL)',
+    'hospitalisations_qc': 'Nouvelles hospitalisations (QC)',
+    'hospitalisations_active_qc': 'Hospitalisations en cours (QC)',
+    'intensive_care_active_qc': 'Soins Intensifs (en cours, QC)',
+    'hospitalisations_mtl': 'Nouvelles hospitalisations (MTL)',
     # Test positivity fig
     'testing_label': 'Taux de positivité des tests',
     'testing_y_label': 'Taux de positivité (QC)',

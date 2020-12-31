@@ -288,18 +288,37 @@ def deaths_fig(data_mtl, data_qc, labels):
     return deaths_fig
 
 
-def hospitalisations_fig(data_qc, data_mtl, labels):
+def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
     # Hospitalisations (QC)
     hospitalisations_fig = go.Figure({
         'data': [
             {
+                'type': 'bar',
+                'x': data_qc_hosp['date'],
+                'y': data_qc_hosp['hospitalisations_all'],
+                'yaxis': 'y1',
+                'marker': {'color': '#5c6dad'},
+                'name': labels['hospitalisations_active_qc'],
+                'hoverlabel': {'namelength': 35},
+            },
+            {
+                'type': 'bar',
+                'x': data_qc_hosp['date'],
+                'y': data_qc_hosp['icu'],
+                'yaxis': 'y1',
+                'marker': {'color': '#158c17'},
+                'name': labels['intensive_care_active_qc'],
+                'hoverlabel': {'namelength': 35},
+            },
+            {
                 'type': 'scatter',
                 'x': data_qc['date'],
                 'y': data_qc['hos_quo_tot_n'],
+                'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#001F97'},
                 'name': labels['hospitalisations_qc'],
-                'hoverlabel': {'namelength': 25},
+                'hoverlabel': {'namelength': 35},
             },
             {
                 'type': 'scatter',
@@ -307,17 +326,19 @@ def hospitalisations_fig(data_qc, data_mtl, labels):
                 'marker': {'color': '#1bd1c2'},
                 'x': data_qc['date'],
                 'y': data_qc['hos_quo_si_n'],
+                'yaxis': 'y2',
                 'name': labels['intensive_care_qc'],
-                'hoverlabel': {'namelength': 25},
+                'hoverlabel': {'namelength': 35},
             },
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
                 'y': data_mtl['hos_quo_tot_n'],
+                'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#D6142C'},
                 'name': labels['hospitalisations_mtl'],
-                'hoverlabel': {'namelength': 25},
+                'hoverlabel': {'namelength': 35},
             },
             {
                 'type': 'scatter',
@@ -325,8 +346,9 @@ def hospitalisations_fig(data_qc, data_mtl, labels):
                 'marker': {'color': '#f7289d'},
                 'x': data_mtl['date'],
                 'y': data_mtl['hos_quo_si_n'],
+                'yaxis': 'y2',
                 'name': labels['intensive_care_mtl'],
-                'hoverlabel': {'namelength': 25},
+                'hoverlabel': {'namelength': 35},
             }
         ],
         'layout': {
@@ -337,10 +359,18 @@ def hospitalisations_fig(data_qc, data_mtl, labels):
                 'title': {'text': labels['hospitalisations_y_label']},
                 'gridcolor': '#f5f5f5'
             },
+            'yaxis2': {
+                'title': {'text': labels['hospitalisations_y2_label']},
+                'overlaying': 'y',
+                'rangemode': 'tozero',
+                'side': 'right'
+
+            },
             'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
             'paper_bgcolor': 'rgba(255,255,255,1)',
             'hovermode': 'x',
+            'barmode': 'overlay',
             'hoverlabel': {'font': {'color': '#ffffff'}},
             'dragmode': False
         }

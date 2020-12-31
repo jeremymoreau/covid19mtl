@@ -14,7 +14,7 @@ def generate_layout(labels):
     cases_fig = figures.cases_fig(data_mtl, data_qc, labels)
     age_fig = figures.mtl_age_hist_fig(mtl_age_data, labels)
     deaths_fig = figures.deaths_fig(data_mtl, data_qc, labels)
-    hospitalisations_fig = figures.hospitalisations_fig(data_qc, data_mtl, labels)
+    hospitalisations_fig = figures.hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels)
     testing_fig = figures.testing_fig(data_qc, data_mtl, labels)
     deaths_loc_mtl_fig = figures.mtl_deaths_loc_fig(data_mtl_death_loc, labels)
     deaths_loc_qc_fig = figures.qc_deaths_loc_fig(data_qc, labels)
