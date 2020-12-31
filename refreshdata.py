@@ -615,7 +615,7 @@ def append_mtl_cases_by_age(sources_dir, processed_dir, date):
 
 def update_vaccines_data_csv(sources_dir: str, processed_dir: str):
     """Load all data_qc_vaccines.csv data and generate a csv with MTL and QC vaccination data
-    Output csv format: date | mtl_doses | qc_doses | mtl_perc | qc_perc
+    Output csv format: date | mtl_doses | qc_doses | mtl_new | qc_new | mtl_perc | qc_perc
 
     Parameters
     ----------
@@ -645,13 +645,15 @@ def update_vaccines_data_csv(sources_dir: str, processed_dir: str):
         data = pd.read_csv(data_csv, encoding='utf-8', na_values='na', sep=';')
         data_dict[date] = data
 
-    # Create a df of format: date | mtl_doses | qc_doses | mtl_perc | qc_perc
+    # Create a df of format: date | mtl_doses | qc_doses | mtl_new | qc_new | mtl_perc | qc_perc
     vaccine_df_date = []
     vaccine_df_mtl = []
     vaccine_df_qc = []
+    vaccine_df_mtl_new = []
+    vaccine_df_qc_new = []
     vaccine_df_mtl_perc = []
     vaccine_df_qc_perc = []
-    for date in data_dict:
+    for i, date in enumerate(data_dict):
         # Add date and dose counts
         data_df = data_dict[date]
         mtl_count = int(data_df[data_df['Regions'] == '06 - Montréal']['Number of administered doses of the vaccine'])
@@ -659,6 +661,17 @@ def update_vaccines_data_csv(sources_dir: str, processed_dir: str):
         vaccine_df_date.append(date)
         vaccine_df_mtl.append(mtl_count)
         vaccine_df_qc.append(qc_count)
+
+        # Add new doses administered
+        if i == 0:
+            # Add na for first day of available data
+            vaccine_df_mtl_new.append('na')
+            vaccine_df_qc_new.append('na')
+        else:
+            mtl_new = mtl_count - vaccine_df_mtl[-2]
+            qc_new = qc_count - vaccine_df_qc[-2]
+            vaccine_df_mtl_new.append(mtl_new)
+            vaccine_df_qc_new.append(qc_new)
 
         # Add approx calculated % of population vaccinated
         # Note: this is based on the somewhat inaccurate assumption that 2 doses = 1 person vaccinated.
@@ -677,6 +690,8 @@ def update_vaccines_data_csv(sources_dir: str, processed_dir: str):
         'date': vaccine_df_date,
         'mtl_doses': vaccine_df_mtl,
         'qc_doses': vaccine_df_qc,
+        'mtl_new_doses': vaccine_df_mtl_new,
+        'qc_new_doses': vaccine_df_qc_new,
         'mtl_percent_vaccinated': vaccine_df_mtl_perc,
         'qc_percent_vaccinated': vaccine_df_qc_perc
     })
