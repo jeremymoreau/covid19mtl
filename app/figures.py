@@ -410,7 +410,7 @@ def testing_fig(data_qc, data_mtl, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['psi_quo_pos_t'].rolling(7).mean().round() / 100,  # divide by 100 because '%' tickformat is x100
+                'y': data_qc['psi_quo_pos_t'].rolling(7).mean() / 100,  # divide by 100 because '%' tickformat is x100
                 'mode': 'lines',
                 'marker': {'color': '#001F97'},
                 'name': labels['testing_qc'],
@@ -419,7 +419,7 @@ def testing_fig(data_qc, data_mtl, labels):
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['psi_quo_pos_t'].rolling(7).mean().round() / 100,  # divide by 100 because '%' tickformat is x100
+                'y': data_mtl['psi_quo_pos_t'].rolling(7).mean() / 100,  # divide by 100 because '%' tickformat is x100
                 'mode': 'lines',
                 'marker': {'color': '#D6142C'},
                 'name': labels['testing_mtl'],
