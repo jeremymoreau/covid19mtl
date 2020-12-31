@@ -15,6 +15,7 @@ import dateparser
 import pandas as pd
 import pytz
 import requests
+from bs4 import BeautifulSoup
 
 pd.options.mode.chained_assignment = None
 
@@ -242,14 +243,17 @@ def get_qc_data_date():
 
 
 def get_mtl_data_date():
-    content = fetch(SOURCES.get('data_mtl_new_cases.csv'))
+    content = fetch(SOURCES.get('data_mtl.html'))
 
-    # directly load file from the web
-    df = pd.read_csv(io.StringIO(content), sep=';', na_values=[''])
-    # drop last eows with NaN
-    df.dropna(how='all', inplace=True)
+    soup: BeautifulSoup = BeautifulSoup(content, 'lxml')
 
-    return df.iloc[-1, 0]
+    date_elements = [element for element in soup.select('div.csc-textpic-text p.bodytext')
+                     if 'extracted on' in element.text]
+
+    date_text = date_elements[0].contents[0]
+    date_text = date_text.split('extracted on ')[-1]
+
+    return dateparser.parse(date_text)
 
 
 def load_data_qc_csv(source_file):
