@@ -140,7 +140,7 @@ def cases_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['new_cases'],
+                'y': data_qc['new_cases'].rolling(7).mean(),
                 'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#1bd1c2'},
@@ -150,7 +150,7 @@ def cases_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['new_cases'],
+                'y': data_mtl['new_cases'].rolling(7).mean(),
                 'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#f7289d'},
@@ -265,7 +265,7 @@ def deaths_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['new_deaths'],
+                'y': data_qc['new_deaths'].rolling(7).mean(),
                 'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#1bd1c2'},
@@ -275,7 +275,7 @@ def deaths_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['new_deaths'],
+                'y': data_mtl['new_deaths'].rolling(7).mean(),
                 'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#f7289d'},
@@ -335,7 +335,7 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['hos_quo_tot_n'],
+                'y': data_qc['hos_quo_tot_n'].rolling(7).mean(),
                 'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#001F97'},
@@ -347,7 +347,7 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
                 'mode': 'lines',
                 'marker': {'color': '#1bd1c2'},
                 'x': data_qc['date'],
-                'y': data_qc['hos_quo_si_n'],
+                'y': data_qc['hos_quo_si_n'].rolling(7).mean(),
                 'yaxis': 'y2',
                 'name': labels['intensive_care_qc'],
                 'hoverlabel': {'namelength': 35},
@@ -355,7 +355,7 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['hos_quo_tot_n'],
+                'y': data_mtl['hos_quo_tot_n'].rolling(7).mean(),
                 'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#D6142C'},
@@ -367,7 +367,7 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
                 'mode': 'lines',
                 'marker': {'color': '#f7289d'},
                 'x': data_mtl['date'],
-                'y': data_mtl['hos_quo_si_n'],
+                'y': data_mtl['hos_quo_si_n'].rolling(7).mean(),
                 'yaxis': 'y2',
                 'name': labels['intensive_care_mtl'],
                 'hoverlabel': {'namelength': 35},
@@ -410,7 +410,7 @@ def testing_fig(data_qc, data_mtl, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['psi_quo_pos_t'] / 100,  # divide by 100 because '%' tickformat multiplies by 100
+                'y': data_qc['psi_quo_pos_t'].rolling(7).mean() / 100,  # divide by 100 because '%' tickformat is x100
                 'mode': 'lines',
                 'marker': {'color': '#001F97'},
                 'name': labels['testing_qc'],
@@ -419,7 +419,7 @@ def testing_fig(data_qc, data_mtl, labels):
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['psi_quo_pos_t'] / 100,  # divide by 100 because '%' tickformat multiplies by 100
+                'y': data_mtl['psi_quo_pos_t'].rolling(7).mean() / 100,  # divide by 100 because '%' tickformat is x100
                 'mode': 'lines',
                 'marker': {'color': '#D6142C'},
                 'name': labels['testing_mtl'],
@@ -549,7 +549,7 @@ def cases_vs_newcases_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_mtl['cases'],
-                'y': data_mtl['new_cases'],
+                'y': data_mtl['new_cases'].rolling(7).mean(),
                 'customdata': data_mtl['date'],
                 'mode': 'lines',
                 'name': labels['cases_vs_newcases_legend_mtl'],
@@ -559,7 +559,7 @@ def cases_vs_newcases_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['cases'],
-                'y': data_qc['new_cases'],
+                'y': data_qc['new_cases'].rolling(7).mean(),
                 'customdata': data_qc['date'],
                 'mode': 'lines',
                 'name': labels['cases_vs_newcases_legend_qc'],
