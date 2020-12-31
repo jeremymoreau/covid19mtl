@@ -35,30 +35,33 @@ def generate_layout(labels):
             # language select
             html.Div(
                 [
-                    # Load in a new tab because some figures do not resize properly otherwise
-                    # TODO: Fix this bug
-                    html.A([labels['language0']], href=labels['language_link0'], target='_blank', className='lang-link'),
-                    html.A([labels['language1']], href=labels['language_link1'], target='_blank', className='lang-link'),
-                    html.A([labels['language2']], href=labels['language_link2'], target='_blank', className='lang-link'),
-                ],
-                id='language-container',
-            ),
-
-            # page title
-            html.Div(
-                [
-                    # title
-                    html.H3(
-                        [labels['title']],
-                        id='title',
+                    html.Div(
+                        [
+                            # title
+                            html.P(
+                                [labels['title']],
+                                id='title',
+                            ),
+                            # subtitle
+                            html.P(
+                                [labels['subtitle']],
+                                id='subtitle',
+                            ),
+                        ],
+                        id='title-container',
                     ),
-                    # subtitle
-                    html.H6(
-                        [labels['subtitle']],
-                        id='subtitle',
+                    html.Div(
+                        [
+                            # Load in a new tab because some figures do not resize properly otherwise
+                            # TODO: Fix this bug
+                            html.A([labels['language0']], href=labels['language_link0'], target='_blank', className='lang-link'),
+                            html.A([labels['language1']], href=labels['language_link1'], target='_blank', className='lang-link'),
+                            html.A([labels['language2']], href=labels['language_link2'], target='_blank', className='lang-link'),
+                        ],
+                        id='language-container',
                     ),
                 ],
-                id='title-container',
+                id='header',
             ),
 
             # mini info boxes

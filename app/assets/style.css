@@ -1,7 +1,26 @@
 /* header */
+#header {
+  overflow: auto;
+}
+#title-container {
+  text-align: left;
+  float: left;
+}
+#title {
+  font-size: 2.5rem;
+  margin-bottom: 0;
+  padding-right: 20px;
+}
+#subtitle {
+  color: #6d6d6d;
+  font-size: 1.5rem;
+  margin-bottom: 0;
+}
 #language-container {
   text-align: right;
-  user-select: none; 
+  user-select: none;
+  float: right;
+  width: 240px;
 }
 .lang-link{
   margin-left: 1.5rem;
@@ -13,9 +32,6 @@
 }
 .lang-link:active {
   color: #cc4444;
-}
-#title-container {
-  text-align: center;
 }
 
 /* mini info boxes */
@@ -283,15 +299,27 @@ li {
     grid-template-columns: 1fr;
     row-gap: 15px;
   }
+  #title {
+    font-size: 1.8rem;
+  }
+  #subtitle{
+    padding-bottom: 0.5rem;
+  }
+  #language-container {
+    text-align: center;
+    clear: both;
+    float: none;
+    width: 100%;
+  }
+  #language-container a:first-child {
+    margin-left: 0;
+  }
   #footer {
     grid-template-columns: 1fr;
     column-gap: 15px;
     row-gap: 0px;
     text-align: center;
     line-height: 1.5;
-  }
-  #title {
-    margin-bottom: 10px;
   }
   h3 {
     font-size: 2.5rem;
@@ -313,4 +341,3 @@ li {
     font-size: 1.5rem;
   }
 }
-  
