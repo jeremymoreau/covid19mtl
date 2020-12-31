@@ -415,6 +415,7 @@ def testing_fig(data_qc, data_mtl, labels):
                 'marker': {'color': '#001F97'},
                 'name': labels['testing_qc'],
                 'hoverlabel': {'namelength': 25},
+                'hovertemplate': '%{y:,.1%}'
             },
             {
                 'type': 'scatter',
@@ -424,6 +425,7 @@ def testing_fig(data_qc, data_mtl, labels):
                 'marker': {'color': '#D6142C'},
                 'name': labels['testing_mtl'],
                 'hoverlabel': {'namelength': 25},
+                'hovertemplate': '%{y:,.1%}'
             },
         ],
         'layout': {
