@@ -83,6 +83,9 @@ data_mtl_by_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl_age.csv'
 data_qc = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc.csv'), encoding='utf-8', na_values='na')
 data_qc_hosp = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_hospitalisations.csv'), encoding='utf-8')
 
+# Vaccination_data
+data_vaccination = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccines.csv'), encoding='utf-8', na_values='na')
+
 # MTL deaths by location data
 data_mtl_death_loc = pd.read_csv(
     DATA_PATH.joinpath('processed', 'data_mtl_death_loc.csv'),
