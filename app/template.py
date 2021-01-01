@@ -3,14 +3,14 @@ import dash_html_components as html
 
 import app.figures as figures
 
-from .core import (cases_per1000_long, data_mtl, data_mtl_death_loc, data_qc, data_qc_hosp, latest_cases_mtl,
-                   latest_cases_qc, latest_deaths_mtl, latest_deaths_qc, latest_hospitalisations_qc, latest_icu_qc,
-                   latest_negative_tests_qc, latest_recovered_qc, mtl_age_data, mtl_geojson)
+from .core import (data_mtl, data_mtl_death_loc, data_qc, data_qc_hosp, latest_cases_mtl, latest_cases_qc,
+                   latest_deaths_mtl, latest_deaths_qc, latest_hospitalisations_qc, latest_icu_qc,
+                   latest_negative_tests_qc, latest_recovered_qc, mtl_age_data, mtl_boroughs, mtl_geojson)
 
 
 def generate_layout(labels):
     # Figures #####
-    mtlmap_fig = figures.mtl_cases_map_fig(cases_per1000_long, mtl_geojson, labels)
+    mtlmap_fig = figures.mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels)
     cases_fig = figures.cases_fig(data_mtl, data_qc, labels)
     age_fig = figures.mtl_age_hist_fig(mtl_age_data, labels)
     deaths_fig = figures.deaths_fig(data_mtl, data_qc, labels)

@@ -9,7 +9,7 @@ app = dash.Dash(__name__, meta_tags=[
     {'name': 'viewport', 'content': 'width=device-width'},
     {'name': 'description', 'content': 'COVID-19 Montreal Dashboard / Tableau de bord COVID-19 Montréal'},
 ])
-app.title = 'COVID-19 MTL'
+app.title = 'COVID-19 Montréal Dashboard'
 app.config.suppress_callback_exceptions = True
 # WSGI entry point
 server = app.server
