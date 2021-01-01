@@ -382,7 +382,7 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_mtl_municipal.csv')
     cases_csv = os.path.join(processed_dir, 'cases.csv')
     day_df = pd.read_csv(day_csv, sep=';', index_col=0, encoding='utf-8')
-    cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8')
+    cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8', na_values='na')
 
     # Select column to append
     new_data_col = day_df.iloc[:, target_col]
@@ -425,7 +425,7 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
             cases_df[cases_df.columns[-1]] = 'na'
 
     # Overwrite cases.csv
-    cases_df.to_csv(cases_csv, encoding='utf-8')
+    cases_df.to_csv(cases_csv, encoding='utf-8', na_rep='na')
 
 
 def append_mtl_cases_per100k_csv(processed_dir, date: str):
