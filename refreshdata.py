@@ -469,7 +469,7 @@ def append_mtl_cases_per100k_csv(processed_dir, date: str):
     cases_df = cases_df.add_suffix('_cases')
     new_cases_df = new_cases_df.add_suffix('_new_cases')
     seven_day_df = seven_day_df.add_suffix('_7day_incidence')
-    seven_day_per100k_df = seven_day_per100k_df.add_suffix('_7day_per100k_incidence')
+    seven_day_per100k_df = seven_day_per100k_df.add_suffix('_7day_incidence_per100k')
 
     combined = cases_df.join([new_cases_df, seven_day_df, seven_day_per100k_df])
 
@@ -478,6 +478,9 @@ def append_mtl_cases_per100k_csv(processed_dir, date: str):
 
     # create multiindex by splitting on column names to have metrics per borough
     combined.columns = combined.columns.str.split('_', 1, expand=True)
+    # name the levels
+    combined.columns.names = ['borough', 'metric']
+    combined.index.name = 'date'
     combined.to_csv(cases_per100k_csv, na_rep='na')
 
     # remove Unnamed columns
