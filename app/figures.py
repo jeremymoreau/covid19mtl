@@ -445,6 +445,85 @@ def testing_fig(data_qc, data_mtl, labels):
     return testing_fig
 
 
+def vaccination_fig(data_vaccination, labels):
+    vaccination_fig = go.Figure({
+        'data': [
+            {
+                'type': 'scatter',
+                'x': data_vaccination['date'],
+                'y': data_vaccination['qc_percent_vaccinated'],
+                'customdata': data_vaccination['qc_doses'],
+                'yaxis': 'y1',
+                'mode': 'lines',
+                'marker': {'color': '#001F97'},
+                'name': labels['vaccination_perc_qc'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate': labels['vaccination_hovertemplate']
+            },
+            {
+                'type': 'scatter',
+                'x': data_vaccination['date'],
+                'y': data_vaccination['mtl_percent_vaccinated'],
+                'customdata': data_vaccination['mtl_doses'],
+                'yaxis': 'y1',
+                'mode': 'lines',
+                'marker': {'color': '#D6142C'},
+                'name': labels['vaccination_perc_mtl'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate': labels['vaccination_hovertemplate']
+            },
+            {
+                'type': 'scatter',
+                'x': data_vaccination['date'],
+                'y': data_vaccination['qc_new_doses'],
+                'yaxis': 'y2',
+                'mode': 'lines',
+                'line': {'dash': 'dot'},
+                'marker': {'color': '#1bd1c2'},
+                'name': labels['vaccination_new_qc'],
+                'hoverlabel': {'namelength': 35},
+            },
+            {
+                'type': 'scatter',
+                'x': data_vaccination['date'],
+                'y': data_vaccination['mtl_new_doses'],
+                'yaxis': 'y2',
+                'mode': 'lines',
+                'line': {'dash': 'dot'},
+                'marker': {'color': '#f7289d'},
+                'name': labels['vaccination_new_mtl'],
+                'hoverlabel': {'namelength': 35},
+            },
+        ],
+        'layout': {
+            'autosize': True,
+            'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
+            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'yaxis': {
+                'title': {'text': labels['vaccination_y']},
+                'gridcolor': '#f5f5f5'
+            },
+            'yaxis2': {
+                'title': {'text': labels['vaccination_y2']},
+                'overlaying': 'y',
+                'rangemode': 'tozero',
+                'side': 'right'
+
+            },
+            'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
+            'plot_bgcolor': 'rgba(255,255,255,1)',
+            'paper_bgcolor': 'rgba(255,255,255,1)',
+            'hovermode': 'x',
+            'barmode': 'overlay',
+            'hoverlabel': {'font': {'color': '#ffffff'}},
+            'dragmode': False
+        }
+    })
+    vaccination_fig = add_ylog_menu(vaccination_fig, data_vaccination['qc_percent_vaccinated'], labels)
+
+    return vaccination_fig
+
+
 def mtl_deaths_loc_fig(data_mtl_death_loc, labels):
     # Confirmed deaths by place of residence (MTL)
     deaths_loc_mtl_fig = go.Figure({

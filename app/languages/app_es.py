@@ -111,7 +111,16 @@ labels = {
     'cases_vs_newcases_ylabel': 'New cases (log)',
     'cases_vs_newcases_legend_mtl': 'Montreal',
     'cases_vs_newcases_legend_qc': 'Quebec',
-    'cases_vs_newcases_hovertemplate': 'Date: %{customdata} <br> New Cases: %{y}'
+    'cases_vs_newcases_hovertemplate': 'Date: %{customdata} <br> New Cases: %{y}',
+    # Vaccination_fig
+    'vaccination_label': 'Vaccination',
+    'vaccination_y': 'Approx. % of population vaccinated',
+    'vaccination_y2': 'New doses',
+    'vaccination_perc_mtl': '% of pop vaccinated (MTL)',
+    'vaccination_perc_qc': '% of pop vaccinated (QC)',
+    'vaccination_hovertemplate': '% vaccinated: %{y:.2f}% <br> # of doses: %{customdata}',
+    'vaccination_new_mtl': 'New doses (MTL)',
+    'vaccination_new_qc': 'New doses (QC'
 }
 
 layout = generate_layout(labels)

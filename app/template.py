@@ -5,7 +5,7 @@ import app.figures as figures
 
 from .core import (cases_per1000_long, data_mtl, data_mtl_death_loc, data_qc, data_qc_hosp, latest_cases_mtl,
                    latest_cases_qc, latest_deaths_mtl, latest_deaths_qc, latest_hospitalisations_qc, latest_icu_qc,
-                   latest_negative_tests_qc, latest_recovered_qc, mtl_age_data, mtl_geojson)
+                   latest_negative_tests_qc, latest_recovered_qc, mtl_age_data, mtl_geojson, data_vaccination)
 
 
 def generate_layout(labels):
@@ -19,6 +19,7 @@ def generate_layout(labels):
     deaths_loc_mtl_fig = figures.mtl_deaths_loc_fig(data_mtl_death_loc, labels)
     deaths_loc_qc_fig = figures.qc_deaths_loc_fig(data_qc, labels)
     cases_vs_newcases_fig = figures.cases_vs_newcases_fig(data_mtl, data_qc, labels)
+    vaccination_fig = figures.vaccination_fig(data_vaccination, labels)
 
     # Plotly modebar buttons to remove
     modebar_buttons_to_remove = ['select2d',
@@ -237,16 +238,16 @@ def generate_layout(labels):
                     html.Div(
                         [
                             html.H6(
-                                ['']
+                                [labels['vaccination_label']]
                             ),
-                            # dcc.Graph(
-                            #     figure=hospitalisations_fig,
-                            #     id='hospitalisations_fig',
-                            #     responsive=True,
-                            #     config={
-                            #         'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                            #     }
-                            # ),
+                            dcc.Graph(
+                                figure=vaccination_fig,
+                                id='vaccination_fig',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                }
+                            ),
                         ],
                         className='grid-item'
                     ),
