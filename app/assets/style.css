@@ -47,7 +47,7 @@
 }
 #info-container {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 15px;
   margin-top: 15px;
   margin-bottom: 15px;
@@ -261,7 +261,7 @@ li {
 
 @media (max-width: 1500px) {
   #info-container {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

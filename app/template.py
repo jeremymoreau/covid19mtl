@@ -67,6 +67,7 @@ def generate_layout(labels):
             # mini info boxes
             html.Div(
                 [
+                    # MTL
                     html.Div(
                         [html.H3(latest_cases_mtl, id='cases_mtl_text'),
                          html.P([labels['cases_montreal_label']], id='cases_montreal_label')],
@@ -103,6 +104,7 @@ def generate_layout(labels):
                         id='icu_qc',
                         className='mini_container',
                     ),
+                    # QC
                     html.Div(
                         [html.H3(latest_recovered_qc, id='recovered_qc_text'),
                          html.P([labels['recovered_qc_label']], id='recovered_qc_label')],
@@ -112,6 +114,30 @@ def generate_layout(labels):
                     html.Div(
                         [html.H3(latest_negative_tests_qc, id='negative_tests_qc_text'),
                          html.P([labels['negative_tests_qc_box_label']], id='negative_tests_qc_label')],
+                        id='negative_tests_qc',
+                        className='mini_container',
+                    ),
+                    html.Div(
+                        [html.H3(latest_recovered_qc, id='recovered_qc_text'),
+                         html.P([labels['recovered_qc_label']], id='tmp1')],
+                        id='recovered_qc',
+                        className='mini_container',
+                    ),
+                    html.Div(
+                        [html.H3(latest_negative_tests_qc, id='negative_tests_qc_text'),
+                         html.P([labels['negative_tests_qc_box_label']], id='tmp2')],
+                        id='negative_tests_qc',
+                        className='mini_container',
+                    ),
+                    html.Div(
+                        [html.H3(latest_recovered_qc, id='recovered_qc_text'),
+                         html.P([labels['recovered_qc_label']], id='tmp3')],
+                        id='recovered_qc',
+                        className='mini_container',
+                    ),
+                    html.Div(
+                        [html.H3(latest_negative_tests_qc, id='negative_tests_qc_text'),
+                         html.P([labels['negative_tests_qc_box_label']], id='tmp4')],
                         id='negative_tests_qc',
                         className='mini_container',
                     ),
