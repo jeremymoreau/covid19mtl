@@ -3,9 +3,15 @@ import dash_html_components as html
 
 import app.figures as figures
 
-from .core import (cases_per1000_long, data_mtl, data_mtl_death_loc, data_qc, data_qc_hosp, latest_cases_mtl,
-                   latest_cases_qc, latest_deaths_mtl, latest_deaths_qc, latest_hospitalisations_qc, latest_icu_qc,
-                   latest_negative_tests_qc, latest_recovered_qc, mtl_age_data, mtl_geojson, data_vaccination)
+from .core import (latest_cases_mtl, new_cases_mtl, latest_cases_qc, new_cases_qc,
+                   incid_per100k_7d_mtl, incid_per100K_perc_change_mtl,
+                   incid_per100k_7d_qc, incid_per100K_perc_change_qc,
+                   latest_deaths_mtl, new_deaths_mtl, latest_deaths_qc, new_deaths_qc,
+                   new_hosp_mtl, new_icu_mtl, new_hosp_qc, new_icu_qc,
+                   perc_vac_mtl, new_doses_mtl, perc_vac_qc, new_doses_qc,
+                   pos_rate_mtl, pos_rate_change_mtl, pos_rate_qc, pos_rate_change_qc,
+                   cases_per1000_long, data_mtl, data_mtl_death_loc, data_qc, data_qc_hosp,
+                   mtl_age_data, mtl_geojson, data_vaccination)
 
 
 def generate_layout(labels):
@@ -68,79 +74,79 @@ def generate_layout(labels):
             # mini info boxes
             html.Div(
                 [
-                    # MTL
+                    ####### MTL #######
                     html.Div(
-                        [html.H3(latest_cases_mtl, id='cases_mtl_text'),
-                         html.P([labels['cases_montreal_label']], id='cases_montreal_label')],
-                        id='cases_mtl',
+                        [html.P(['+' + new_cases_mtl + labels['today']], className='superscript'),
+                         html.H3(latest_cases_mtl, className='main_text'),
+                         html.P([labels['cases_montreal_label']], className='subscript')],
+                        className='mini_container cases',
+                    ),
+                    html.Div(
+                        [html.P([incid_per100K_perc_change_mtl + '%' + labels['vs_last7d']], className='superscript'),
+                         html.H3(incid_per100k_7d_mtl, className='main_text'),
+                         html.P([labels['incidence_per100k_7d_mtl_label']], className='subscript')],
+                        className='mini_container cases',
+                    ),
+                    html.Div(
+                        [html.P(['+' + new_deaths_mtl + labels['today']], className='superscript'),
+                         html.H3(latest_deaths_mtl, className='main_text'),
+                         html.P([labels['deaths_montreal_label']], className='subscript')],
+                        className='mini_container deaths',
+                    ),
+                    html.Div(
+                        [html.P(['+' + new_icu_qc + labels['icu']], className='superscript icu'),
+                         html.H3('+' + new_hosp_mtl + labels['total'], className='main_text hosp'),
+                         html.P([labels['hosp_mtl_label']], className='subscript hosp')],
                         className='mini_container',
                     ),
                     html.Div(
-                        [html.H3(latest_deaths_mtl, id='deaths_mtl_text'),
-                         html.P([labels['deaths_montreal_label']], id='deaths_montreal_label')],
-                        id='deaths_mtl',
+                        [html.P([pos_rate_change_mtl + '%' + labels['today']], className='superscript'),
+                         html.H3(pos_rate_mtl + '%', className='main_text'),
+                         html.P([labels['test_pos_mtl_label']], className='subscript')],
+                        className='mini_container tests',
+                    ),
+                    html.Div(
+                        [html.P(['+' + new_doses_mtl + labels['doses_today']], className='superscript'),
+                         html.H3(perc_vac_mtl + '%', className='main_text'),
+                         html.P([labels['vaccination_perc_mtl_label']], className='subscript')],
+                        className='mini_container vaccines',
+                    ),
+                    ####### QC #######
+                    html.Div(
+                        [html.P(['+' + new_cases_qc + labels['today']], className='superscript'),
+                         html.H3(latest_cases_qc, className='main_text'),
+                         html.P([labels['cases_qc_label']], className='subscript')],
+                        className='mini_container cases',
+                    ),
+                    html.Div(
+                        [html.P([incid_per100K_perc_change_qc + '%' + labels['vs_last7d']], className='superscript'),
+                         html.H3(incid_per100k_7d_qc, className='main_text'),
+                         html.P([labels['incidence_per100k_7d_qc_label']], className='subscript')],
+                        className='mini_container cases',
+                    ),
+                    html.Div(
+                        [html.P(['+' + new_deaths_qc + labels['today']], className='superscript'),
+                         html.H3(latest_deaths_qc, className='main_text'),
+                         html.P([labels['deaths_qc_label']], className='subscript')],
+                        className='mini_container deaths',
+                    ),
+                    html.Div(
+                        [html.P(['+' + new_icu_qc + labels['icu']], className='superscript icu'),
+                         html.H3('+' + new_hosp_qc + labels['total'], className='main_text hosp'),
+                         html.P([labels['hosp_qc_label']], className='subscript hosp')],
                         className='mini_container',
                     ),
                     html.Div(
-                        [html.H3(latest_cases_qc, id='cases_qc_text'),
-                         html.P([labels['cases_qc_label']], id='cases_qc_label')],
-                        id='cases_qc',
-                        className='mini_container',
+                        [html.P([pos_rate_change_qc + '%' + labels['today']], className='superscript'),
+                         html.H3(pos_rate_qc + '%', className='main_text'),
+                         html.P([labels['test_pos_qc_label']], className='subscript')],
+                        className='mini_container tests',
                     ),
                     html.Div(
-                        [html.H3(latest_deaths_qc, id='deaths_qc_text'),
-                         html.P([labels['deaths_qc_label']], id='deaths_qc_label')],
-                        id='deaths_qc',
-                        className='mini_container',
-                    ),
-                    html.Div(
-                        [html.H3(latest_hospitalisations_qc, id='hospitalisations_qc_text'),
-                         html.P([labels['total_hospitalisations_label']], id='hospitalisations_qc_label')],
-                        id='hospitalisations_qc',
-                        className='mini_container',
-                    ),
-                    html.Div(
-                        [html.H3(latest_icu_qc, id='icu_qc_text'),
-                         html.P([labels['intensive_care_label']], id='icu_qc_label')],
-                        id='icu_qc',
-                        className='mini_container',
-                    ),
-                    # QC
-                    html.Div(
-                        [html.H3(latest_recovered_qc, id='recovered_qc_text'),
-                         html.P([labels['recovered_qc_label']], id='recovered_qc_label')],
-                        id='recovered_qc',
-                        className='mini_container',
-                    ),
-                    html.Div(
-                        [html.H3(latest_negative_tests_qc, id='negative_tests_qc_text'),
-                         html.P([labels['negative_tests_qc_box_label']], id='negative_tests_qc_label')],
-                        id='negative_tests_qc',
-                        className='mini_container',
-                    ),
-                    html.Div(
-                        [html.H3(latest_recovered_qc, id='recovered_qc_text'),
-                         html.P([labels['recovered_qc_label']], id='tmp1')],
-                        id='recovered_qc',
-                        className='mini_container',
-                    ),
-                    html.Div(
-                        [html.H3(latest_negative_tests_qc, id='negative_tests_qc_text'),
-                         html.P([labels['negative_tests_qc_box_label']], id='tmp2')],
-                        id='negative_tests_qc',
-                        className='mini_container',
-                    ),
-                    html.Div(
-                        [html.H3(latest_recovered_qc, id='recovered_qc_text'),
-                         html.P([labels['recovered_qc_label']], id='tmp3')],
-                        id='recovered_qc',
-                        className='mini_container',
-                    ),
-                    html.Div(
-                        [html.H3(latest_negative_tests_qc, id='negative_tests_qc_text'),
-                         html.P([labels['negative_tests_qc_box_label']], id='tmp4')],
-                        id='negative_tests_qc',
-                        className='mini_container',
+                        [html.P(['+' + new_doses_qc + labels['doses_today']], className='superscript'),
+                         html.H3(perc_vac_qc + '%', className='main_text'),
+                         html.P([labels['vaccination_perc_qc_label']], className='subscript')],
+                        className='mini_container vaccines',
                     ),
                 ],
                 id='info-container'

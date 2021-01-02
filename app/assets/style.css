@@ -45,6 +45,19 @@
   padding: 15px;
   position: relative;
 }
+.superscript {
+  margin-top: 5px;
+  margin-bottom: 0;
+  font-size: 1.5rem;
+}
+.main_text {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.subscript {
+  margin-bottom: 5px;
+  font-size: 1.5rem;
+}
 #info-container {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -52,24 +65,23 @@
   margin-top: 15px;
   margin-bottom: 15px;
 }
-#cases_mtl {
+.cases {
   color:#c51515;
 }
-#deaths_mtl {
+.deaths {
   color: #252525;
 }
-#cases_qc {
-  color: #c51515;
+.hosp {
+  color: #f17b40;
 }
-#hospitalisations_qc {
-  color: #F87E3F;
-  hyphens: auto;
-}
-#icu_qc {
+.icu {
   color: #0083CB;
 }
-#deaths_qc {
-  color: #252525;
+.vaccines {
+  color: #3156A0;
+}
+.tests {
+  color: #D33505;
 }
 #recovered_qc {
   color: #249a24;
@@ -198,7 +210,7 @@ h2 {
   margin-top: 1.8rem;
 }
 h3 {
-  font-size: 3rem;
+  font-size: 3.5rem;
   line-height: 1.3;
   letter-spacing: -0.1rem;
   margin-bottom: 1.5rem;
@@ -259,7 +271,7 @@ li {
   }
 }
 
-@media (max-width: 1500px) {
+@media (max-width: 1400px) {
   #info-container {
     grid-template-columns: repeat(3, 1fr);
   }
