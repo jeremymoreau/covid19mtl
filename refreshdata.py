@@ -432,8 +432,8 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     cases_df.to_csv(cases_csv, encoding='utf-8', na_rep='na')
 
 
-def append_mtl_cases_per100k_csv(processed_dir, date: str):
-    """Append new column of data to cases_per100k.csv
+def update_mtl_boroughs_csv(processed_dir):
+    """Build MTL borough data based on cases.csv.
 
     Parameters
     ----------
@@ -496,28 +496,6 @@ def append_mtl_cases_per100k_csv(processed_dir, date: str):
     combined.columns.names = ['borough', 'metric']
     combined.index.name = 'date'
     combined.to_csv(cases_per100k_csv, na_rep='na')
-
-    # remove Unnamed columns
-    # cases_df = cases_df.loc[:, ~cases_df.columns.str.contains('^Unnamed')]
-    # cases_per100k_df = cases_per100k_df.loc[:, ~cases_per100k_df.columns.str.contains('^Unnamed')]
-
-    # latest data date
-    # latest_date = cases_df.loc[date]
-
-
-
-    # if date not in cases_per100k_df.columns:
-    #     # ignore columns with 'na'
-    #     if pd.Series.all(latest_date == 'na'):
-    #         cases_per100k_df[date] = 'na'
-    #     else:
-    #         day_cases_per100k = latest_date[:-1] / borough_pop * 100000
-    #         cases_per100k_df[date] = list(day_cases_per100k.round(1))
-    # else:
-    #     print(f'{date} has already been appended to {cases_per100k_csv}')
-
-    # # Overwrite cases_per100k.csv
-    # cases_per100k_df.to_csv(cases_per100k_csv, encoding='utf-8', na_rep='na')
 
 
 def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
@@ -796,8 +774,8 @@ def main():
     # Append col to cases.csv
     append_mtl_cases_csv(sources_dir, processed_dir, 3, yesterday_date)
 
-    # Append col to cases_per1000.csv
-    append_mtl_cases_per1000_csv(processed_dir, yesterday_date)
+    # Update data_mtl_boroughs.csv
+    update_mtl_boroughs_csv(processed_dir)
 
     # Append row to data_mtl_death_loc.csv
     append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
