@@ -88,8 +88,9 @@ mtl_boroughs_df = pd.read_csv(
 # downsample
 mtl_boroughs = downsample(mtl_boroughs_df, '7d')
 # prepare to use in figure
-# unstack multi index to access everything by column
-mtl_boroughs = mtl_boroughs.unstack().unstack(level=1).reset_index(level=1).reset_index(level=0)
+# unstack multi index so that boroughs are its own column as well
+mtl_boroughs = mtl_boroughs.unstack().unstack(level=1).reset_index()
+mtl_boroughs.sort_values('date', inplace=True)
 
 # Montreal data
 data_mtl = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl.csv'), encoding='utf-8', na_values='na')

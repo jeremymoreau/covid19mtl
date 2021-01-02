@@ -57,22 +57,53 @@ def add_ylog_menu(fig, y_data, labels):
 
 
 def mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels):
-    # get max cases value
-    cases_max_val = mtl_boroughs['7day_incidence_per100k'].max()
     # Montreal cases per 100k map
     mtlmap_fig = px.choropleth_mapbox(
         mtl_boroughs,
         geojson=mtl_geojson,
-        locations=mtl_boroughs['borough'],
-        color='7day_incidence_per100k',
+        locations='borough',
+        color='7day_incidence_rate',
         featureidkey='properties.borough',
         animation_frame='date',
         animation_group='borough',
         mapbox_style='carto-positron',
-        range_color=[0, cases_max_val],
+        color_discrete_map={
+            '< 10': '#7ea47c',
+            '> 10-25': '#ecd93b',
+            '> 25-50': '#dfae5a',
+            '> 50-100': '#c83a44',
+            '> 100-200': '#c83a44',
+            '> 20-300': '#c83a44',
+            '> 300': '#c83a44',
+        },
+        category_orders={
+            '7day_incidence_rate': [
+                '< 10',
+                '> 10-25',
+                '> 25-50',
+                '> 50-100',
+                '> 100-200',
+                '> 200-300',
+                '> 300',
+            ]
+        },
         zoom=9,
         center={'lat': 45.55, 'lon': -73.75},
-        labels=labels['montreal_map_colourbar_labels']
+        labels=labels['montreal_map_colourbar_labels'],
+        hover_name='borough',
+        # hover_data={
+        #     '7day_incidence_per100k': True,
+        #     'new_cases': True,
+        #     'cases': True,
+        #     'date': False,
+        #     '7day_incidence_rate': False,
+        #     '7day_incidence': False,
+        # }
+    )
+
+    mtlmap_fig.update_layout(
+        showlegend=True,
+        legend_title_text='<b>7-day incidence</b>',
     )
 
     # set the default frame to the latest date
