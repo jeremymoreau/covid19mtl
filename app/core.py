@@ -120,7 +120,7 @@ if not pos_rate_change_mtl.startswith('-'):
 incid_per100k_7d_mtl = round(float(data_mtl['new_cases'].dropna().iloc[-7:].sum()) / (mtl_pop / 100000))
 incid_per100k_last7d_mtl = round(float(data_mtl['new_cases'].dropna().iloc[-14:-7].sum()) / (mtl_pop / 100000))
 incid_per100K_perc_change_mtl = str(round(
-    ((incid_per100k_7d_mtl - incid_per100k_last7d_mtl) / incid_per100k_last7d_mtl) * 100, 2))
+    ((incid_per100k_7d_mtl - incid_per100k_last7d_mtl) / incid_per100k_last7d_mtl) * 100))
 incid_per100k_7d_mtl = str(incid_per100k_7d_mtl)
 if not incid_per100K_perc_change_mtl.startswith('-'):
     incid_per100K_perc_change_mtl = '+' + incid_per100K_perc_change_mtl
@@ -142,7 +142,7 @@ if not pos_rate_change_qc.startswith('-'):
 incid_per100k_7d_qc = round(float(data_qc['new_cases'].dropna().iloc[-7:].sum()) / (qc_pop / 100000))
 incid_per100k_last7d_qc = round(float(data_qc['new_cases'].dropna().iloc[-14:-7].sum()) / (qc_pop / 100000))
 incid_per100K_perc_change_qc = str(round(
-    ((incid_per100k_7d_qc - incid_per100k_last7d_qc) / incid_per100k_last7d_qc) * 100, 2))
+    ((incid_per100k_7d_qc - incid_per100k_last7d_qc) / incid_per100k_last7d_qc) * 100))
 incid_per100k_7d_qc = str(incid_per100k_7d_qc)
 if not incid_per100K_perc_change_qc.startswith('-'):
     incid_per100K_perc_change_qc = '+' + incid_per100K_perc_change_qc
