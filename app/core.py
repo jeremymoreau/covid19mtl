@@ -5,31 +5,37 @@ import pathlib
 import pandas as pd
 
 
-def reduce_cols(df, downsample):
-    """Reduce number of columns in a pandas df by skipping alternate columns
+def downsample(df, offset):
+    """Reduce dataframe by resampling according to frequency offset/rule
 
     Parameters
     ----------
     df : pandas.core.frame.DataFrame
-        A pandas dataframe where the first column is the title.
-    downsample : int
-        Factor by which to downsample dataframe. Step == input ncols // downsample
+        A pandas dataframe where the index is the date.
+    offset : str
+        offset rule to apply for downsampling
+        see https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects
 
     Returns
     -------
     pandas.core.frame.DataFrame
-        A pandas dataframe with a reduced number of columns
+        A pandas dataframe that is downsampled
     """
-    title_col = df.iloc[:, 0]  # always keep title col
-    last_col = df.iloc[:, -1]  # always keep data for latest day
-    cols_to_reduce = df.iloc[:, 1:-1]
+    # convert index to DateIndex
+    df.index = pd.to_datetime(df.index)
+    # downsample based on offset
+    resampled = df.resample(offset).asfreq()
+    # remove dates for which no data is available
+    resampled.dropna(how='all', inplace=True)
 
-    ncols = cols_to_reduce.shape[1]
-    step = ncols // downsample
-    reduced_cols = cols_to_reduce.iloc[:, ::step]
-    new_cols = pd.concat([title_col, reduced_cols, last_col], axis=1)
+    # add last date if it is not present
+    if df.iloc[-1].name not in resampled.index:
+        resampled = pd.concat([resampled, df.iloc[[-1]]])
 
-    return new_cols
+    # convert back DateIndex to string as plotly is expectecting string values
+    resampled.index = resampled.index.strftime('%Y-%m-%d')
+
+    return resampled
 
 
 def reduce_rows(df, downsample):
@@ -78,8 +84,12 @@ mtl_boroughs_df = pd.read_csv(
     index_col=0,
     header=[0, 1]
 ).dropna(axis=1, how='all')
+
+# downsample
+mtl_boroughs = downsample(mtl_boroughs_df, '7d')
 # prepare to use in figure
-mtl_boroughs = mtl_boroughs_df.unstack().unstack(level=1).reset_index(level=1).reset_index(level=0)
+# unstack multi index to access everything by column
+mtl_boroughs = mtl_boroughs.unstack().unstack(level=1).reset_index(level=1).reset_index(level=0)
 
 # Montreal data
 data_mtl = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl.csv'), encoding='utf-8', na_values='na')
