@@ -65,16 +65,15 @@ def mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels):
         color='7day_incidence_rate',
         featureidkey='properties.borough',
         animation_frame='date',
-        animation_group='borough',
         mapbox_style='carto-positron',
         color_discrete_map={
             '< 10': '#7ea47c',
             '> 10-25': '#ecd93b',
             '> 25-50': '#dfae5a',
-            '> 50-100': '#c83a44',
-            '> 100-200': '#c83a44',
-            '> 20-300': '#c83a44',
-            '> 300': '#c83a44',
+            '> 50-100': '#df825a',
+            '> 100-200': '#800000',
+            '> 200-300': '#A80101',
+            '> 300': '#CC0101',
         },
         category_orders={
             '7day_incidence_rate': [
@@ -106,9 +105,9 @@ def mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels):
         legend_title_text='<b>7-day incidence</b>',
     )
 
-    # set the default frame to the latest date
-    mtlmap_fig.layout.sliders[0]['active'] = len(mtlmap_fig.frames) - 1  # slider
-    mtlmap_fig.update_traces(z=mtlmap_fig.frames[-1].data[0].z)  # frame
+    # # set the default frame to the latest date
+    # mtlmap_fig.layout.sliders[0]['active'] = len(mtlmap_fig.frames) - 1  # slider
+    # mtlmap_fig.update_traces(z=mtlmap_fig.frames[-1].data[0].z)  # frame
 
     mtlmap_fig.layout.sliders[0]['currentvalue']['prefix'] = labels['date_slider_label']
     mtlmap_fig.layout.sliders[0]['xanchor'] = 'left'

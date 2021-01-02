@@ -92,6 +92,16 @@ mtl_boroughs = downsample(mtl_boroughs_df, '7d')
 mtl_boroughs = mtl_boroughs.unstack().unstack(level=1).reset_index()
 mtl_boroughs.sort_values('date', inplace=True)
 
+# Add all available categories to each date
+category = mtl_boroughs['7day_incidence_rate'].unique()
+dates = mtl_boroughs['date'].unique()
+for date in dates:
+    for i in category:
+        mtl_boroughs = mtl_boroughs.append({
+            'date': date,
+            '7day_incidence_rate': i
+        }, ignore_index=True)
+
 # Montreal data
 data_mtl = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl.csv'), encoding='utf-8', na_values='na')
 data_mtl_by_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl_age.csv'), encoding='utf-8', na_values='na')
