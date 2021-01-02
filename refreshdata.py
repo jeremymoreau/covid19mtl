@@ -441,8 +441,7 @@ def append_mtl_cases_per100k_csv(processed_dir, date: str):
     """
     cases_csv = os.path.join(processed_dir, 'cases.csv')
     cases_per100k_csv = os.path.join(processed_dir, 'data_mtl_boroughs.csv')
-    cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8', na_values='na')
-    # cases_per100k_df = pd.read_csv(cases_per100k_csv, index_col=0, encoding='utf-8')
+    cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8', na_values='na', parse_dates=True)
 
     # drop to be confirmed (TBC) cases
     cases_df = cases_df[:-1]
@@ -450,15 +449,20 @@ def append_mtl_cases_per100k_csv(processed_dir, date: str):
     # make date the index
     # and drop rows with only NA
     cases_df = cases_df.transpose().dropna(how='all').astype(int)
+    # convert index to DateTimeIndex
+    cases_df.index = pd.to_datetime(cases_df.index)
 
     new_cases_df = cases_df.diff()
     # replace NaN with 0 in first row
     new_cases_df.iloc[0] = 0
     new_cases_df = new_cases_df.astype(int)
 
-    seven_day_df = new_cases_df.rolling(window=7).sum()
+    seven_day_df = new_cases_df.rolling('7d').sum()
     # replace NaN with 0
     seven_day_df = seven_day_df.fillna(0).astype(int)
+    # the incidence can be negative due to negative case adjustments reflected in the total case numbers
+    # replace negative incidence with 0
+    seven_day_df[seven_day_df < 0] = 0
 
     # population of borough/linked city
     borough_pop = [134245, 42796, 3823, 19324, 166520, 32448, 48899, 18980,
