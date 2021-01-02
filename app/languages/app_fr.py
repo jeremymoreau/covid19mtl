@@ -47,7 +47,9 @@ labels = {
         'cases_per_1000': 'Cas par 1000<br>habitants'
     },
     'montreal_map_hovertemplate': '<br>Arrondissement/Ville: %{location}<br>Cas par 1000 habitants: %{z}',
-    'confirmed_cases_y_label': 'Cas confirmés',
+    # confirmed cases fig
+    'confirmed_cases_y_label': 'Cas (cumul)',
+    'confirmed_cases_y2_label': 'Nouveaux  cas (moyenne mobile 7 jours)',
     'confirmed_cases_qc_label': 'Québec (cumul)',
     'active_cases_qc_label': 'Québec (cas actif)',
     'confirmed_cases_mtl_label': 'Montréal (cumul)',
@@ -56,22 +58,27 @@ labels = {
     'age_total_label': "Répartition des cas<br>parmi les groupes d'âge",
     'age_per100000_label': "Répartition des cas par 100 000<br>habitants dans chaque groupe d'âge",
     'age_fig_hovertemplate': '%: %{y}',
+    # deaths fig
     'deaths_fig_label': 'Décès',
-    'deaths_qc_y_label': 'Décès',
+    'deaths_qc_y_label': 'Décès (cumul)',
+    'deaths_qc_y2_label': 'Nouveaux décès (moyenne mobile 7 jours)',
     'deaths_fig_qc_label': 'Québec (cumul)',
     'deaths_fig_mtl_label': 'Montréal (cumul)',
     'new_deaths_qc_label': 'Québec (nouveaux décès)',
     'new_deaths_mtl_label': 'Montréal (nouveaux décès)',
     # hospitalisations fig
     'hospitalisations_label': 'Hospitalisations',
-    'hospitalisations_y_label': 'Hospitalisations',
+    'hospitalisations_y_label': 'Hospitalisations en cours',
+    'hospitalisations_y2_label': 'Nouvelles hospitalisations (moyenne mobile 7 jours)',
     'intensive_care_qc': 'Nouvelles admissions aux soins intensifs (QC)',
     'intensive_care_mtl': 'Nouvelles admissions aux soins intensifs (MTL)',
-    'hospitalisations_qc': 'Nouvelles hospitalisations (total, QC)',
-    'hospitalisations_mtl': 'Nouvelles hospitalisations (total, MTL)',
+    'hospitalisations_qc': 'Nouvelles hospitalisations (QC)',
+    'hospitalisations_active_qc': 'Hospitalisations en cours (QC)',
+    'intensive_care_active_qc': 'Soins Intensifs (en cours, QC)',
+    'hospitalisations_mtl': 'Nouvelles hospitalisations (MTL)',
     # Test positivity fig
     'testing_label': 'Taux de positivité des tests',
-    'testing_y_label': 'Taux de positivité (QC)',
+    'testing_y_label': 'Taux de positivité (moyenne mobile 7 jours)',
     'testing_mtl': 'Montréal',
     'testing_qc': 'Québec',
     #
@@ -104,7 +111,16 @@ labels = {
     'cases_vs_newcases_ylabel': 'Nouveaux cas (log)',
     'cases_vs_newcases_legend_mtl': 'Montréal',
     'cases_vs_newcases_legend_qc': 'Québec',
-    'cases_vs_newcases_hovertemplate': 'Date: %{customdata} <br> Nouveaux cas: %{y}'
+    'cases_vs_newcases_hovertemplate': 'Date: %{customdata} <br> Nouveaux cas: %{y}',
+    # Vaccination_fig
+    'vaccination_label': 'Vaccination',
+    'vaccination_y': '% de la population vaccinée (approximatif)',
+    'vaccination_y2': 'Nouvelles doses',
+    'vaccination_perc_mtl': '% de la population vaccinée (MTL)',
+    'vaccination_perc_qc': '% de la population vaccinée (QC)',
+    'vaccination_hovertemplate': '% vaccinée: %{y:.2f}% <br> # de doses: %{customdata}',
+    'vaccination_new_mtl': 'Nouvelles doses (MTL)',
+    'vaccination_new_qc': 'Nouvelles doses (QC)'
 }
 
 layout = generate_layout(labels)

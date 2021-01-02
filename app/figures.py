@@ -30,7 +30,8 @@ def add_ylog_menu(fig, y_data, labels):
                          args=[{'visible': [True, True]},
                                {'yaxis': {
                                    'type': 'linear',
-                                   'gridcolor': '#f5f5f5'
+                                   'gridcolor': '#f5f5f5',
+                                   'title': str(fig.layout.yaxis.title.text)
                                }
                          }]),
                     dict(label=labels['log_label'],
@@ -39,7 +40,8 @@ def add_ylog_menu(fig, y_data, labels):
                                {'yaxis': {
                                    'type': 'log',
                                    'nticks': nticks_log,
-                                   'gridcolor': '#f5f5f5'
+                                   'gridcolor': '#f5f5f5',
+                                   'title': str(fig.layout.yaxis.title.text)
                                }
                          }]),
                 ]),
@@ -143,18 +145,22 @@ def cases_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['new_cases'],
+                'y': data_qc['new_cases'].rolling(7).mean().round(),
+                'yaxis': 'y2',
                 'mode': 'lines',
-                'marker': {'color': '#00104f'},
+                'marker': {'color': '#1bd1c2'},
+                'line': {'dash': 'dot'},
                 'name': labels['new_confirmed_cases_qc_label'],
                 'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['new_cases'],
+                'y': data_mtl['new_cases'].rolling(7).mean().round(),
+                'yaxis': 'y2',
                 'mode': 'lines',
-                'marker': {'color': '#780b18'},
+                'marker': {'color': '#f7289d'},
+                'line': {'dash': 'dot'},
                 'name': labels['new_confirmed_cases_mtl_label'],
                 'hoverlabel': {'namelength': 25},
             }
@@ -164,8 +170,17 @@ def cases_fig(data_mtl, data_qc, labels):
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
-            'yaxis': {'title': {'text': labels['confirmed_cases_y_label']},
-                      'gridcolor': '#f5f5f5'},
+            'yaxis': {
+                'title': {'text': labels['confirmed_cases_y_label']},
+                'gridcolor': '#f5f5f5',
+                'rangemode': 'tozero',
+            },
+            'yaxis2': {
+                'title': {'text': labels['confirmed_cases_y2_label']},
+                'overlaying': 'y',
+                'rangemode': 'tozero',
+                'side': 'right'
+            },
             'margin': {'r': 0, 't': 10, 'l': 60, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
             'paper_bgcolor': 'rgba(255,255,255,1)',
@@ -257,18 +272,22 @@ def deaths_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['new_deaths'],
+                'y': data_qc['new_deaths'].rolling(7).mean().round(),
+                'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#1bd1c2'},
+                'line': {'dash': 'dot'},
                 'name': labels['new_deaths_qc_label'],
                 'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['new_deaths'],
+                'y': data_mtl['new_deaths'].rolling(7).mean().round(),
+                'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#f7289d'},
+                'line': {'dash': 'dot'},
                 'name': labels['new_deaths_mtl_label'],
                 'hoverlabel': {'namelength': 25},
             }
@@ -279,7 +298,14 @@ def deaths_fig(data_mtl, data_qc, labels):
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {
                 'title': {'text': labels['deaths_qc_y_label']},
-                'gridcolor': '#f5f5f5'
+                'gridcolor': '#f5f5f5',
+                'rangemode': 'tozero'
+            },
+            'yaxis2': {
+                'title': {'text': labels['deaths_qc_y2_label']},
+                'overlaying': 'y',
+                'rangemode': 'tozero',
+                'side': 'right'
             },
             'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
@@ -293,45 +319,71 @@ def deaths_fig(data_mtl, data_qc, labels):
     return deaths_fig
 
 
-def hospitalisations_fig(data_qc, data_mtl, labels):
+def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
     # Hospitalisations (QC)
     hospitalisations_fig = go.Figure({
         'data': [
             {
+                'type': 'bar',
+                'x': data_qc_hosp['date'],
+                'y': data_qc_hosp['hospitalisations_all'],
+                'yaxis': 'y1',
+                'marker': {'color': '#5c6dad', 'opacity': 0.3},
+                'name': labels['hospitalisations_active_qc'],
+                'hoverlabel': {'namelength': 35},
+            },
+            {
+                'type': 'bar',
+                'x': data_qc_hosp['date'],
+                'y': data_qc_hosp['icu'],
+                'yaxis': 'y1',
+                'marker': {'color': '#158c17', 'opacity': 0.5},
+                'name': labels['intensive_care_active_qc'],
+                'hoverlabel': {'namelength': 35},
+            },
+            {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['hos_quo_tot_n'],
+                'y': data_qc['hos_quo_tot_n'].rolling(7).mean().round(),
+                'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#001F97'},
+                'line': {'dash': 'dot'},
                 'name': labels['hospitalisations_qc'],
-                'hoverlabel': {'namelength': 25},
+                'hoverlabel': {'namelength': 35},
             },
             {
                 'type': 'scatter',
                 'mode': 'lines',
                 'marker': {'color': '#1bd1c2'},
+                'line': {'dash': 'dot'},
                 'x': data_qc['date'],
-                'y': data_qc['hos_quo_si_n'],
+                'y': data_qc['hos_quo_si_n'].rolling(7).mean().round(),
+                'yaxis': 'y2',
                 'name': labels['intensive_care_qc'],
-                'hoverlabel': {'namelength': 25},
+                'hoverlabel': {'namelength': 35},
             },
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['hos_quo_tot_n'],
+                'y': data_mtl['hos_quo_tot_n'].rolling(7).mean().round(),
+                'yaxis': 'y2',
                 'mode': 'lines',
                 'marker': {'color': '#D6142C'},
+                'line': {'dash': 'dot'},
                 'name': labels['hospitalisations_mtl'],
-                'hoverlabel': {'namelength': 25},
+                'hoverlabel': {'namelength': 35},
             },
             {
                 'type': 'scatter',
                 'mode': 'lines',
                 'marker': {'color': '#f7289d'},
+                'line': {'dash': 'dot'},
                 'x': data_mtl['date'],
-                'y': data_mtl['hos_quo_si_n'],
+                'y': data_mtl['hos_quo_si_n'].rolling(7).mean().round(),
+                'yaxis': 'y2',
                 'name': labels['intensive_care_mtl'],
-                'hoverlabel': {'namelength': 25},
+                'hoverlabel': {'namelength': 35},
             }
         ],
         'layout': {
@@ -342,10 +394,18 @@ def hospitalisations_fig(data_qc, data_mtl, labels):
                 'title': {'text': labels['hospitalisations_y_label']},
                 'gridcolor': '#f5f5f5'
             },
+            'yaxis2': {
+                'title': {'text': labels['hospitalisations_y2_label']},
+                'overlaying': 'y',
+                'rangemode': 'tozero',
+                'side': 'right'
+
+            },
             'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
             'paper_bgcolor': 'rgba(255,255,255,1)',
             'hovermode': 'x',
+            'barmode': 'overlay',
             'hoverlabel': {'font': {'color': '#ffffff'}},
             'dragmode': False
         }
@@ -363,20 +423,22 @@ def testing_fig(data_qc, data_mtl, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['psi_quo_pos_t'] / 100,  # divide by 100 because '%' tickformat multiplies by 100
+                'y': data_qc['psi_quo_pos_t'].rolling(7).mean() / 100,  # divide by 100 because '%' tickformat is x100
                 'mode': 'lines',
                 'marker': {'color': '#001F97'},
                 'name': labels['testing_qc'],
                 'hoverlabel': {'namelength': 25},
+                'hovertemplate': '%{y:,.1%}'
             },
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['psi_quo_pos_t'] / 100,  # divide by 100 because '%' tickformat multiplies by 100
+                'y': data_mtl['psi_quo_pos_t'].rolling(7).mean() / 100,  # divide by 100 because '%' tickformat is x100
                 'mode': 'lines',
                 'marker': {'color': '#D6142C'},
                 'name': labels['testing_mtl'],
                 'hoverlabel': {'namelength': 25},
+                'hovertemplate': '%{y:,.1%}'
             },
         ],
         'layout': {
@@ -394,6 +456,85 @@ def testing_fig(data_qc, data_mtl, labels):
     testing_fig = add_ylog_menu(testing_fig, data_qc['negative_tests'], labels)
 
     return testing_fig
+
+
+def vaccination_fig(data_vaccination, labels):
+    vaccination_fig = go.Figure({
+        'data': [
+            {
+                'type': 'scatter',
+                'x': data_vaccination['date'],
+                'y': data_vaccination['qc_percent_vaccinated'],
+                'customdata': data_vaccination['qc_doses'],
+                'yaxis': 'y1',
+                'mode': 'lines',
+                'marker': {'color': '#001F97'},
+                'name': labels['vaccination_perc_qc'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate': labels['vaccination_hovertemplate']
+            },
+            {
+                'type': 'scatter',
+                'x': data_vaccination['date'],
+                'y': data_vaccination['mtl_percent_vaccinated'],
+                'customdata': data_vaccination['mtl_doses'],
+                'yaxis': 'y1',
+                'mode': 'lines',
+                'marker': {'color': '#D6142C'},
+                'name': labels['vaccination_perc_mtl'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate': labels['vaccination_hovertemplate']
+            },
+            {
+                'type': 'scatter',
+                'x': data_vaccination['date'],
+                'y': data_vaccination['qc_new_doses'],
+                'yaxis': 'y2',
+                'mode': 'lines',
+                'line': {'dash': 'dot'},
+                'marker': {'color': '#1bd1c2'},
+                'name': labels['vaccination_new_qc'],
+                'hoverlabel': {'namelength': 35},
+            },
+            {
+                'type': 'scatter',
+                'x': data_vaccination['date'],
+                'y': data_vaccination['mtl_new_doses'],
+                'yaxis': 'y2',
+                'mode': 'lines',
+                'line': {'dash': 'dot'},
+                'marker': {'color': '#f7289d'},
+                'name': labels['vaccination_new_mtl'],
+                'hoverlabel': {'namelength': 35},
+            },
+        ],
+        'layout': {
+            'autosize': True,
+            'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
+            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'yaxis': {
+                'title': {'text': labels['vaccination_y']},
+                'gridcolor': '#f5f5f5'
+            },
+            'yaxis2': {
+                'title': {'text': labels['vaccination_y2']},
+                'overlaying': 'y',
+                'rangemode': 'tozero',
+                'side': 'right'
+
+            },
+            'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
+            'plot_bgcolor': 'rgba(255,255,255,1)',
+            'paper_bgcolor': 'rgba(255,255,255,1)',
+            'hovermode': 'x',
+            'barmode': 'overlay',
+            'hoverlabel': {'font': {'color': '#ffffff'}},
+            'dragmode': False
+        }
+    })
+    vaccination_fig = add_ylog_menu(vaccination_fig, data_vaccination['qc_percent_vaccinated'], labels)
+
+    return vaccination_fig
 
 
 def mtl_deaths_loc_fig(data_mtl_death_loc, labels):
@@ -502,7 +643,7 @@ def cases_vs_newcases_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_mtl['cases'],
-                'y': data_mtl['new_cases'],
+                'y': data_mtl['new_cases'].rolling(7).mean().round(),
                 'customdata': data_mtl['date'],
                 'mode': 'lines',
                 'name': labels['cases_vs_newcases_legend_mtl'],
@@ -512,7 +653,7 @@ def cases_vs_newcases_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['cases'],
-                'y': data_qc['new_cases'],
+                'y': data_qc['new_cases'].rolling(7).mean().round(),
                 'customdata': data_qc['date'],
                 'mode': 'lines',
                 'name': labels['cases_vs_newcases_legend_qc'],

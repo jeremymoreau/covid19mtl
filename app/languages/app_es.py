@@ -47,7 +47,9 @@ labels = {
         'cases_per_1000': 'Casos por cada 1000<br>habitantes'
     },
     'montreal_map_hovertemplate': '<br>Vecindario/Ciudad: %{location}<br>Casos por cada 1000 habitantes: %{z}',
-    'confirmed_cases_y_label': 'Casos confirmados',
+    # confirmed cases fig
+    'confirmed_cases_y_label': 'Cumulative cases',
+    'confirmed_cases_y2_label': 'New cases (7-day moving average)',
     'confirmed_cases_qc_label': 'Quebec (acumulativo)',
     'confirmed_cases_mtl_label': 'Montreal (acumulativo)',
     'active_cases_qc_label': 'Quebec (casos activos)',
@@ -56,22 +58,27 @@ labels = {
     'age_total_label': 'Distribución del total<br>de casos en el grupo de edad',
     'age_per100000_label': 'Distribución de casos por cada<br>100,000 habitantes en el grupo de edad',
     'age_fig_hovertemplate': '%: %{y}',
+    # deaths fig
     'deaths_fig_label': 'Muertes',
-    'deaths_qc_y_label': 'Muertes',
+    'deaths_qc_y_label': 'Cumulative deaths',
+    'deaths_qc_y2_label': 'New deaths (7-day moving average)',
     'deaths_fig_qc_label': 'Quebec (acumulativo)',
     'deaths_fig_mtl_label': 'Montreal (acumulativo)',
     'new_deaths_qc_label': 'Quebec (nuevas muertes)',
     'new_deaths_mtl_label': 'Montreal (nuevas muertes)',
     # hospitalisations fig
     'hospitalisations_label': 'Hospitalisations',
-    'hospitalisations_y_label': 'Hospitalisations',
+    'hospitalisations_y_label': 'Active hospitalisations',
+    'hospitalisations_y2_label': 'New hospitalisations (7-day moving average)',
     'intensive_care_qc': 'New intensive care admissions (QC)',
     'intensive_care_mtl': 'New intensive care admissions (MTL)',
-    'hospitalisations_qc': 'Total new hospitalisations (QC)',
-    'hospitalisations_mtl': 'Total new hospitalisations(MTL)',
+    'hospitalisations_qc': 'New hospitalisations (QC)',
+    'hospitalisations_active_qc': 'Active hospitalisations (QC)',
+    'intensive_care_active_qc': 'Active ICU hospitalisations (QC)',
+    'hospitalisations_mtl': 'New hospitalisations(MTL)',
     # Test positivity fig
     'testing_label': 'Test positivity rate',
-    'testing_y_label': 'Test positivity rate (QC)',
+    'testing_y_label': 'Test positivity rate (7-day moving average)',
     'testing_mtl': 'Montreal',
     'testing_qc': 'Quebec',
     #
@@ -104,7 +111,16 @@ labels = {
     'cases_vs_newcases_ylabel': 'New cases (log)',
     'cases_vs_newcases_legend_mtl': 'Montreal',
     'cases_vs_newcases_legend_qc': 'Quebec',
-    'cases_vs_newcases_hovertemplate': 'Date: %{customdata} <br> New Cases: %{y}'
+    'cases_vs_newcases_hovertemplate': 'Date: %{customdata} <br> New Cases: %{y}',
+    # Vaccination_fig
+    'vaccination_label': 'Vaccination',
+    'vaccination_y': 'Approx. % of population vaccinated',
+    'vaccination_y2': 'New doses',
+    'vaccination_perc_mtl': '% of pop vaccinated (MTL)',
+    'vaccination_perc_qc': '% of pop vaccinated (QC)',
+    'vaccination_hovertemplate': '% vaccinated: %{y:.2f}% <br> # of doses: %{customdata}',
+    'vaccination_new_mtl': 'New doses (MTL)',
+    'vaccination_new_qc': 'New doses (QC)'
 }
 
 layout = generate_layout(labels)
