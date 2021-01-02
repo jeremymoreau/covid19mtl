@@ -326,6 +326,12 @@ li {
   #language-container a:first-child {
     margin-left: 0;
   }
+  .superscript {
+    font-size: 1.3rem;
+  }
+  .subscript {
+    font-size: 1.3rem;
+  }
   #footer {
     grid-template-columns: 1fr;
     column-gap: 15px;
