@@ -9,6 +9,7 @@ from argparse import ArgumentParser
 from datetime import datetime, timedelta
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import pytz
 import requests
@@ -472,13 +473,19 @@ def append_mtl_cases_per100k_csv(processed_dir, date: str):
 
     seven_day_per100k_df = seven_day_df / borough_pop * 100000
 
+    # create categories for 7day incidence per 100k
+    bins = [-1, 10, 25, 50, 100, 200, 300, np.inf]
+    labels = ['< 10', '> 10-25', '> 25-50', '> 50-100', '> 100-200', '> 200-300', '> 300']
+    category_df = seven_day_per100k_df.apply(pd.cut, bins=bins, labels=labels)
+
     # add suffixes to each df and join
     cases_df = cases_df.add_suffix('_cases')
     new_cases_df = new_cases_df.add_suffix('_new_cases')
     seven_day_df = seven_day_df.add_suffix('_7day_incidence')
     seven_day_per100k_df = seven_day_per100k_df.add_suffix('_7day_incidence_per100k')
+    category_df = category_df.add_suffix('_7day_incidence_rate')
 
-    combined = cases_df.join([new_cases_df, seven_day_df, seven_day_per100k_df])
+    combined = cases_df.join([new_cases_df, seven_day_df, seven_day_per100k_df, category_df])
 
     # sort column names
     combined.sort_index(axis=1, inplace=True)
