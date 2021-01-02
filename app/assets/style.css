@@ -311,11 +311,19 @@ li {
     grid-template-columns: 1fr;
     row-gap: 15px;
   }
+  #title-container {
+    clear: both;
+    float: none;
+  }
   #title {
     font-size: 1.8rem;
+    text-align: center;
+    padding-right: 0;
   }
   #subtitle{
     padding-bottom: 0.5rem;
+    padding-right: 0;
+    text-align: center;
   }
   #language-container {
     text-align: center;
