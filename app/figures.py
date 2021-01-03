@@ -57,6 +57,17 @@ def add_ylog_menu(fig, y_data, labels):
 
 
 def mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels):
+    # Add all available categories to each date
+    # see: https://medium.com/@mahshadn/animated-choropleth-map-with-discrete-colors-using-python-and-plotly-styling-5e208e5b6bf8  # noqa: E501
+    category = mtl_boroughs['7day_incidence_rate'].unique()
+    dates = mtl_boroughs['date'].unique()
+    for date in dates:
+        for i in category:
+            mtl_boroughs = mtl_boroughs.append({
+                'date': date,
+                '7day_incidence_rate': i
+            }, ignore_index=True)
+
     # Montreal cases per 100k map
     mtlmap_fig = px.choropleth_mapbox(
         mtl_boroughs,
@@ -71,19 +82,19 @@ def mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels):
             '> 10-25': '#ecd93b',
             '> 25-50': '#dfae5a',
             '> 50-100': '#df825a',
-            '> 100-200': '#800000',
+            '> 100-200': '#CC0101',
             '> 200-300': '#A80101',
-            '> 300': '#CC0101',
+            '> 300': '#800000',
         },
         category_orders={
             '7day_incidence_rate': [
-                '< 10',
-                '> 10-25',
-                '> 25-50',
-                '> 50-100',
-                '> 100-200',
-                '> 200-300',
                 '> 300',
+                '> 200-300',
+                '> 100-200',
+                '> 50-100',
+                '> 25-50',
+                '> 10-25',
+                '< 10',
             ]
         },
         zoom=9,
