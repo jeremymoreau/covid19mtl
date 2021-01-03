@@ -472,6 +472,7 @@ def update_mtl_boroughs_csv(processed_dir):
                    78305, 921, 78151, 69229, 89170, 143853, 20312]
 
     seven_day_per100k_df = seven_day_df / borough_pop * 100000
+    seven_day_per100k_df = seven_day_per100k_df.round()
 
     # create categories for 7day incidence per 100k
     bins = [-1, 10, 25, 50, 100, 200, 300, np.inf]

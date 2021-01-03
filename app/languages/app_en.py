@@ -45,6 +45,10 @@ labels = {
         'date': 'Date',
         'borough': 'Borough/City',
         '7day_incidence_rate': '7-day incidence rate',
+        'new_cases': 'New cases',
+        'cases': 'Total cases',
+        '7day_incidence_per100k': '7-day incidence per 100,000',
+        '7day_incidence': '7-day incidence',
     },
     'montreal_map_hovertemplate': '<br>Borough/City: %{location}<br>7-day incidence per 100,000: %{z}',
     # confirmed cases fig

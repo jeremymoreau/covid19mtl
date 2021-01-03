@@ -76,6 +76,7 @@ def mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels):
         color='7day_incidence_rate',
         featureidkey='properties.borough',
         animation_frame='date',
+        animation_group='borough',
         mapbox_style='carto-positron',
         color_discrete_map={
             '< 10': '#7ea47c',
@@ -101,19 +102,23 @@ def mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels):
         center={'lat': 45.55, 'lon': -73.75},
         labels=labels['montreal_map_colourbar_labels'],
         hover_name='borough',
-        # hover_data={
-        #     '7day_incidence_per100k': True,
-        #     'new_cases': True,
-        #     'cases': True,
-        #     'date': False,
-        #     '7day_incidence_rate': False,
-        #     '7day_incidence': False,
-        # }
+        hover_data={
+            '7day_incidence': True,
+            '7day_incidence_per100k': True,
+            '7day_incidence_rate': False,
+            'borough': False,
+            'cases': True,
+            'date': False,
+            'new_cases': True,
+        }
     )
 
     mtlmap_fig.update_layout(
         showlegend=True,
         legend_title_text='<b>7-day incidence</b>',
+        margin={'r': 0, 't': 0, 'l': 0, 'b': 0},
+        plot_bgcolor='rgba(255,255,255,1)',
+        paper_bgcolor='rgba(255,255,255,1)',
     )
 
     # # set the default frame to the latest date
@@ -127,26 +132,13 @@ def mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels):
     mtlmap_fig.layout.updatemenus[0]['x'] = 0
     mtlmap_fig.layout.updatemenus[0]['pad'] = {'r': 50, 't': 15}
 
-    mtlmap_fig.update_layout({
-        'margin': {'r': 0, 't': 0, 'l': 0, 'b': 0},
-        'plot_bgcolor': 'rgba(255,255,255,1)',
-        'paper_bgcolor': 'rgba(255,255,255,1)',
-        'coloraxis': {
-            'colorbar': {
-                'thicknessmode': 'fraction',
-                'thickness': 0.03,
-                'lenmode': 'fraction',
-                'len': 0.7,
-                'title': {'text': ''}
-            }
-        }
-    })
     # Update hoverlabel for all frames
-    mtlmap_fig.update_traces({
-        'hovertemplate': labels['montreal_map_hovertemplate']
-    })
-    for frame in mtlmap_fig.frames:
-        frame['data'][0]['hovertemplate'] = labels['montreal_map_hovertemplate']
+    # mtlmap_fig.update_traces({
+    #     'hovertemplate': labels['montreal_map_hovertemplate']
+    # })
+    # this does not seem to be necessary (already covered with the above call)
+    # for frame in mtlmap_fig.frames:
+    #     frame['data'][0]['hovertemplate'] = labels['montreal_map_hovertemplate']
 
     return mtlmap_fig
 
