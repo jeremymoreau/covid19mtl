@@ -95,7 +95,7 @@ def generate_layout(labels):
                     ),
                     html.Div(
                         [html.P(['+' + new_icu_qc + labels['icu']], className='superscript icu'),
-                         html.H3('+' + new_hosp_mtl + labels['total'], className='main_text hosp'),
+                         html.H3('+' + new_hosp_mtl + labels['yesterday'], className='main_text hosp'),
                          html.P([labels['hosp_mtl_label']], className='subscript hosp')],
                         className='mini_container',
                     ),
@@ -132,7 +132,7 @@ def generate_layout(labels):
                     ),
                     html.Div(
                         [html.P(['+' + new_icu_qc + labels['icu']], className='superscript icu'),
-                         html.H3('+' + new_hosp_qc + labels['total'], className='main_text hosp'),
+                         html.H3('+' + new_hosp_qc + labels['yesterday'], className='main_text hosp'),
                          html.P([labels['hosp_qc_label']], className='subscript hosp')],
                         className='mini_container',
                     ),
