@@ -95,7 +95,7 @@ def generate_layout(labels):
                         className='mini_container deaths',
                     ),
                     html.Div(
-                        [html.P(['+' + new_icu_qc + labels['icu']], className='superscript icu'),
+                        [html.P(['+' + new_icu_mtl + labels['icu']], className='superscript icu'),
                          html.H3('+' + new_hosp_mtl + labels['yesterday'], className='main_text hosp'),
                          html.P([labels['hosp_mtl_label']], className='subscript hosp')],
                         className='mini_container',
