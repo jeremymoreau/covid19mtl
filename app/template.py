@@ -9,7 +9,8 @@ from .core import (latest_cases_mtl, new_cases_mtl, latest_cases_qc, new_cases_q
                    latest_deaths_mtl, new_deaths_mtl, latest_deaths_qc, new_deaths_qc,
                    new_hosp_mtl, new_icu_mtl, new_hosp_qc, new_icu_qc,
                    perc_vac_mtl, new_doses_mtl, perc_vac_qc, new_doses_qc,
-                   pos_rate_mtl, pos_rate_change_mtl, pos_rate_qc, pos_rate_change_qc,
+                   pos_rate_mtl, pos_rate_change_mtl, pos_rate_mtl_colour,
+                   pos_rate_qc, pos_rate_change_qc, pos_rate_qc_colour,
                    cases_per1000_long, data_mtl, data_mtl_death_loc, data_qc, data_qc_hosp,
                    mtl_age_data, mtl_geojson, data_vaccination)
 
@@ -103,7 +104,7 @@ def generate_layout(labels):
                         [html.P([pos_rate_change_mtl + '%' + labels['yesterday']], className='superscript'),
                          html.H3(pos_rate_mtl + '%', className='main_text'),
                          html.P([labels['test_pos_mtl_label']], className='subscript')],
-                        className='mini_container tests',
+                        className='mini_container', style={'color': pos_rate_mtl_colour}
                     ),
                     html.Div(
                         [html.P(['+' + new_doses_mtl + labels['doses_today']], className='superscript'),
@@ -140,7 +141,7 @@ def generate_layout(labels):
                         [html.P([pos_rate_change_qc + '%' + labels['yesterday']], className='superscript'),
                          html.H3(pos_rate_qc + '%', className='main_text'),
                          html.P([labels['test_pos_qc_label']], className='subscript')],
-                        className='mini_container tests',
+                        className='mini_container', style={'color': pos_rate_qc_colour}
                     ),
                     html.Div(
                         [html.P(['+' + new_doses_qc + labels['doses_today']], className='superscript'),
