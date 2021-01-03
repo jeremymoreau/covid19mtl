@@ -107,7 +107,7 @@ def generate_layout(labels):
                         className='mini_container', style={'color': pos_rate_mtl_colour}
                     ),
                     html.Div(
-                        [html.P(['+' + new_doses_mtl + labels['doses_today']], className='superscript'),
+                        [html.P([new_doses_mtl + labels['doses_today']], className='superscript'),
                          html.H3(perc_vac_mtl + '%', className='main_text'),
                          html.P([labels['vaccination_perc_mtl_label']], className='subscript')],
                         className='mini_container vaccines',
@@ -144,7 +144,7 @@ def generate_layout(labels):
                         className='mini_container', style={'color': pos_rate_qc_colour}
                     ),
                     html.Div(
-                        [html.P(['+' + new_doses_qc + labels['doses_today']], className='superscript'),
+                        [html.P([new_doses_qc + labels['doses_today']], className='superscript'),
                          html.H3(perc_vac_qc + '%', className='main_text'),
                          html.P([labels['vaccination_perc_qc_label']], className='subscript')],
                         className='mini_container vaccines',

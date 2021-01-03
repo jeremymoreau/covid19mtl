@@ -111,6 +111,8 @@ new_hosp_mtl = str(int(data_mtl['hos_quo_reg_n'].dropna().iloc[-2]))
 new_icu_mtl = str(int(data_mtl['hos_quo_si_n'].dropna().iloc[-2]))
 perc_vac_mtl = str(float(data_vaccination['mtl_percent_vaccinated'].dropna().round(2).iloc[-1]))
 new_doses_mtl = str(int(data_vaccination['mtl_new_doses'].dropna().iloc[-1]))
+if not new_doses_mtl.startswith('-'):
+    new_doses_mtl = '+' + new_doses_mtl
 pos_rate_mtl = float(data_mtl['psi_quo_pos_t'].dropna().round(1).iloc[-1])
 if pos_rate_mtl < 5:
     pos_rate_mtl_colour = '#83AF9B'
@@ -152,6 +154,8 @@ new_hosp_qc = str(int(data_qc['hos_quo_reg_n'].dropna().iloc[-2]))
 new_icu_qc = str(int(data_qc['hos_quo_si_n'].dropna().iloc[-2]))
 perc_vac_qc = str(float(data_vaccination['qc_percent_vaccinated'].dropna().round(2).iloc[-1]))
 new_doses_qc = str(int(data_vaccination['qc_new_doses'].dropna().iloc[-1]))
+if not new_doses_qc.startswith('-'):
+    new_doses_qc = '+' + new_doses_qc
 pos_rate_qc = float(data_qc['psi_quo_pos_t'].dropna().round(1).iloc[-1])
 if pos_rate_qc < 5:
     pos_rate_qc_colour = '#83AF9B'
