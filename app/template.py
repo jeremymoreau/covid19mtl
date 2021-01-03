@@ -100,7 +100,7 @@ def generate_layout(labels):
                         className='mini_container',
                     ),
                     html.Div(
-                        [html.P([pos_rate_change_mtl + '%' + labels['today']], className='superscript'),
+                        [html.P([pos_rate_change_mtl + '%' + labels['yesterday']], className='superscript'),
                          html.H3(pos_rate_mtl + '%', className='main_text'),
                          html.P([labels['test_pos_mtl_label']], className='subscript')],
                         className='mini_container tests',
@@ -137,7 +137,7 @@ def generate_layout(labels):
                         className='mini_container',
                     ),
                     html.Div(
-                        [html.P([pos_rate_change_qc + '%' + labels['today']], className='superscript'),
+                        [html.P([pos_rate_change_qc + '%' + labels['yesterday']], className='superscript'),
                          html.H3(pos_rate_qc + '%', className='main_text'),
                          html.P([labels['test_pos_qc_label']], className='subscript')],
                         className='mini_container tests',
