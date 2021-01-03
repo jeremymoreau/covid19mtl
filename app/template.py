@@ -4,8 +4,8 @@ import dash_html_components as html
 import app.figures as figures
 
 from .core import (latest_cases_mtl, new_cases_mtl, latest_cases_qc, new_cases_qc,
-                   incid_per100k_7d_mtl, incid_per100K_perc_change_mtl,
-                   incid_per100k_7d_qc, incid_per100K_perc_change_qc,
+                   incid_per100k_7d_mtl, incid_per100K_perc_change_mtl, incid_per100k_7d_mtl_colour,
+                   incid_per100k_7d_qc, incid_per100K_perc_change_qc, incid_per100k_7d_qc_colour,
                    latest_deaths_mtl, new_deaths_mtl, latest_deaths_qc, new_deaths_qc,
                    new_hosp_mtl, new_icu_mtl, new_hosp_qc, new_icu_qc,
                    perc_vac_mtl, new_doses_mtl, perc_vac_qc, new_doses_qc,
@@ -85,7 +85,7 @@ def generate_layout(labels):
                         [html.P([incid_per100K_perc_change_mtl + '%' + labels['vs_last7d']], className='superscript'),
                          html.H3(incid_per100k_7d_mtl, className='main_text'),
                          html.P([labels['incidence_per100k_7d_mtl_label']], className='subscript')],
-                        className='mini_container cases',
+                        className='mini_container', style={'color': incid_per100k_7d_mtl_colour}
                     ),
                     html.Div(
                         [html.P(['+' + new_deaths_mtl + labels['today']], className='superscript'),
@@ -122,7 +122,7 @@ def generate_layout(labels):
                         [html.P([incid_per100K_perc_change_qc + '%' + labels['vs_last7d']], className='superscript'),
                          html.H3(incid_per100k_7d_qc, className='main_text'),
                          html.P([labels['incidence_per100k_7d_qc_label']], className='subscript')],
-                        className='mini_container cases',
+                        className='mini_container', style={'color': incid_per100k_7d_qc_colour}
                     ),
                     html.Div(
                         [html.P(['+' + new_deaths_qc + labels['today']], className='superscript'),
