@@ -108,14 +108,14 @@ def mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels):
             '7day_incidence_rate': False,
             'borough': False,
             'cases': True,
-            'date': False,
+            'date': True,
             'new_cases': True,
         }
     )
 
     mtlmap_fig.update_layout(
         showlegend=True,
-        legend_title_text='<b>7-day incidence</b>',
+        legend_title_text=labels['montreal_map_legend_title'],
         margin={'r': 0, 't': 0, 'l': 0, 'b': 0},
         plot_bgcolor='rgba(255,255,255,1)',
         paper_bgcolor='rgba(255,255,255,1)',
@@ -136,7 +136,6 @@ def mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels):
     # mtlmap_fig.update_traces({
     #     'hovertemplate': labels['montreal_map_hovertemplate']
     # })
-    # this does not seem to be necessary (already covered with the above call)
     # for frame in mtlmap_fig.frames:
     #     frame['data'][0]['hovertemplate'] = labels['montreal_map_hovertemplate']
 

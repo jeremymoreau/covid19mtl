@@ -44,8 +44,13 @@ labels = {
     'montreal_map_colourbar_labels': {
         'date': 'Fecha',
         'borough': 'Vecindario/Ciudad',
-        '7day_incidence_rate': 'Tasa de incidencia de 7 días'
+        '7day_incidence_rate': 'Tasa de incidencia de 7 días',
+        'new_cases': 'Nuevos casos',
+        'cases': 'Casos',
+        '7day_incidence_per100k': 'Incidencia de 7 días por 100 000',
+        '7day_incidence': 'Incidencia de 7 días',
     },
+    'montreal_map_legend_title': '<b>Tasa de incidencia de 7 días</b>',
     'montreal_map_hovertemplate': '<br>Vecindario/Ciudad: %{location}<br>Incidencia de 7 días por 100 000: %{z}',
     # confirmed cases fig
     'confirmed_cases_y_label': 'Cumulative cases',

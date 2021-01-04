@@ -50,7 +50,8 @@ labels = {
         '7day_incidence_per100k': '7-day incidence per 100,000',
         '7day_incidence': '7-day incidence',
     },
-    'montreal_map_hovertemplate': '<br>Borough/City: %{location}<br>7-day incidence per 100,000: %{z}',
+    'montreal_map_legend_title': '<b>7-day incidence rate</b>',
+    'montreal_map_hovertemplate': '<b>%{hovertext}</b><br><br>Date=%{customdata[5]}<br>7-day incidence=%{customdata[0]}<br>7-day incidence per 100,000=%{customdata[1]}<br>Total cases=%{customdata[4]}<br>New cases=%{customdata[6]}<extra></extra>',
     # confirmed cases fig
     'confirmed_cases_y_label': 'Cumulative cases',
     'confirmed_cases_y2_label': 'New cases (7-day moving average)',
