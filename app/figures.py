@@ -116,6 +116,7 @@ def mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels):
     mtlmap_fig.update_layout(
         showlegend=True,
         legend_title_text=labels['montreal_map_legend_title'],
+        legend={'yanchor': 'top', 'y': 0.99, 'xanchor': 'left', 'x': 0.01, 'bgcolor': 'rgba(0,0,0,0)'},
         margin={'r': 0, 't': 0, 'l': 0, 'b': 0},
         plot_bgcolor='rgba(255,255,255,1)',
         paper_bgcolor='rgba(255,255,255,1)',
