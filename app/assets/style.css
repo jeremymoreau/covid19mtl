@@ -281,7 +281,7 @@ li {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-@media (max-width: 700px) {
+@media (max-width: 750px) {
   #info-container {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -292,6 +292,29 @@ li {
   .grid-container-three-cols {
     grid-template-columns: 1fr;
     row-gap: 15px;
+  }
+  #title-container {
+    clear: both;
+    float: none;
+  }
+  #title {
+    font-size: 1.8rem;
+    text-align: center;
+    padding-right: 0;
+  }
+  #subtitle{
+    padding-bottom: 0.5rem;
+    padding-right: 0;
+    text-align: center;
+  }
+  #language-container {
+    text-align: center;
+    clear: both;
+    float: none;
+    width: 100%;
+  }
+  #language-container a:first-child {
+    margin-left: 0;
   }
   h4 {
     font-size: 2rem;
