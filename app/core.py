@@ -66,7 +66,12 @@ mtl_boroughs.sort_values('date', inplace=True)
 
 # Montreal data
 data_mtl = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl.csv'), encoding='utf-8', na_values='na')
-data_mtl_by_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl_age.csv'), encoding='utf-8', na_values='na')
+data_mtl_by_age = pd.read_csv(
+    DATA_PATH.joinpath('processed', 'data_mtl_age.csv'),
+    encoding='utf-8',
+    index_col=0,
+    na_values='na'
+)
 
 # QC data
 data_qc = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc.csv'), encoding='utf-8', na_values='na')
