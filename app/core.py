@@ -145,20 +145,21 @@ incid_per100k_7d_mtl = round(float(data_mtl['new_cases'].dropna().iloc[-7:].sum(
 incid_per100k_last7d_mtl = round(float(data_mtl['new_cases'].dropna().iloc[-14:-7].sum()) / (mtl_pop / 100000))
 incid_per100K_perc_change_mtl = str(round(
     ((incid_per100k_7d_mtl - incid_per100k_last7d_mtl) / incid_per100k_last7d_mtl) * 100))
-if incid_per100k_7d_mtl < 10:
-    incid_per100k_7d_mtl_colour = '#7ea47c'
-elif 10 < incid_per100k_7d_mtl < 25:
-    incid_per100k_7d_mtl_colour = '#ecd93b'
-elif 25 < incid_per100k_7d_mtl < 50:
-    incid_per100k_7d_mtl_colour = '#dfae5a'
-elif 50 < incid_per100k_7d_mtl < 100:
-    incid_per100k_7d_mtl_colour = '#df825a'
-elif 100 < incid_per100k_7d_mtl < 200:
-    incid_per100k_7d_mtl_colour = '#CC0101'
-elif 200 < incid_per100k_7d_mtl < 300:
-    incid_per100k_7d_mtl_colour = '#A80101'
-elif incid_per100k_7d_mtl > 300:
+if incid_per100k_7d_mtl >= 300:
     incid_per100k_7d_mtl_colour = '#800000'
+if incid_per100k_7d_mtl >= 200:
+    incid_per100k_7d_mtl_colour = '#A80101'
+elif incid_per100k_7d_mtl >= 100:
+    incid_per100k_7d_mtl_colour = '#CC0101'
+elif incid_per100k_7d_mtl >= 50:
+    incid_per100k_7d_mtl_colour = '#df825a'
+elif incid_per100k_7d_mtl >= 25:
+    incid_per100k_7d_mtl_colour = '#dfae5a'
+elif incid_per100k_7d_mtl >= 10:
+    incid_per100k_7d_mtl_colour = '#ecd93b'
+else:
+    incid_per100k_7d_mtl_colour = '#7ea47c'
+
 incid_per100k_7d_mtl = str(incid_per100k_7d_mtl)
 if not incid_per100K_perc_change_mtl.startswith('-'):
     incid_per100K_perc_change_mtl = '+' + incid_per100K_perc_change_mtl
@@ -188,20 +189,21 @@ incid_per100k_7d_qc = round(float(data_qc['new_cases'].dropna().iloc[-7:].sum())
 incid_per100k_last7d_qc = round(float(data_qc['new_cases'].dropna().iloc[-14:-7].sum()) / (qc_pop / 100000))
 incid_per100K_perc_change_qc = str(round(
     ((incid_per100k_7d_qc - incid_per100k_last7d_qc) / incid_per100k_last7d_qc) * 100))
-if incid_per100k_7d_qc < 10:
-    incid_per100k_7d_qc_colour = '#7ea47c'
-elif 10 < incid_per100k_7d_qc < 25:
-    incid_per100k_7d_qc_colour = '#ecd93b'
-elif 25 < incid_per100k_7d_qc < 50:
-    incid_per100k_7d_qc_colour = '#dfae5a'
-elif 50 < incid_per100k_7d_qc < 100:
-    incid_per100k_7d_qc_colour = '#df825a'
-elif 100 < incid_per100k_7d_qc < 200:
-    incid_per100k_7d_qc_colour = '#CC0101'
-elif 200 < incid_per100k_7d_qc < 300:
-    incid_per100k_7d_qc_colour = '#A80101'
-elif incid_per100k_7d_qc > 300:
+if incid_per100k_7d_qc >= 300:
     incid_per100k_7d_qc_colour = '#800000'
+if incid_per100k_7d_qc >= 200:
+    incid_per100k_7d_qc_colour = '#A80101'
+elif incid_per100k_7d_qc >= 100:
+    incid_per100k_7d_qc_colour = '#CC0101'
+elif incid_per100k_7d_qc >= 50:
+    incid_per100k_7d_qc_colour = '#df825a'
+elif incid_per100k_7d_qc >= 25:
+    incid_per100k_7d_qc_colour = '#dfae5a'
+elif incid_per100k_7d_qc >= 10:
+    incid_per100k_7d_qc_colour = '#ecd93b'
+else:
+    incid_per100k_7d_qc_colour = '#7ea47c'
+
 incid_per100k_7d_qc = str(incid_per100k_7d_qc)
 if not incid_per100K_perc_change_qc.startswith('-'):
     incid_per100K_perc_change_qc = '+' + incid_per100K_perc_change_qc
