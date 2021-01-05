@@ -38,34 +38,6 @@ def downsample(df, offset):
     return resampled
 
 
-def reduce_rows(df, downsample):
-    """Reduce number of rows in a pandas df by skipping alternate rows
-
-    Note: drops rows containing NaNs in the 'cases_mtl_0-4' column
-
-    Parameters
-    ----------
-    df : pandas.core.frame.DataFrame
-        A pandas dataframe.
-    downsample : int
-        Factor by which to downsample dataframe. Step == input nrows // downsample
-
-    Returns
-    -------
-    pandas.core.frame.DataFrame
-        A pandas dataframe with a reduced number of rows
-    """
-    df = df[df['cases_mtl_0-4'].notna()]  # drop rows with no age data
-    last_row = df.iloc[-1, :]  # always keep data for latest day
-    rows_to_reduce = df.iloc[0:-1, :]
-
-    nrows = rows_to_reduce.shape[0]
-    step = nrows // downsample
-    reduced_rows = rows_to_reduce.iloc[::step, :]
-    new_rows = reduced_rows.append(last_row)
-    return new_rows
-
-
 # get relative data folder
 PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath('data').resolve()
@@ -216,7 +188,8 @@ latest_negative_tests_qc = str(int(data_qc['negative_tests'].dropna().iloc[-1]))
 latest_recovered_qc = str(int(data_qc['recovered'].dropna().iloc[-1]))
 
 # Make MTL histogram data tidy
-mtl_age_data = reduce_rows(data_mtl_by_age, 7).melt(
+# downsample then reset_index to have date column
+mtl_age_data = downsample(data_mtl_by_age, '7d').reset_index().melt(
     id_vars='date', value_vars=[
         'cases_mtl_0-4_norm', 'cases_mtl_5-9_norm',
         'cases_mtl_10-19_norm', 'cases_mtl_20-29_norm',
