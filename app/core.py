@@ -92,105 +92,86 @@ data_mtl_death_loc = pd.read_csv(
 latest_mtl_date = datetime.date.fromisoformat(data_mtl['date'].iloc[-1]) + datetime.timedelta(days=1)
 latest_update_date = latest_mtl_date.isoformat()
 
-###### Mini info boxes ######
+# Mini info boxes
+data_mtl_totals = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl_totals.csv'), index_col=0, na_values='na')
+data_qc_totals = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_totals.csv'), index_col=0, na_values='na')
+
 # Source for 2020 pop estimates: https://publications.msss.gouv.qc.ca/msss/document-001617/
 mtl_pop = 2065657  # Région sociosanitaire 06 - Montreal, 2020 projection
 qc_pop = 8539073  # QC Total, 2020 projection
-### MTL ###
-latest_cases_mtl = str(int(data_mtl['cases'].dropna().iloc[-1]))
-new_cases_mtl = str(int(data_mtl['new_cases'].dropna().iloc[-1]))
-latest_deaths_mtl = str(int(data_mtl['deaths'].dropna().iloc[-1]))
-new_deaths_mtl = str(int(data_mtl['new_deaths'].dropna().iloc[-1]))
-new_hosp_mtl = str(int(data_mtl['hos_quo_reg_n'].dropna().iloc[-2]))
-new_icu_mtl = str(int(data_mtl['hos_quo_si_n'].dropna().iloc[-2]))
+# MTL
+latest_cases_mtl = str(int(data_mtl_totals['cases'].dropna().iloc[-1]))
+new_cases_mtl = str(int(data_mtl_totals['cases'].diff().iloc[-1]))
+latest_deaths_mtl = str(int(data_mtl_totals['deaths'].dropna().iloc[-1]))
+new_deaths_mtl = str(int(data_mtl_totals['deaths'].diff().iloc[-1]))
+new_hosp_mtl = str(int(data_mtl_totals['hos_cum_reg_n'].diff().iloc[-1]))
+new_icu_mtl = str(int(data_mtl_totals['hos_cum_si_n'].diff().iloc[-1]))
 perc_vac_mtl = str(float(data_vaccination['mtl_percent_vaccinated'].dropna().round(2).iloc[-1]))
-new_doses_mtl = str(int(data_vaccination['mtl_new_doses'].dropna().iloc[-1]))
-if not new_doses_mtl.startswith('-'):
-    new_doses_mtl = '+' + new_doses_mtl
-pos_rate_mtl = float(data_mtl['psi_quo_pos_t'].dropna().round(1).iloc[-1])
+new_doses_mtl = int(data_vaccination['mtl_new_doses'].dropna().iloc[-1])
+pos_rate_mtl = float(data_mtl['psi_quo_pos_t'].dropna().iloc[-1])
+pos_rate_change_mtl = float(data_mtl['psi_quo_pos_t'].dropna().iloc[-1] - data_mtl['psi_quo_pos_t'].dropna().iloc[-2])
+
 if pos_rate_mtl < 5:
     pos_rate_mtl_colour = '#83AF9B'
 else:
     pos_rate_mtl_colour = '#D33505'
-pos_rate_mtl = str(pos_rate_mtl)
-pos_rate_change_mtl = str(round(float(
-    data_mtl['psi_quo_pos_t'].dropna().iloc[-1] - data_mtl['psi_quo_pos_t'].dropna().iloc[-2]), 1))
-if not pos_rate_change_mtl.startswith('-'):
-    pos_rate_change_mtl = '+' + pos_rate_change_mtl
-# 7-days incidence per 100k (and % change vs previous 7 days)
-incid_per100k_7d_mtl = round(float(data_mtl['new_cases'].dropna().iloc[-7:].sum()) / (mtl_pop / 100000))
-incid_per100k_last7d_mtl = round(float(data_mtl['new_cases'].dropna().iloc[-14:-7].sum()) / (mtl_pop / 100000))
-incid_per100K_perc_change_mtl = str(round(
-    ((incid_per100k_7d_mtl - incid_per100k_last7d_mtl) / incid_per100k_last7d_mtl) * 100))
-if incid_per100k_7d_mtl >= 300:
-    incid_per100k_7d_mtl_colour = '#800000'
-if incid_per100k_7d_mtl >= 200:
-    incid_per100k_7d_mtl_colour = '#A80101'
-elif incid_per100k_7d_mtl >= 100:
-    incid_per100k_7d_mtl_colour = '#CC0101'
-elif incid_per100k_7d_mtl >= 50:
-    incid_per100k_7d_mtl_colour = '#df825a'
-elif incid_per100k_7d_mtl >= 25:
-    incid_per100k_7d_mtl_colour = '#dfae5a'
-elif incid_per100k_7d_mtl >= 10:
-    incid_per100k_7d_mtl_colour = '#ecd93b'
-else:
-    incid_per100k_7d_mtl_colour = '#7ea47c'
 
-incid_per100k_7d_mtl = str(incid_per100k_7d_mtl)
-if not incid_per100K_perc_change_mtl.startswith('-'):
-    incid_per100K_perc_change_mtl = '+' + incid_per100K_perc_change_mtl
-### QC ###
-latest_cases_qc = str(int(data_qc['cases'].dropna().iloc[-1]))
-new_cases_qc = str(int(data_qc['new_cases'].dropna().iloc[-1]))
-latest_deaths_qc = str(int(data_qc['deaths'].dropna().iloc[-1]))
-new_deaths_qc = str(int(data_qc['new_deaths'].dropna().iloc[-1]))
-new_hosp_qc = str(int(data_qc['hos_quo_reg_n'].dropna().iloc[-2]))
-new_icu_qc = str(int(data_qc['hos_quo_si_n'].dropna().iloc[-2]))
+# 7-days incidence per 100k (and % change vs previous 7 days)
+incid_per100k_7d_mtl = float(data_mtl['new_cases'].dropna().iloc[-7:].sum()) / (mtl_pop / 100000)
+incid_per100k_last7d_mtl = float(data_mtl['new_cases'].dropna().iloc[-14:-7].sum()) / (mtl_pop / 100000)
+incid_per100K_perc_change_mtl = ((incid_per100k_7d_mtl - incid_per100k_last7d_mtl) / incid_per100k_last7d_mtl) * 100
+
+if incid_per100k_7d_mtl < 10:
+    incid_per100k_7d_mtl_colour = '#7ea47c'
+elif 10 < incid_per100k_7d_mtl < 25:
+    incid_per100k_7d_mtl_colour = '#ecd93b'
+elif 25 < incid_per100k_7d_mtl < 50:
+    incid_per100k_7d_mtl_colour = '#dfae5a'
+elif 50 < incid_per100k_7d_mtl < 100:
+    incid_per100k_7d_mtl_colour = '#df825a'
+elif 100 < incid_per100k_7d_mtl < 200:
+    incid_per100k_7d_mtl_colour = '#CC0101'
+elif 200 < incid_per100k_7d_mtl < 300:
+    incid_per100k_7d_mtl_colour = '#A80101'
+elif incid_per100k_7d_mtl > 300:
+    incid_per100k_7d_mtl_colour = '#800000'
+
+# QC
+latest_cases_qc = str(int(data_qc_totals['cases'].dropna().iloc[-1]))
+new_cases_qc = str(int(data_qc_totals['cases'].diff().iloc[-1]))
+latest_deaths_qc = str(int(data_qc_totals['deaths'].dropna().iloc[-1]))
+new_deaths_qc = str(int(data_qc_totals['deaths'].diff().iloc[-1]))
+new_hosp_qc = str(int(data_qc_totals['hos_cum_reg_n'].diff().iloc[-1]))
+new_icu_qc = str(int(data_qc_totals['hos_cum_si_n'].diff().iloc[-1]))
 perc_vac_qc = str(float(data_vaccination['qc_percent_vaccinated'].dropna().round(2).iloc[-1]))
-new_doses_qc = str(int(data_vaccination['qc_new_doses'].dropna().iloc[-1]))
-if not new_doses_qc.startswith('-'):
-    new_doses_qc = '+' + new_doses_qc
-pos_rate_qc = float(data_qc['psi_quo_pos_t'].dropna().round(1).iloc[-1])
+new_doses_qc = int(data_vaccination['qc_new_doses'].dropna().iloc[-1])
+pos_rate_qc = float(data_qc['psi_quo_pos_t'].dropna().round(2).iloc[-1])
+pos_rate_change_qc = float(data_qc['psi_quo_pos_t'].dropna().iloc[-1] - data_qc['psi_quo_pos_t'].dropna().iloc[-2])
+
 if pos_rate_qc < 5:
     pos_rate_qc_colour = '#83AF9B'
 else:
     pos_rate_qc_colour = '#D33505'
-pos_rate_qc = str(pos_rate_qc)
-pos_rate_change_qc = str(round(float(
-    data_qc['psi_quo_pos_t'].dropna().iloc[-1] - data_qc['psi_quo_pos_t'].dropna().iloc[-2]), 1))
-if not pos_rate_change_qc.startswith('-'):
-    pos_rate_change_qc = '+' + pos_rate_change_qc
+
 # 7-days incidence per 100k (and % change vs previous 7 days)
-incid_per100k_7d_qc = round(float(data_qc['new_cases'].dropna().iloc[-7:].sum()) / (qc_pop / 100000))
-incid_per100k_last7d_qc = round(float(data_qc['new_cases'].dropna().iloc[-14:-7].sum()) / (qc_pop / 100000))
-incid_per100K_perc_change_qc = str(round(
-    ((incid_per100k_7d_qc - incid_per100k_last7d_qc) / incid_per100k_last7d_qc) * 100))
-if incid_per100k_7d_qc >= 300:
-    incid_per100k_7d_qc_colour = '#800000'
-if incid_per100k_7d_qc >= 200:
-    incid_per100k_7d_qc_colour = '#A80101'
-elif incid_per100k_7d_qc >= 100:
-    incid_per100k_7d_qc_colour = '#CC0101'
-elif incid_per100k_7d_qc >= 50:
-    incid_per100k_7d_qc_colour = '#df825a'
-elif incid_per100k_7d_qc >= 25:
-    incid_per100k_7d_qc_colour = '#dfae5a'
-elif incid_per100k_7d_qc >= 10:
-    incid_per100k_7d_qc_colour = '#ecd93b'
-else:
+incid_per100k_7d_qc = float(data_qc['new_cases'].dropna().iloc[-7:].sum()) / (qc_pop / 100000)
+incid_per100k_last7d_qc = float(data_qc['new_cases'].dropna().iloc[-14:-7].sum()) / (qc_pop / 100000)
+incid_per100K_perc_change_qc = ((incid_per100k_7d_qc - incid_per100k_last7d_qc) / incid_per100k_last7d_qc) * 100
+
+if incid_per100k_7d_qc < 10:
     incid_per100k_7d_qc_colour = '#7ea47c'
-
-incid_per100k_7d_qc = str(incid_per100k_7d_qc)
-if not incid_per100K_perc_change_qc.startswith('-'):
-    incid_per100K_perc_change_qc = '+' + incid_per100K_perc_change_qc
-
-
-latest_hospitalisations_qc = str(int(data_qc_hosp['hospitalisations_all'].dropna().iloc[-1]))
-latest_icu_qc = str(int(data_qc_hosp['icu'].dropna().iloc[-1]))
-latest_negative_tests_qc = str(int(data_qc['negative_tests'].dropna().iloc[-1]))
-
-latest_recovered_qc = str(int(data_qc['recovered'].dropna().iloc[-1]))
+elif 10 < incid_per100k_7d_qc < 25:
+    incid_per100k_7d_qc_colour = '#ecd93b'
+elif 25 < incid_per100k_7d_qc < 50:
+    incid_per100k_7d_qc_colour = '#dfae5a'
+elif 50 < incid_per100k_7d_qc < 100:
+    incid_per100k_7d_qc_colour = '#df825a'
+elif 100 < incid_per100k_7d_qc < 200:
+    incid_per100k_7d_qc_colour = '#CC0101'
+elif 200 < incid_per100k_7d_qc < 300:
+    incid_per100k_7d_qc_colour = '#A80101'
+elif incid_per100k_7d_qc > 300:
+    incid_per100k_7d_qc_colour = '#800000'
 
 # Make MTL histogram data tidy
 # downsample then reset_index to have date column
