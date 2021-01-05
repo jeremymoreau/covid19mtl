@@ -68,6 +68,9 @@ def mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels):
                 '7day_incidence_rate': i
             }, ignore_index=True)
 
+    # sort backwards as a workaround to show latest date first
+    mtl_boroughs = mtl_boroughs.sort_values('date', ascending=False)
+
     # Montreal cases per 100k map
     mtlmap_fig = px.choropleth_mapbox(
         mtl_boroughs,
