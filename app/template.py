@@ -58,10 +58,10 @@ def generate_layout(labels):
                     html.Div(
                         [
                             # Load in a new tab because some figures do not resize properly otherwise
-                            # TODO: Fix this bug
-                            html.A([labels['language0']], href=labels['language_link0'], target='_blank', className='lang-link'),
-                            html.A([labels['language1']], href=labels['language_link1'], target='_blank', className='lang-link'),
-                            html.A([labels['language2']], href=labels['language_link2'], target='_blank', className='lang-link'),
+                            # TODO: Fix this bug. Removed: Seems to work?!
+                            html.A([labels['language0']], href=labels['language_link0'], className='lang-link'),
+                            html.A([labels['language1']], href=labels['language_link1'], className='lang-link'),
+                            html.A([labels['language2']], href=labels['language_link2'], className='lang-link'),
                         ],
                         id='language-container',
                     ),
@@ -98,13 +98,13 @@ def generate_layout(labels):
                     ),
                     html.Div(
                         [html.P(['+' + new_icu_mtl + labels['icu']], className='superscript icu'),
-                         html.H3('+' + new_hosp_mtl + labels['yesterday'], className='main_text hosp'),
+                         html.H3('+' + new_hosp_mtl + labels['today_short'], className='main_text hosp'),
                          html.P([labels['hosp_mtl_label']], className='subscript hosp')],
                         className='mini_container',
                     ),
                     html.Div(
-                        [html.P([f'{pos_rate_change_mtl:+.2f}%' + labels['yesterday']], className='superscript'),
-                         html.H3(f'{pos_rate_mtl:.2f}%', className='main_text'),
+                        [html.P([f'{pos_rate_change_mtl:+.2f}%' + labels['vs_2dago']], className='superscript'),
+                         html.H3(f'{pos_rate_mtl:.2f}%' + labels['yesterday'], className='main_text'),
                          html.P([labels['test_pos_mtl_label']], className='subscript')],
                         className='mini_container', style={'color': pos_rate_mtl_colour}
                     ),
@@ -140,13 +140,13 @@ def generate_layout(labels):
                     ),
                     html.Div(
                         [html.P(['+' + new_icu_qc + labels['icu']], className='superscript icu'),
-                         html.H3('+' + new_hosp_qc + labels['yesterday'], className='main_text hosp'),
+                         html.H3('+' + new_hosp_qc + labels['today_short'], className='main_text hosp'),
                          html.P([labels['hosp_qc_label']], className='subscript hosp')],
                         className='mini_container',
                     ),
                     html.Div(
-                        [html.P([f'{pos_rate_change_qc:+.2f}%' + labels['yesterday']], className='superscript'),
-                         html.H3(f'{pos_rate_qc:.2f}%', className='main_text'),
+                        [html.P([f'{pos_rate_change_qc:+.2f}%' + labels['vs_2dago']], className='superscript'),
+                         html.H3(f'{pos_rate_qc:.2f}%' + labels['yesterday'], className='main_text'),
                          html.P([labels['test_pos_qc_label']], className='subscript')],
                         className='mini_container', style={'color': pos_rate_qc_colour}
                     ),
