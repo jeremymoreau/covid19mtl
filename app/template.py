@@ -58,10 +58,10 @@ def generate_layout(labels):
                     html.Div(
                         [
                             # Load in a new tab because some figures do not resize properly otherwise
-                            # TODO: Fix this bug
-                            html.A([labels['language0']], href=labels['language_link0'], target='_blank', className='lang-link'),
-                            html.A([labels['language1']], href=labels['language_link1'], target='_blank', className='lang-link'),
-                            html.A([labels['language2']], href=labels['language_link2'], target='_blank', className='lang-link'),
+                            # TODO: Fix this bug. Removed: Seems to work?!
+                            html.A([labels['language0']], href=labels['language_link0'], className='lang-link'),
+                            html.A([labels['language1']], href=labels['language_link1'], className='lang-link'),
+                            html.A([labels['language2']], href=labels['language_link2'], className='lang-link'),
                         ],
                         id='language-container',
                     ),
@@ -72,7 +72,7 @@ def generate_layout(labels):
             # mini info boxes
             html.Div(
                 [
-                    ####### MTL #######
+                    # MTL
                     html.Div(
                         [html.P(['+' + new_cases_mtl + labels['today']], className='superscript'),
                          html.H3(latest_cases_mtl, className='main_text'),
@@ -80,9 +80,14 @@ def generate_layout(labels):
                         className='mini_container cases',
                     ),
                     html.Div(
-                        [html.P([incid_per100K_perc_change_mtl + '%' + labels['vs_last7d']], className='superscript'),
-                         html.H3(incid_per100k_7d_mtl, className='main_text'),
-                         html.P([labels['incidence_per100k_7d_mtl_label']], className='subscript')],
+                        [
+                            html.P(
+                                [f'{incid_per100K_perc_change_mtl:+.0f}%' + labels['vs_last7d']],
+                                className='superscript'
+                            ),
+                            html.H3(f'{incid_per100k_7d_mtl:.0f}', className='main_text'),
+                            html.P([labels['incidence_per100k_7d_mtl_label']], className='subscript')
+                        ],
                         className='mini_container', style={'color': incid_per100k_7d_mtl_colour}
                     ),
                     html.Div(
@@ -93,23 +98,23 @@ def generate_layout(labels):
                     ),
                     html.Div(
                         [html.P(['+' + new_icu_mtl + labels['icu']], className='superscript icu'),
-                         html.H3('+' + new_hosp_mtl + labels['yesterday'], className='main_text hosp'),
+                         html.H3('+' + new_hosp_mtl + labels['today_short'], className='main_text hosp'),
                          html.P([labels['hosp_mtl_label']], className='subscript hosp')],
                         className='mini_container',
                     ),
                     html.Div(
-                        [html.P([pos_rate_change_mtl + '%' + labels['yesterday']], className='superscript'),
-                         html.H3(pos_rate_mtl + '%', className='main_text'),
+                        [html.P([f'{pos_rate_change_mtl:+.1f}%' + labels['vs_2dago']], className='superscript'),
+                         html.H3(f'{pos_rate_mtl:.1f}%' + labels['yesterday'], className='main_text'),
                          html.P([labels['test_pos_mtl_label']], className='subscript')],
                         className='mini_container', style={'color': pos_rate_mtl_colour}
                     ),
                     html.Div(
-                        [html.P([new_doses_mtl + labels['doses_today']], className='superscript'),
+                        [html.P([f'{new_doses_mtl:+d}' + labels['doses_today']], className='superscript'),
                          html.H3(perc_vac_mtl + '%', className='main_text'),
                          html.P([labels['vaccination_perc_mtl_label']], className='subscript')],
                         className='mini_container vaccines',
                     ),
-                    ####### QC #######
+                    # QC
                     html.Div(
                         [html.P(['+' + new_cases_qc + labels['today']], className='superscript'),
                          html.H3(latest_cases_qc, className='main_text'),
@@ -117,9 +122,14 @@ def generate_layout(labels):
                         className='mini_container cases',
                     ),
                     html.Div(
-                        [html.P([incid_per100K_perc_change_qc + '%' + labels['vs_last7d']], className='superscript'),
-                         html.H3(incid_per100k_7d_qc, className='main_text'),
-                         html.P([labels['incidence_per100k_7d_qc_label']], className='subscript')],
+                        [
+                            html.P(
+                                [f'{incid_per100K_perc_change_qc:+.0f}%' + labels['vs_last7d']],
+                                className='superscript'
+                            ),
+                            html.H3(f'{incid_per100k_7d_qc:.0f}', className='main_text'),
+                            html.P([labels['incidence_per100k_7d_qc_label']], className='subscript')
+                        ],
                         className='mini_container', style={'color': incid_per100k_7d_qc_colour}
                     ),
                     html.Div(
@@ -130,18 +140,18 @@ def generate_layout(labels):
                     ),
                     html.Div(
                         [html.P(['+' + new_icu_qc + labels['icu']], className='superscript icu'),
-                         html.H3('+' + new_hosp_qc + labels['yesterday'], className='main_text hosp'),
+                         html.H3('+' + new_hosp_qc + labels['today_short'], className='main_text hosp'),
                          html.P([labels['hosp_qc_label']], className='subscript hosp')],
                         className='mini_container',
                     ),
                     html.Div(
-                        [html.P([pos_rate_change_qc + '%' + labels['yesterday']], className='superscript'),
-                         html.H3(pos_rate_qc + '%', className='main_text'),
+                        [html.P([f'{pos_rate_change_qc:+.1f}%' + labels['vs_2dago']], className='superscript'),
+                         html.H3(f'{pos_rate_qc:.1f}%' + labels['yesterday'], className='main_text'),
                          html.P([labels['test_pos_qc_label']], className='subscript')],
                         className='mini_container', style={'color': pos_rate_qc_colour}
                     ),
                     html.Div(
-                        [html.P([new_doses_qc + labels['doses_today']], className='superscript'),
+                        [html.P([f'{new_doses_qc:+d}' + labels['doses_today']], className='superscript'),
                          html.H3(perc_vac_qc + '%', className='main_text'),
                          html.P([labels['vaccination_perc_qc_label']], className='subscript')],
                         className='mini_container vaccines',

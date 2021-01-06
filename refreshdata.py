@@ -475,8 +475,8 @@ def update_mtl_boroughs_csv(processed_dir):
     seven_day_per100k_df = seven_day_per100k_df.round()
 
     # create categories for 7day incidence per 100k
-    bins = [-1, 10, 25, 50, 100, 200, 300, np.inf]
-    labels = ['< 10', '> 10-25', '> 25-50', '> 50-100', '> 100-200', '> 200-300', '> 300']
+    bins = [-1, 10, 25, 50, 100, 200, 300, 500, np.inf]
+    labels = ['< 10', '> 10-25', '> 25-50', '> 50-100', '> 100-200', '> 200-300', '> 300-500', '> 500']
     category_df = seven_day_per100k_df.apply(pd.cut, bins=bins, labels=labels)
 
     # add suffixes to each df and join
@@ -729,6 +729,35 @@ def update_vaccines_data_csv(sources_dir: str, processed_dir: str):
     vaccine_df.to_csv(data_vaccines_csv, encoding='utf-8', index=False, na_rep='na')
 
 
+def append_totals_csv(processed_dir: str, totals_name: str, data_name: str):
+    """Load latest data CSV and append its last row to the existing totals CSV.
+
+    Parameters
+    ----------
+    processed_dir : str
+        Absolute path to processed dir.
+    totals_name : str
+        The filename of the totals CSV within the processed_dir.
+    data_name : str
+        The filename of the data CSV within the processed_dir.
+    """
+    processed_path = Path(processed_dir)
+    totals_csv = processed_path.joinpath(totals_name)
+
+    # handle QC
+    total_df = pd.read_csv(totals_csv, index_col=0, na_values='na')
+    df = pd.read_csv(processed_path.joinpath(data_name), index_col=0)
+
+    # get last data
+    data = df.iloc[-1]
+
+    if data.name not in total_df.index:
+        total_df = total_df.append(data)
+
+    # Overwrite total csv
+    total_df.to_csv(totals_csv, na_rep='na')
+
+
 def main():
     parser = ArgumentParser('refreshdata', description=__doc__)
     parser.add_argument('-nd', '--no-download', action='store_true', default=False,
@@ -789,6 +818,10 @@ def main():
 
     # Append row to data_mtl_age.csv
     append_mtl_cases_by_age(sources_dir, processed_dir, yesterday_date)
+
+    # Copy total rows
+    append_totals_csv(processed_dir, 'data_qc_totals.csv', 'data_qc.csv')
+    append_totals_csv(processed_dir, 'data_mtl_totals.csv', 'data_mtl.csv')
 
     return 0
 
