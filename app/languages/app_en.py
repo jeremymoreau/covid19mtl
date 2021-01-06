@@ -21,7 +21,7 @@ labels = {
     'hosp_mtl_label': 'New Hospitalisations (MTL)',
     'hosp_qc_label': 'New Hospitalisations (QC)',
     'icu': ' ICU today',
-    'yesterday': ' yester.',
+    'yesterday': ' yday',
     'vs_2dago': ' vs. 2 days ago',
     'vaccination_perc_mtl_label': 'Est. % vaccinated (MTL)',
     'vaccination_perc_qc_label': 'Est. % vaccinated (QC)',
