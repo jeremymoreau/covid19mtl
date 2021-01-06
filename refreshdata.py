@@ -817,6 +817,7 @@ def main():
     update_vaccines_data_csv(sources_dir, processed_dir)
 
     # Append row to data_mtl_age.csv
+    append_mtl_cases_by_age(sources_dir, processed_dir, yesterday_date)
 
     # Copy total rows
     append_totals_csv(processed_dir, 'data_qc_totals.csv', 'data_qc.csv')
