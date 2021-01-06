@@ -103,8 +103,8 @@ def generate_layout(labels):
                         className='mini_container',
                     ),
                     html.Div(
-                        [html.P([f'{pos_rate_change_mtl:+.2f}%' + labels['vs_2dago']], className='superscript'),
-                         html.H3(f'{pos_rate_mtl:.2f}%' + labels['yesterday'], className='main_text'),
+                        [html.P([f'{pos_rate_change_mtl:+.1f}%' + labels['vs_2dago']], className='superscript'),
+                         html.H3(f'{pos_rate_mtl:.1f}%' + labels['yesterday'], className='main_text'),
                          html.P([labels['test_pos_mtl_label']], className='subscript')],
                         className='mini_container', style={'color': pos_rate_mtl_colour}
                     ),
@@ -145,8 +145,8 @@ def generate_layout(labels):
                         className='mini_container',
                     ),
                     html.Div(
-                        [html.P([f'{pos_rate_change_qc:+.2f}%' + labels['vs_2dago']], className='superscript'),
-                         html.H3(f'{pos_rate_qc:.2f}%' + labels['yesterday'], className='main_text'),
+                        [html.P([f'{pos_rate_change_qc:+.1f}%' + labels['vs_2dago']], className='superscript'),
+                         html.H3(f'{pos_rate_qc:.1f}%' + labels['yesterday'], className='main_text'),
                          html.P([labels['test_pos_qc_label']], className='subscript')],
                         className='mini_container', style={'color': pos_rate_qc_colour}
                     ),
