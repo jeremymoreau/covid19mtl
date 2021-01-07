@@ -10,8 +10,8 @@ from argparse import ArgumentParser
 from datetime import datetime, timedelta
 from pathlib import Path
 
-import numpy as np
 import dateparser
+import numpy as np
 import pandas as pd
 import pytz
 import requests
@@ -681,24 +681,13 @@ def update_vaccines_data_csv(sources_dir: str, processed_dir: str):
     processed_dir : str
         Absolute path to processed dir.
     """
-    # Create list of dates for which we have data
-    data_dates = []
-    for date_dir in os.listdir(sources_dir):
-        # exclude hidden files/dirs, e.g. .DS
-        if not date_dir.startswith('.'):
-            # exclude _v#
-            date_dir = date_dir.split('_')[0]
+    # Create list of all vaccine files.
+    vaccine_files = sorted([path for path in Path(sources_dir).glob('*-*-*/data_qc_vaccines.csv')])
 
-            # Only add date if data_qc_vaccines.csv exists
-            data_mtl_csv = os.path.join(sources_dir, date_dir, 'data_qc_vaccines.csv')
-            if os.path.isfile(data_mtl_csv):
-                data_dates.append(date_dir)
-    data_dates.sort()
-
-    # Get Montreal case data files and store them in a {date: pandas_df} dict
+    # Build {date: pandas_df} dict
     data_dict = {}
-    for date in data_dates:
-        data_csv = os.path.join(sources_dir, date, 'data_qc_vaccines.csv')
+    for data_csv in vaccine_files:
+        date = data_csv.parent.name
         data = pd.read_csv(data_csv, encoding='utf-8', na_values='na', sep=';')
         data_dict[date] = data
 
@@ -727,8 +716,8 @@ def update_vaccines_data_csv(sources_dir: str, processed_dir: str):
         else:
             mtl_new = mtl_count - vaccine_df_mtl[-2]
             qc_new = qc_count - vaccine_df_qc[-2]
-            vaccine_df_mtl_new.append(mtl_new)
-            vaccine_df_qc_new.append(qc_new)
+            vaccine_df_mtl_new.append(mtl_new)  # type: ignore[arg-type]
+            vaccine_df_qc_new.append(qc_new)  # type: ignore[arg-type]
 
         # Add approx calculated % of population vaccinated
         # Note: this is based on the somewhat inaccurate assumption that 2 doses = 1 person vaccinated.
