@@ -65,7 +65,7 @@ labels = {
         '7day_incidence_per100k': 'Incidence à 7 jours pour 100 000',
         '7day_incidence': 'Incidence à 7 jours',
     },
-    'montreal_map_legend_title': "<b>Taux d'incidence sur 7 jours</b>",
+    'montreal_map_legend_title': '<b>Incidence à 7 jours pour 100 000</b>',
     'montreal_map_hovertemplate': '<br>Arrondissement/Ville: %{location}<br>Incidence à 7 jours pour 100 000 habitants: %{z}',
     # confirmed cases fig
     'confirmed_cases_y_label': 'Cas (cumul)',
