@@ -250,7 +250,8 @@ def get_mtl_data_date():
     date_elements = [element for element in soup.select('div.csc-textpic-text p.bodytext')
                      if 'extracted on' in element.text]
 
-    date_text = date_elements[0].contents[0]
+    # check the last date element to ensure all data has been updated
+    date_text = date_elements[-1].contents[0]
     date_text = date_text.split('extracted on ')[-1]
 
     return dateparser.parse(date_text)
