@@ -366,7 +366,7 @@ def update_hospitalisations_qc_csv(sources_dir, processed_dir):
     hosp_df.to_csv(os.path.join(processed_dir, 'data_qc_hospitalisations.csv'), encoding='utf-8', index=False)
 
 
-def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
+def append_mtl_cases_csv(sources_dir, processed_dir, date):
     """Append daily MTL borough data to cases.csv file.
 
     cases.csv file will be overwritten with the new updated file.
@@ -377,8 +377,6 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
         Absolute path of sources dir.
     processed_dir : str
         Absolute path of processed dir.
-    target_col : int
-        Index of target col to select.
     date : str
         ISO-8601 formatted date string to use as column name in cases_csv
     """
@@ -388,8 +386,8 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     day_df = pd.read_csv(day_csv, sep=';', index_col=0, encoding='utf-8')
     cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8', na_values='na')
 
-    # Select column to append
-    new_data_col = day_df.iloc[:, target_col]
+    # Select column to append. Select by expected name of column to ensure the column is there.
+    new_data_col = day_df.loc[:, 'Nombre de cas cumulatif, depuis le début de la pandémie']
 
     # convert string to int if present
     if not pd.api.types.is_numeric_dtype(new_data_col.dtype):
@@ -586,17 +584,14 @@ def append_mtl_cases_by_age(sources_dir, processed_dir, date):
         day_csv,
         sep=';',
         index_col=0,
-        header=0,
-        usecols=[0, 1, 2],
-        names=['age', 'new_cases', 'cases'],
-        # settings for dates < 2020-10-08
-        # usecols=[0, 1],
-        # names=['age', 'cases']
     )
     mtl_age_df = pd.read_csv(mtl_age_csv, encoding='utf-8', na_values='na')
 
     # Remove last 2 row (total count and age missing (Manquant))
     day_df = day_df[:-2]
+
+    # Rename cases column. If the column does not exist this will raise an error later.
+    day_df.columns.str.replace('Nombre de cas cumulatif, depuis le début de la pandémie', 'cases')
 
     # cases column might not be int due to 'Manquant' containing '< 5', convert to int
     day_df['cases'] = day_df['cases'].astype(int)
@@ -799,14 +794,6 @@ def main():
     # Replace data_qc_hospitalisations
     update_hospitalisations_qc_csv(sources_dir, processed_dir)
 
-    # Scrape latest number of recovered cases for QC
-
-    # Append col to cases.csv
-    append_mtl_cases_csv(sources_dir, processed_dir, 3, yesterday_date)
-
-    # Update data_mtl_boroughs.csv
-    update_mtl_boroughs_csv(processed_dir)
-
     # Append row to data_mtl_death_loc.csv
     append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
 
@@ -816,12 +803,19 @@ def main():
     # Update data_vaccines.csv
     update_vaccines_data_csv(sources_dir, processed_dir)
 
-    # Append row to data_mtl_age.csv
-    append_mtl_cases_by_age(sources_dir, processed_dir, yesterday_date)
-
     # Copy total rows
     append_totals_csv(processed_dir, 'data_qc_totals.csv', 'data_qc.csv')
     append_totals_csv(processed_dir, 'data_mtl_totals.csv', 'data_mtl.csv')
+
+    # Process Sante Montreal data
+    # Append col to cases.csv
+    append_mtl_cases_csv(sources_dir, processed_dir, yesterday_date)
+
+    # Update data_mtl_boroughs.csv
+    update_mtl_boroughs_csv(processed_dir)
+
+    # Append row to data_mtl_age.csv
+    append_mtl_cases_by_age(sources_dir, processed_dir, yesterday_date)
 
     return 0
 
