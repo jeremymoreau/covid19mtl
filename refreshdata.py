@@ -591,7 +591,7 @@ def append_mtl_cases_by_age(sources_dir, processed_dir, date):
     day_df = day_df[:-2]
 
     # Rename cases column. If the column does not exist this will raise an error later.
-    day_df.columns.str.replace('Nombre de cas cumulatif, depuis le début de la pandémie', 'cases')
+    day_df.columns = day_df.columns.str.replace('Nombre de cas cumulatif, depuis le début de la pandémie', 'cases')
 
     # cases column might not be int due to 'Manquant' containing '< 5', convert to int
     day_df['cases'] = day_df['cases'].astype(int)
