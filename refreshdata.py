@@ -366,7 +366,7 @@ def update_hospitalisations_qc_csv(sources_dir, processed_dir):
     hosp_df.to_csv(os.path.join(processed_dir, 'data_qc_hospitalisations.csv'), encoding='utf-8', index=False)
 
 
-def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
+def append_mtl_cases_csv(sources_dir, processed_dir, date):
     """Append daily MTL borough data to cases.csv file.
 
     cases.csv file will be overwritten with the new updated file.
@@ -377,8 +377,6 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
         Absolute path of sources dir.
     processed_dir : str
         Absolute path of processed dir.
-    target_col : int
-        Index of target col to select.
     date : str
         ISO-8601 formatted date string to use as column name in cases_csv
     """
@@ -388,8 +386,8 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     day_df = pd.read_csv(day_csv, sep=';', index_col=0, encoding='utf-8')
     cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8', na_values='na')
 
-    # Select column to append
-    new_data_col = day_df.iloc[:, target_col]
+    # Select column to append. Select by expected name of column to ensure the column is there.
+    new_data_col = day_df.loc[:, 'Nombre de cas cumulatif, depuis le début de la pandémie']
 
     # convert string to int if present
     if not pd.api.types.is_numeric_dtype(new_data_col.dtype):
@@ -405,28 +403,25 @@ def append_mtl_cases_csv(sources_dir, processed_dir, target_col, date):
     # Remove last row (total count)
     new_data_col = new_data_col[:-1]
 
-    # check if column already exists in cases_csv, append column if it doesn't
-    if cases_df.columns[-1] == date:
+    # check if date already exists in cases_csv, append if it doesn't
+    if date in cases_df.index:
         print(f'MTL cases: {date} has already been appended to {cases_csv}')
     else:
-        # Append new col of data
-        cases_df[date] = list(new_data_col)
-
-        # check whether the exact same data already exists for a previous day
+        # check whether this is actually new data and not data from a previous day (see issue #34)
         # data is not updated on Sat (for Fri) and Sun (for Sat) and still shows previous days data
         # replace it with 'na' if it is the same
-        # see: issue #34
         already_exists = False
-        # need to go back several columns in case the previous one has 'na'
-        # TODO: can just check the previous two rows if na values are dropped (see append_mtl_age_csv)
-        for i in range(len(cases_df.columns) - 1, 1, -1):
-            if pd.Series.all(cases_df[date] == cases_df[cases_df.columns[i - 1]]):
-                already_exists = True
-                break
+        # check with last row that has actual values
+        print(cases_df.dropna().iloc[-1])
+        if pd.Series.all(cases_df.dropna().iloc[-1] == list(new_data_col)):
+            already_exists = True
+
+        # Append new row of data
+        cases_df.loc[date] = list(new_data_col)
 
         if already_exists:
             print(f'MTL cases: the data shown on {date} already exists for a previous day, replacing with "na"')
-            cases_df[cases_df.columns[-1]] = 'na'
+            cases_df.iloc[-1] = 'na'
 
     # Overwrite cases.csv
     cases_df.to_csv(cases_csv, encoding='utf-8', na_rep='na')
@@ -445,11 +440,10 @@ def update_mtl_boroughs_csv(processed_dir):
     cases_df = pd.read_csv(cases_csv, index_col=0, encoding='utf-8', na_values='na', parse_dates=True)
 
     # drop to be confirmed (TBC) cases
-    cases_df = cases_df[:-1]
+    cases_df = cases_df.iloc[:, :-1]
 
-    # make date the index
     # and drop rows with only NA
-    cases_df = cases_df.transpose().dropna(how='all').astype(int)
+    cases_df = cases_df.dropna(how='all').astype(int)
     # convert index to DateTimeIndex
     cases_df.index = pd.to_datetime(cases_df.index)
 
@@ -586,17 +580,14 @@ def append_mtl_cases_by_age(sources_dir, processed_dir, date):
         day_csv,
         sep=';',
         index_col=0,
-        header=0,
-        usecols=[0, 1, 2],
-        names=['age', 'new_cases', 'cases'],
-        # settings for dates < 2020-10-08
-        # usecols=[0, 1],
-        # names=['age', 'cases']
     )
     mtl_age_df = pd.read_csv(mtl_age_csv, encoding='utf-8', na_values='na')
 
     # Remove last 2 row (total count and age missing (Manquant))
     day_df = day_df[:-2]
+
+    # Rename cases column. If the column does not exist this will raise an error later.
+    day_df.columns = day_df.columns.str.replace('Nombre de cas cumulatif, depuis le début de la pandémie', 'cases')
 
     # cases column might not be int due to 'Manquant' containing '< 5', convert to int
     day_df['cases'] = day_df['cases'].astype(int)
@@ -799,14 +790,6 @@ def main():
     # Replace data_qc_hospitalisations
     update_hospitalisations_qc_csv(sources_dir, processed_dir)
 
-    # Scrape latest number of recovered cases for QC
-
-    # Append col to cases.csv
-    append_mtl_cases_csv(sources_dir, processed_dir, 3, yesterday_date)
-
-    # Update data_mtl_boroughs.csv
-    update_mtl_boroughs_csv(processed_dir)
-
     # Append row to data_mtl_death_loc.csv
     append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
 
@@ -816,12 +799,19 @@ def main():
     # Update data_vaccines.csv
     update_vaccines_data_csv(sources_dir, processed_dir)
 
-    # Append row to data_mtl_age.csv
-    append_mtl_cases_by_age(sources_dir, processed_dir, yesterday_date)
-
     # Copy total rows
     append_totals_csv(processed_dir, 'data_qc_totals.csv', 'data_qc.csv')
     append_totals_csv(processed_dir, 'data_mtl_totals.csv', 'data_mtl.csv')
+
+    # Process Sante Montreal data
+    # Append col to cases.csv
+    append_mtl_cases_csv(sources_dir, processed_dir, yesterday_date)
+
+    # Update data_mtl_boroughs.csv
+    update_mtl_boroughs_csv(processed_dir)
+
+    # Append row to data_mtl_age.csv
+    append_mtl_cases_by_age(sources_dir, processed_dir, yesterday_date)
 
     return 0
 
