@@ -158,7 +158,7 @@ def backup_processed_dir(processed_dir, processed_backups_dir):
         shutil.copy(file_path, current_bkp_dir)
 
 
-def download_source_files(sources, sources_dir):
+def download_source_files(sources, sources_dir, version=True):
     """Download files from URL
 
     Downloaded files will be downloaded into data/sources/YYYY-MM-DD{_v#}/
@@ -170,25 +170,33 @@ def download_source_files(sources, sources_dir):
         the file in which to save the downloaded data.
     sources_dir : str
         Absolute path of dir in which to save downloaded files.
+    version : bool
+        True, if source directories should be versioned if sources for the same date already exist, False otherwise.
     """
     # create data/sources/YYYY-MM-DD{_v#}/ dir, use previous day date (data is reported for previous day)
     yesterday_date = datetime.now(tz=TIMEZONE) - timedelta(days=1)
     date_tag = yesterday_date.date().isoformat()
 
-    current_sources_dir = os.path.join(sources_dir, date_tag)
-    i = 1
-    while os.path.isdir(current_sources_dir):
-        i += 1
-        current_sources_dirname = date_tag + '_v' + str(i)
-        current_sources_dir = os.path.join(sources_dir, current_sources_dirname)
-    else:
-        os.mkdir(current_sources_dir)
+    current_sources_dir = Path(sources_dir, date_tag)
+
+    if version:
+        i = 1
+        while current_sources_dir.is_dir():
+            i += 1
+            current_sources_dirname = date_tag + '_v' + str(i)
+            current_sources_dir = current_sources_dir.parent.joinpath(current_sources_dirname)
+
+    current_sources_dir.mkdir(exist_ok=True)
 
     # Download all source data files to sources dir
     for file, url in sources.items():
         data = fetch(url)
-        fq_path = os.path.join(current_sources_dir, file)
-        save_datafile(fq_path, data)
+        fq_path = current_sources_dir.joinpath(file)
+
+        if not fq_path.exists():
+            save_datafile(fq_path, data)
+        else:
+            raise TypeError(f'{fq_path} already exists')
 
 
 def get_latest_source_dir(sources_dir):
