@@ -231,7 +231,7 @@ def get_source_dir_for_date(sources_dir, date):
     return latest_source_dir.name
 
 
-def get_qc_data_date():
+def get_inspq_data_date():
     content = fetch(SOURCES.get('data_qc_manual_data.csv'))
 
     # directly load file from the web
@@ -239,7 +239,37 @@ def get_qc_data_date():
     # get cell with date
     date_string = df.iloc[1, 6]
 
-    return dateparser.parse(date_string)
+    return dateparser.parse(date_string).date()  # type: ignore[union-attr]
+
+
+def get_qc_data_date():
+    content = fetch(SOURCES.get('data_qc_7days.csv'))
+
+    # directly load file from the web
+    df = pd.read_csv(io.StringIO(content), header=None, sep=';')
+    # get cell with date
+    date_string = df.iloc[-1, 0]
+
+    csv_date = dateparser.parse(date_string)
+
+    if csv_date:
+        content = fetch(SOURCES_QC.get('QC_situation.html'))
+
+        soup: BeautifulSoup = BeautifulSoup(content, 'lxml')
+
+        date_elements = [element for element in soup.select('div.ce-textpic div.ce-bodytext p')
+                         if 'Source: ' in element.text]
+
+        # expected format of last element: "Source: TSP, MSSS (Updated on January 11, 2021 at 4&nbsp;p.m.)"
+        date_text = date_elements[-1].contents[0]
+        date_text = date_text.split('Updated on')[-1].split(')')[0]
+
+        html_date = dateparser.parse(date_text)
+
+        if html_date and csv_date.date() == html_date.date():
+            return html_date.date()
+
+    return None
 
 
 def get_mtl_data_date():
@@ -254,7 +284,7 @@ def get_mtl_data_date():
     date_text = date_elements[-1].contents[0]
     date_text = date_text.split('extracted on ')[-1]
 
-    return dateparser.parse(date_text)
+    return dateparser.parse(date_text).date()  # type: ignore[union-attr]
 
 
 def load_data_qc_csv(source_file):
