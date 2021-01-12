@@ -826,53 +826,101 @@ def main():
     args = parser.parse_args()
     # init_logging(args)
 
-    # Yesterday's date (data is reported for previous day)
-    yesterday = datetime.now(tz=TIMEZONE) - timedelta(days=1)
-    yesterday_date = yesterday.date().isoformat()
+    # Use yesterday's date (data is reported for previous day)
+    today = datetime.now(tz=TIMEZONE).date()
+    yesterday = today - timedelta(days=1)
+    yesterday_date = yesterday.isoformat()
 
     # sources, processed, and processed_backups dir paths
     sources_dir = os.path.join(DATA_DIR, 'sources')
     processed_dir = os.path.join(DATA_DIR, 'processed')
     processed_backups_dir = os.path.join(DATA_DIR, 'processed_backups')
 
-    # download all source files into data/sources/YYYY-MM-DD{_v#}/
-    if not args.no_download:
-        SOURCES = {**SOURCES_MTL, **SOURCES_INSPQ, **SOURCES_QC}
-        download_source_files(SOURCES, sources_dir)
-
     # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
     if not args.no_backup:
-        backup_processed_dir(processed_dir, processed_backups_dir)
+        # backup only once
+        if not Path(processed_backups_dir, today.isoformat()).exists():
+            backup_processed_dir(processed_dir, processed_backups_dir)
 
-    # Update data/processed files from latest data/sources files
-    # Replace data_qc
-    update_data_qc_csv(sources_dir, processed_dir)
+    print('checking for new data for date: ' + str(yesterday))
 
-    # Replace data_qc_hospitalisations
-    update_hospitalisations_qc_csv(sources_dir, processed_dir)
+    # get the latest date of INSPQ data
+    df = pd.read_csv(Path(processed_dir).joinpath('data_qc.csv'), index_col=0)
+    inspq_data_date = datetime.fromisoformat(df.index[-1]).date()
 
-    # Append row to data_mtl_death_loc.csv
-    append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
+    # verify that we don't have the latest data yet
+    if inspq_data_date != yesterday:
+        print('checking data of INSPQ data remotely...')
+        current_inspq_data_date = get_inspq_data_date()
 
-    # Update data_mtl.csv
-    update_mtl_data_csv(sources_dir, processed_dir)
+        # verify that there is new data available
+        if current_inspq_data_date == yesterday:
+            print('retrieving new data from INSPQ...')
+            download_source_files(SOURCES_INSPQ, sources_dir, False)
 
-    # Update data_vaccines.csv
-    update_vaccines_data_csv(sources_dir, processed_dir)
+            # Replace data_qc
+            update_data_qc_csv(sources_dir, processed_dir)
 
-    # Copy total rows
-    append_totals_csv(processed_dir, 'data_qc_totals.csv', 'data_qc.csv')
-    append_totals_csv(processed_dir, 'data_mtl_totals.csv', 'data_mtl.csv')
+            # Replace data_qc_hospitalisations
+            update_hospitalisations_qc_csv(sources_dir, processed_dir)
 
-    # Process Sante Montreal data
-    # Append col to cases.csv
-    append_mtl_cases_csv(sources_dir, processed_dir, yesterday_date)
+            # Append row to data_mtl_death_loc.csv
+            append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
 
-    # Update data_mtl_boroughs.csv
-    update_mtl_boroughs_csv(processed_dir)
+            # Update data_mtl.csv
+            update_mtl_data_csv(sources_dir, processed_dir)
 
-    # Append row to data_mtl_age.csv
-    append_mtl_cases_by_age(sources_dir, processed_dir, yesterday_date)
+            # Copy total rows
+            append_totals_csv(processed_dir, 'data_qc_totals.csv', 'data_qc.csv')
+            append_totals_csv(processed_dir, 'data_mtl_totals.csv', 'data_mtl.csv')
+
+    # get the latest date of QC data
+    df = pd.read_csv(Path(processed_dir).joinpath('data_vaccines.csv'), index_col=0)
+    qc_data_date = datetime.fromisoformat(df.index[-1]).date()
+
+    # verify that we don't have the latest data yet
+    if qc_data_date != yesterday:
+        # print('checking data of QC data remotely...')
+        current_qc_data_date = get_qc_data_date()
+
+        # verify that there is new data available
+        if current_qc_data_date == yesterday:
+            print('retrieving new data from QC...')
+            download_source_files(SOURCES_QC, sources_dir, False)
+
+            # Update data_vaccines.csv
+            update_vaccines_data_csv(sources_dir, processed_dir)
+
+    # get the latest date of MTL data
+    df = pd.read_csv(Path(processed_dir).joinpath('data_mtl_boroughs.csv'), index_col=0)
+    mtl_data_date = datetime.fromisoformat(df.index[-1]).date()
+
+    # verify that we don't have the latest data yet
+    if mtl_data_date != yesterday:
+        # print('checking data of Sante MTL data remotely...')
+        current_mtl_data_date = get_mtl_data_date()
+
+        # verify that there is new data available
+        if current_mtl_data_date == yesterday:
+            print('retrieving new data from Sante MTL...')
+            download_source_files(SOURCES_MTL, sources_dir, False)
+
+            # Process Sante Montreal data
+            # Append col to cases.csv
+            append_mtl_cases_csv(sources_dir, processed_dir, yesterday_date)
+
+            # Update data_mtl_boroughs.csv
+            update_mtl_boroughs_csv(processed_dir)
+
+            # Append row to data_mtl_age.csv
+            append_mtl_cases_by_age(sources_dir, processed_dir, yesterday_date)
+        else:
+            print('no new data from Sante MTL available')
+
+    # download all source files into data/sources/YYYY-MM-DD{_v#}/
+    # if not args.no_download:
+    #     SOURCES = {**SOURCES_MTL, **SOURCES_INSPQ, **SOURCES_QC}
+    #     download_source_files(SOURCES, sources_dir)
 
     return 0
 
