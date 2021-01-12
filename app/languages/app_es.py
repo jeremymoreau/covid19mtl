@@ -41,7 +41,7 @@ labels = {
     'intensive_care_label': 'Cuidados intensivos (QC)',
     'total_testing_label': 'Pruebas diagnósticas (QC)',
     # footer
-    'footer_left': 'Datos: [Santé Montréal](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees) / Construido con [Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
+    'footer_left': 'Datos: [Santé Montréal](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees), [Gobierno de Québec](https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/situation-coronavirus-in-quebec/) / Construido con [Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
     'footer_centre': 'Patrocinado por [DigitalOcean](https://www.digitalocean.com/community/pages/covid-19)',
     'footer_right': 'Hecho por [Jeremy Moreau](https://jeremymoreau.com/), [Matthias Schoettle](https://mattsch.com), [Colaboradores](https://github.com/jeremymoreau/covid19mtl#contributors) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.est)',
     'infobox': """
@@ -52,7 +52,6 @@ labels = {
     - [Centro de experiencia y de consulta en salud pública (sólo francés)](https://www.inspq.qc.ca/covid-19/donnees)
     - [La enfermedad del coronavirus (COVID-19) en Quebec (inglés y francés)](https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/situation-coronavirus-in-quebec/)
     - [Gobierno de Canadá: COVID-19 (inglés y francés)](https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19.html)
-    - [Flatten.ca: auto-reporte de estado de salud (inglés y francés)](https://flatten.ca/)
 
     Si está preocupado por el COVID-19 o presenta síntomas como tos o fiebre, llame sin costo al (514) 644-4545 en el área de Montreal, al (418) 644-4545 en la región de la Ciudad de Quebec y al 1 (877) 644-4545 en cualquier otra parte de la Provincia de Quebec.
     """,
