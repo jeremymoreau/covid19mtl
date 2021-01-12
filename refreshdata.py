@@ -24,8 +24,8 @@ NB_RETRIES = 3
 TIMEZONE = pytz.timezone('America/Montreal')
 # Data sources mapping
 # {filename: url}
-SOURCES = {
-    # Montreal
+# Montreal
+SOURCES_MTL = {
     # HTML
     'data_mtl.html':
     'https://santemontreal.qc.ca/en/public/coronavirus-covid-19/situation-of-the-coronavirus-covid-19-in-montreal',
@@ -40,9 +40,10 @@ SOURCES = {
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/sexe.csv',
     'data_mtl_new_cases.csv':
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/courbe.csv',
+}
 
-
-    # INSPQ
+# INSPQ
+SOURCES_INSPQ = {
     # HTML
     'INSPQ_main.html': 'https://www.inspq.qc.ca/covid-19/donnees',
     'INSPQ_region.html': 'https://www.inspq.qc.ca/covid-19/donnees/regions',
@@ -53,7 +54,10 @@ SOURCES = {
     'data_qc_manual_data.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/manual-data.csv',
     'data_qc_cases_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls-new.csv',
     'data_qc_death_loc_by_region.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa-new.csv',
-    # Quebec.ca/coronavirus
+}
+
+# Quebec.ca/coronavirus
+SOURCES_QC = {
     # HTML
     'QC_situation.html':
     'https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/situation-coronavirus-in-quebec/',
@@ -232,7 +236,7 @@ def get_source_dir_for_date(sources_dir, date):
 
 
 def get_inspq_data_date():
-    content = fetch(SOURCES.get('data_qc_manual_data.csv'))
+    content = fetch(SOURCES_INSPQ.get('data_qc_manual_data.csv'))
 
     # directly load file from the web
     df = pd.read_csv(io.StringIO(content))
@@ -243,7 +247,7 @@ def get_inspq_data_date():
 
 
 def get_qc_data_date():
-    content = fetch(SOURCES.get('data_qc_7days.csv'))
+    content = fetch(SOURCES_QC.get('data_qc_7days.csv'))
 
     # directly load file from the web
     df = pd.read_csv(io.StringIO(content), header=None, sep=';')
@@ -273,7 +277,7 @@ def get_qc_data_date():
 
 
 def get_mtl_data_date():
-    content = fetch(SOURCES.get('data_mtl.html'))
+    content = fetch(SOURCES_MTL.get('data_mtl.html'))
 
     soup: BeautifulSoup = BeautifulSoup(content, 'lxml')
 
@@ -834,6 +838,7 @@ def main():
 
     # download all source files into data/sources/YYYY-MM-DD{_v#}/
     if not args.no_download:
+        SOURCES = {**SOURCES_MTL, **SOURCES_INSPQ, **SOURCES_QC}
         download_source_files(SOURCES, sources_dir)
 
     # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
