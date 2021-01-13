@@ -412,7 +412,6 @@ def append_mtl_cases_csv(sources_dir, processed_dir, date):
         # replace it with 'na' if it is the same
         already_exists = False
         # check with last row that has actual values
-        print(cases_df.dropna().iloc[-1])
         if pd.Series.all(cases_df.dropna().iloc[-1] == list(new_data_col)):
             already_exists = True
 
