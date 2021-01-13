@@ -244,6 +244,13 @@ def get_source_dir_for_date(sources_dir, date):
 
 
 def get_inspq_data_date():
+    """Returns the date of the data that is currently provided by INSPQ.
+
+    Returns
+    ----------
+    date
+        the date of the INSPQ data
+    """
     content = fetch(SOURCES_INSPQ.get('data_qc_manual_data.csv'))
 
     # directly load file from the web
@@ -255,6 +262,13 @@ def get_inspq_data_date():
 
 
 def get_qc_data_date():
+    """Returns the date of the data that is currently provided by Quebec (quebec.ca/coronavirus).
+
+    Returns
+    ----------
+    date
+        the date of the QC data
+    """
     content = fetch(SOURCES_QC.get('data_qc_7days.csv'))
 
     # directly load file from the web
@@ -285,6 +299,13 @@ def get_qc_data_date():
 
 
 def get_mtl_data_date():
+    """Returns the date of the data that is currently provided by Sante Montreal.
+
+    Returns
+    ----------
+    date
+        the date of the Sante Montreal data
+    """
     content = fetch(SOURCES_MTL.get('data_mtl.html'))
 
     soup: BeautifulSoup = BeautifulSoup(content, 'lxml')
@@ -842,20 +863,17 @@ def main():
         if not Path(processed_backups_dir, today.isoformat()).exists():
             backup_processed_dir(processed_dir, processed_backups_dir)
 
-    print('checking for new data for date: ' + str(yesterday))
-
     # get the latest date of INSPQ data
     df = pd.read_csv(Path(processed_dir).joinpath('data_qc.csv'), index_col=0)
     inspq_data_date = datetime.fromisoformat(df.index[-1]).date()
 
     # verify that we don't have the latest data yet
     if inspq_data_date != yesterday:
-        print('checking data of INSPQ data remotely...')
         current_inspq_data_date = get_inspq_data_date()
 
         # verify that there is new data available
         if current_inspq_data_date == yesterday:
-            print('retrieving new data from INSPQ...')
+            # print('retrieving new data from INSPQ...')
             download_source_files(SOURCES_INSPQ, sources_dir, False)
 
             # Replace data_qc
@@ -874,22 +892,25 @@ def main():
             append_totals_csv(processed_dir, 'data_qc_totals.csv', 'data_qc.csv')
             append_totals_csv(processed_dir, 'data_mtl_totals.csv', 'data_mtl.csv')
 
+            print('Downloaded and processed data from INSPQ.')
+
     # get the latest date of QC data
     df = pd.read_csv(Path(processed_dir).joinpath('data_vaccines.csv'), index_col=0)
     qc_data_date = datetime.fromisoformat(df.index[-1]).date()
 
     # verify that we don't have the latest data yet
     if qc_data_date != yesterday:
-        # print('checking data of QC data remotely...')
         current_qc_data_date = get_qc_data_date()
 
         # verify that there is new data available
         if current_qc_data_date == yesterday:
-            print('retrieving new data from QC...')
+            # print('retrieving new data from QC...')
             download_source_files(SOURCES_QC, sources_dir, False)
 
             # Update data_vaccines.csv
             update_vaccines_data_csv(sources_dir, processed_dir)
+
+            print('Downloaded and processed data from QC.')
 
     # get the latest date of MTL data
     df = pd.read_csv(Path(processed_dir).joinpath('data_mtl_boroughs.csv'), index_col=0)
@@ -897,12 +918,11 @@ def main():
 
     # verify that we don't have the latest data yet
     if mtl_data_date != yesterday:
-        # print('checking data of Sante MTL data remotely...')
         current_mtl_data_date = get_mtl_data_date()
 
         # verify that there is new data available
         if current_mtl_data_date == yesterday:
-            print('retrieving new data from Sante MTL...')
+            # print('retrieving new data from Sante MTL...')
             download_source_files(SOURCES_MTL, sources_dir, False)
 
             # Process Sante Montreal data
@@ -914,8 +934,8 @@ def main():
 
             # Append row to data_mtl_age.csv
             append_mtl_cases_by_age(sources_dir, processed_dir, yesterday_date)
-        else:
-            print('no new data from Sante MTL available')
+
+            print('Downloaded and processed data from Sante Montreal.')
 
     # download all source files into data/sources/YYYY-MM-DD{_v#}/
     # if not args.no_download:
