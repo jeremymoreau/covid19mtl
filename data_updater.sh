@@ -18,10 +18,10 @@ git pull > /dev/null
 # echo "downloading data, processing files..."
 OUTPUT=$(python refreshdata.py)
 
-# check if there are local changes
+# check if there are local changes to the processed files
 # see: https://stackoverflow.com/q/5143795
 # since untracked files are not reported, this will prevent only the backup to be committed
-if ! git diff-index --quiet HEAD --; then
+if ! git diff-index --quiet HEAD -- $DATA_DIR/processed/; then
   echo "detected local changes:"
   echo "$OUTPUT"
 
