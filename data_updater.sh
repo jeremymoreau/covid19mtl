@@ -12,7 +12,7 @@ source .venv/bin/activate
 
 # pull in case there were commits
 # echo "pulling latest state of repo..."
-git pull
+git pull > /dev/null
 
 # download sources, backup current data and update processed CSVs
 # echo "downloading data, processing files..."
@@ -20,6 +20,7 @@ OUTPUT=$(python refreshdata.py)
 
 # check if there are local changes
 # see: https://stackoverflow.com/q/5143795
+# since untracked files are not reported, this will prevent only the backup to be committed
 if ! git diff-index --quiet HEAD --; then
   echo "detected local changes:"
   echo "$OUTPUT"
