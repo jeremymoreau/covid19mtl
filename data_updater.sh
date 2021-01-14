@@ -16,7 +16,7 @@ git pull --quiet
 
 # download sources, backup current data and update processed CSVs
 # echo "downloading data, processing files..."
-OUTPUT=$(python refreshdata.py)
+OUTPUT=$(python refreshdata.py -m auto)
 
 # check if there are local changes to the processed files
 # see: https://stackoverflow.com/q/5143795
@@ -47,9 +47,9 @@ if ! git diff-index --quiet HEAD -- $DATA_DIR/processed/; then
 
   echo "staging changes..."
   # add updated files to index
-  git add --quiet $DATA_DIR/processed/*.csv
-  git add --quiet $DATA_DIR/processed_backups/$(date +%Y-%m-%d)/*.csv
-  git add --quiet $DATA_DIR/sources/$YESTERDAY/*
+  git add $DATA_DIR/processed/*.csv
+  git add $DATA_DIR/processed_backups/$(date +%Y-%m-%d)/*.csv
+  git add $DATA_DIR/sources/$YESTERDAY/*
 
   # check if there are now changes on the index (staged for commit)
   if ! git diff-index --cached --quiet HEAD --; then
