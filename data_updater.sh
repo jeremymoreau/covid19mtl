@@ -12,7 +12,7 @@ source .venv/bin/activate
 
 # pull in case there were commits
 # echo "pulling latest state of repo..."
-git pull > /dev/null
+git pull --quiet
 
 # download sources, backup current data and update processed CSVs
 # echo "downloading data, processing files..."
@@ -38,8 +38,6 @@ if ! git diff-index --quiet HEAD -- $DATA_DIR/processed/; then
 
   echo "version tag: $VERSION_TAG"
 
-  echo "committing and pushing changes..."
-
   # support Mac/BSD date and Linux/GNU date
   if [ "$(uname)" == "Darwin" ]; then
       YESTERDAY=$(date -v-1d +"%Y-%m-%d")
@@ -47,13 +45,15 @@ if ! git diff-index --quiet HEAD -- $DATA_DIR/processed/; then
       YESTERDAY=$(date +%Y-%m-%d -d "1 day ago")
   fi
 
+  echo "staging changes..."
   # add updated files to index
-  git add $DATA_DIR/processed/*.csv > /dev/null
-  git add $DATA_DIR/processed_backups/$(date +%Y-%m-%d)/*.csv > /dev/null
-  git add $DATA_DIR/sources/$YESTERDAY/* > /dev/null
+  git add --quiet $DATA_DIR/processed/*.csv
+  git add --quiet $DATA_DIR/processed_backups/$(date +%Y-%m-%d)/*.csv
+  git add --quiet $DATA_DIR/sources/$YESTERDAY/*
 
   # check if there are now changes on the index (staged for commit)
   if ! git diff-index --cached --quiet HEAD --; then
+    echo "committing and pushing..."
     # commit, tag and push
     git commit -m "Automatic update: Data update for $YESTERDAY" -m "$OUTPUT"
     git push
