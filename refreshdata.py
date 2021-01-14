@@ -62,6 +62,8 @@ SOURCES_QC = {
     # HTML
     'QC_situation.html':
     'https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/situation-coronavirus-in-quebec/',
+    'QC_vaccination.html':
+    'https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/situation-coronavirus-in-quebec/covid-19-vaccination-data/',  # noqa: E501
     # CSV
     'data_qc_outbreaks.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/eclosions-par-milieu-en.csv',  # noqa: E501
@@ -317,7 +319,21 @@ def is_new_qc_data_available(expected_date: dt.date):
 
     html_date = dateparser.parse(date_text).date()  # type: ignore[union-attr]
 
-    return csv_date == expected_date and html_date == expected_date
+    # ensure vaccination data (what we are actually interested in is available)
+    content = fetch(SOURCES_QC.get('QC_vaccination.html'))
+    soup = BeautifulSoup(content, 'lxml')
+
+    date_elements = [element for element in soup.select('div.ce-textpic div.ce-bodytext p')
+                     if 'Source: ' in element.text]
+    # expected format: "Source: CIUSSSCN-CIUSSSCOMTL-MSSS, January 13, 2021, 11 a.m."
+    date_text = date_elements[0].contents[0]
+    date_text = date_text.split(', ', 1)[-1]
+
+    vacc_date = dateparser.parse(date_text).date()  # type: ignore[union-attr]
+    # the vaccination data update is provided the day of (not yesterday)
+    vacc_expected_date = expected_date + timedelta(days=1)
+
+    return csv_date == expected_date and html_date == expected_date and vacc_date == vacc_expected_date
 
 
 def is_new_mtl_data_available(expected_date: dt.date):
