@@ -868,12 +868,79 @@ def append_totals_csv(processed_dir: str, totals_name: str, data_name: str):
     total_df.to_csv(totals_csv, na_rep='na')
 
 
+def process_inspq_data(sources_dir, processed_dir, date):
+    """Processes new INSPQ data.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path to source data dir.
+    processed_dir : str
+        Absolute path to processed data dir.
+    date : str
+        Date of data to append (yyyy-mm-dd).
+    """
+    # Replace data_qc
+    update_data_qc_csv(sources_dir, processed_dir)
+
+    # Replace data_qc_hospitalisations
+    update_hospitalisations_qc_csv(sources_dir, processed_dir)
+
+    # Append row to data_mtl_death_loc.csv
+    append_mtl_death_loc_csv(sources_dir, processed_dir, date)
+
+    # Update data_mtl.csv
+    update_mtl_data_csv(sources_dir, processed_dir)
+
+    # Copy total rows
+    append_totals_csv(processed_dir, 'data_qc_totals.csv', 'data_qc.csv')
+    append_totals_csv(processed_dir, 'data_mtl_totals.csv', 'data_mtl.csv')
+
+
+def process_qc_data(sources_dir, processed_dir):
+    """Processes new QC data.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path to source data dir.
+    processed_dir : str
+        Absolute path to processed data dir.
+    """
+    # Update data_vaccines.csv
+    update_vaccines_data_csv(sources_dir, processed_dir)
+
+
+def process_mtl_data(sources_dir, processed_dir, date):
+    """Processes new Sante Montreal data.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path to source data dir.
+    processed_dir : str
+        Absolute path to processed data dir.
+    date : str
+        Date of data to append (yyyy-mm-dd).
+    """
+    # Append col to cases.csv
+    append_mtl_cases_csv(sources_dir, processed_dir, date)
+
+    # Update data_mtl_boroughs.csv
+    update_mtl_boroughs_csv(processed_dir)
+
+    # Append row to data_mtl_age.csv
+    append_mtl_cases_by_age(sources_dir, processed_dir, date)
+
+
 def main():
     parser = ArgumentParser('refreshdata', description=__doc__)
     parser.add_argument('-nd', '--no-download', action='store_true', default=False,
                         help='Do not fetch remote file, only process local copies')
     parser.add_argument('-nb', '--no-backup', action='store_true', default=False,
                         help='Do not backup files in data/processed')
+    # TODO: add mode=auto|manual(default)
+    # TODO: move processing into separate functions to reuse across modes
     # parser.add_argument('-d', '--data-dir', default=DATA_DIR)
     # parser.add_argument('-v', '--verbose', action='store_true', default=False,
     #                     help='Increase verbosity')
@@ -910,21 +977,7 @@ def main():
         # print('retrieving new data from INSPQ...')
         download_source_files(SOURCES_INSPQ, sources_dir, False)
 
-        # Replace data_qc
-        update_data_qc_csv(sources_dir, processed_dir)
-
-        # Replace data_qc_hospitalisations
-        update_hospitalisations_qc_csv(sources_dir, processed_dir)
-
-        # Append row to data_mtl_death_loc.csv
-        append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
-
-        # Update data_mtl.csv
-        update_mtl_data_csv(sources_dir, processed_dir)
-
-        # Copy total rows
-        append_totals_csv(processed_dir, 'data_qc_totals.csv', 'data_qc.csv')
-        append_totals_csv(processed_dir, 'data_mtl_totals.csv', 'data_mtl.csv')
+        process_inspq_data(sources_dir, processed_dir, yesterday_date)
 
         print('Downloaded and processed data from INSPQ.')
 
@@ -937,8 +990,7 @@ def main():
         # print('retrieving new data from QC...')
         download_source_files(SOURCES_QC, sources_dir, False)
 
-        # Update data_vaccines.csv
-        update_vaccines_data_csv(sources_dir, processed_dir)
+        process_qc_data(sources_dir, processed_dir)
 
         print('Downloaded and processed data from QC.')
 
@@ -951,15 +1003,7 @@ def main():
         # print('retrieving new data from Sante MTL...')
         download_source_files(SOURCES_MTL, sources_dir, False)
 
-        # Process Sante Montreal data
-        # Append col to cases.csv
-        append_mtl_cases_csv(sources_dir, processed_dir, yesterday_date)
-
-        # Update data_mtl_boroughs.csv
-        update_mtl_boroughs_csv(processed_dir)
-
-        # Append row to data_mtl_age.csv
-        append_mtl_cases_by_age(sources_dir, processed_dir, yesterday_date)
+        process_mtl_data(sources_dir, processed_dir, yesterday_date)
 
         print('Downloaded and processed data from Sante Montreal.')
 
