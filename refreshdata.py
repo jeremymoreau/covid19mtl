@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Refresh data files for the Covid19 Mtl dashboard """
+""" Refresh data files for the COVID-19 MTL dashboard """
 
 import datetime as dt
 # import logging
@@ -542,7 +542,6 @@ def append_mtl_cases_csv(sources_dir, processed_dir, date):
         # replace it with 'na' if it is the same
         already_exists = False
         # check with last row that has actual values
-        print(cases_df.dropna().iloc[-1])
         if pd.Series.all(cases_df.dropna().iloc[-1] == list(new_data_col)):
             already_exists = True
 
@@ -935,12 +934,18 @@ def process_mtl_data(sources_dir, processed_dir, date):
 
 def main():
     parser = ArgumentParser('refreshdata', description=__doc__)
+    parser.add_argument(
+        '-m',
+        '--mode',
+        required=True,
+        choices=['auto', 'manual'],
+        help='Mode in which to operate. Auto: Automatically backup, download and process only new data (if new data '
+             'is available). Manual: Backup, download and update data irregardless of new data availability.'
+    )
     parser.add_argument('-nd', '--no-download', action='store_true', default=False,
-                        help='Do not fetch remote file, only process local copies')
+                        help='Do not fetch remote file, only process local copies (applies only to manual mode)')
     parser.add_argument('-nb', '--no-backup', action='store_true', default=False,
-                        help='Do not backup files in data/processed')
-    # TODO: add mode=auto|manual(default)
-    # TODO: move processing into separate functions to reuse across modes
+                        help='Do not backup files in data/processed (applies to both modes)')
     # parser.add_argument('-d', '--data-dir', default=DATA_DIR)
     # parser.add_argument('-v', '--verbose', action='store_true', default=False,
     #                     help='Increase verbosity')
@@ -962,55 +967,68 @@ def main():
     processed_dir = os.path.join(DATA_DIR, 'processed')
     processed_backups_dir = os.path.join(DATA_DIR, 'processed_backups')
 
-    # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
-    if not args.no_backup:
-        # backup only once
-        if not Path(processed_backups_dir, today.isoformat()).exists():
+    if args.mode == 'auto':
+        # ensure no download option is not used with mode=auto
+        if args.no_download:
+            raise ValueError('cannot use --no-download option with auto mode')
+
+        # Backup first if desired
+        if not args.no_backup:
+            # backup only once
+            if not Path(processed_backups_dir, today.isoformat()).exists():
+                backup_processed_dir(processed_dir, processed_backups_dir)
+
+        # get the latest date of INSPQ data
+        df = pd.read_csv(Path(processed_dir).joinpath('data_qc.csv'), index_col=0)
+        inspq_data_date = datetime.fromisoformat(df.index[-1]).date()
+
+        # verify that we don't have the latest data yet
+        if inspq_data_date != yesterday and is_new_inspq_data_available(yesterday):
+            # print('retrieving new data from INSPQ...')
+            download_source_files(SOURCES_INSPQ, sources_dir, False)
+
+            process_inspq_data(sources_dir, processed_dir, yesterday_date)
+
+            print('Downloaded and processed data from INSPQ.')
+
+        # get the latest date of QC data
+        df = pd.read_csv(Path(processed_dir).joinpath('data_vaccines.csv'), index_col=0)
+        qc_data_date = datetime.fromisoformat(df.index[-1]).date()
+
+        # verify that we don't have the latest data yet
+        if qc_data_date != yesterday and is_new_qc_data_available(yesterday):
+            # print('retrieving new data from QC...')
+            download_source_files(SOURCES_QC, sources_dir, False)
+
+            process_qc_data(sources_dir, processed_dir)
+
+            print('Downloaded and processed data from QC.')
+
+        # get the latest date of MTL data
+        df = pd.read_csv(Path(processed_dir).joinpath('data_mtl_boroughs.csv'), index_col=0)
+        mtl_data_date = datetime.fromisoformat(df.index[-1]).date()
+
+        # verify that we don't have the latest data yet
+        if mtl_data_date != yesterday and is_new_mtl_data_available(yesterday):
+            # print('retrieving new data from Sante MTL...')
+            download_source_files(SOURCES_MTL, sources_dir, False)
+
+            process_mtl_data(sources_dir, processed_dir, yesterday_date)
+
+            print('Downloaded and processed data from Sante Montreal.')
+    # mode=manual
+    else:
+        if not args.no_backup:
             backup_processed_dir(processed_dir, processed_backups_dir)
 
-    # get the latest date of INSPQ data
-    df = pd.read_csv(Path(processed_dir).joinpath('data_qc.csv'), index_col=0)
-    inspq_data_date = datetime.fromisoformat(df.index[-1]).date()
-
-    # verify that we don't have the latest data yet
-    if inspq_data_date != yesterday and is_new_inspq_data_available(yesterday):
-        # print('retrieving new data from INSPQ...')
-        download_source_files(SOURCES_INSPQ, sources_dir, False)
+        # download all source files into data/sources/YYYY-MM-DD{_v#}/
+        if not args.no_download:
+            SOURCES = {**SOURCES_MTL, **SOURCES_INSPQ, **SOURCES_QC}
+            download_source_files(SOURCES, sources_dir)
 
         process_inspq_data(sources_dir, processed_dir, yesterday_date)
-
-        print('Downloaded and processed data from INSPQ.')
-
-    # get the latest date of QC data
-    df = pd.read_csv(Path(processed_dir).joinpath('data_vaccines.csv'), index_col=0)
-    qc_data_date = datetime.fromisoformat(df.index[-1]).date()
-
-    # verify that we don't have the latest data yet
-    if qc_data_date != yesterday and is_new_qc_data_available(yesterday):
-        # print('retrieving new data from QC...')
-        download_source_files(SOURCES_QC, sources_dir, False)
-
         process_qc_data(sources_dir, processed_dir)
-
-        print('Downloaded and processed data from QC.')
-
-    # get the latest date of MTL data
-    df = pd.read_csv(Path(processed_dir).joinpath('data_mtl_boroughs.csv'), index_col=0)
-    mtl_data_date = datetime.fromisoformat(df.index[-1]).date()
-
-    # verify that we don't have the latest data yet
-    if mtl_data_date != yesterday and is_new_mtl_data_available(yesterday):
-        # print('retrieving new data from Sante MTL...')
-        download_source_files(SOURCES_MTL, sources_dir, False)
-
         process_mtl_data(sources_dir, processed_dir, yesterday_date)
-
-        print('Downloaded and processed data from Sante Montreal.')
-
-    # download all source files into data/sources/YYYY-MM-DD{_v#}/
-    # if not args.no_download:
-    #     SOURCES = {**SOURCES_MTL, **SOURCES_INSPQ, **SOURCES_QC}
-    #     download_source_files(SOURCES, sources_dir)
 
     return 0
 
