@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-""" Refresh data files for the Covid19 Mtl dashboard """
+""" Refresh data files for the COVID-19 MTL dashboard """
 
+import datetime as dt
 # import logging
+import io
 import os
 import shutil
 import sys
@@ -9,10 +11,12 @@ from argparse import ArgumentParser
 from datetime import datetime, timedelta
 from pathlib import Path
 
+import dateparser
 import numpy as np
 import pandas as pd
 import pytz
 import requests
+from bs4 import BeautifulSoup
 
 pd.options.mode.chained_assignment = None
 
@@ -21,8 +25,8 @@ NB_RETRIES = 3
 TIMEZONE = pytz.timezone('America/Montreal')
 # Data sources mapping
 # {filename: url}
-SOURCES = {
-    # Montreal
+# Montreal
+SOURCES_MTL = {
     # HTML
     'data_mtl.html':
     'https://santemontreal.qc.ca/en/public/coronavirus-covid-19/situation-of-the-coronavirus-covid-19-in-montreal',
@@ -37,9 +41,10 @@ SOURCES = {
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/sexe.csv',
     'data_mtl_new_cases.csv':
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/courbe.csv',
+}
 
-
-    # INSPQ
+# INSPQ
+SOURCES_INSPQ = {
     # HTML
     'INSPQ_main.html': 'https://www.inspq.qc.ca/covid-19/donnees',
     'INSPQ_region.html': 'https://www.inspq.qc.ca/covid-19/donnees/regions',
@@ -50,7 +55,10 @@ SOURCES = {
     'data_qc_manual_data.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/manual-data.csv',
     'data_qc_cases_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls-new.csv',
     'data_qc_death_loc_by_region.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa-new.csv',
-    # Quebec.ca/coronavirus
+}
+
+# Quebec.ca/coronavirus
+SOURCES_QC = {
     # HTML
     'QC_situation.html':
     'https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/situation-coronavirus-in-quebec/',
@@ -151,7 +159,7 @@ def backup_processed_dir(processed_dir, processed_backups_dir):
         shutil.copy(file_path, current_bkp_dir)
 
 
-def download_source_files(sources, sources_dir):
+def download_source_files(sources, sources_dir, version=True):
     """Download files from URL
 
     Downloaded files will be downloaded into data/sources/YYYY-MM-DD{_v#}/
@@ -163,25 +171,33 @@ def download_source_files(sources, sources_dir):
         the file in which to save the downloaded data.
     sources_dir : str
         Absolute path of dir in which to save downloaded files.
+    version : bool
+        True, if source directories should be versioned if sources for the same date already exist, False otherwise.
     """
     # create data/sources/YYYY-MM-DD{_v#}/ dir, use previous day date (data is reported for previous day)
     yesterday_date = datetime.now(tz=TIMEZONE) - timedelta(days=1)
     date_tag = yesterday_date.date().isoformat()
 
-    current_sources_dir = os.path.join(sources_dir, date_tag)
-    i = 1
-    while os.path.isdir(current_sources_dir):
-        i += 1
-        current_sources_dirname = date_tag + '_v' + str(i)
-        current_sources_dir = os.path.join(sources_dir, current_sources_dirname)
-    else:
-        os.mkdir(current_sources_dir)
+    current_sources_dir = Path(sources_dir, date_tag)
+
+    if version:
+        i = 1
+        while current_sources_dir.is_dir():
+            i += 1
+            current_sources_dirname = date_tag + '_v' + str(i)
+            current_sources_dir = current_sources_dir.parent.joinpath(current_sources_dirname)
+
+    current_sources_dir.mkdir(exist_ok=True)
 
     # Download all source data files to sources dir
     for file, url in sources.items():
         data = fetch(url)
-        fq_path = os.path.join(current_sources_dir, file)
-        save_datafile(fq_path, data)
+        fq_path = current_sources_dir.joinpath(file)
+
+        if not fq_path.exists():
+            save_datafile(fq_path, data)
+        else:
+            raise TypeError(f'{fq_path} already exists')
 
 
 def get_latest_source_dir(sources_dir):
@@ -226,6 +242,120 @@ def get_source_dir_for_date(sources_dir, date):
     latest_source_dir = sorted(source_dirs)[-1]
 
     return latest_source_dir.name
+
+
+def is_new_inspq_data_available(expected_date: dt.date):
+    """Returns whether new date provided by INSPQ is available.
+    Data is available if the data's last date is equal the given expected date.
+
+    Parameters
+    ----------
+    expected_date : date
+        The date that new data needs to have to be considered new.
+
+    Returns
+    ----------
+    bool
+        True, if new data is available, False otherwise
+    """
+    # check the manual CSV with the date provided in it (used in the boxes on their website)
+    content = fetch(SOURCES_INSPQ.get('data_qc_manual_data.csv'))
+
+    # directly load file from the web
+    df = pd.read_csv(io.StringIO(content))
+    # get cell with date
+    date_string = df.iloc[1, 6]
+
+    csv_date = dateparser.parse(date_string).date()  # type: ignore[union-attr]
+
+    # in addition, verify the date of the historic QC data in the main CSV
+    content = fetch(SOURCES_INSPQ.get('data_qc.csv'))
+    df = pd.read_csv(io.StringIO(content))
+    # get last cell with date
+    date_string = df.iloc[-1, 0]
+
+    csv_date2 = dateparser.parse(date_string).date()  # type: ignore[union-attr]
+
+    return csv_date == expected_date and csv_date2 == expected_date
+
+
+def is_new_qc_data_available(expected_date: dt.date):
+    """Returns whether new date provided by Quebec (quebec.ca/coronavirus) is available.
+    Data is available if the data's last date is equal the given expected date.
+
+    Parameters
+    ----------
+    expected_date : date
+        The date that new data needs to have to be considered new.
+
+    Returns
+    ----------
+    bool
+        True, if new data is available, False otherwise
+    """
+    # check the 7 day overview CSV
+    content = fetch(SOURCES_QC.get('data_qc_7days.csv'))
+
+    # directly load file from the web
+    df = pd.read_csv(io.StringIO(content), header=None, sep=';')
+    # get cell with date
+    date_string = df.iloc[-1, 0]
+
+    csv_date = dateparser.parse(date_string).date()  # type: ignore[union-attr]
+
+    # additionally check the date provided on the website under the last table
+    content = fetch(SOURCES_QC.get('QC_situation.html'))
+
+    soup: BeautifulSoup = BeautifulSoup(content, 'lxml')
+
+    date_elements = [element for element in soup.select('div.ce-textpic div.ce-bodytext p')
+                     if 'Source: ' in element.text]
+
+    # expected format of last element: "Source: TSP, MSSS (Updated on January 11, 2021 at 4&nbsp;p.m.)"
+    date_text = date_elements[-1].contents[0]
+    date_text = date_text.split('Updated on')[-1].split(')')[0]
+
+    html_date = dateparser.parse(date_text).date()  # type: ignore[union-attr]
+
+    return csv_date == expected_date and html_date == expected_date
+
+
+def is_new_mtl_data_available(expected_date: dt.date):
+    """Returns whether new date provided by Sante Montreal is available.
+    Data is available if the data's last date is equal the given expected date.
+
+    Parameters
+    ----------
+    expected_date : date
+        The date that new data needs to have to be considered new.
+
+    Returns
+    ----------
+    bool
+        True, if new data is available, False otherwise
+    """
+    # check the date on the website that is provided under the last table
+    content = fetch(SOURCES_MTL.get('data_mtl.html'))
+
+    soup: BeautifulSoup = BeautifulSoup(content, 'lxml')
+
+    date_elements = [element for element in soup.select('div.csc-textpic-text p.bodytext')
+                     if 'extracted on' in element.text]
+
+    # check the last date element to ensure all data has been updated
+    date_text = date_elements[-1].contents[0]
+    date_text = date_text.split('extracted on ')[-1]
+
+    html_date = dateparser.parse(date_text).date()  # type: ignore[union-attr]
+
+    # additionally, check that the CSV files are updated as well
+    content = fetch(SOURCES_MTL.get('data_mtl_new_cases.csv'))
+    df = pd.read_csv(io.StringIO(content), sep=';', na_values='')
+    date_string = df.dropna(how='all').iloc[-1, 0]
+
+    csv_date = dateparser.parse(date_string).date()  # type: ignore[union-attr]
+
+    return html_date == expected_date and csv_date == expected_date
 
 
 def load_data_qc_csv(source_file):
@@ -642,24 +772,13 @@ def update_vaccines_data_csv(sources_dir: str, processed_dir: str):
     processed_dir : str
         Absolute path to processed dir.
     """
-    # Create list of dates for which we have data
-    data_dates = []
-    for date_dir in os.listdir(sources_dir):
-        # exclude hidden files/dirs, e.g. .DS
-        if not date_dir.startswith('.'):
-            # exclude _v#
-            date_dir = date_dir.split('_')[0]
+    # Create list of all vaccine files.
+    vaccine_files = sorted([path for path in Path(sources_dir).glob('*-*-*/data_qc_vaccines.csv')])
 
-            # Only add date if data_qc_vaccines.csv exists
-            data_mtl_csv = os.path.join(sources_dir, date_dir, 'data_qc_vaccines.csv')
-            if os.path.isfile(data_mtl_csv):
-                data_dates.append(date_dir)
-    data_dates.sort()
-
-    # Get Montreal case data files and store them in a {date: pandas_df} dict
+    # Build {date: pandas_df} dict
     data_dict = {}
-    for date in data_dates:
-        data_csv = os.path.join(sources_dir, date, 'data_qc_vaccines.csv')
+    for data_csv in vaccine_files:
+        date = data_csv.parent.name
         data = pd.read_csv(data_csv, encoding='utf-8', na_values='na', sep=';')
         data_dict[date] = data
 
@@ -688,8 +807,8 @@ def update_vaccines_data_csv(sources_dir: str, processed_dir: str):
         else:
             mtl_new = mtl_count - vaccine_df_mtl[-2]
             qc_new = qc_count - vaccine_df_qc[-2]
-            vaccine_df_mtl_new.append(mtl_new)
-            vaccine_df_qc_new.append(qc_new)
+            vaccine_df_mtl_new.append(mtl_new)  # type: ignore[arg-type]
+            vaccine_df_qc_new.append(qc_new)  # type: ignore[arg-type]
 
         # Add approx calculated % of population vaccinated
         # Note: this is based on the somewhat inaccurate assumption that 2 doses = 1 person vaccinated.
@@ -748,12 +867,85 @@ def append_totals_csv(processed_dir: str, totals_name: str, data_name: str):
     total_df.to_csv(totals_csv, na_rep='na')
 
 
+def process_inspq_data(sources_dir, processed_dir, date):
+    """Processes new INSPQ data.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path to source data dir.
+    processed_dir : str
+        Absolute path to processed data dir.
+    date : str
+        Date of data to append (yyyy-mm-dd).
+    """
+    # Replace data_qc
+    update_data_qc_csv(sources_dir, processed_dir)
+
+    # Replace data_qc_hospitalisations
+    update_hospitalisations_qc_csv(sources_dir, processed_dir)
+
+    # Append row to data_mtl_death_loc.csv
+    append_mtl_death_loc_csv(sources_dir, processed_dir, date)
+
+    # Update data_mtl.csv
+    update_mtl_data_csv(sources_dir, processed_dir)
+
+    # Copy total rows
+    append_totals_csv(processed_dir, 'data_qc_totals.csv', 'data_qc.csv')
+    append_totals_csv(processed_dir, 'data_mtl_totals.csv', 'data_mtl.csv')
+
+
+def process_qc_data(sources_dir, processed_dir):
+    """Processes new QC data.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path to source data dir.
+    processed_dir : str
+        Absolute path to processed data dir.
+    """
+    # Update data_vaccines.csv
+    update_vaccines_data_csv(sources_dir, processed_dir)
+
+
+def process_mtl_data(sources_dir, processed_dir, date):
+    """Processes new Sante Montreal data.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path to source data dir.
+    processed_dir : str
+        Absolute path to processed data dir.
+    date : str
+        Date of data to append (yyyy-mm-dd).
+    """
+    # Append col to cases.csv
+    append_mtl_cases_csv(sources_dir, processed_dir, date)
+
+    # Update data_mtl_boroughs.csv
+    update_mtl_boroughs_csv(processed_dir)
+
+    # Append row to data_mtl_age.csv
+    append_mtl_cases_by_age(sources_dir, processed_dir, date)
+
+
 def main():
     parser = ArgumentParser('refreshdata', description=__doc__)
+    parser.add_argument(
+        '-m',
+        '--mode',
+        required=True,
+        choices=['auto', 'manual'],
+        help='Mode in which to operate. Auto: Automatically backup, download and process only new data (if new data '
+             'is available). Manual: Backup, download and update data irregardless of new data availability.'
+    )
     parser.add_argument('-nd', '--no-download', action='store_true', default=False,
-                        help='Do not fetch remote file, only process local copies')
+                        help='Do not fetch remote file, only process local copies (applies only to manual mode)')
     parser.add_argument('-nb', '--no-backup', action='store_true', default=False,
-                        help='Do not backup files in data/processed')
+                        help='Do not backup files in data/processed (applies to both modes)')
     # parser.add_argument('-d', '--data-dir', default=DATA_DIR)
     # parser.add_argument('-v', '--verbose', action='store_true', default=False,
     #                     help='Increase verbosity')
@@ -765,52 +957,78 @@ def main():
     args = parser.parse_args()
     # init_logging(args)
 
-    # Yesterday's date (data is reported for previous day)
-    yesterday = datetime.now(tz=TIMEZONE) - timedelta(days=1)
-    yesterday_date = yesterday.date().isoformat()
+    # Use yesterday's date (data is reported for previous day)
+    today = datetime.now(tz=TIMEZONE).date()
+    yesterday = today - timedelta(days=1)
+    yesterday_date = yesterday.isoformat()
 
     # sources, processed, and processed_backups dir paths
     sources_dir = os.path.join(DATA_DIR, 'sources')
     processed_dir = os.path.join(DATA_DIR, 'processed')
     processed_backups_dir = os.path.join(DATA_DIR, 'processed_backups')
 
-    # download all source files into data/sources/YYYY-MM-DD{_v#}/
-    if not args.no_download:
-        download_source_files(SOURCES, sources_dir)
+    if args.mode == 'auto':
+        # ensure no download option is not used with mode=auto
+        if args.no_download:
+            raise ValueError('cannot use --no-download option with auto mode')
 
-    # Copy all files from data/processed to data/processed_backups/YYYY-MM-DD_version
-    if not args.no_backup:
-        backup_processed_dir(processed_dir, processed_backups_dir)
+        # Backup first if desired
+        if not args.no_backup:
+            # backup only once
+            if not Path(processed_backups_dir, today.isoformat()).exists():
+                backup_processed_dir(processed_dir, processed_backups_dir)
 
-    # Update data/processed files from latest data/sources files
-    # Replace data_qc
-    update_data_qc_csv(sources_dir, processed_dir)
+        # get the latest date of INSPQ data
+        df = pd.read_csv(Path(processed_dir).joinpath('data_qc.csv'), index_col=0)
+        inspq_data_date = datetime.fromisoformat(df.index[-1]).date()
 
-    # Replace data_qc_hospitalisations
-    update_hospitalisations_qc_csv(sources_dir, processed_dir)
+        # verify that we don't have the latest data yet
+        if inspq_data_date != yesterday and is_new_inspq_data_available(yesterday):
+            # print('retrieving new data from INSPQ...')
+            download_source_files(SOURCES_INSPQ, sources_dir, False)
 
-    # Append row to data_mtl_death_loc.csv
-    append_mtl_death_loc_csv(sources_dir, processed_dir, yesterday_date)
+            process_inspq_data(sources_dir, processed_dir, yesterday_date)
 
-    # Update data_mtl.csv
-    update_mtl_data_csv(sources_dir, processed_dir)
+            print('Downloaded and processed data from INSPQ.')
 
-    # Update data_vaccines.csv
-    update_vaccines_data_csv(sources_dir, processed_dir)
+        # get the latest date of QC data
+        df = pd.read_csv(Path(processed_dir).joinpath('data_vaccines.csv'), index_col=0)
+        qc_data_date = datetime.fromisoformat(df.index[-1]).date()
 
-    # Copy total rows
-    append_totals_csv(processed_dir, 'data_qc_totals.csv', 'data_qc.csv')
-    append_totals_csv(processed_dir, 'data_mtl_totals.csv', 'data_mtl.csv')
+        # verify that we don't have the latest data yet
+        if qc_data_date != yesterday and is_new_qc_data_available(yesterday):
+            # print('retrieving new data from QC...')
+            download_source_files(SOURCES_QC, sources_dir, False)
 
-    # Process Sante Montreal data
-    # Append col to cases.csv
-    append_mtl_cases_csv(sources_dir, processed_dir, yesterday_date)
+            process_qc_data(sources_dir, processed_dir)
 
-    # Update data_mtl_boroughs.csv
-    update_mtl_boroughs_csv(processed_dir)
+            print('Downloaded and processed data from QC.')
 
-    # Append row to data_mtl_age.csv
-    append_mtl_cases_by_age(sources_dir, processed_dir, yesterday_date)
+        # get the latest date of MTL data
+        df = pd.read_csv(Path(processed_dir).joinpath('data_mtl_boroughs.csv'), index_col=0)
+        mtl_data_date = datetime.fromisoformat(df.index[-1]).date()
+
+        # verify that we don't have the latest data yet
+        if mtl_data_date != yesterday and is_new_mtl_data_available(yesterday):
+            # print('retrieving new data from Sante MTL...')
+            download_source_files(SOURCES_MTL, sources_dir, False)
+
+            process_mtl_data(sources_dir, processed_dir, yesterday_date)
+
+            print('Downloaded and processed data from Sante Montreal.')
+    # mode=manual
+    else:
+        if not args.no_backup:
+            backup_processed_dir(processed_dir, processed_backups_dir)
+
+        # download all source files into data/sources/YYYY-MM-DD{_v#}/
+        if not args.no_download:
+            SOURCES = {**SOURCES_MTL, **SOURCES_INSPQ, **SOURCES_QC}
+            download_source_files(SOURCES, sources_dir)
+
+        process_inspq_data(sources_dir, processed_dir, yesterday_date)
+        process_qc_data(sources_dir, processed_dir)
+        process_mtl_data(sources_dir, processed_dir, yesterday_date)
 
     return 0
 
