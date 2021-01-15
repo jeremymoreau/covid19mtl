@@ -459,6 +459,10 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
 
 
 def testing_fig(data_qc, data_mtl, labels):
+    # reduce dfs by NaNs in 'psi_quo_pos_t' column assuring equal lengths of x/y lists
+    data_mtl = data_mtl.dropna(subset=['psi_quo_pos_t'])
+    data_qc = data_qc.dropna(subset=['psi_quo_pos_t'])
+
     # Testing (QC)
     testing_fig = go.Figure({
         'data': [
@@ -466,7 +470,7 @@ def testing_fig(data_qc, data_mtl, labels):
                 'type': 'scatter',
                 'x': data_qc['date'],
                 # divide by 100 because '%' tickformat is x100
-                'y': data_qc['psi_quo_pos_t'].dropna().rolling(7).mean() / 100,
+                'y': data_qc['psi_quo_pos_t'].rolling(7).mean() / 100,
                 'mode': 'lines',
                 'marker': {'color': '#001F97'},
                 'name': labels['testing_qc'],
@@ -477,7 +481,7 @@ def testing_fig(data_qc, data_mtl, labels):
                 'type': 'scatter',
                 'x': data_mtl['date'],
                 # divide by 100 because '%' tickformat is x100
-                'y': data_mtl['psi_quo_pos_t'].dropna().rolling(7).mean() / 100,
+                'y': data_mtl['psi_quo_pos_t'].rolling(7).mean() / 100,
                 'mode': 'lines',
                 'marker': {'color': '#D6142C'},
                 'name': labels['testing_mtl'],
