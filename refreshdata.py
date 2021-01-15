@@ -68,7 +68,9 @@ SOURCES_QC = {
     'data_qc_outbreaks.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/eclosions-par-milieu-en.csv',  # noqa: E501
     'data_qc_vaccines.csv':
-    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/doses-vaccins-en.csv',
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/doses-vaccins.csv',
+    'data_qc_vaccines_received.csv':
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/doses-vaccins-7jours.csv',  # noqa: E501
     'data_qc_7days.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours-en.csv',
 }
@@ -777,9 +779,8 @@ def append_mtl_cases_by_age(sources_dir, processed_dir, date):
         print(f'MTL cases by age: {date} has already been appended to {mtl_age_csv}')
 
 
-def update_vaccines_data_csv(sources_dir: str, processed_dir: str):
-    """Load all data_qc_vaccines.csv data and generate a csv with MTL and QC vaccination data
-    Output csv format: date | mtl_doses | qc_doses | mtl_new | qc_new | mtl_perc | qc_perc
+def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
+    """Append new row to data_vaccines.csv data.
 
     Parameters
     ----------
@@ -787,45 +788,16 @@ def update_vaccines_data_csv(sources_dir: str, processed_dir: str):
         Absolute path to sources dir.
     processed_dir : str
         Absolute path to processed dir.
+    date : str
+        Date of data to append (yyyy-mm-dd).
     """
-    # Create list of all vaccine files.
-    vaccine_files = sorted([path for path in Path(sources_dir).glob('*-*-*/data_qc_vaccines.csv')])
+    # Load csv files
+    day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_vaccines.csv')
+    vacc_csv = os.path.join(processed_dir, 'data_vaccines.csv')
+    day_df = pd.read_csv(day_csv, sep=';', thousands=' ', encoding='utf-8')
+    vaccine_df = pd.read_csv(vacc_csv, encoding='utf-8', index_col=0)
 
-    # Build {date: pandas_df} dict
-    data_dict = {}
-    for data_csv in vaccine_files:
-        date = data_csv.parent.name
-        data = pd.read_csv(data_csv, encoding='utf-8', na_values='na', sep=';')
-        data_dict[date] = data
-
-    # Create a df of format: date | mtl_doses | qc_doses | mtl_new | qc_new | mtl_perc | qc_perc
-    vaccine_df_date = []
-    vaccine_df_mtl = []
-    vaccine_df_qc = []
-    vaccine_df_mtl_new = []
-    vaccine_df_qc_new = []
-    vaccine_df_mtl_perc = []
-    vaccine_df_qc_perc = []
-    for i, date in enumerate(data_dict):
-        # Add date and dose counts
-        data_df = data_dict[date]
-        mtl_count = int(data_df[data_df['Regions'] == '06 - Montréal']['Number of administered doses of the vaccine'])
-        qc_count = int(data_df[data_df['Regions'] == 'Total']['Number of administered doses of the vaccine'])
-        vaccine_df_date.append(date)
-        vaccine_df_mtl.append(mtl_count)
-        vaccine_df_qc.append(qc_count)
-
-        # Add new doses administered
-        if i == 0:
-            # Add na for first day of available data
-            vaccine_df_mtl_new.append('na')
-            vaccine_df_qc_new.append('na')
-        else:
-            mtl_new = mtl_count - vaccine_df_mtl[-2]
-            qc_new = qc_count - vaccine_df_qc[-2]
-            vaccine_df_mtl_new.append(mtl_new)  # type: ignore[arg-type]
-            vaccine_df_qc_new.append(qc_new)  # type: ignore[arg-type]
-
+    if date not in vaccine_df.index:
         # Add approx calculated % of population vaccinated
         # Note: this is based on the somewhat inaccurate assumption that 2 doses = 1 person vaccinated.
         # This estimate should be closer to the truth once a larger % of the population is vaccinated,
@@ -833,25 +805,32 @@ def update_vaccines_data_csv(sources_dir: str, processed_dir: str):
         # Source for 2020 pop estimates: https://publications.msss.gouv.qc.ca/msss/document-001617/
         mtl_pop = 2065657  # Région sociosanitaire 06 - Montreal, 2020 projection
         qc_pop = 8539073  # QC Total, 2020 projection
+
+        # get total values and calculate new doses and percentage administered
+        mtl_count = int(day_df[day_df['Régions'] == '06 - Montréal']['Nombre de doses de vaccins administrés'])
+        qc_count = int(day_df[day_df['Régions'] == 'Total']['Nombre de doses de vaccins administrés'])
+
+        mtl_new = mtl_count - vaccine_df['mtl_doses'][-1]
+        qc_new = qc_count - vaccine_df['qc_doses'][-1]
+
         mtl_perc = (mtl_count / 2) * 100 / mtl_pop
         qc_perc = (qc_count / 2) * 100 / qc_pop
-        vaccine_df_mtl_perc.append(mtl_perc)
-        vaccine_df_qc_perc.append(qc_perc)
 
-    # Build the pandas df
-    vaccine_df = pd.DataFrame({
-        'date': vaccine_df_date,
-        'mtl_doses': vaccine_df_mtl,
-        'qc_doses': vaccine_df_qc,
-        'mtl_new_doses': vaccine_df_mtl_new,
-        'qc_new_doses': vaccine_df_qc_new,
-        'mtl_percent_vaccinated': vaccine_df_mtl_perc,
-        'qc_percent_vaccinated': vaccine_df_qc_perc
-    })
+        # build and add new data, use dict to preserve column datatypes
+        new_data = {
+            'mtl_doses': mtl_count,
+            'qc_doses': qc_count,
+            'mtl_new_doses': mtl_new,
+            'qc_new_doses': qc_new,
+            'mtl_percent_vaccinated': mtl_perc,
+            'qc_percent_vaccinated': qc_perc,
+        }
+        vaccine_df.loc[date] = new_data
 
-    # Overwrite processed/data_vaccines.csv
-    data_vaccines_csv = os.path.join(processed_dir, 'data_vaccines.csv')
-    vaccine_df.to_csv(data_vaccines_csv, encoding='utf-8', index=False, na_rep='na')
+        # Overwrite data_mtl_death_loc.csv
+        vaccine_df.to_csv(vacc_csv, encoding='utf-8', na_rep='na')
+    else:
+        print(f'Vaccine data: {date} has already been appended to {vacc_csv}')
 
 
 def append_totals_csv(processed_dir: str, totals_name: str, data_name: str):
@@ -912,7 +891,7 @@ def process_inspq_data(sources_dir, processed_dir, date):
     append_totals_csv(processed_dir, 'data_mtl_totals.csv', 'data_mtl.csv')
 
 
-def process_qc_data(sources_dir, processed_dir):
+def process_qc_data(sources_dir, processed_dir, date):
     """Processes new QC data.
 
     Parameters
@@ -921,9 +900,11 @@ def process_qc_data(sources_dir, processed_dir):
         Absolute path to source data dir.
     processed_dir : str
         Absolute path to processed data dir.
+    date : str
+        Date of data to append (yyyy-mm-dd).
     """
     # Update data_vaccines.csv
-    update_vaccines_data_csv(sources_dir, processed_dir)
+    append_vaccines_data_csv(sources_dir, processed_dir, date)
 
 
 def process_mtl_data(sources_dir, processed_dir, date):
@@ -1016,7 +997,7 @@ def main():
             # print('retrieving new data from QC...')
             download_source_files(SOURCES_QC, sources_dir, False)
 
-            process_qc_data(sources_dir, processed_dir)
+            process_qc_data(sources_dir, processed_dir, yesterday_date)
 
             print('Downloaded and processed data from QC.')
 
@@ -1043,7 +1024,7 @@ def main():
             download_source_files(SOURCES, sources_dir)
 
         process_inspq_data(sources_dir, processed_dir, yesterday_date)
-        process_qc_data(sources_dir, processed_dir)
+        process_qc_data(sources_dir, processed_dir, yesterday_date)
         process_mtl_data(sources_dir, processed_dir, yesterday_date)
 
     return 0
