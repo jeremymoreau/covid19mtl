@@ -28,6 +28,8 @@ def generate_layout(labels):
     # Plotly modebar buttons to remove
     modebar_buttons_to_remove = ['select2d',
                                  'lasso2d',
+                                 'zoomIn2d',
+                                 'zoomOut2d',
                                  'autoScale2d',
                                  'hoverCompareCartesian',
                                  'hoverClosestCartesian',
@@ -213,7 +215,8 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                }
+                                },
+                                className='figure'
                             ),
                         ],
                         className='grid-item'
@@ -230,7 +233,8 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                }
+                                },
+                                className='figure'
                             ),
                         ],
                         className='grid-item'
@@ -255,7 +259,8 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                }
+                                },
+                                className='figure'
                             ),
                         ],
                         className='grid-item'
@@ -272,7 +277,8 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                }
+                                },
+                                className='figure'
                             ),
                         ],
                         className='grid-item'
@@ -289,7 +295,8 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                }
+                                },
+                                className='figure'
                             ),
                         ],
                         className='grid-item'
@@ -313,7 +320,8 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                }
+                                },
+                                className='figure'
                             ),
                         ],
                         className='grid-item'
@@ -330,7 +338,8 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                }
+                                },
+                                className='figure'
                             ),
                         ],
                         className='grid-item'
@@ -355,7 +364,8 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                }
+                                },
+                                className='figure'
                             ),
                         ],
                         className='grid-item'
@@ -372,7 +382,8 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                }
+                                },
+                                className='figure'
                             ),
                         ],
                         className='grid-item'

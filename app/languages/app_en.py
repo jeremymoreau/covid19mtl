@@ -139,7 +139,14 @@ labels = {
     'vaccination_perc_qc': '% of pop vaccinated (QC)',
     'vaccination_hovertemplate': '% vaccinated: %{y:.2f}% <br> # of doses: %{customdata}',
     'vaccination_new_mtl': 'New doses (MTL)',
-    'vaccination_new_qc': 'New doses (QC)'
+    'vaccination_new_qc': 'New doses (QC)',
+    # Range sliders
+    '1m': '1m',
+    '3m': '3m',
+    '6m': '6m',
+    'ytd': 'YTD',
+    '1y': '1y',
+    'all': 'all'
 }
 
 layout = generate_layout(labels)
