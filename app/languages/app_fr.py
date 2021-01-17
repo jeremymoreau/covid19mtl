@@ -144,7 +144,7 @@ labels = {
     '1m': '1m',
     '3m': '3m',
     '6m': '6m',
-    'ytd': 'ADD',
+    'ytd': 'AAJ',
     '1y': '1an',
     'all': 'tout'
 }
