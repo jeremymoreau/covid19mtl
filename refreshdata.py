@@ -816,6 +816,21 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
         mtl_perc = (mtl_count / 2) * 100 / mtl_pop
         qc_perc = (qc_count / 2) * 100 / qc_pop
 
+        # for some reason the thousands seperator is not converted here
+        # there is a non-breaking space (\xa0) used as a thousands separator
+        # remove the space and convert to int
+        received_df = pd.read_csv(
+            day_received_csv,
+            sep=';',
+            thousands=' ',
+            index_col=0,
+            converters={'Nombre de doses de vaccins reçues': lambda x: int(''.join(x.split()))}
+        )
+
+        new_doses = received_df.loc['2021-01-17', 'Nombre de doses de vaccins reçues']
+        total_doses = new_doses + vaccine_df['qc_doses_received'][-1]
+        doses_used = qc_count / total_doses * 100
+
         # build and add new data, use dict to preserve column datatypes
         new_data = {
             'mtl_doses': mtl_count,
@@ -824,7 +839,11 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
             'qc_new_doses': qc_new,
             'mtl_percent_vaccinated': mtl_perc,
             'qc_percent_vaccinated': qc_perc,
+            'qc_new_doses_received': new_doses,
+            'qc_doses_received': total_doses,
+            'qc_percent_used': doses_used
         }
+
         vaccine_df.loc[date] = new_data
 
         # Overwrite data_mtl_death_loc.csv
