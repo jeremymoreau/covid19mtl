@@ -794,8 +794,23 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
     # Load csv files
     day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_vaccines.csv')
     vacc_csv = os.path.join(processed_dir, 'data_vaccines.csv')
+    day_received_csv = os.path.join(
+        sources_dir,
+        get_source_dir_for_date(sources_dir, date),
+        'data_qc_vaccines_received.csv'
+    )
     day_df = pd.read_csv(day_csv, sep=';', thousands=' ', encoding='utf-8')
     vaccine_df = pd.read_csv(vacc_csv, encoding='utf-8', index_col=0)
+    # for some reason the thousands seperator is not converted here
+    # there is a non-breaking space (\xa0) used as a thousands separator
+    # remove the space and convert to int
+    received_df = pd.read_csv(
+        day_received_csv,
+        sep=';',
+        thousands=' ',
+        index_col=0,
+        converters={'Nombre de doses de vaccins reçues': lambda x: int(''.join(x.split()))}
+    )
 
     if date not in vaccine_df.index:
         # Add approx calculated % of population vaccinated
@@ -815,17 +830,6 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
 
         mtl_perc = (mtl_count / 2) * 100 / mtl_pop
         qc_perc = (qc_count / 2) * 100 / qc_pop
-
-        # for some reason the thousands seperator is not converted here
-        # there is a non-breaking space (\xa0) used as a thousands separator
-        # remove the space and convert to int
-        received_df = pd.read_csv(
-            day_received_csv,
-            sep=';',
-            thousands=' ',
-            index_col=0,
-            converters={'Nombre de doses de vaccins reçues': lambda x: int(''.join(x.split()))}
-        )
 
         new_doses = received_df.loc['2021-01-17', 'Nombre de doses de vaccins reçues']
         total_doses = new_doses + vaccine_df['qc_doses_received'][-1]
