@@ -822,8 +822,8 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
         qc_pop = 8539073  # QC Total, 2020 projection
 
         # get total values and calculate new doses and percentage administered
-        mtl_count = int(day_df[day_df['Régions'] == '06 - Montréal']['Nombre de doses de vaccins administrés'])
-        qc_count = int(day_df[day_df['Régions'] == 'Total']['Nombre de doses de vaccins administrés'])
+        mtl_count = int(day_df[day_df['Régions'] == '06 - Montréal']['Nombre de doses de vaccins administrées'])
+        qc_count = int(day_df[day_df['Régions'] == 'Total']['Nombre de doses de vaccins administrées'])
 
         mtl_new = mtl_count - vaccine_df['mtl_doses'][-1]
         qc_new = qc_count - vaccine_df['qc_doses'][-1]
