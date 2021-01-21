@@ -842,7 +842,7 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
         mtl_perc = (mtl_count / 2) * 100 / mtl_pop
         qc_perc = (qc_count / 2) * 100 / qc_pop
 
-        new_doses = received_df.loc['2021-01-17', 'Nombre de doses de vaccins reçues']
+        new_doses = received_df.loc[date, 'Nombre de doses de vaccins reçues']
         total_doses = new_doses + vaccine_df['qc_doses_received'][-1]
         doses_used = qc_count / total_doses * 100
 
