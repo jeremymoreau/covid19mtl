@@ -307,6 +307,14 @@ def is_new_qc_data_available(expected_date: dt.date):
 
     csv_date = dateparser.parse(date_string).date()  # type: ignore[union-attr]
 
+    # check vaccine doses received CSV to ensure vaccination CSVs have been updated
+    content = fetch(SOURCES_QC.get('data_qc_vaccines_received.csv'))
+    df = pd.read_csv(io.StringIO(content), sep=';')
+    # get cell with date
+    date_string = df.iloc[0, 0]
+
+    csv_date2 = dateparser.parse(date_string).date()  # type: ignore[union-attr]
+
     # additionally check the date provided on the website under the last table
     content = fetch(SOURCES_QC.get('QC_situation.html'))
 
@@ -335,7 +343,10 @@ def is_new_qc_data_available(expected_date: dt.date):
     # the vaccination data update is provided the day of (not yesterday)
     vacc_expected_date = expected_date + timedelta(days=1)
 
-    return csv_date == expected_date and html_date == expected_date and vacc_date == vacc_expected_date
+    return csv_date == expected_date \
+        and csv_date2 == expected_date \
+        and html_date == expected_date \
+        and vacc_date == vacc_expected_date
 
 
 def is_new_mtl_data_available(expected_date: dt.date):
