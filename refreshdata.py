@@ -66,13 +66,15 @@ SOURCES_QC = {
     'https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/situation-coronavirus-in-quebec/covid-19-vaccination-data/',  # noqa: E501
     # CSV
     'data_qc_outbreaks.csv':
-    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/eclosions-par-milieu-en.csv',  # noqa: E501
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/eclosions-par-milieu.csv',  # noqa: E501
     'data_qc_vaccines.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/doses-vaccins.csv',
     'data_qc_vaccines_received.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/doses-vaccins-7jours.csv',  # noqa: E501
+    'data_qc_vaccines_situation.csv':
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/situation-vaccination-en.csv',  # noqa: E501
     'data_qc_7days.csv':
-    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours-en.csv',
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours.csv',
 }
 
 
@@ -315,6 +317,14 @@ def is_new_qc_data_available(expected_date: dt.date):
 
     csv_date2 = dateparser.parse(date_string).date()  # type: ignore[union-attr]
 
+    # check vaccination situation CSV
+    content = fetch(SOURCES_QC.get('data_qc_vaccines_situation.csv'))
+    df = pd.read_csv(io.StringIO(content), sep=';', header=None)
+    # get cell with date
+    date_string = df.iloc[0, 1]
+
+    csv_date3 = dateparser.parse(date_string).date()  # type: ignore[union-attr]
+
     # additionally check the date provided on the website under the last table
     content = fetch(SOURCES_QC.get('QC_situation.html'))
 
@@ -345,6 +355,7 @@ def is_new_qc_data_available(expected_date: dt.date):
 
     return csv_date == expected_date \
         and csv_date2 == expected_date \
+        and csv_date3 == vacc_expected_date \
         and html_date == expected_date \
         and vacc_date == vacc_expected_date
 
@@ -842,8 +853,8 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
         mtl_perc = (mtl_count / 2) * 100 / mtl_pop
         qc_perc = (qc_count / 2) * 100 / qc_pop
 
-        new_doses = received_df.loc[date, 'Nombre de doses de vaccins reçues']
-        total_doses = new_doses + vaccine_df['qc_doses_received'][-1]
+        total_doses = received_df.loc[date, 'Doses du vaccin COVID-19 reçues (cumulatif)']
+        new_doses = total_doses - vaccine_df['qc_doses_received'][-1]
         doses_used = qc_count / total_doses * 100
 
         # build and add new data, use dict to preserve column datatypes
