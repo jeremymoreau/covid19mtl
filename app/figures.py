@@ -515,14 +515,15 @@ def vaccination_fig(data_vaccination, labels):
                 'y': data_vaccination['qc_doses_received'],
                 'yaxis': 'y1',
                 'marker': {'color': '#001F97', 'opacity': 0.3},
-                'name': 'Doses received (QC)',
+                'name': labels['vaccination_total_received_qc'],
                 'hoverlabel': {'namelength': 35},
+                'hovertemplate': labels['vaccination_total_received_qc'] + ': %{y:,.0f}',
             },
             {
                 'type': 'scatter',
                 'x': data_vaccination['date'],
                 'y': data_vaccination['qc_doses'],
-                'customdata': data_vaccination['qc_percent_vaccinated'],
+                'customdata': data_vaccination[['qc_percent_vaccinated']],
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': '#001F97'},
@@ -534,7 +535,7 @@ def vaccination_fig(data_vaccination, labels):
                 'type': 'scatter',
                 'x': data_vaccination['date'],
                 'y': data_vaccination['mtl_doses'],
-                'customdata': data_vaccination['mtl_percent_vaccinated'],
+                'customdata': data_vaccination[['mtl_percent_vaccinated']],
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': '#D6142C'},
@@ -568,7 +569,7 @@ def vaccination_fig(data_vaccination, labels):
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
             'yaxis': {
                 'title': {'text': labels['vaccination_y']},
                 'gridcolor': '#f5f5f5'

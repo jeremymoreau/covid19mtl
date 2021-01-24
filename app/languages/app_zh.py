@@ -113,14 +113,14 @@ labels = {
         '公立长期护理机构',
         '家',
         '中间',
-        "私人养老院",
+        '私人养老院',
         '其他',
         '未知'
     ],
     # Confirmed deaths by place of residence (QC) fig
     'deaths_loc_fig_qc_label': '按居住地分类死亡人数 (魁省)',
     'chsld_label': '公立长期护理机构',
-    'psr_label': "私人养老院",
+    'psr_label': '私人养老院',
     'home_label': '家',
     'other_or_unknown_label': '其他或未知',
     'deaths_loc_fig_qc_y_label': '累计死亡 （魁省)',
@@ -133,13 +133,16 @@ labels = {
     'cases_vs_newcases_hovertemplate': '日期: %{customdata} <br> 新增病例: %{y}',
     # Vaccination_fig
     'vaccination_label': '疫苗接种量',
-    'vaccination_y': '接种疫苗人口百分比',
+    'vaccination_y': 'Doses (cumulative)',
     'vaccination_y2': '新增接种量',
+    'vaccination_total_received_qc': 'Doses received (QC)',
+    'vaccination_total_qc': 'Doses administered (QC)',
+    'vaccination_total_mtl': 'Doses administered (MTL)',
     'vaccination_perc_mtl': '接种人口百分比 (蒙特利尔)',
     'vaccination_perc_qc': '接种人口百分比 (魁省)',
-    'vaccination_hovertemplate': '接种人口百分比: %{y:.2f}% <br> 接种人数: %{customdata}',
+    'vaccination_hovertemplate': '接种人数: %{y:.0f} <br>接种人口百分比: %{customdata[0]:.2f}%',
     'vaccination_new_mtl': '新增接种量 (蒙特利尔)',
-    'vaccination_new_qc': '新增接种量 (魁省)'
+    'vaccination_new_qc': '新增接种量 (魁省)',
 }
 
 layout = generate_layout(labels)
