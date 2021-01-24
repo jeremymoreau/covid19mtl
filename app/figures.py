@@ -510,10 +510,19 @@ def vaccination_fig(data_vaccination, labels):
     vaccination_fig = go.Figure({
         'data': [
             {
+                'type': 'bar',
+                'x': data_vaccination['date'],
+                'y': data_vaccination['qc_doses_received'],
+                'yaxis': 'y1',
+                'marker': {'color': '#001F97', 'opacity': 0.3},
+                'name': 'Doses received (QC)',
+                'hoverlabel': {'namelength': 35},
+            },
+            {
                 'type': 'scatter',
                 'x': data_vaccination['date'],
-                'y': data_vaccination['qc_percent_vaccinated'],
-                'customdata': data_vaccination['qc_doses'],
+                'y': data_vaccination['qc_doses'],
+                'customdata': data_vaccination['qc_percent_vaccinated'],
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': '#001F97'},
@@ -524,8 +533,8 @@ def vaccination_fig(data_vaccination, labels):
             {
                 'type': 'scatter',
                 'x': data_vaccination['date'],
-                'y': data_vaccination['mtl_percent_vaccinated'],
-                'customdata': data_vaccination['mtl_doses'],
+                'y': data_vaccination['mtl_doses'],
+                'customdata': data_vaccination['mtl_percent_vaccinated'],
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': '#D6142C'},
