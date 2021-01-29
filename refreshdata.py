@@ -55,6 +55,7 @@ SOURCES_INSPQ = {
     'data_qc_manual_data.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/manual-data.csv',
     'data_qc_cases_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls-new.csv',
     'data_qc_death_loc_by_region.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa-new.csv',
+    # updated once a week on Tuesdays
     'data_qc_preconditions.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/comorbidite.csv',
 }
 
@@ -274,6 +275,8 @@ def is_new_inspq_data_available(expected_date: dt.date):
     date_string = df.iloc[1, 6]
 
     csv_date = dateparser.parse(date_string).date()  # type: ignore[union-attr]
+    # since 2021-01-29 the date the data was updated is provided
+    updated_date = expected_date + timedelta(days=1)
 
     # in addition, verify the date of the historic QC data in the main CSV
     content = fetch(SOURCES_INSPQ.get('data_qc.csv'))
@@ -283,7 +286,7 @@ def is_new_inspq_data_available(expected_date: dt.date):
 
     csv_date2 = dateparser.parse(date_string).date()  # type: ignore[union-attr]
 
-    return csv_date == expected_date and csv_date2 == expected_date
+    return csv_date == updated_date and csv_date2 == expected_date
 
 
 def is_new_qc_data_available(expected_date: dt.date):
