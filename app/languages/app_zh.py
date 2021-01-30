@@ -139,7 +139,15 @@ labels = {
     'vaccination_perc_qc': '接种人口百分比 (魁省)',
     'vaccination_hovertemplate': '接种人口百分比: %{y:.2f}% <br> 接种人数: %{customdata}',
     'vaccination_new_mtl': '新增接种量 (蒙特利尔)',
-    'vaccination_new_qc': '新增接种量 (魁省)'
+    'vaccination_new_qc': '新增接种量 (魁省)',
+    # Range sliders
+    '14d': '14d',
+    '1m': '1m',
+    '3m': '3m',
+    '6m': '6m',
+    'ytd': 'YTD',
+    '1y': '1y',
+    'all': 'all'
 }
 
 layout = generate_layout(labels)

@@ -125,6 +125,9 @@
   margin: 0px;
   padding: 15px;
 }
+.figure {
+  height: 550px;
+}
 
 /* footer */
 #footer {
@@ -148,7 +151,7 @@
 /* Plotly modebar  */
 .js-plotly-plot .plotly .modebar {
   padding-top: 0px !important;
-  top: -10px !important;
+  top: 0px !important;
   margin-right: 0px;
 }
 
