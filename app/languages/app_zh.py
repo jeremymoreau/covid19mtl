@@ -141,6 +141,7 @@ labels = {
     'vaccination_new_mtl': '新增接种量 (蒙特利尔)',
     'vaccination_new_qc': '新增接种量 (魁省)',
     # Range sliders
+    '14d': '14d',
     '1m': '1m',
     '3m': '3m',
     '6m': '6m',

@@ -141,6 +141,7 @@ labels = {
     'vaccination_new_mtl': 'Nouvelles doses (MTL)',
     'vaccination_new_qc': 'Nouvelles doses (QC)',
     # Range sliders
+    '14d': '14j',
     '1m': '1m',
     '3m': '3m',
     '6m': '6m',

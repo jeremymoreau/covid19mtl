@@ -2,7 +2,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-def add_ylog_menu(fig, y_data, labels):
+def add_fig_controls(fig, y_data, labels):
     """Add a dropdown menu to select between log and linear scales and range sliders/buttons
 
     Parameters
@@ -24,6 +24,10 @@ def add_ylog_menu(fig, y_data, labels):
         xaxis=dict(
             rangeselector=dict(
                 buttons=list([
+                    dict(count=14,
+                         label=labels['14d'],
+                         step='day',
+                         stepmode='backward'),
                     dict(count=1,
                          label=labels['1m'],
                          step='month',
@@ -269,7 +273,7 @@ def cases_fig(data_mtl, data_qc, labels):
             'dragmode': False
         }
     })
-    cases_fig = add_ylog_menu(cases_fig, data_qc['cases'], labels)
+    cases_fig = add_fig_controls(cases_fig, data_qc['cases'], labels)
 
     return cases_fig
 
@@ -395,7 +399,7 @@ def deaths_fig(data_mtl, data_qc, labels):
             'dragmode': False
         }
     })
-    deaths_fig = add_ylog_menu(deaths_fig, data_qc['deaths'], labels)
+    deaths_fig = add_fig_controls(deaths_fig, data_qc['deaths'], labels)
 
     return deaths_fig
 
@@ -495,7 +499,7 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
             'dragmode': False
         }
     })
-    hospitalisations_fig = add_ylog_menu(hospitalisations_fig,
+    hospitalisations_fig = add_fig_controls(hospitalisations_fig,
                                          data_qc['hos_quo_reg_n'], labels)
 
     return hospitalisations_fig
@@ -544,7 +548,7 @@ def testing_fig(data_qc, data_mtl, labels):
             'dragmode': False
         }
     })
-    testing_fig = add_ylog_menu(testing_fig, data_qc['negative_tests'], labels)
+    testing_fig = add_fig_controls(testing_fig, data_qc['negative_tests'], labels)
 
     return testing_fig
 
@@ -623,7 +627,7 @@ def vaccination_fig(data_vaccination, labels):
             'dragmode': False
         }
     })
-    vaccination_fig = add_ylog_menu(vaccination_fig, data_vaccination['qc_percent_vaccinated'], labels)
+    vaccination_fig = add_fig_controls(vaccination_fig, data_vaccination['qc_percent_vaccinated'], labels)
 
     return vaccination_fig
 
@@ -721,7 +725,7 @@ def qc_deaths_loc_fig(data_qc, labels):
             'dragmode': False
         }
     })
-    deaths_loc_qc_fig = add_ylog_menu(deaths_loc_qc_fig, data_qc[
+    deaths_loc_qc_fig = add_fig_controls(deaths_loc_qc_fig, data_qc[
         'deaths_chsld'], labels)
 
     return deaths_loc_qc_fig
