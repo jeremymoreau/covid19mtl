@@ -189,7 +189,8 @@ def generate_layout(labels):
                                         'lasso2d',
                                         'hoverClosestGeo',
                                     ],
-                                    'scrollZoom': True
+                                    'scrollZoom': True,
+                                    'doubleClick': False
                                 }
                             ),
                         ],
@@ -215,6 +216,7 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
                                 },
                                 className='figure'
                             ),
@@ -233,6 +235,7 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
                                 },
                                 className='figure'
                             ),
@@ -259,6 +262,7 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
                                 },
                                 className='figure'
                             ),
@@ -277,6 +281,7 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
                                 },
                                 className='figure'
                             ),
@@ -295,6 +300,7 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
                                 },
                                 className='figure'
                             ),
@@ -320,6 +326,7 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
                                 },
                                 className='figure'
                             ),
@@ -338,6 +345,7 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
                                 },
                                 className='figure'
                             ),
@@ -364,6 +372,7 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
                                 },
                                 className='figure'
                             ),
@@ -382,6 +391,7 @@ def generate_layout(labels):
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
                                 },
                                 className='figure'
                             ),
