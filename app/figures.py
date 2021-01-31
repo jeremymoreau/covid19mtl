@@ -2,8 +2,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-def add_ylog_menu(fig, y_data, labels):
-    """Add a dropdown menu to select between log and linear scales
+def add_fig_controls(fig, y_data, labels):
+    """Add a dropdown menu to select between log and linear scales and range sliders/buttons
 
     Parameters
     ----------
@@ -12,15 +12,61 @@ def add_ylog_menu(fig, y_data, labels):
     y_data : pandas.core.series.Series
         Pandas series containing the y axis data
     labels : dict
-        Dict containing the labels to display in the dropdown
+        Dict containing the labels to display in the dropdown and the range buttons
 
     Returns
     -------
     plotly.graph_objs._figure.Figure
-        Plotly line chart including a dropdown menu at the bottom left
+        Plotly line chart including a linear/log dropdown and range slider/buttons
     """
     nticks_log = len(str(y_data.iloc[-1]))  # to hide minor tick labels
     fig.update_layout(
+        xaxis=dict(
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=14,
+                         label=labels['14d'],
+                         step='day',
+                         stepmode='backward'),
+                    dict(count=1,
+                         label=labels['1m'],
+                         step='month',
+                         stepmode='backward'),
+                    dict(count=3,
+                         label=labels['3m'],
+                         step='month',
+                         stepmode='backward'),
+                    dict(count=6,
+                         label=labels['6m'],
+                         step='month',
+                         stepmode='backward'),
+                    dict(count=1,
+                         label=labels['ytd'],
+                         step='year',
+                         stepmode='todate'),
+                    dict(count=1,
+                         label=labels['1y'],
+                         step='year',
+                         stepmode='backward'),
+                    dict(label=labels['all'],
+                         step='all')
+                ]),
+                yanchor='top',
+                y=1.15,
+                xanchor='left',
+                x=-0.15,
+            ),
+            rangeslider=dict(
+                visible=True
+            ),
+            type='date'
+        ),
+        legend=dict(
+            yanchor='top',
+            y=1.10,
+            xanchor='left',
+            x=0.01
+        ),
         updatemenus=[
             dict(
                 active=0,
@@ -49,10 +95,11 @@ def add_ylog_menu(fig, y_data, labels):
                 pad={'t': 5, 'b': 5, 'r': 5},
                 x=0,
                 xanchor='left',
-                y=-0.125,
-                yanchor='top'
+                y=-0.39,
+                yanchor='bottom'
             )
         ])
+    fig.update_xaxes(rangeslider_thickness=0.05)
     return fig
 
 
@@ -226,7 +273,7 @@ def cases_fig(data_mtl, data_qc, labels):
             'dragmode': False
         }
     })
-    cases_fig = add_ylog_menu(cases_fig, data_qc['cases'], labels)
+    cases_fig = add_fig_controls(cases_fig, data_qc['cases'], labels)
 
     return cases_fig
 
@@ -352,7 +399,7 @@ def deaths_fig(data_mtl, data_qc, labels):
             'dragmode': False
         }
     })
-    deaths_fig = add_ylog_menu(deaths_fig, data_qc['deaths'], labels)
+    deaths_fig = add_fig_controls(deaths_fig, data_qc['deaths'], labels)
 
     return deaths_fig
 
@@ -452,7 +499,7 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
             'dragmode': False
         }
     })
-    hospitalisations_fig = add_ylog_menu(hospitalisations_fig,
+    hospitalisations_fig = add_fig_controls(hospitalisations_fig,
                                          data_qc['hos_quo_reg_n'], labels)
 
     return hospitalisations_fig
@@ -501,7 +548,7 @@ def testing_fig(data_qc, data_mtl, labels):
             'dragmode': False
         }
     })
-    # testing_fig = add_ylog_menu(testing_fig, data_qc['negative_tests'], labels)
+    testing_fig = add_fig_controls(testing_fig, data_qc['negative_tests'], labels)
 
     return testing_fig
 
@@ -590,7 +637,7 @@ def vaccination_fig(data_vaccination, labels):
             'dragmode': False
         }
     })
-    vaccination_fig = add_ylog_menu(vaccination_fig, data_vaccination['qc_percent_vaccinated'], labels)
+    vaccination_fig = add_fig_controls(vaccination_fig, data_vaccination['qc_percent_vaccinated'], labels)
 
     return vaccination_fig
 
@@ -688,7 +735,7 @@ def qc_deaths_loc_fig(data_qc, labels):
             'dragmode': False
         }
     })
-    deaths_loc_qc_fig = add_ylog_menu(deaths_loc_qc_fig, data_qc[
+    deaths_loc_qc_fig = add_fig_controls(deaths_loc_qc_fig, data_qc[
         'deaths_chsld'], labels)
 
     return deaths_loc_qc_fig

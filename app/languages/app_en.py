@@ -64,7 +64,7 @@ labels = {
         '7day_incidence_per100k': '7-day incidence per 100,000',
         '7day_incidence': '7-day incidence',
     },
-    'montreal_map_legend_title': '<b>7-day incidence per 100,00</b>',
+    'montreal_map_legend_title': '<b>7-day incidence per 100,000</b>',
     'montreal_map_hovertemplate': '<b>%{hovertext}</b><br><br>Date=%{customdata[5]}<br>7-day incidence=%{customdata[0]}<br>7-day incidence per 100,000=%{customdata[1]}<br>Total cases=%{customdata[4]}<br>New cases=%{customdata[6]}<extra></extra>',
     # confirmed cases fig
     'confirmed_cases_y_label': 'Cumulative cases',
@@ -142,7 +142,15 @@ labels = {
     'vaccination_perc_qc': '% of pop vaccinated (QC)',
     'vaccination_hovertemplate': '# of doses: %{y:.0f}<br>% vaccinated: %{customdata[0]:.2f}%',
     'vaccination_new_mtl': 'New doses (MTL)',
-    'vaccination_new_qc': 'New doses (QC)'
+    'vaccination_new_qc': 'New doses (QC)',
+    # Range sliders
+    '14d': '14d',
+    '1m': '1m',
+    '3m': '3m',
+    '6m': '6m',
+    'ytd': 'YTD',
+    '1y': '1y',
+    'all': 'all'
 }
 
 layout = generate_layout(labels)
