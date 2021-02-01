@@ -273,6 +273,8 @@ def is_new_inspq_data_available(expected_date: dt.date):
     df = pd.read_csv(io.StringIO(content))
     # get cell with date
     date_string = df.iloc[1, 6]
+    # remove superscript tags (1<sup>er</sup> février)
+    date_string = date_string.replace('<sup>', '').replace('</sup>', '')
 
     csv_date = dateparser.parse(date_string).date()  # type: ignore[union-attr]
     # since 2021-01-29 the date the data was updated is provided
