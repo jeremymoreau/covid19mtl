@@ -500,7 +500,7 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
         }
     })
     hospitalisations_fig = add_fig_controls(hospitalisations_fig,
-                                         data_qc['hos_quo_reg_n'], labels)
+                                            data_qc['hos_quo_reg_n'], labels)
 
     return hospitalisations_fig
 
@@ -561,10 +561,11 @@ def vaccination_fig(data_vaccination, labels):
                 'x': data_vaccination['date'],
                 'y': data_vaccination['qc_doses_received'],
                 'yaxis': 'y1',
-                'marker': {'color': '#001F97', 'opacity': 0.3},
+                'marker': {'color': '#5c6dad', 'opacity': 0.3},
                 'name': labels['vaccination_total_received_qc'],
+                'customdata': data_vaccination['qc_new_doses_received'],
                 'hoverlabel': {'namelength': 35},
-                'hovertemplate': labels['vaccination_total_received_qc'] + ': %{y:,.0f}',
+                'hovertemplate': labels['vaccination_received_hovertemplate'],
             },
             {
                 'type': 'scatter',
@@ -574,7 +575,7 @@ def vaccination_fig(data_vaccination, labels):
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': '#001F97'},
-                'name': labels['vaccination_perc_qc'],
+                'name': labels['vaccination_total_qc'],
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate': labels['vaccination_hovertemplate']
             },
@@ -586,7 +587,7 @@ def vaccination_fig(data_vaccination, labels):
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': '#D6142C'},
-                'name': labels['vaccination_perc_mtl'],
+                'name': labels['vaccination_total_mtl'],
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate': labels['vaccination_hovertemplate']
             },
@@ -597,9 +598,10 @@ def vaccination_fig(data_vaccination, labels):
                 'yaxis': 'y2',
                 'mode': 'lines',
                 'line': {'dash': 'dot'},
-                'marker': {'color': '#1bd1c2'},
+                'marker': {'color': '#1b97d1'},
                 'name': labels['vaccination_new_qc'],
                 'hoverlabel': {'namelength': 35},
+                'hovertemplate': '%{y:d}',
             },
             {
                 'type': 'scatter',
@@ -608,9 +610,10 @@ def vaccination_fig(data_vaccination, labels):
                 'yaxis': 'y2',
                 'mode': 'lines',
                 'line': {'dash': 'dot'},
-                'marker': {'color': '#f7289d'},
+                'marker': {'color': '#fa3b3b'},
                 'name': labels['vaccination_new_mtl'],
                 'hoverlabel': {'namelength': 35},
+                'hovertemplate': '%{y:d}',
             },
         ],
         'layout': {

@@ -140,7 +140,8 @@ labels = {
     'vaccination_total_mtl': 'Doses administered (MTL)',
     'vaccination_perc_mtl': '% of pop vaccinated (MTL)',
     'vaccination_perc_qc': '% of pop vaccinated (QC)',
-    'vaccination_hovertemplate': '# of doses: %{y:.0f}<br>% vaccinated: %{customdata[0]:.2f}%',
+    'vaccination_hovertemplate': 'Doses administered: %{y:,d}<br>% vaccinated: %{customdata[0]:.2f}%',
+    'vaccination_received_hovertemplate': 'Doses received: %{y:,d}<br>New doses received: %{customdata:,d}',
     'vaccination_new_mtl': 'New doses (MTL)',
     'vaccination_new_qc': 'New doses (QC)',
     # Range sliders

@@ -140,7 +140,8 @@ labels = {
     'vaccination_total_mtl': 'Doses administered (MTL)',
     'vaccination_perc_mtl': '接种人口百分比 (蒙特利尔)',
     'vaccination_perc_qc': '接种人口百分比 (魁省)',
-    'vaccination_hovertemplate': '接种人数: %{y:.0f} <br>接种人口百分比: %{customdata[0]:.2f}%',
+    'vaccination_hovertemplate': '接种人数: %{y:,df} <br>接种人口百分比: %{customdata[0]:.2f}%',
+    'vaccination_received_hovertemplate': 'Doses received: %{y:,d}<br>New doses received: %{customdata:,d}',
     'vaccination_new_mtl': '新增接种量 (蒙特利尔)',
     'vaccination_new_qc': '新增接种量 (魁省)',
     # Range sliders
