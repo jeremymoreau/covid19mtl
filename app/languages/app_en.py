@@ -133,11 +133,15 @@ labels = {
     'cases_vs_newcases_hovertemplate': 'Date: %{customdata} <br> New Cases: %{y}',
     # Vaccination_fig
     'vaccination_label': 'Vaccination',
-    'vaccination_y': 'Approx. % of population vaccinated',
+    'vaccination_y': 'Doses (cumulative)',
     'vaccination_y2': 'New doses',
+    'vaccination_total_received_qc': 'Doses received (QC)',
+    'vaccination_total_qc': 'Doses administered (QC)',
+    'vaccination_total_mtl': 'Doses administered (MTL)',
     'vaccination_perc_mtl': '% of pop vaccinated (MTL)',
     'vaccination_perc_qc': '% of pop vaccinated (QC)',
-    'vaccination_hovertemplate': '% vaccinated: %{y:.2f}% <br> # of doses: %{customdata}',
+    'vaccination_hovertemplate': 'Doses administered: %{y:,d}<br>% vaccinated: %{customdata[0]:.2f}%',
+    'vaccination_received_hovertemplate': 'Doses received: %{y:,d}<br>New doses received: %{customdata:,d}',
     'vaccination_new_mtl': 'New doses (MTL)',
     'vaccination_new_qc': 'New doses (QC)',
     # Range sliders
