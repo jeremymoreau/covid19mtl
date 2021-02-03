@@ -262,7 +262,7 @@ def cases_fig(data_mtl, data_qc, labels):
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
             'yaxis': {
                 'title': {'text': labels['confirmed_cases_y_label']},
                 'gridcolor': COLOUR_GRID,
@@ -388,7 +388,7 @@ def deaths_fig(data_mtl, data_qc, labels):
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
             'yaxis': {
                 'title': {'text': labels['deaths_qc_y_label']},
                 'gridcolor': COLOUR_GRID,
@@ -486,7 +486,7 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
             'yaxis': {
                 'title': {'text': labels['hospitalisations_y_label']},
                 'gridcolor': COLOUR_GRID
@@ -547,6 +547,7 @@ def testing_fig(data_qc, data_mtl, labels):
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
+            'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
             'yaxis': {'title': {'text': labels['testing_y_label']}, 'gridcolor': COLOUR_GRID, 'tickformat': ',.0%'},
             'margin': {'r': 0, 't': 10, 'l': 60, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
@@ -732,7 +733,7 @@ def qc_deaths_loc_fig(data_qc, labels):
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
             'yaxis': {
                 'title': {'text': labels['deaths_loc_fig_qc_y_label']},
                 'gridcolor': COLOUR_GRID
