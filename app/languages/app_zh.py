@@ -79,12 +79,10 @@ labels = {
     'age_fig_hovertemplate': '%: %{y}',
     # deaths fig
     'deaths_fig_label': '死亡',
-    'deaths_qc_y_label': '累计死亡',
+    'deaths_qc_y_label': 'New deaths',
     'deaths_qc_y2_label': '新增死亡 (7日移动平均)',
-    'deaths_fig_qc_label': '累计死亡（魁省）',
-    'deaths_fig_mtl_label': '累计死亡（蒙特利尔）',
-    'new_deaths_qc_label': '新增死亡（魁省）',
-    'new_deaths_mtl_label': '新增死亡（蒙特利尔）',
+    'new_deaths_qc_label': 'New deaths (QC)',
+    'new_deaths_mtl_label': 'New deaths (MTL)',
     # hospitalisations fig
     'hospitalisations_label': '入院人数',
     'hospitalisations_y_label': '现入院人数',

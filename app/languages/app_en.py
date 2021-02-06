@@ -79,12 +79,10 @@ labels = {
     'age_fig_hovertemplate': '%: %{y}',
     # deaths fig
     'deaths_fig_label': 'Deaths',
-    'deaths_qc_y_label': 'Cumulative deaths',
+    'deaths_qc_y_label': 'New deaths',
     'deaths_qc_y2_label': 'New deaths (7-day moving average)',
-    'deaths_fig_qc_label': 'Quebec (cumulative)',
-    'deaths_fig_mtl_label': 'Montreal (cumulative)',
-    'new_deaths_qc_label': 'Quebec (new deaths)',
-    'new_deaths_mtl_label': 'Montreal (new deaths)',
+    'new_deaths_qc_label': 'New deaths (QC)',
+    'new_deaths_mtl_label': 'New deaths (MTL)',
     # hospitalisations fig
     'hospitalisations_label': 'Hospitalisations',
     'hospitalisations_y_label': 'Active hospitalisations',
