@@ -94,10 +94,13 @@ labels = {
     'intensive_care_active_qc': '现重症患者 (魁省)',
     'hospitalisations_mtl': '新增入院 (蒙特利尔)',
     # Test positivity fig
-    'testing_label': '检测阳性率',
-    'testing_y_label': '检测阳性率 (7日移动平均)',
-    'testing_mtl': '蒙特利尔',
-    'testing_qc': '魁省',
+    'testing_label': 'Test positivity rate',
+    'testing_y_label': 'Test positivity rate',
+    'testing_y2_label': 'Tests performed',
+    'testing_tests_qc': 'Tests performed (QC)',
+    'testing_tests_mtl': 'Tests performed (MTL)',
+    'testing_hovertemplate_qc': '<b>Quebec</b><br>7-day moving avg: %{y:,.2f}%<br>Test positivity: %{customdata:,.2f}%',
+    'testing_hovertemplate_mtl': '<b>Montreal</b><br>7-day moving avg: %{y:,.2f}%<br>Test positivity: %{customdata:,.2f}%',
     #
     'date_slider_label': '日期: ',
     'date_label': '日期',

@@ -95,9 +95,12 @@ labels = {
     'hospitalisations_mtl': 'Nouvelles hospitalisations (MTL)',
     # Test positivity fig
     'testing_label': 'Taux de positivité des tests',
-    'testing_y_label': 'Taux de positivité (moyenne mobile 7 jours)',
-    'testing_mtl': 'Montréal',
-    'testing_qc': 'Québec',
+    'testing_y_label': 'Taux de positivité',
+    'testing_y2_label': 'Nombre de tests effectués',
+    'testing_tests_qc': 'Nombre de tests effectués (QC)',
+    'testing_tests_mtl': 'Nombre de tests effectués (MTL)',
+    'testing_hovertemplate_qc': '<b>Quebec</b><br>Moyenne mobile 7 jours: %{y:,.2f}%<br>Taux de positivité: %{customdata:,.2f}%',
+    'testing_hovertemplate_mtl': '<b>Montreal</b><br>Moyenne mobile 7 jours: %{y:,.2f}%<br>Taux de positivité: %{customdata:,.2f}%',
     #
     'date_slider_label': 'Date: ',
     'date_label': 'Date',

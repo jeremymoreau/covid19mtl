@@ -95,9 +95,12 @@ labels = {
     'hospitalisations_mtl': 'New hospitalisations(MTL)',
     # Test positivity fig
     'testing_label': 'Test positivity rate',
-    'testing_y_label': 'Test positivity rate (7-day moving average)',
-    'testing_mtl': 'Montreal',
-    'testing_qc': 'Quebec',
+    'testing_y_label': 'Test positivity rate',
+    'testing_y2_label': 'Tests performed',
+    'testing_tests_qc': 'Tests performed (QC)',
+    'testing_tests_mtl': 'Tests performed (MTL)',
+    'testing_hovertemplate_qc': '<b>Quebec</b><br>7-day moving avg: %{y:,.2f}%<br>Test positivity: %{customdata:,.2f}%',
+    'testing_hovertemplate_mtl': '<b>Montreal</b><br>7-day moving avg: %{y:,.2f}%<br>Test positivity: %{customdata:,.2f}%',
     #
     'date_slider_label': 'Fecha: ',
     'date_label': 'Fecha',

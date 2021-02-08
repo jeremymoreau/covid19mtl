@@ -511,33 +511,64 @@ def testing_fig(data_qc, data_mtl, labels):
     testing_fig = go.Figure({
         'data': [
             {
+                'type': 'bar',
+                'x': data_qc['date'],
+                'y': data_qc['psi_quo_tes_n'],
+                'yaxis': 'y2',
+                'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.5},
+                'name': labels['testing_tests_qc'],
+                'hoverlabel': {'namelength': 25},
+                'hovertemplate': '%{y:d}',
+            },
+            {
+                'type': 'bar',
+                'x': data_mtl['date'],
+                'y': data_mtl['psi_quo_tes_n'],
+                'yaxis': 'y2',
+                'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.5},
+                'name': labels['testing_tests_mtl'],
+                'hoverlabel': {'namelength': 25},
+                'hovertemplate': '%{y:d}',
+            },
+            {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                # divide by 100 because '%' tickformat is x100
-                'y': data_qc['psi_quo_pos_t'].rolling(7).mean() / 100,
+                'y': data_qc['psi_quo_pos_t'].rolling(7).mean(),
+                'customdata': data_qc['psi_quo_pos_t'],
                 'mode': 'lines',
                 'marker': {'color': COLOUR_QC},
-                'name': labels['testing_qc'],
-                'hoverlabel': {'namelength': 25},
-                'hovertemplate': '%{y:,.1%}'
+                'name': labels['7day_avg_qc_label'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate': labels['testing_hovertemplate_qc'],
             },
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                # divide by 100 because '%' tickformat is x100
-                'y': data_mtl['psi_quo_pos_t'].rolling(7).mean() / 100,
+                'y': data_mtl['psi_quo_pos_t'].rolling(7).mean(),
+                'customdata': data_mtl['psi_quo_pos_t'],
                 'mode': 'lines',
                 'marker': {'color': COLOUR_MTL},
-                'name': labels['testing_mtl'],
-                'hoverlabel': {'namelength': 25},
-                'hovertemplate': '%{y:,.1%}'
+                'name': labels['7day_avg_mtl_label'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate': labels['testing_hovertemplate_mtl'],
             },
         ],
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
-            'yaxis': {'title': {'text': labels['testing_y_label']}, 'gridcolor': COLOUR_GRID, 'tickformat': ',.0%'},
+            'yaxis': {
+                'title': {'text': labels['testing_y_label']},
+                'gridcolor': COLOUR_GRID,
+                'ticksuffix': '%'
+            },
+            'yaxis2': {
+                'title': {'text': labels['testing_y2_label']},
+                'overlaying': 'y',
+                'rangemode': 'tozero',
+                'side': 'right',
+                'constrain': 'domain',
+            },
             'margin': {'r': 0, 't': 10, 'l': 60, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
             'paper_bgcolor': 'rgba(255,255,255,1)',
