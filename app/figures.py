@@ -592,7 +592,7 @@ def vaccination_fig(data_vaccination, labels):
                 'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.3},
                 'name': labels['vaccination_total_received_qc'],
                 'customdata': data_vaccination['qc_new_doses_received'],
-                'hoverlabel': {'namelength': 35},
+                'hoverlabel': {'namelength': 0},
                 'hovertemplate': labels['vaccination_received_hovertemplate'],
             },
             {
