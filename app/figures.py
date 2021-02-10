@@ -1,6 +1,14 @@
 import plotly.express as px
 import plotly.graph_objects as go
 
+COLOUR_QC = '#001F97'
+# slightly more blue: #4677e7
+COLOUR_QC_LIGHT = '#5c6dad'
+COLOUR_MTL = '#D6142C'
+COLOUR_MTL_LIGHT = '#d64b5b'
+COLOUR_EXTRA = '#1b97d1'
+COLOUR_GRID = '#f5f5f5'
+
 
 def add_fig_controls(fig, y_data, labels):
     """Add a dropdown menu to select between log and linear scales and range sliders/buttons
@@ -76,7 +84,7 @@ def add_fig_controls(fig, y_data, labels):
                          args=[{'visible': [True, True]},
                                {'yaxis': {
                                    'type': 'linear',
-                                   'gridcolor': '#f5f5f5',
+                                   'gridcolor': COLOUR_GRID,
                                    'title': str(fig.layout.yaxis.title.text)
                                }
                          }]),
@@ -86,7 +94,7 @@ def add_fig_controls(fig, y_data, labels):
                                {'yaxis': {
                                    'type': 'log',
                                    'nticks': nticks_log,
-                                   'gridcolor': '#f5f5f5',
+                                   'gridcolor': COLOUR_GRID,
                                    'title': str(fig.layout.yaxis.title.text)
                                }
                          }]),
@@ -202,62 +210,57 @@ def cases_fig(data_mtl, data_qc, labels):
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['cases'],
-                'mode': 'lines',
-                'marker': {'color': '#001F97'},
-                'name': labels['confirmed_cases_qc_label'],
-                'hoverlabel': {'namelength': 25},
-            },
-            {
-                'type': 'scatter',
-                'x': data_qc['date'],
                 'y': data_qc['active_cases'],
+                'yaxis': 'y2',
                 'mode': 'lines',
-                'marker': {'color': '#001F97'},
+                'marker': {'color': COLOUR_EXTRA},
                 'line': {'dash': 'dash'},
                 'name': labels['active_cases_qc_label'],
                 'hoverlabel': {'namelength': 25},
+                'hovertemplate': '%{y:d}',
             },
             {
-                'type': 'scatter',
+                'type': 'bar',
+                'x': data_qc['date'],
+                'y': data_qc['new_cases'],
+                'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.5},
+                'name': labels['new_cases_qc_label'],
+                'hoverlabel': {'namelength': 25},
+            },
+            {
+                'type': 'bar',
                 'x': data_mtl['date'],
-                'y': data_mtl['cases'],
-                'mode': 'lines',
-                'marker': {'color': '#D6142C'},
-                'name': labels['confirmed_cases_mtl_label'],
+                'y': data_mtl['new_cases'],
+                'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.5},
+                'name': labels['new_cases_mtl_label'],
                 'hoverlabel': {'namelength': 25},
             },
             {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                'y': data_qc['new_cases'].rolling(7).mean().round(),
-                'yaxis': 'y2',
+                'y': data_qc['new_cases'].rolling(7).mean().round().fillna(0),
                 'mode': 'lines',
-                'marker': {'color': '#1bd1c2'},
-                'line': {'dash': 'dot'},
-                'name': labels['new_confirmed_cases_qc_label'],
-                'hoverlabel': {'namelength': 25},
+                'marker': {'color': COLOUR_QC},
+                'name': labels['7day_avg_qc_label'],
+                'hoverlabel': {'namelength': 30},
             },
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                'y': data_mtl['new_cases'].rolling(7).mean().round(),
-                'yaxis': 'y2',
+                'y': data_mtl['new_cases'].rolling(7).mean().round().fillna(0),
                 'mode': 'lines',
-                'marker': {'color': '#f7289d'},
-                'line': {'dash': 'dot'},
-                'name': labels['new_confirmed_cases_mtl_label'],
-                'hoverlabel': {'namelength': 25},
-            }
-
+                'marker': {'color': COLOUR_MTL},
+                'name': labels['7day_avg_mtl_label'],
+                'hoverlabel': {'namelength': 30},
+            },
         ],
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
             'yaxis': {
                 'title': {'text': labels['confirmed_cases_y_label']},
-                'gridcolor': '#f5f5f5',
+                'gridcolor': COLOUR_GRID,
                 'rangemode': 'tozero',
             },
             'yaxis2': {
@@ -298,7 +301,7 @@ def mtl_age_hist_fig(mtl_age_data, labels):
     age_fig.update_layout({
         'legend': {'bgcolor': 'rgba(255,255,255,1)', 'x': 0, 'y': 1, 'title': ''},
         'xaxis': {'title': {'text': labels['age_label']}},
-        'yaxis': {'title': {'text': '%'}, 'gridcolor': '#f5f5f5'},
+        'yaxis': {'title': {'text': '%'}, 'gridcolor': COLOUR_GRID},
         'margin': {'r': 0, 't': 10, 'l': 0, 'b': 0},
         'plot_bgcolor': 'rgba(255,255,255,1)',
         'paper_bgcolor': 'rgba(255,255,255,1)',
@@ -337,53 +340,47 @@ def deaths_fig(data_mtl, data_qc, labels):
     deaths_fig = go.Figure({
         'data': [
             {
-                'type': 'scatter',
+                'type': 'bar',
                 'x': data_qc['date'],
-                'y': data_qc['deaths'],
-                'mode': 'lines',
-                'marker': {'color': '#001F97'},
-                'name': labels['deaths_fig_qc_label'],
-                'hoverlabel': {'namelength': 25},
-            },
-            {
-                'type': 'scatter',
-                'x': data_mtl['date'],
-                'y': data_mtl['deaths'],
-                'mode': 'lines',
-                'marker': {'color': '#D6142C'},
-                'name': labels['deaths_fig_mtl_label'],
-                'hoverlabel': {'namelength': 25},
-            },
-            {
-                'type': 'scatter',
-                'x': data_qc['date'],
-                'y': data_qc['new_deaths'].rolling(7).mean().round(),
-                'yaxis': 'y2',
-                'mode': 'lines',
-                'marker': {'color': '#1bd1c2'},
-                'line': {'dash': 'dot'},
+                'y': data_qc['new_deaths'],
+                'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.5},
                 'name': labels['new_deaths_qc_label'],
                 'hoverlabel': {'namelength': 25},
             },
             {
-                'type': 'scatter',
+                'type': 'bar',
                 'x': data_mtl['date'],
-                'y': data_mtl['new_deaths'].rolling(7).mean().round(),
-                'yaxis': 'y2',
-                'mode': 'lines',
-                'marker': {'color': '#f7289d'},
-                'line': {'dash': 'dot'},
+                'y': data_mtl['new_deaths'],
+                'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.5},
                 'name': labels['new_deaths_mtl_label'],
                 'hoverlabel': {'namelength': 25},
+            },
+            {
+                'type': 'scatter',
+                'x': data_qc['date'],
+                'y': data_qc['new_deaths'].rolling(7).mean().round().fillna(0),
+                'mode': 'lines',
+                'marker': {'color': COLOUR_QC},
+                'name': labels['7day_avg_qc_label'],
+                'hoverlabel': {'namelength': 30},
+            },
+            {
+                'type': 'scatter',
+                'x': data_mtl['date'],
+                'y': data_mtl['new_deaths'].rolling(7).mean().round().fillna(0),
+                'mode': 'lines',
+                'marker': {'color': COLOUR_MTL},
+                'name': labels['7day_avg_mtl_label'],
+                'hoverlabel': {'namelength': 30},
             }
         ],
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
             'yaxis': {
                 'title': {'text': labels['deaths_qc_y_label']},
-                'gridcolor': '#f5f5f5',
+                'gridcolor': COLOUR_GRID,
                 'rangemode': 'tozero'
             },
             'yaxis2': {
@@ -413,7 +410,7 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
                 'x': data_qc_hosp['date'],
                 'y': data_qc_hosp['hospitalisations_all'],
                 'yaxis': 'y1',
-                'marker': {'color': '#5c6dad', 'opacity': 0.3},
+                'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.3},
                 'name': labels['hospitalisations_active_qc'],
                 'hoverlabel': {'namelength': 35},
             },
@@ -433,7 +430,7 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
                 'y': data_qc['hos_quo_tot_n'].iloc[:-1].rolling(7).mean().round(),
                 'yaxis': 'y2',
                 'mode': 'lines',
-                'marker': {'color': '#001F97'},
+                'marker': {'color': COLOUR_QC},
                 'line': {'dash': 'dot'},
                 'name': labels['hospitalisations_qc'],
                 'hoverlabel': {'namelength': 35},
@@ -457,7 +454,7 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
                 'y': data_mtl['hos_quo_tot_n'].iloc[:-1].rolling(7).mean().round(),
                 'yaxis': 'y2',
                 'mode': 'lines',
-                'marker': {'color': '#D6142C'},
+                'marker': {'color': COLOUR_MTL},
                 'line': {'dash': 'dot'},
                 'name': labels['hospitalisations_mtl'],
                 'hoverlabel': {'namelength': 35},
@@ -478,10 +475,10 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
             'yaxis': {
                 'title': {'text': labels['hospitalisations_y_label']},
-                'gridcolor': '#f5f5f5'
+                'gridcolor': COLOUR_GRID
             },
             'yaxis2': {
                 'title': {'text': labels['hospitalisations_y2_label']},
@@ -514,33 +511,64 @@ def testing_fig(data_qc, data_mtl, labels):
     testing_fig = go.Figure({
         'data': [
             {
+                'type': 'bar',
+                'x': data_qc['date'],
+                'y': data_qc['psi_quo_tes_n'],
+                'yaxis': 'y2',
+                'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.5},
+                'name': labels['testing_tests_qc'],
+                'hoverlabel': {'namelength': 25},
+                'hovertemplate': '%{y:d}',
+            },
+            {
+                'type': 'bar',
+                'x': data_mtl['date'],
+                'y': data_mtl['psi_quo_tes_n'],
+                'yaxis': 'y2',
+                'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.5},
+                'name': labels['testing_tests_mtl'],
+                'hoverlabel': {'namelength': 25},
+                'hovertemplate': '%{y:d}',
+            },
+            {
                 'type': 'scatter',
                 'x': data_qc['date'],
-                # divide by 100 because '%' tickformat is x100
-                'y': data_qc['psi_quo_pos_t'].rolling(7).mean() / 100,
+                'y': data_qc['psi_quo_pos_t'].rolling(7).mean(),
+                'customdata': data_qc['psi_quo_pos_t'],
                 'mode': 'lines',
-                'marker': {'color': '#001F97'},
-                'name': labels['testing_qc'],
-                'hoverlabel': {'namelength': 25},
-                'hovertemplate': '%{y:,.1%}'
+                'marker': {'color': COLOUR_QC},
+                'name': labels['7day_avg_qc_label'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate': labels['testing_hovertemplate_qc'],
             },
             {
                 'type': 'scatter',
                 'x': data_mtl['date'],
-                # divide by 100 because '%' tickformat is x100
-                'y': data_mtl['psi_quo_pos_t'].rolling(7).mean() / 100,
+                'y': data_mtl['psi_quo_pos_t'].rolling(7).mean(),
+                'customdata': data_mtl['psi_quo_pos_t'],
                 'mode': 'lines',
-                'marker': {'color': '#D6142C'},
-                'name': labels['testing_mtl'],
-                'hoverlabel': {'namelength': 25},
-                'hovertemplate': '%{y:,.1%}'
+                'marker': {'color': COLOUR_MTL},
+                'name': labels['7day_avg_mtl_label'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate': labels['testing_hovertemplate_mtl'],
             },
         ],
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
-            'yaxis': {'title': {'text': labels['testing_y_label']}, 'gridcolor': '#f5f5f5', 'tickformat': ',.0%'},
+            'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
+            'yaxis': {
+                'title': {'text': labels['testing_y_label']},
+                'gridcolor': COLOUR_GRID,
+                'ticksuffix': '%'
+            },
+            'yaxis2': {
+                'title': {'text': labels['testing_y2_label']},
+                'overlaying': 'y',
+                'rangemode': 'tozero',
+                'side': 'right',
+                'constrain': 'domain',
+            },
             'margin': {'r': 0, 't': 10, 'l': 60, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
             'paper_bgcolor': 'rgba(255,255,255,1)',
@@ -561,10 +589,10 @@ def vaccination_fig(data_vaccination, labels):
                 'x': data_vaccination['date'],
                 'y': data_vaccination['qc_doses_received'],
                 'yaxis': 'y1',
-                'marker': {'color': '#5c6dad', 'opacity': 0.3},
+                'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.3},
                 'name': labels['vaccination_total_received_qc'],
                 'customdata': data_vaccination['qc_new_doses_received'],
-                'hoverlabel': {'namelength': 35},
+                'hoverlabel': {'namelength': 0},
                 'hovertemplate': labels['vaccination_received_hovertemplate'],
             },
             {
@@ -574,7 +602,7 @@ def vaccination_fig(data_vaccination, labels):
                 'customdata': data_vaccination[['qc_percent_vaccinated']],
                 'yaxis': 'y1',
                 'mode': 'lines',
-                'marker': {'color': '#001F97'},
+                'marker': {'color': COLOUR_QC},
                 'name': labels['vaccination_total_qc'],
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate': labels['vaccination_hovertemplate']
@@ -586,7 +614,7 @@ def vaccination_fig(data_vaccination, labels):
                 'customdata': data_vaccination[['mtl_percent_vaccinated']],
                 'yaxis': 'y1',
                 'mode': 'lines',
-                'marker': {'color': '#D6142C'},
+                'marker': {'color': COLOUR_MTL},
                 'name': labels['vaccination_total_mtl'],
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate': labels['vaccination_hovertemplate']
@@ -622,7 +650,7 @@ def vaccination_fig(data_vaccination, labels):
             'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
             'yaxis': {
                 'title': {'text': labels['vaccination_y']},
-                'gridcolor': '#f5f5f5'
+                'gridcolor': COLOUR_GRID
             },
             'yaxis2': {
                 'title': {'text': labels['vaccination_y2']},
@@ -725,10 +753,10 @@ def qc_deaths_loc_fig(data_qc, labels):
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
             'yaxis': {
                 'title': {'text': labels['deaths_loc_fig_qc_y_label']},
-                'gridcolor': '#f5f5f5'
+                'gridcolor': COLOUR_GRID
             },
             'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
@@ -755,7 +783,7 @@ def cases_vs_newcases_fig(data_mtl, data_qc, labels):
                 'customdata': data_mtl['date'],
                 'mode': 'lines',
                 'name': labels['cases_vs_newcases_legend_mtl'],
-                'marker': {'color': '#D6142C'},
+                'marker': {'color': COLOUR_MTL},
                 'hovertemplate': labels['cases_vs_newcases_hovertemplate'],
             },
             {
@@ -765,13 +793,13 @@ def cases_vs_newcases_fig(data_mtl, data_qc, labels):
                 'customdata': data_qc['date'],
                 'mode': 'lines',
                 'name': labels['cases_vs_newcases_legend_qc'],
-                'marker': {'color': '#001F97'},
+                'marker': {'color': COLOUR_QC},
                 'hovertemplate': labels['cases_vs_newcases_hovertemplate'],
             },
         ],
         'layout': {
             'xaxis': {'type': 'log', 'title': {'text': labels['cases_vs_newcases_xlabel']}},
-            'yaxis': {'type': 'log', 'title': {'text': labels['cases_vs_newcases_ylabel']}, 'gridcolor': '#f5f5f5'},
+            'yaxis': {'type': 'log', 'title': {'text': labels['cases_vs_newcases_ylabel']}, 'gridcolor': COLOUR_GRID},
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
             'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
