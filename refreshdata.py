@@ -74,7 +74,7 @@ SOURCES_QC = {
     'data_qc_vaccines_received.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/doses-vaccins-7jours.csv',  # noqa: E501
     'data_qc_vaccines_situation.csv':
-    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/situation-vaccination-en.csv',  # noqa: E501
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/situation-vaccination.csv',  # noqa: E501
     'data_qc_7days.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours.csv',
 }
