@@ -227,11 +227,11 @@ def generate_layout(labels):
                     html.Div(
                         [
                             html.H6(
-                                [labels['age_group_label']],
+                                [labels['hospitalisations_label']],
                             ),
                             dcc.Graph(
-                                figure=age_fig,
-                                id='age_fig',
+                                figure=hospitalisations_fig,
+                                id='hospitalisations_fig',
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
@@ -318,11 +318,11 @@ def generate_layout(labels):
                     html.Div(
                         [
                             html.H6(
-                                [labels['hospitalisations_label']],
+                                [labels['age_group_label']],
                             ),
                             dcc.Graph(
-                                figure=hospitalisations_fig,
-                                id='hospitalisations_fig',
+                                figure=age_fig,
+                                id='age_fig',
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
