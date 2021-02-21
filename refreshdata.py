@@ -846,6 +846,7 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
         # This estimate should be closer to the truth once a larger % of the population is vaccinated,
         # as the ratio of (ppl waiting for a 2nd dose / ppl having received 2 doses) decreases.
         # Source for 2020 pop estimates: https://publications.msss.gouv.qc.ca/msss/document-001617/
+        # Note2: Disabled 2 doses for now as noone has received the second dose yet
         mtl_pop = 2065657  # Région sociosanitaire 06 - Montreal, 2020 projection
         qc_pop = 8539073  # QC Total, 2020 projection
 
@@ -856,8 +857,8 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
         mtl_new = mtl_count - vaccine_df['mtl_doses'][-1]
         qc_new = qc_count - vaccine_df['qc_doses'][-1]
 
-        mtl_perc = (mtl_count / 2) * 100 / mtl_pop
-        qc_perc = (qc_count / 2) * 100 / qc_pop
+        mtl_perc = (mtl_count) * 100 / mtl_pop
+        qc_perc = (qc_count) * 100 / qc_pop
 
         total_doses = received_df.loc[date, 'Doses du vaccin COVID-19 reçues (cumulatif)']
         new_doses = total_doses - vaccine_df['qc_doses_received'][-1]
