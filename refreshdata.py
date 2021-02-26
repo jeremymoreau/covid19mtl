@@ -887,6 +887,48 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
         print(f'Vaccine data: {date} has already been appended to {vacc_csv}')
 
 
+def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
+    """Append new row to data_variants.csv data.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path to sources dir.
+    processed_dir : str
+        Absolute path to processed dir.
+    date : str
+        Date of data to append (yyyy-mm-dd).
+    """
+    # Load csv files
+    day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_manual_data.csv')
+    variants_csv = os.path.join(processed_dir, 'data_variants.csv')
+    day_df = pd.read_csv(day_csv, header=1, encoding='utf-8')
+    variants_df = pd.read_csv(variants_csv, encoding='utf-8', index_col=0)
+
+    if date not in variants_df.index:
+        sequenced = int(day_df['Variants Tot'][0])
+        presumptive = day_df['Variants Crib Tot'][0].astype(int)
+        new_sequenced = sequenced - variants_df['sequenced'][-1]
+        new_presumptive = presumptive - variants_df['presumptive'][-1]
+        new_cases = day_df['cas'][1]
+
+        # build and add new data, use dict to preserve column datatypes
+        new_data = {
+            'sequenced': sequenced,
+            'presumptive': presumptive,
+            'new_sequenced': new_sequenced,
+            'new_presumptive': new_presumptive,
+            'new_cases': new_cases,
+        }
+
+        variants_df.loc[date] = new_data
+
+        # Overwrite data_variants.csv
+        variants_df.to_csv(variants_csv, encoding='utf-8')
+    else:
+        print(f'Variant data: {date} has already been appended to {variants_csv}')
+
+
 def append_totals_csv(processed_dir: str, totals_name: str, data_name: str):
     """Load latest data CSV and append its last row to the existing totals CSV.
 
@@ -933,6 +975,9 @@ def process_inspq_data(sources_dir, processed_dir, date):
 
     # Replace data_qc_hospitalisations
     update_hospitalisations_qc_csv(sources_dir, processed_dir)
+
+    # Update data_variants.csv
+    append_variants_data_csv(sources_dir, processed_dir, date)
 
     # Append row to data_mtl_death_loc.csv
     append_mtl_death_loc_csv(sources_dir, processed_dir, date)
