@@ -673,6 +673,90 @@ def vaccination_fig(data_vaccination, labels):
     return vaccination_fig
 
 
+def variants_fig(data_variants, labels):
+    variants_fig = go.Figure({
+        'data': [
+            {
+                'type': 'bar',
+                'x': data_variants['date'],
+                'y': data_variants['sequenced'],
+                'yaxis': 'y2',
+                'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.3},
+                'name': 'Sequenced cases',
+                'customdata': data_variants['new_sequenced'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate': 'Sequenced cases: %{y}<br>New sequenced cases: %{customdata}',
+            },
+            {
+                'type': 'bar',
+                'x': data_variants['date'],
+                'y': data_variants['screened'],
+                'yaxis': 'y2',
+                'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.3},
+                'name': 'Presumptive cases',
+                'hoverlabel': {'namelength': 30},
+            },
+            # {
+            #     'type': 'scatter',
+            #     'x': data_variants['date'],
+            #     'y': data_variants['new_sequenced'],
+            #     'yaxis': 'y2',
+            #     'mode': 'lines',
+            #     'marker': {'color': COLOUR_QC},
+            #     'name': 'New sequenced cases',
+            #     'hoverlabel': {'namelength': 30},
+            # },
+            {
+                'type': 'scatter',
+                'x': data_variants['date'],
+                'y': data_variants['new_screened'],
+                'yaxis': 'y1',
+                'mode': 'lines',
+                'marker': {'color': COLOUR_MTL},
+                'name': 'New presumptive cases',
+                'hoverlabel': {'namelength': 30},
+            },
+            {
+                'type': 'scatter',
+                'x': data_variants['date'],
+                'y': data_variants['new_cases'],
+                # 'customdata': data_variants[['new_screened_perc']],
+                'yaxis': 'y1',
+                'mode': 'lines',
+                'marker': {'color': COLOUR_QC},
+                'name': 'Total new cases',
+                'hoverlabel': {'namelength': 30},
+                # 'hovertemplate': 'New cases: %{y:d}<br>Est. % new presumptive cases: %{customdata[0]:.1f}%'
+            },
+        ],
+        'layout': {
+            'autosize': True,
+            'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
+            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'yaxis': {
+                'title': {'text': labels['confirmed_cases_y_label']},
+                'gridcolor': COLOUR_GRID
+            },
+            'yaxis2': {
+                'title': {'text': 'Cases'},
+                'overlaying': 'y',
+                'rangemode': 'tozero',
+                'side': 'right',
+                'constrain': 'domain',
+            },
+            'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
+            'plot_bgcolor': 'rgba(255,255,255,1)',
+            'paper_bgcolor': 'rgba(255,255,255,1)',
+            'hovermode': 'x',
+            'barmode': 'overlay',
+            'hoverlabel': {'font': {'color': '#ffffff'}},
+            'dragmode': False
+        }
+    })
+
+    return variants_fig
+
+
 def mtl_deaths_loc_fig(data_mtl_death_loc, labels):
     # Confirmed deaths by place of residence (MTL)
     deaths_loc_mtl_fig = go.Figure({

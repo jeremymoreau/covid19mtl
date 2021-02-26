@@ -79,6 +79,8 @@ data_qc_hosp = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_hospitalisat
 
 # Vaccination_data
 data_vaccination = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccines.csv'), encoding='utf-8', na_values='na')
+# Variants
+data_variants = pd.read_csv(DATA_PATH.joinpath('processed', 'data_variants.csv'))
 
 # MTL deaths by location data
 data_mtl_death_loc = pd.read_csv(
