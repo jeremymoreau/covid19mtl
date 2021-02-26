@@ -310,6 +310,8 @@ def is_new_qc_data_available(expected_date: dt.date):
 
     # directly load file from the web
     df = pd.read_csv(io.StringIO(content), header=None, sep=';')
+    # remove NaN line at the end
+    df.dropna(how='all', inplace=True)
     # get cell with date
     date_string = df.iloc[-1, 0]
 
