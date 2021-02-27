@@ -145,6 +145,13 @@ labels = {
     'vaccination_received_hovertemplate': 'Doses reçues: %{y:d}<br>Nouvelles doses reçues: %{customdata:d}',
     'vaccination_new_mtl': 'Nouvelles doses (MTL)',
     'vaccination_new_qc': 'Nouvelles doses (QC)',
+    # Variants fig
+    'variants_sequenced': 'Cas séquencés',
+    'variants_presumptive': 'Cas présomptifs',
+    'variants_new_presumptive': 'Nouveaux cas présomptifs',
+    'variants_new_sequenced': 'Nouveaux cas séquencés',
+    'variants_new_cases': 'Nombre total de nouveaux cas',
+    'variants_y2': 'Cas',
     # Range sliders
     '14d': '14j',
     '1m': '1m',

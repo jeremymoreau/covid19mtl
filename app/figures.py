@@ -682,25 +682,27 @@ def variants_fig(data_variants, labels):
                 'y': data_variants['sequenced'],
                 'yaxis': 'y2',
                 'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.3},
-                'name': 'Sequenced cases',
+                'name': labels['variants_sequenced'],
                 'customdata': data_variants['new_sequenced'],
                 'hoverlabel': {'namelength': 0},
-                'hovertemplate': 'Sequenced cases: %{y}<br>New sequenced cases: %{customdata}',
+                'hovertemplate':
+                    labels['variants_sequenced'] + ': %{y}<br>'
+                    + labels['variants_new_sequenced'] + ': %{customdata}',
             },
             {
                 'type': 'bar',
                 'x': data_variants['date'],
-                'y': data_variants['screened'],
+                'y': data_variants['presumptive'],
                 'yaxis': 'y2',
                 'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.3},
-                'name': 'Presumptive cases',
+                'name': labels['variants_presumptive'],
                 'hoverlabel': {'namelength': 30},
             },
             # {
             #     'type': 'scatter',
             #     'x': data_variants['date'],
             #     'y': data_variants['new_sequenced'],
-            #     'yaxis': 'y2',
+            #     'yaxis': 'y1',
             #     'mode': 'lines',
             #     'marker': {'color': COLOUR_QC},
             #     'name': 'New sequenced cases',
@@ -709,11 +711,11 @@ def variants_fig(data_variants, labels):
             {
                 'type': 'scatter',
                 'x': data_variants['date'],
-                'y': data_variants['new_screened'],
+                'y': data_variants['new_presumptive'],
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': COLOUR_MTL},
-                'name': 'New presumptive cases',
+                'name': labels['variants_new_presumptive'],
                 'hoverlabel': {'namelength': 30},
             },
             {
@@ -724,7 +726,7 @@ def variants_fig(data_variants, labels):
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': COLOUR_QC},
-                'name': 'Total new cases',
+                'name': labels['variants_new_cases'],
                 'hoverlabel': {'namelength': 30},
                 # 'hovertemplate': 'New cases: %{y:d}<br>Est. % new presumptive cases: %{customdata[0]:.1f}%'
             },
@@ -738,7 +740,7 @@ def variants_fig(data_variants, labels):
                 'gridcolor': COLOUR_GRID
             },
             'yaxis2': {
-                'title': {'text': 'Cases'},
+                'title': {'text': labels['variants_y2']},
                 'overlaying': 'y',
                 'rangemode': 'tozero',
                 'side': 'right',
