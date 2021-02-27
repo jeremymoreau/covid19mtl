@@ -146,12 +146,13 @@ labels = {
     'vaccination_new_mtl': '新增接种量 (蒙特利尔)',
     'vaccination_new_qc': '新增接种量 (魁省)',
     # Variants fig
+    'variants_label': 'Presumptive and sequenced cases of new variants (QC)',
     'variants_sequenced': 'Sequenced cases',
     'variants_presumptive': 'Presumptive cases',
     'variants_new_presumptive': 'New presumptive cases',
     'variants_new_sequenced': 'New sequenced cases',
     'variants_new_cases': 'Total new cases',
-    'variants_y2': 'Cases',
+    'variants_y2': 'Cases (cumulative)',
     # Range sliders
     '14d': '14d',
     '1m': '1m',

@@ -338,7 +338,7 @@ def generate_layout(labels):
                     html.Div(
                         [
                             html.H6(
-                                ['Presumptive and sequenced cases of new variants (QC)'],
+                                labels['variants_label'],
                             ),
                             dcc.Graph(
                                 figure=variants_fig,
