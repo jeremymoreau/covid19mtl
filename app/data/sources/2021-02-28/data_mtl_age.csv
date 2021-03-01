@@ -1,0 +1,13 @@
+Groupe d'âge;Nombre de nouveaux cas rapportés, les dernières 24 heures;Nombre de cas, les derniers 14 jours;Taux de cas pour 100 000 personnes, les derniers 14 jours;Nombre de cas cumulatif, depuis le début de la pandémie;Taux de cas pour 100 000 personnes cumulatif, depuis le début de la pandémie;Nombre de décès, les derniers 14 jours;Taux de mortalité pour 100 000 personnes, les derniers 14 jours;Nombre de décès cumulatif, depuis le début de la pandémie;Taux de mortalité pour 100 000 personnes cumulatif, depuis le début de la pandémie
+0-4 ans;20;314;285,9;3285;2990,7;0;;0;
+5-9 ans;18;398;370;4555;4234,1;0;;0;
+10-19 ans;41;713;358,4;11015;5537,5;0;;0;
+20-29 ans;43;667;204,9;17652;5421,7;0;;< 5;n.p.
+30-39 ans;48;791;241;16121;4911,7;0;;7;n.p.
+40-49 ans;46;801;288,5;15677;5647,4;0;;16;* 5,8
+50-59 ans;45;622;242,5;12966;5055;< 5;n.p.;85;33,1
+60-69 ans;20;347;160,4;8139;3762,2;< 5;n.p.;293;135,4
+70-79 ans;11;176;121,8;5643;3905;14;* 9,7;769;532,2
+80 ans et +;11;165;164;11359;11292,3;41;40,8;3322;3302,5
+Manquant;0;< 5;;80;;0;;0;
+Total;303;4995;241,8;106492;5155,4;60;2,9;4495;217,6
