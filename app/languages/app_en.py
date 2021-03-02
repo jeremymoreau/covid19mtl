@@ -48,6 +48,7 @@ labels = {
     ###### Useful resources
 
     - [COVID-19 Symptom Self-Assessment Tool](https://ca.thrive.health/covid19/en)
+    - [Quebec Vaccination Campaign &ndash; Appointments](https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/progress-of-the-covid-19-vaccination/)
     - [Santé Montréal](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/)
     - [Public health expertise and reference centre (French only)](https://www.inspq.qc.ca/covid-19/donnees)
     - [Coronavirus disease (COVID-19) in Quebec](https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/situation-coronavirus-in-quebec/)

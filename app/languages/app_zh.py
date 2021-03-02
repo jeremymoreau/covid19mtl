@@ -48,6 +48,7 @@ labels = {
     ###### 相关资源
 
     - [新型冠状病毒症状自我评估工具](https://ca.thrive.health/covid19/en)
+    - [Quebec Vaccination Campaign &ndash; Appointments](https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/progress-of-the-covid-19-vaccination/)
     - [蒙特利尔市公共卫生部门](https://santemontreal.qc.ca/en/public/coronavirus-covid-19/)
     - [公共卫生专业知识和参考资料（法语）](https://www.inspq.qc.ca/covid-19/donnees)
     - [魁北克省冠状病毒（COVID-19）相关资源](https://www.quebec.ca/en/health/health-issues/a-z/2019-coronavirus/situation-coronavirus-in-quebec/)

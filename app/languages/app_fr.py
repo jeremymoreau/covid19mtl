@@ -48,6 +48,7 @@ labels = {
     ###### Ressources utiles
 
     - [Outil d'auto-évaluation des symptômes COVID-19](https://ca.thrive.health/covid19/fr)
+    - [Campagne de vaccination du Québec &ndash; Rendez-vous](https://www.quebec.ca/sante/problemes-de-sante/a-z/coronavirus-2019/deroulement-vaccination-contre-la-covid-19/)
     - [Santé Montréal](https://santemontreal.qc.ca/population/coronavirus-covid-19/)
     - [Centre d'expertise et de référence en santé publique](https://www.inspq.qc.ca/covid-19/donnees)
     - [La maladie à coronavirus (COVID-19) au Québec](https://www.quebec.ca/sante/problemes-de-sante/a-z/coronavirus-2019/situation-coronavirus-quebec/)
