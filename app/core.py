@@ -181,18 +181,44 @@ else:
 
 # Make MTL histogram data tidy
 # downsample then reset_index to have date column
-mtl_age_data = downsample(data_mtl_by_age, '7d').reset_index().melt(
-    id_vars='date', value_vars=[
-        'cases_mtl_0-4_norm', 'cases_mtl_5-9_norm',
-        'cases_mtl_10-19_norm', 'cases_mtl_20-29_norm',
-        'cases_mtl_30-39_norm', 'cases_mtl_40-49_norm',
-        'cases_mtl_50-59_norm', 'cases_mtl_60-69_norm',
-        'cases_mtl_70-79_norm', 'cases_mtl_80+_norm',
-        'cases_mtl_0-4_per100000_norm', 'cases_mtl_5-9_per100000_norm',
-        'cases_mtl_10-19_per100000_norm', 'cases_mtl_20-29_per100000_norm',
-        'cases_mtl_30-39_per100000_norm', 'cases_mtl_40-49_per100000_norm',
-        'cases_mtl_50-59_per100000_norm', 'cases_mtl_60-69_per100000_norm',
-        'cases_mtl_70-79_per100000_norm', 'cases_mtl_80+_per100000_norm'
-    ],
-    var_name='age_group', value_name='percent'
-).dropna()
+# mtl_age_data = downsample(data_mtl_by_age, '7d').reset_index().melt(
+#     id_vars='date', value_vars=[
+#         'cases_mtl_0-4_norm', 'cases_mtl_5-9_norm',
+#         'cases_mtl_10-19_norm', 'cases_mtl_20-29_norm',
+#         'cases_mtl_30-39_norm', 'cases_mtl_40-49_norm',
+#         'cases_mtl_50-59_norm', 'cases_mtl_60-69_norm',
+#         'cases_mtl_70-79_norm', 'cases_mtl_80+_norm',
+#         'cases_mtl_0-4_per100000_norm', 'cases_mtl_5-9_per100000_norm',
+#         'cases_mtl_10-19_per100000_norm', 'cases_mtl_20-29_per100000_norm',
+#         'cases_mtl_30-39_per100000_norm', 'cases_mtl_40-49_per100000_norm',
+#         'cases_mtl_50-59_per100000_norm', 'cases_mtl_60-69_per100000_norm',
+#         'cases_mtl_70-79_per100000_norm', 'cases_mtl_80+_per100000_norm'
+#     ],
+#     var_name='age_group', value_name='percent'
+# ).dropna()
+
+# set up MTL age data using 7-day mov avg and resample by calendar week
+mtl_age = data_mtl_by_age[[
+    'cases_mtl_0-4', 'cases_mtl_5-9', 'cases_mtl_10-19', 'cases_mtl_20-29',
+    'cases_mtl_30-39', 'cases_mtl_40-49', 'cases_mtl_50-59',
+    'cases_mtl_60-69', 'cases_mtl_70-79', 'cases_mtl_80+'
+]]
+# determine daily new cases and its 7-day rolling avg
+mtl_age = mtl_age.diff().dropna()
+mtl_age = mtl_age.rolling(7).mean().dropna().round()
+# drop numbers < 0 when corrections happened
+mtl_age = mtl_age[mtl_age >= 0]
+# calculate % of each age group among sum of cases
+mtl_age = mtl_age.div(mtl_age.sum(axis=1), axis=0) * 100
+# resample weekly
+mtl_age.index = pd.to_datetime(mtl_age.index)
+# make week start Monday and report for dates starting Monday to not report on future dates
+mtl_age_data = mtl_age.resample('W-MON', closed='left', label='left').mean()
+mtl_age_data = mtl_age_data.dropna(how='all').round(2)
+# convert back DateIndex to string as plotly is expectecting string values
+mtl_age_data.index = mtl_age_data.index.strftime('%Y-%m-%d')
+# limit data to last 12 weeks
+mtl_age_data = mtl_age_data.iloc[-16:]
+mtl_age_data = mtl_age_data.reset_index().melt(id_vars=['date'], var_name='age', value_name='new_cases')
+# clean up age
+mtl_age_data['age'] = mtl_age_data['age'].str.split('_').str[-1]

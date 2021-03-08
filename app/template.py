@@ -16,7 +16,7 @@ def generate_layout(labels):
     # Figures #####
     mtlmap_fig = figures.mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels)
     cases_fig = figures.cases_fig(data_mtl, data_qc, labels)
-    age_fig = figures.mtl_age_hist_fig(mtl_age_data, labels)
+    age_fig = figures.mtl_age_fig(mtl_age_data, labels)
     deaths_fig = figures.deaths_fig(data_mtl, data_qc, labels)
     hospitalisations_fig = figures.hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels)
     testing_fig = figures.testing_fig(data_qc, data_mtl, labels)
