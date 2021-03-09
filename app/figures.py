@@ -737,7 +737,8 @@ def variants_fig(data_variants, labels):
             'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
             'yaxis': {
                 'title': {'text': labels['confirmed_cases_y_label']},
-                'gridcolor': COLOUR_GRID
+                'gridcolor': COLOUR_GRID,
+                'rangemode': 'nonnegative',
             },
             'yaxis2': {
                 'title': {'text': labels['variants_y2']},
