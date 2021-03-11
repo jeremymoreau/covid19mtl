@@ -203,6 +203,8 @@ mtl_age = data_mtl_by_age[[
     'cases_mtl_30-39', 'cases_mtl_40-49', 'cases_mtl_50-59',
     'cases_mtl_60-69', 'cases_mtl_70-79', 'cases_mtl_80+'
 ]]
+# clean columns
+mtl_age.columns = mtl_age.columns.str.split('_').str[-1]
 # determine daily new cases and its 7-day rolling avg
 mtl_age = mtl_age.diff().dropna()
 mtl_age = mtl_age.rolling(7).mean().dropna().round()
@@ -220,5 +222,3 @@ mtl_age_data.index = mtl_age_data.index.strftime('%Y-%m-%d')
 # limit data to last 12 weeks
 mtl_age_data = mtl_age_data.iloc[-16:]
 mtl_age_data = mtl_age_data.reset_index().melt(id_vars=['date'], var_name='age', value_name='new_cases')
-# clean up age
-mtl_age_data['age'] = mtl_age_data['age'].str.split('_').str[-1]
