@@ -296,6 +296,10 @@ li {
     grid-template-columns: 1fr;
     row-gap: 15px;
   }
+  .grid-container-two-cols {
+    grid-template-columns: 1fr;
+    row-gap: 15px;
+  }
   #title-container {
     clear: both;
     float: none;
@@ -337,10 +341,6 @@ li {
 }
 
 @media (max-width: 600px) {
-  .grid-container-two-cols {
-    grid-template-columns: 1fr;
-    row-gap: 15px;
-  }
   #title-container {
     clear: both;
     float: none;

@@ -35,7 +35,7 @@ labels = {
     'negative_tests_qc_box_label': 'Negative tests (QC)',
     'montreal_map_label': 'Cases per 100,000 population (Island of Montreal)',
     'total_cases_label': 'Confirmed cases',
-    'age_group_label': 'Cases by age group (MTL)',
+    'age_group_label': 'Distribution of new cases across all age groups by week (MTL)',
     'total_deaths_label': 'Deaths (QC)',
     'total_hospitalisations_label': 'Hospitalisations (QC)',
     'intensive_care_label': 'Intensive Care (QC)',
@@ -75,6 +75,7 @@ labels = {
     'active_cases_qc_label': 'Active cases (QC)',
     'new_cases_qc_label': 'New cases (QC)',
     'new_cases_mtl_label': 'New cases (MTL)',
+    # age groups
     'age_total_label': 'Distribution of total<br>cases across age groups',
     'age_per100000_label': 'Distribution of cases per<br>100,000 population in age group',
     'age_fig_hovertemplate': '%: %{y}',
@@ -106,6 +107,7 @@ labels = {
     'date_slider_label': 'Date: ',
     'date_label': 'Date',
     'age_label': 'Age',
+    'week_label': 'Week',
     'linear_label': 'Linear scale',
     'log_label': 'Log scale',
     # Confirmed deaths by place of residence (MTL) fig
