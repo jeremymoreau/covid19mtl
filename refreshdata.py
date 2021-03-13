@@ -55,6 +55,8 @@ SOURCES_INSPQ = {
     'data_qc_manual_data.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/manual-data.csv',
     'data_qc_cases_by_network.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rls-new.csv',
     'data_qc_death_loc_by_region.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/tableau-rpa-new.csv',
+    'data_qc_vaccination.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/vaccination.csv',
+    'data_qc_variants.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/variants.csv',
     # updated once a week on Tuesdays
     'data_qc_preconditions.csv': 'https://www.inspq.qc.ca/sites/default/files/covid/donnees/comorbidite.csv',
 }
