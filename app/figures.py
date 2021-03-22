@@ -1,3 +1,4 @@
+import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
@@ -735,11 +736,20 @@ def vaccination_fig(data_vaccination, labels):
 
 
 def variants_fig(data_variants, labels):
+    # filter out negative new presumptive numbers
+    data_variants_cleaned = data_variants.loc[:, ['new_presumptive', 'new_screened']]
+    data_variants_cleaned[data_variants_cleaned < 0] = np.nan
+    # calculate variants positivity rate (3-day rolling avg to smooth variation)
+    data_variants_cleaned['pos_rate'] = (
+        data_variants_cleaned['new_presumptive'] / data_variants_cleaned['new_screened'] * 100
+    )
+    data_variants_cleaned['pos_rate_3d_avg'] = data_variants_cleaned['pos_rate'].dropna().rolling(3).mean()
+
     variants_fig = go.Figure({
         'data': [
             {
                 'type': 'bar',
-                'x': data_variants['date'],
+                'x': data_variants.index,
                 'y': data_variants['sequenced'],
                 'yaxis': 'y2',
                 'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.3},
@@ -752,7 +762,7 @@ def variants_fig(data_variants, labels):
             },
             {
                 'type': 'bar',
-                'x': data_variants['date'],
+                'x': data_variants.index,
                 'y': data_variants['presumptive'],
                 'yaxis': 'y2',
                 'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.3},
@@ -761,7 +771,7 @@ def variants_fig(data_variants, labels):
             },
             # {
             #     'type': 'scatter',
-            #     'x': data_variants['date'],
+            #     'x': data_variants.index,
             #     'y': data_variants['new_sequenced'],
             #     'yaxis': 'y1',
             #     'mode': 'lines',
@@ -771,42 +781,81 @@ def variants_fig(data_variants, labels):
             # },
             {
                 'type': 'scatter',
-                'x': data_variants['date'],
+                'x': data_variants.index,
                 'y': data_variants['new_presumptive'],
                 'yaxis': 'y1',
                 'mode': 'lines',
-                'marker': {'color': COLOUR_MTL},
+                'marker': {'color': COLOUR_QC},
                 'name': labels['variants_new_presumptive'],
                 'hoverlabel': {'namelength': 30},
             },
+            # {
+            #     'type': 'scatter',
+            #     'x': data_variants.index,
+            #     'y': data_variants['new_cases'],
+            #     # 'customdata': data_variants[['new_screened_perc']],
+            #     'yaxis': 'y1',
+            #     'mode': 'lines',
+            #     'marker': {'color': COLOUR_QC},
+            #     'name': labels['variants_new_cases'],
+            #     'hoverlabel': {'namelength': 30},
+            #     # 'hovertemplate': 'New cases: %{y:d}<br>Est. % new presumptive cases: %{customdata[0]:.1f}%'
+            # },
             {
                 'type': 'scatter',
-                'x': data_variants['date'],
-                'y': data_variants['new_cases'],
-                # 'customdata': data_variants[['new_screened_perc']],
-                'yaxis': 'y1',
-                'mode': 'lines',
-                'marker': {'color': COLOUR_QC},
-                'name': labels['variants_new_cases'],
-                'hoverlabel': {'namelength': 30},
-                # 'hovertemplate': 'New cases: %{y:d}<br>Est. % new presumptive cases: %{customdata[0]:.1f}%'
+                'x': data_variants_cleaned.index,
+                'y': data_variants_cleaned['pos_rate_3d_avg'],
+                'yaxis': 'y3',
+                'mode': 'lines+markers',
+                # 'line': {'dash': 'dash'},
+                'marker': {'color': COLOUR_EXTRA},
+                'name': labels['variants_pos_rate_3d_avg'],
+                'hoverlabel': {'namelength': 0},
+                'customdata': data_variants_cleaned[['pos_rate', 'new_screened']],
+                'hovertemplate':
+                    '<b>' + labels['variants_pos_rate_3d_avg'] + ': %{y:.1f}%</b><br>'
+                    + labels['variants_pos_rate'] + ': %{customdata[0]:.1f}%<br>'
+                    + labels['variants_screened'] + ': %{customdata[1]}',
             },
         ],
         'layout': {
             'autosize': True,
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
-            'xaxis': {'tickformat': '%m-%d', 'title': {'text': labels['date_label']}},
+            'xaxis': {
+                'tickformat': '%m-%d',
+                'title': {'text': labels['date_label']},
+                # make more space for 2 yaxes on right
+                # 'domain': [0, 0.9],
+            },
             'yaxis': {
                 'title': {'text': labels['confirmed_cases_y_label']},
-                'gridcolor': COLOUR_GRID,
+                # 'gridcolor': COLOUR_GRID,
+                # force higher range to keep new presumptive cases at a lower level
+                'range': [0, 1000],
                 'rangemode': 'nonnegative',
             },
             'yaxis2': {
                 'title': {'text': labels['variants_y2']},
+                'title_standoff': 10,
                 'overlaying': 'y',
                 'rangemode': 'tozero',
                 'side': 'right',
                 'constrain': 'domain',
+                'gridcolor': COLOUR_GRID,
+            },
+            'yaxis3': {
+                # 'title': {'text': '%'},
+                'ticksuffix': '%',
+                'overlaying': 'y',
+                'range': [0, 100],
+                'side': 'right',
+                'tickfont': {
+                    'size': 10,
+                },
+                'dtick': 25,
+                # move slightly to the left right next to the graph
+                'anchor': 'free',
+                'position': 0.955,
             },
             'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
