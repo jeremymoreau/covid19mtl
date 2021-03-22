@@ -739,11 +739,14 @@ def variants_fig(data_variants, labels):
     # filter out negative new presumptive numbers
     data_variants_cleaned = data_variants.loc[:, ['new_presumptive', 'new_screened']]
     data_variants_cleaned[data_variants_cleaned < 0] = np.nan
-    # calculate variants positivity rate (3-day rolling avg to smooth variation)
+    # calculate variants positivity rate (7-day rolling avg)
     data_variants_cleaned['pos_rate'] = (
         data_variants_cleaned['new_presumptive'] / data_variants_cleaned['new_screened'] * 100
     )
-    data_variants_cleaned['pos_rate_3d_avg'] = data_variants_cleaned['pos_rate'].dropna().rolling(3).mean()
+    # use min_periods=1 to have values for the first 7 days
+    data_variants_cleaned['pos_rate_7d_avg'] = (
+        data_variants_cleaned['pos_rate'].dropna().rolling(7, min_periods=1).mean()
+    )
 
     variants_fig = go.Figure({
         'data': [
@@ -804,16 +807,16 @@ def variants_fig(data_variants, labels):
             {
                 'type': 'scatter',
                 'x': data_variants_cleaned.index,
-                'y': data_variants_cleaned['pos_rate_3d_avg'],
+                'y': data_variants_cleaned['pos_rate_7d_avg'],
                 'yaxis': 'y3',
                 'mode': 'lines+markers',
                 # 'line': {'dash': 'dash'},
                 'marker': {'color': COLOUR_EXTRA},
-                'name': labels['variants_pos_rate_3d_avg'],
+                'name': labels['variants_pos_rate_avg'],
                 'hoverlabel': {'namelength': 0},
                 'customdata': data_variants_cleaned[['pos_rate', 'new_screened']],
                 'hovertemplate':
-                    '<b>' + labels['variants_pos_rate_3d_avg'] + ': %{y:.1f}%</b><br>'
+                    '<b>' + labels['variants_pos_rate_avg'] + ': %{y:.1f}%</b><br>'
                     + labels['variants_pos_rate'] + ': %{customdata[0]:.1f}%<br>'
                     + labels['variants_screened'] + ': %{customdata[1]}',
             },

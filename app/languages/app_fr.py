@@ -156,7 +156,7 @@ labels = {
     'variants_new_sequenced': 'Nouveaux cas séquencés',
     'variants_new_cases': 'Nombre total de nouveaux cas',
     'variants_pos_rate': 'Taux de positivité',
-    'variants_pos_rate_3d_avg': 'Taux de positivité (moy. mob. 3 jours)',
+    'variants_pos_rate_avg': 'Taux de positivité (moy. mob. 7 jours)',
     'variants_screened': 'Échantillons criblés',
     'variants_y2': 'Cas (cumul)',
     # Range sliders
