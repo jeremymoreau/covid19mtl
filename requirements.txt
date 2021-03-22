@@ -77,7 +77,7 @@ soupsieve==2.1
     # via beautifulsoup4
 tzlocal==2.1
     # via dateparser
-urllib3==1.26.2
+urllib3==1.26.4
     # via requests
 werkzeug==1.0.1
     # via flask
