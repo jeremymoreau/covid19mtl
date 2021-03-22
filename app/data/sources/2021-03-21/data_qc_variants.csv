@@ -1,0 +1,20 @@
+RÉGION SOCIOSANITAIRE	,B.1.1.7,B.1.351,P.1,Autres variants,TOTAL CONFIRMÉS,Présomptifs reçus,TOTAL PRÉSOMPTIFS moins confirmés,Taux pour 100 000
+01 - Bas-Saint-Laurent,0,0,0,0,0,13,13,6.61
+02 - Saguenay–Lac-Saint-Jean,0,0,0,0,0,2,2,0.72
+03 - Capitale-Nationale,12,0,0,0,12,278,266,34.99
+04 - Mauricie et Centre-du-Québec,0,0,0,0,0,27,27,5.15
+05 - Estrie,9,0,0,0,9,54,45,9.06
+06 - Montréal,324,1,1,2,328,1921,1593,76.64
+07 - Outaouais,0,0,0,0,0,170,170,42.03
+08 - Abitibi-Témiscamingue,0,100,0,0,100,160,60,40.63
+09 - Côte-Nord,0,0,0,0,0,0,0,0.00
+10 - Nord-du-Québec,0,0,0,0,0,0,0,0.00
+11 - Gaspésie–Îles-de-la-Madeleine,0,0,0,0,0,0,0,0.00
+12 - Chaudière-Appalaches,0,0,0,0,0,89,89,20.61
+13 - Laval,29,0,0,0,29,450,421,94.27
+14 - Lanaudière,8,2,0,0,10,171,161,30.69
+15 - Laurentides,32,1,0,0,33,257,224,35.36
+16 - Montérégie,18,2,0,0,20,168,148,10.25
+Inconnu,0,1,0,0,1,153,152,-
+Hors Québec,0,0,0,0,0,2,2,-
+Ensemble du Québec,432,107,1,2,542,3915,3373,39.26
