@@ -902,22 +902,26 @@ def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
         Date of data to append (yyyy-mm-dd).
     """
     # Load csv files
-    day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_manual_data.csv')
+    manual_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_manual_data.csv')
+    day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_variants.csv')
     variants_csv = os.path.join(processed_dir, 'data_variants.csv')
-    day_df = pd.read_csv(day_csv, header=1, encoding='utf-8')
-    variants_df = pd.read_csv(variants_csv, encoding='utf-8', index_col=0)
+    manual_df = pd.read_csv(manual_csv, header=1, encoding='utf-8')
+    day_df = pd.read_csv(day_csv, index_col=0)
+    variants_df = pd.read_csv(variants_csv, encoding='utf-8', index_col=0, na_values='na')
 
     if date not in variants_df.index:
-        sequenced = int(day_df['Variants Tot'][0])
-        presumptive = day_df['Variants Crib Tot'][0].astype(int)
+        sequenced = int(manual_df['Variants Tot'][0])
+        presumptive = manual_df['Variants Crib Tot'][0].astype(int)
+        presumptive_total = day_df.loc['Ensemble du Québec', 'Présomptifs reçus']
         new_sequenced = sequenced - variants_df['sequenced'][-1]
-        new_presumptive = presumptive - variants_df['presumptive'][-1]
-        new_cases = day_df['cas'][1]
+        new_presumptive = presumptive_total - variants_df['presumptive_total'][-1]
+        new_cases = manual_df['cas'][1]
 
         # build and add new data, use dict to preserve column datatypes
         new_data = {
             'sequenced': sequenced,
             'presumptive': presumptive,
+            'presumptive_total': presumptive_total,
             'new_sequenced': new_sequenced,
             'new_presumptive': new_presumptive,
             'new_cases': new_cases,
@@ -926,7 +930,7 @@ def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
         variants_df.loc[date] = new_data
 
         # Overwrite data_variants.csv
-        variants_df.to_csv(variants_csv, encoding='utf-8')
+        variants_df.to_csv(variants_csv, encoding='utf-8', na_rep='na')
     else:
         print(f'Variant data: {date} has already been appended to {variants_csv}')
 

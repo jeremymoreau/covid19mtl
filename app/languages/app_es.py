@@ -155,6 +155,9 @@ labels = {
     'variants_new_presumptive': 'New presumptive cases',
     'variants_new_sequenced': 'New sequenced cases',
     'variants_new_cases': 'Total new cases',
+    'variants_pos_rate': 'Percent positivity',
+    'variants_pos_rate_avg': 'Percent positivity (7-day mov avg)',
+    'variants_screened': 'Screened samples',
     'variants_y2': 'Cases (cumulative)',
     # Range sliders
     '14d': '14d',
