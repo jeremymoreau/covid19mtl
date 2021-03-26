@@ -918,8 +918,10 @@ def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
     variants_df = pd.read_csv(variants_csv, encoding='utf-8', index_col=0, na_values='na')
 
     if date not in variants_df.index:
-        sequenced = int(manual_df['Variants Tot'][0])
-        presumptive = manual_df['Variants Crib Tot'][0].astype(int)
+        sequenced = day_df.loc['Ensemble du Québec', 'TOTAL CONFIRMÉS']
+        # in the past the 'presumptive moins confirmés' were reported
+        # starting March 26th this was removed, therefore this needs to be calculated
+        presumptive = day_df.loc['Ensemble du Québec', 'Présomptifs reçus'] - sequenced
         presumptive_total = day_df.loc['Ensemble du Québec', 'Présomptifs reçus']
         new_sequenced = sequenced - variants_df['sequenced'][-1]
         new_presumptive = presumptive_total - variants_df['presumptive_total'][-1]
