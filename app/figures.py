@@ -748,6 +748,10 @@ def variants_fig(data_variants, labels):
         data_variants_cleaned['pos_rate'].dropna().rolling(7, min_periods=1).mean()
     )
 
+    # calculate MTL new numbers
+    data_variants['new_sequenced_mtl'] = data_variants['sequenced_mtl'].diff()
+    data_variants['new_presumptive_mtl'] = data_variants['presumptive_total_mtl'].diff()
+
     variants_fig = go.Figure({
         'data': [
             {
@@ -789,7 +793,7 @@ def variants_fig(data_variants, labels):
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': COLOUR_QC},
-                'name': labels['variants_new_presumptive'],
+                'name': labels['variants_new_presumptive'] + ' (QC)',
                 'hoverlabel': {'namelength': 30},
             },
             # {
@@ -804,6 +808,20 @@ def variants_fig(data_variants, labels):
             #     'hoverlabel': {'namelength': 30},
             #     # 'hovertemplate': 'New cases: %{y:d}<br>Est. % new presumptive cases: %{customdata[0]:.1f}%'
             # },
+            {
+                'type': 'scatter',
+                'x': data_variants.index,
+                'y': data_variants['new_presumptive_mtl'],
+                'yaxis': 'y1',
+                'mode': 'lines',
+                'marker': {'color': COLOUR_MTL},
+                'name': labels['variants_new_presumptive'] + ' (MTL)',
+                'hoverlabel': {'namelength': 0},
+                'customdata': data_variants[['new_sequenced_mtl']],
+                'hovertemplate':
+                    '<b>' + labels['variants_new_presumptive'] + ' (MTL): %{y}</b><br>'
+                    + labels['variants_new_sequenced'] + ' (MTL): %{customdata[0]}<br>',
+            },
             {
                 'type': 'scatter',
                 'x': data_variants_cleaned.index,
