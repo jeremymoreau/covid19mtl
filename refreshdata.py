@@ -291,14 +291,15 @@ def is_new_inspq_data_available(expected_date: dt.date):
     csv_date2 = dateparser.parse(date_string).date()  # type: ignore[union-attr]
 
     # also check the vaccination data
-    content = fetch(SOURCES_INSPQ.get('data_qc_vaccination.csv'))
-    df = pd.read_csv(io.StringIO(content))
+    # only updated Mon-Fri
+    # content = fetch(SOURCES_INSPQ.get('data_qc_vaccination.csv'))
+    # df = pd.read_csv(io.StringIO(content))
     # get last cell with date
-    date_string = df.iloc[-1, 0]
+    # date_string = df.iloc[-1, 0]
 
-    csv_date3 = dateparser.parse(date_string).date()  # type: ignore[union-attr]
+    # csv_date3 = dateparser.parse(date_string).date()  # type: ignore[union-attr]
 
-    return csv_date == updated_date and csv_date2 == expected_date and csv_date3 == expected_date
+    return csv_date == updated_date and csv_date2 == expected_date
 
 
 def is_new_qc_data_available(expected_date: dt.date):
