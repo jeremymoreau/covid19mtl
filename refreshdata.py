@@ -927,6 +927,8 @@ def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
         new_sequenced = sequenced - variants_df['sequenced'][-1]
         new_presumptive = presumptive_total - variants_df['presumptive_total'][-1]
         new_cases = manual_df['cas'][1]
+        sequenced_mtl = day_df.loc['06 - Montréal', 'TOTAL SÉQUENCAGE']
+        presumptive_total_mtl = day_df.loc['06 - Montréal', 'CRIBLAGE']
 
         # build and add new data, use dict to preserve column datatypes
         new_data = {
@@ -936,6 +938,8 @@ def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
             'new_sequenced': new_sequenced,
             'new_presumptive': new_presumptive,
             'new_cases': new_cases,
+            'sequenced_mtl': sequenced_mtl,
+            'presumptive_total_mtl': presumptive_total_mtl,
         }
 
         variants_df.loc[date] = new_data
