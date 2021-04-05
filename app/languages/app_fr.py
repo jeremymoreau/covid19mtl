@@ -67,6 +67,7 @@ labels = {
     },
     'montreal_map_legend_title': '<b>Incidence sur 7 jours pour 100 000</b>',
     'montreal_map_hovertemplate': '<br>Arrondissement/Ville: %{location}<br>Incidence sur 7 jours pour 100 000 habitants: %{z}',
+    '7day_avg_short': 'moy mob 7 jours',
     '7day_avg_qc_label': 'Moyenne mobile 7 jours (QC)',
     '7day_avg_mtl_label': 'Moyenne mobile 7 jours (MTL)',
     # confirmed cases fig
@@ -149,7 +150,7 @@ labels = {
     'vaccination_new_mtl': 'Nouvelles doses (MTL)',
     'vaccination_new_qc': 'Nouvelles doses (QC)',
     # Variants fig
-    'variants_label': 'Cas présomptifs et séquencés de nouvelles variants (QC)',
+    'variants_label': 'Progression des nouvelles variants (VOC)',
     'variants_sequenced': 'Cas séquencés',
     'variants_presumptive': 'Cas présomptifs',
     'variants_new_presumptive': 'Nouveaux cas présomptifs',
@@ -159,6 +160,7 @@ labels = {
     'variants_pos_rate_avg': 'Taux de positivité (moy. mob. 7 jours)',
     'variants_screened': 'Échantillons criblés',
     'variants_y2': 'Cas (cumul)',
+    'variants_y3': 'Taux de positivité',
     # Range sliders
     '14d': '14j',
     '1m': '1m',
