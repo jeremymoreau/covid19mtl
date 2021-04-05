@@ -736,28 +736,12 @@ def vaccination_fig(data_vaccination, labels):
 
 
 def variants_fig(data_variants, labels):
-    # filter out negative new presumptive numbers
-    data_variants_cleaned = data_variants.loc[:, ['new_presumptive', 'new_sequenced', 'new_screened']]
-    data_variants_cleaned[data_variants_cleaned < 0] = np.nan
-    # calculate variants positivity rate (7-day rolling avg)
-    data_variants_cleaned['pos_rate'] = (
-        data_variants_cleaned['new_presumptive'] / data_variants_cleaned['new_screened'] * 100
-    )
-    # use min_periods=1 to have values for the first 7 days
-    data_variants_cleaned['pos_rate_7d_avg'] = (
-        data_variants_cleaned['pos_rate'].dropna().rolling(7, min_periods=1).mean()
-    )
-
-    # calculate MTL new numbers
-    data_variants['new_sequenced_mtl'] = data_variants['sequenced_mtl'].diff()
-    data_variants['new_presumptive_mtl'] = data_variants['presumptive_total_mtl'].diff()
-
     variants_fig = go.Figure({
         'data': [
             {
                 'type': 'bar',
                 'x': data_variants.index,
-                'y': data_variants_cleaned['new_presumptive'],
+                'y': data_variants['new_presumptive'],
                 'yaxis': 'y1',
                 'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.3},
                 'name': labels['variants_new_presumptive'] + ' (QC)',
@@ -777,13 +761,13 @@ def variants_fig(data_variants, labels):
             {
                 'type': 'scatter',
                 'x': data_variants.index,
-                'y': data_variants_cleaned['new_presumptive'].rolling(7, min_periods=2).mean().round(),
+                'y': data_variants['new_presumptive_7dma'],
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': COLOUR_QC_LIGHT},
                 'name': f"{labels['variants_new_presumptive']} ({labels['7day_avg_short']}, QC)",
                 'hoverlabel': {'namelength': 0},
-                'customdata': data_variants_cleaned[['new_presumptive', 'new_sequenced']],
+                'customdata': data_variants[['new_presumptive', 'new_sequenced']],
                 'hovertemplate':
                     '<b>Québec</b><br>'
                     + labels['variants_new_presumptive'] + ' (' + labels['7day_avg_short'] + '): %{y}<br>'
@@ -793,7 +777,7 @@ def variants_fig(data_variants, labels):
             {
                 'type': 'scatter',
                 'x': data_variants.index,
-                'y': data_variants['new_presumptive_mtl'].rolling(7, min_periods=2).mean().round(),
+                'y': data_variants['new_presumptive_mtl_7dma'],
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': COLOUR_MTL_LIGHT},
@@ -830,15 +814,15 @@ def variants_fig(data_variants, labels):
             },
             {
                 'type': 'scatter',
-                'x': data_variants_cleaned.index,
-                'y': data_variants_cleaned['pos_rate_7d_avg'],
+                'x': data_variants.index,
+                'y': data_variants['pos_rate_7d_avg'],
                 'yaxis': 'y3',
                 'mode': 'lines+markers',
                 # 'line': {'dash': 'dash'},
                 'marker': {'color': COLOUR_EXTRA},
                 'name': labels['variants_pos_rate_avg'],
                 'hoverlabel': {'namelength': 0},
-                'customdata': data_variants_cleaned[['pos_rate', 'new_screened']],
+                'customdata': data_variants[['pos_rate', 'new_screened']],
                 'hovertemplate':
                     '<b>' + labels['variants_pos_rate_avg'] + ': %{y:.1f}%</b><br>'
                     + labels['variants_pos_rate'] + ': %{customdata[0]:.1f}%<br>'

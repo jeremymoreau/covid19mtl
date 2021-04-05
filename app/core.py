@@ -2,6 +2,7 @@ import datetime
 import json
 import pathlib
 
+import numpy as np
 import pandas as pd
 
 
@@ -222,3 +223,20 @@ mtl_age_data.index = mtl_age_data.index.strftime('%Y-%m-%d')
 # limit data to last 12 weeks
 mtl_age_data = mtl_age_data.iloc[-16:]
 mtl_age_data = mtl_age_data.reset_index().melt(id_vars=['date'], var_name='age', value_name='new_cases')
+
+# clean variants data
+# filter out negative new presumptive numbers
+data_variants[data_variants < 0] = np.nan
+# calculate variants positivity rate (7-day rolling avg)
+data_variants['pos_rate'] = data_variants['new_presumptive'] / data_variants['new_screened'] * 100
+# use min_periods=1 to have values for the first 7 days
+data_variants['pos_rate_7d_avg'] = data_variants['pos_rate'].dropna().rolling(7, min_periods=1).mean()
+
+# calculate QC 7-day mov avg
+data_variants['new_presumptive_7dma'] = data_variants['new_presumptive'].rolling(7, min_periods=2).mean().round()
+# calculate MTL new numbers
+data_variants['new_sequenced_mtl'] = data_variants['sequenced_mtl'].diff()
+data_variants['new_presumptive_mtl'] = data_variants['presumptive_total_mtl'].diff()
+data_variants['new_presumptive_mtl_7dma'] = (
+    data_variants['new_presumptive_mtl'].rolling(7, min_periods=1).mean().round()
+)
