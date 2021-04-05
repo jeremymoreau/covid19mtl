@@ -67,6 +67,7 @@ labels = {
     },
     'montreal_map_legend_title': '<b>7-day incidence per 100,000</b>',
     'montreal_map_hovertemplate': '<b>%{hovertext}</b><br><br>Date=%{customdata[5]}<br>7-day incidence=%{customdata[0]}<br>7-day incidence per 100,000=%{customdata[1]}<br>Total cases=%{customdata[4]}<br>New cases=%{customdata[6]}<extra></extra>',
+    '7day_avg_short': '7-day mov avg',
     '7day_avg_qc_label': '7-day moving avg (QC)',
     '7day_avg_mtl_label': '7-day moving avg (MTL)',
     # confirmed cases fig
@@ -149,7 +150,7 @@ labels = {
     'vaccination_new_mtl': 'New doses (MTL)',
     'vaccination_new_qc': 'New doses (QC)',
     # Variants fig
-    'variants_label': 'Presumptive and sequenced cases of new variants (QC)',
+    'variants_label': 'Progression of new variants of concern (VOC)',
     'variants_sequenced': 'Sequenced cases',
     'variants_presumptive': 'Presumptive cases',
     'variants_new_presumptive': 'New presumptive cases',
@@ -159,6 +160,7 @@ labels = {
     'variants_pos_rate_avg': 'Percent positivity (7-day mov avg)',
     'variants_screened': 'Screened samples',
     'variants_y2': 'Cases (cumulative)',
+    'variants_y3': 'Percent Positivity',
     # Range sliders
     '14d': '14d',
     '1m': '1m',

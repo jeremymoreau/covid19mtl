@@ -737,7 +737,7 @@ def vaccination_fig(data_vaccination, labels):
 
 def variants_fig(data_variants, labels):
     # filter out negative new presumptive numbers
-    data_variants_cleaned = data_variants.loc[:, ['new_presumptive', 'new_screened']]
+    data_variants_cleaned = data_variants.loc[:, ['new_presumptive', 'new_sequenced', 'new_screened']]
     data_variants_cleaned[data_variants_cleaned < 0] = np.nan
     # calculate variants positivity rate (7-day rolling avg)
     data_variants_cleaned['pos_rate'] = (
@@ -757,70 +757,76 @@ def variants_fig(data_variants, labels):
             {
                 'type': 'bar',
                 'x': data_variants.index,
-                'y': data_variants['sequenced'],
-                'yaxis': 'y2',
+                'y': data_variants_cleaned['new_presumptive'],
+                'yaxis': 'y1',
                 'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.3},
-                'name': labels['variants_sequenced'],
-                'customdata': data_variants['new_sequenced'],
+                'name': labels['variants_new_presumptive'] + ' (QC)',
                 'hoverlabel': {'namelength': 0},
-                'hovertemplate':
-                    labels['variants_sequenced'] + ': %{y}<br>'
-                    + labels['variants_new_sequenced'] + ': %{customdata}',
+                'hoverinfo': 'skip',
             },
             {
                 'type': 'bar',
                 'x': data_variants.index,
-                'y': data_variants['presumptive'],
-                'yaxis': 'y2',
-                'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.3},
-                'name': labels['variants_presumptive'],
-                'hoverlabel': {'namelength': 30},
-            },
-            # {
-            #     'type': 'scatter',
-            #     'x': data_variants.index,
-            #     'y': data_variants['new_sequenced'],
-            #     'yaxis': 'y1',
-            #     'mode': 'lines',
-            #     'marker': {'color': COLOUR_QC},
-            #     'name': 'New sequenced cases',
-            #     'hoverlabel': {'namelength': 30},
-            # },
-            {
-                'type': 'scatter',
-                'x': data_variants.index,
-                'y': data_variants['new_presumptive'],
-                'yaxis': 'y1',
-                'mode': 'lines',
-                'marker': {'color': COLOUR_QC},
-                'name': labels['variants_new_presumptive'] + ' (QC)',
-                'hoverlabel': {'namelength': 30},
-            },
-            # {
-            #     'type': 'scatter',
-            #     'x': data_variants.index,
-            #     'y': data_variants['new_cases'],
-            #     # 'customdata': data_variants[['new_screened_perc']],
-            #     'yaxis': 'y1',
-            #     'mode': 'lines',
-            #     'marker': {'color': COLOUR_QC},
-            #     'name': labels['variants_new_cases'],
-            #     'hoverlabel': {'namelength': 30},
-            #     # 'hovertemplate': 'New cases: %{y:d}<br>Est. % new presumptive cases: %{customdata[0]:.1f}%'
-            # },
-            {
-                'type': 'scatter',
-                'x': data_variants.index,
                 'y': data_variants['new_presumptive_mtl'],
                 'yaxis': 'y1',
-                'mode': 'lines',
-                'marker': {'color': COLOUR_MTL},
+                'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.3},
                 'name': labels['variants_new_presumptive'] + ' (MTL)',
                 'hoverlabel': {'namelength': 0},
-                'customdata': data_variants[['new_sequenced_mtl']],
+                'hoverinfo': 'skip',
+            },
+            {
+                'type': 'scatter',
+                'x': data_variants.index,
+                'y': data_variants_cleaned['new_presumptive'].rolling(7, min_periods=2).mean().round(),
+                'yaxis': 'y1',
+                'mode': 'lines',
+                'marker': {'color': COLOUR_QC_LIGHT},
+                'name': f"{labels['variants_new_presumptive']} ({labels['7day_avg_short']}, QC)",
+                'hoverlabel': {'namelength': 0},
+                'customdata': data_variants_cleaned[['new_presumptive', 'new_sequenced']],
                 'hovertemplate':
-                    '<b>' + labels['variants_new_presumptive'] + ' (MTL): %{y}</b><br>'
-                    + labels['variants_new_sequenced'] + ' (MTL): %{customdata[0]}<br>',
+                    '<b>Québec</b><br>'
+                    + labels['variants_new_presumptive'] + ' (' + labels['7day_avg_short'] + '): %{y}<br>'
+                    + labels['variants_new_presumptive'] + ': %{customdata[0]}<br>'
+                    + labels['variants_new_sequenced'] + ': %{customdata[1]}',
+            },
+            {
+                'type': 'scatter',
+                'x': data_variants.index,
+                'y': data_variants['new_presumptive_mtl'].rolling(7, min_periods=2).mean().round(),
+                'yaxis': 'y1',
+                'mode': 'lines',
+                'marker': {'color': COLOUR_MTL_LIGHT},
+                'name': f"{labels['variants_new_presumptive']} ({labels['7day_avg_short']}, MTL)",
+                'hoverlabel': {'namelength': 0},
+                'customdata': data_variants[['new_presumptive_mtl', 'new_sequenced_mtl']],
+                'hovertemplate':
+                    '<b>Montréal</b><br>'
+                    + labels['variants_new_presumptive'] + ' (' + labels['7day_avg_short'] + '): %{y}<br>'
+                    + labels['variants_new_presumptive'] + ': %{customdata[0]}<br>'
+                    + labels['variants_new_sequenced'] + ': %{customdata[1]}',
+            },
+            {
+                'type': 'scatter',
+                'x': data_variants.index,
+                'y': data_variants['new_cases'].rolling(7, min_periods=2).mean().round(),
+                'yaxis': 'y1',
+                'mode': 'lines',
+                'line': {'dash': 'dot'},
+                'marker': {'color': COLOUR_QC},
+                'name': f"{labels['variants_new_cases']} ({labels['7day_avg_short']}, QC)",
+                'hoverlabel': {'namelength': 40},
+            },
+            {
+                'type': 'scatter',
+                'x': data_variants.index,
+                'y': data_variants['new_cases_mtl'].rolling(7, min_periods=2).mean().round(),
+                'yaxis': 'y1',
+                'mode': 'lines',
+                'line': {'dash': 'dot'},
+                'marker': {'color': COLOUR_MTL},
+                'name': f"{labels['variants_new_cases']} ({labels['7day_avg_short']}, MTL)",
+                'hoverlabel': {'namelength': 40},
             },
             {
                 'type': 'scatter',
@@ -852,9 +858,10 @@ def variants_fig(data_variants, labels):
                 'title': {'text': labels['confirmed_cases_y_label']},
                 # 'gridcolor': COLOUR_GRID,
                 # force higher range to keep new presumptive cases at a lower level
-                'range': [0, 1000],
-                'rangemode': 'nonnegative',
+                # 'range': [0, 1000],
+                'rangemode': 'tozero',
             },
+            # currently unused
             'yaxis2': {
                 'title': {'text': labels['variants_y2']},
                 'title_standoff': 10,
@@ -865,18 +872,19 @@ def variants_fig(data_variants, labels):
                 'gridcolor': COLOUR_GRID,
             },
             'yaxis3': {
-                # 'title': {'text': '%'},
+                'title': {'text': labels['variants_y3']},
+                'title_standoff': 10,
                 'ticksuffix': '%',
                 'overlaying': 'y',
                 'range': [0, 100],
                 'side': 'right',
-                'tickfont': {
-                    'size': 10,
-                },
-                'dtick': 25,
+                # 'tickfont': {
+                #     'size': 10,
+                # },
+                'dtick': 10,
                 # move slightly to the left right next to the graph
-                'anchor': 'free',
-                'position': 0.955,
+                # 'anchor': 'free',
+                # 'position': 0.955,
             },
             'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
