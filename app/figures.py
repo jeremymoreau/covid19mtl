@@ -644,6 +644,8 @@ def testing_fig(data_qc, data_mtl, labels):
 
 
 def vaccination_fig(data_vaccination, labels):
+    data_vaccination['qc_doses_available'] = data_vaccination['qc_doses_received'] - data_vaccination['qc_doses']
+
     vaccination_fig = go.Figure({
         'data': [
             {
@@ -661,7 +663,7 @@ def vaccination_fig(data_vaccination, labels):
                 'type': 'scatter',
                 'x': data_vaccination['date'],
                 'y': data_vaccination['qc_doses'],
-                'customdata': data_vaccination[['qc_percent_vaccinated']],
+                'customdata': data_vaccination[['qc_doses_available', 'qc_percent_vaccinated']],
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': COLOUR_QC},
