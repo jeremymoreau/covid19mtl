@@ -892,8 +892,7 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
 
         vaccine_df.loc[date] = new_data
 
-        # Overwrite data_mtl_death_loc.csv
-        vaccine_df.to_csv(vacc_csv, encoding='utf-8', float_format='%g', na_rep='na')
+        vaccine_df.to_csv(vacc_csv, encoding='utf-8', float_format='%.4f', na_rep='na')
     else:
         print(f'Vaccine data: {date} has already been appended to {vacc_csv}')
 
