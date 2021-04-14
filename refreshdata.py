@@ -201,7 +201,9 @@ def download_source_files(sources, sources_dir, version=True):
 
     # Download all source data files to sources dir
     for file, url in sources.items():
-        data = fetch(url)
+        # add "random" string to url to prevent server-side caching
+        unix_time = datetime.now().strftime('%s')
+        data = fetch(f'{url}?{unix_time}')
         fq_path = current_sources_dir.joinpath(file)
 
         if not fq_path.exists():
