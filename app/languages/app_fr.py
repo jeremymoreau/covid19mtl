@@ -151,7 +151,7 @@ labels = {
     'vaccination_new_mtl': 'Nouvelles doses (MTL)',
     'vaccination_new_qc': 'Nouvelles doses (QC)',
     # Variants fig
-    'variants_label': 'Progression des nouvelles variants (VOC)',
+    'variants_label': 'Progression des nouveaux variants préoccupants',
     'variants_sequenced': 'Cas séquencés',
     'variants_presumptive': 'Cas présomptifs',
     'variants_new_presumptive': 'Nouveaux cas présomptifs',
