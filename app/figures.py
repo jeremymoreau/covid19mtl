@@ -681,7 +681,7 @@ def vaccination_fig(data_vaccination, labels):
                 'marker': {'color': COLOUR_MTL},
                 'name': labels['vaccination_total_mtl'],
                 'hoverlabel': {'namelength': 0},
-                'hovertemplate': labels['vaccination_hovertemplate']
+                'hovertemplate': labels['vaccination_hovertemplate_mtl']
             },
             {
                 'type': 'scatter',

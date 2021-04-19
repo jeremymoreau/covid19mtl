@@ -146,6 +146,7 @@ labels = {
     'vaccination_perc_mtl': '% of pop vaccinated (MTL)',
     'vaccination_perc_qc': '% of pop vaccinated (QC)',
     'vaccination_hovertemplate': 'Doses administered: %{y:,d}<br>Doses available: %{customdata[0]:,d}<br>% of pop received 1 dose: %{customdata[1]:.2f}%',
+    'vaccination_hovertemplate_mtl': 'Doses administered: %{y:,d}<br>% of pop received 1 dose: %{customdata[0]:.2f}%',
     'vaccination_received_hovertemplate': 'Doses received: %{y:,d}<br>New doses received: %{customdata:,d}',
     'vaccination_new_mtl': 'New doses (MTL)',
     'vaccination_new_qc': 'New doses (QC)',
