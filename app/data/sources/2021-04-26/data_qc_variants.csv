@@ -1,0 +1,20 @@
+RÉGION SOCIOSANITAIRE	,B.1.1.7,B.1.351,P.1,B.1.525,TOTAL SÉQUENCAGE,CRIBLAGE,Taux pour 100 000,Criblage positif (7 jours)
+01 - Bas-Saint-Laurent,67,0,0,0,67,884,449.20,100
+02 - Saguenay–Lac-Saint-Jean,0,0,1,0,1,298,107.43,63.9
+03 - Capitale-Nationale,231,2,0,6,239,6331,832.87,98.4
+04 - Mauricie et Centre-du-Québec,11,0,0,0,11,618,117.87,85.3
+05 - Estrie,49,0,1,0,50,704,141.72,76.1
+06 - Montréal,1949,22,14,9,1994,7804,375.47,74.6
+07 - Outaouais,224,2,1,5,232,2631,650.50,90.9
+08 - Abitibi-Témiscamingue,0,141,0,0,141,227,153.73,25
+09 - Côte-Nord,0,0,0,0,0,65,72.73,94.1
+10 - Nord-du-Québec,0,0,0,0,0,0,0.00,.
+11 - Gaspésie–Îles-de-la-Madeleine,0,0,0,0,0,54,60.24,100
+12 - Chaudière-Appalaches,127,0,0,0,127,1564,362.11,91
+13 - Laval,213,3,0,5,221,1862,416.95,78.9
+14 - Lanaudière,146,5,1,6,158,923,175.93,72.9
+15 - Laurentides,185,6,3,1,195,1428,225.41,80.2
+16 - Montérégie,115,3,3,0,121,2094,145.04,74.7
+Inconnu,0,1,0,0,1,938,,78
+Hors Québec,14,1,0,1,16,48,,87.5
+Ensemble du Québec,3331,186,24,33,3574,28473,331.39,82.3
