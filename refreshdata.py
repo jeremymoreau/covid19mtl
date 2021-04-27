@@ -79,6 +79,8 @@ SOURCES_QC = {
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/situation-vaccination.csv',  # noqa: E501
     'data_qc_7days.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours.csv',
+    'data_qc_cases_by_region.csv':
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/cas-region.csv?t=1619549700',  # noqa: E501
 }
 
 
@@ -914,9 +916,13 @@ def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
     # Load csv files
     manual_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_manual_data.csv')
     day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_variants.csv')
+    # this file is coming from QC, not INSPQ like the rest
+    # usually QC data comes in first but this causes an error if it is not the case
+    regions_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_cases_by_region.csv')
     variants_csv = os.path.join(processed_dir, 'data_variants.csv')
     manual_df = pd.read_csv(manual_csv, header=1, encoding='utf-8')
     day_df = pd.read_csv(day_csv, index_col=0)
+    regions_df = pd.read_csv(regions_csv, sep=';', index_col=0)
     variants_df = pd.read_csv(variants_csv, encoding='utf-8', index_col=0, na_values='na')
 
     if date not in variants_df.index:
@@ -930,6 +936,7 @@ def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
         new_cases = manual_df['cas'][1]
         sequenced_mtl = day_df.loc['06 - Montréal', 'TOTAL SÉQUENCAGE']
         presumptive_total_mtl = day_df.loc['06 - Montréal', 'CRIBLAGE']
+        new_cases_mtl = regions_df.loc['06 - Montréal', date]
 
         # build and add new data, use dict to preserve column datatypes
         new_data = {
@@ -941,6 +948,7 @@ def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
             'new_cases': new_cases,
             'sequenced_mtl': sequenced_mtl,
             'presumptive_total_mtl': presumptive_total_mtl,
+            'new_cases_mtl': new_cases_mtl,
         }
 
         variants_df.loc[date] = new_data
