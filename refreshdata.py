@@ -1104,19 +1104,6 @@ def main():
             if not Path(processed_backups_dir, today.isoformat()).exists():
                 backup_processed_dir(processed_dir, processed_backups_dir)
 
-        # get the latest date of INSPQ data
-        df = pd.read_csv(Path(processed_dir).joinpath('data_qc.csv'), index_col=0)
-        inspq_data_date = datetime.fromisoformat(df.index[-1]).date()
-
-        # verify that we don't have the latest data yet
-        if inspq_data_date != yesterday and is_new_inspq_data_available(yesterday):
-            # print('retrieving new data from INSPQ...')
-            download_source_files(SOURCES_INSPQ, sources_dir, False)
-
-            process_inspq_data(sources_dir, processed_dir, yesterday_date)
-
-            print('Downloaded and processed data from INSPQ.')
-
         # get the latest date of QC data
         df = pd.read_csv(Path(processed_dir).joinpath('data_vaccines.csv'), index_col=0)
         qc_data_date = datetime.fromisoformat(df.index[-1]).date()
@@ -1129,6 +1116,19 @@ def main():
             process_qc_data(sources_dir, processed_dir, yesterday_date)
 
             print('Downloaded and processed data from QC.')
+
+        # get the latest date of INSPQ data
+        df = pd.read_csv(Path(processed_dir).joinpath('data_qc.csv'), index_col=0)
+        inspq_data_date = datetime.fromisoformat(df.index[-1]).date()
+
+        # verify that we don't have the latest data yet
+        if inspq_data_date != yesterday and is_new_inspq_data_available(yesterday):
+            # print('retrieving new data from INSPQ...')
+            download_source_files(SOURCES_INSPQ, sources_dir, False)
+
+            process_inspq_data(sources_dir, processed_dir, yesterday_date)
+
+            print('Downloaded and processed data from INSPQ.')
 
         # get the latest date of MTL data
         df = pd.read_csv(Path(processed_dir).joinpath('data_mtl_boroughs.csv'), index_col=0)
@@ -1152,8 +1152,8 @@ def main():
             SOURCES = {**SOURCES_MTL, **SOURCES_INSPQ, **SOURCES_QC}
             download_source_files(SOURCES, sources_dir)
 
-        process_inspq_data(sources_dir, processed_dir, yesterday_date)
         process_qc_data(sources_dir, processed_dir, yesterday_date)
+        process_inspq_data(sources_dir, processed_dir, yesterday_date)
         process_mtl_data(sources_dir, processed_dir, yesterday_date)
 
     return 0
