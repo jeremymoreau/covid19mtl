@@ -1,9 +1,14 @@
 from ..core import latest_update_date
-from ..template import generate_layout
+from ..template import generate_layout as build_home_layout
+from ..template_vacc import generate_layout as build_vaccination_layout
 
 # Label text (FR) #####
 # TODO: Make markdown links open in new tab
 labels = {
+    'home_link': '/fr',
+    'home_link_text': 'Accueil',
+    'vaccination_link': '/fr/vaccination',
+    'vaccination_link_text': 'Vaccination',
     'language0': 'English',
     'language_link0': '/en',
     'language1': 'Español',
@@ -172,4 +177,5 @@ labels = {
     'all': 'tout'
 }
 
-layout = generate_layout(labels)
+layout = build_home_layout(labels)
+layout_vaccination = build_vaccination_layout(labels)

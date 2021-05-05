@@ -1,6 +1,7 @@
 /* header */
 #header {
   overflow: auto;
+  margin-bottom: 15px;
 }
 #title-container {
   text-align: left;
@@ -20,18 +21,28 @@
   text-align: right;
   user-select: none;
   float: right;
-  width: 240px;
+  /* width: 240px; */
 }
 .lang-link{
   margin-left: 1.5rem;
   color: #323232;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
 }
 .lang-link:hover {
   color: #44aacc;
 }
 .lang-link:active {
   color: #cc4444;
+}
+#language-container .divider {
+  margin-left: 1.3rem;
+  font-weight: bold;
+}
+.nav-link {
+  margin-left: 1.7rem;
+}
+#language-container .active {
+  font-weight: bold;
 }
 
 /* mini info boxes */
@@ -62,7 +73,7 @@
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 15px;
-  margin-top: 15px;
+  /* margin-top: 15px; */
   margin-bottom: 15px;
 }
 .cases {
@@ -98,6 +109,12 @@
 }
 
 /* main grid */
+.grid-container-one-col {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  column-gap: 15px;
+  margin-bottom: 15px;
+}
 .grid-container-two-cols {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -391,6 +408,9 @@ li {
     font-size: 1.5rem;
   }
   .lang-link {
+    font-size: 1.3rem;
+  }
+  .nav-link {
     font-size: 1.5rem;
   }
   p {

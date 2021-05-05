@@ -60,6 +60,13 @@ def generate_layout(labels):
                     ),
                     html.Div(
                         [
+                            html.A(labels['home_link_text'], href=labels['home_link'], className='nav-link active'),
+                            html.A(
+                                labels['vaccination_link_text'],
+                                href=labels['vaccination_link'],
+                                className='nav-link'
+                            ),
+                            html.Span('|', className='divider'),
                             # Load in a new tab because some figures do not resize properly otherwise
                             # TODO: Fix this bug. Removed: Seems to work?!
                             html.A([labels['language0']], href=labels['language_link0'], className='lang-link'),
