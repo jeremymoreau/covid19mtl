@@ -78,36 +78,6 @@ def generate_layout(labels):
                     # right box
                     html.Div(
                         [
-                            # html.H6(
-                            #     [labels['montreal_map_label']],
-                            # ),
-                            # dcc.Graph(
-                            #     figure=mtlmap_fig,
-                            #     id='montreal_map',
-                            #     responsive=True,
-                            #     config={
-                            #         'modeBarButtonsToRemove': [
-                            #             'select2d',
-                            #             'lasso2d',
-                            #             'hoverClosestGeo',
-                            #         ],
-                            #         'scrollZoom': True,
-                            #         'doubleClick': False
-                            #     }
-                            # ),
-                        ],
-                        className='grid-item'
-                    ),
-                ],
-                className='grid-container-onethird-twothirds-cols',
-            ),
-
-            # 3rd row: 3 boxes
-            html.Div(
-                [
-                    # right box
-                    html.Div(
-                        [
                             html.H6(
                                 [labels['vaccination_label']]
                             ),
@@ -125,13 +95,38 @@ def generate_layout(labels):
                         className='grid-item'
                     ),
                 ],
-                className='grid-container-two-cols',
+                className='grid-container-onethird-twothirds-cols',
             ),
 
-            # 5th row: 2 boxes
+            # 3rd row: 3 boxes
+            # html.Div(
+            #     [
+            #         # right box
+            #         html.Div(
+            #             [
+            #                 html.H6(
+            #                     [labels['vaccination_label']]
+            #                 ),
+            #                 dcc.Graph(
+            #                     figure=vaccination_fig,
+            #                     id='vaccination_fig',
+            #                     responsive=True,
+            #                     config={
+            #                         'modeBarButtonsToRemove': modebar_buttons_to_remove,
+            #                         'doubleClick': False
+            #                     },
+            #                     className='figure'
+            #                 ),
+            #             ],
+            #             className='grid-item'
+            #         ),
+            #     ],
+            #     className='grid-container-two-cols',
+            # ),
+
+            # row: 1 box
             html.Div(
                 [
-                    # left box
                     html.Div(
                         [
                             html.H6(

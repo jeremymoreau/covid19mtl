@@ -23,7 +23,6 @@ def generate_layout(labels):
     deaths_loc_mtl_fig = figures.mtl_deaths_loc_fig(data_mtl_death_loc, labels)
     deaths_loc_qc_fig = figures.qc_deaths_loc_fig(data_qc, labels)
     # cases_vs_newcases_fig = figures.cases_vs_newcases_fig(data_mtl, data_qc, labels)
-    vaccination_fig = figures.vaccination_fig(data_vaccination, labels)
     variants_fig = figures.variants_fig(data_variants, labels)
 
     # Plotly modebar buttons to remove
@@ -297,26 +296,26 @@ def generate_layout(labels):
                         className='grid-item'
                     ),
                     # right box
-                    html.Div(
-                        [
-                            html.H6(
-                                [labels['vaccination_label']]
-                            ),
-                            dcc.Graph(
-                                figure=vaccination_fig,
-                                id='vaccination_fig',
-                                responsive=True,
-                                config={
-                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                                    'doubleClick': False
-                                },
-                                className='figure'
-                            ),
-                        ],
-                        className='grid-item'
-                    ),
+                    # html.Div(
+                    #     [
+                    #         html.H6(
+                    #             [labels['vaccination_label']]
+                    #         ),
+                    #         dcc.Graph(
+                    #             figure=vaccination_fig,
+                    #             id='vaccination_fig',
+                    #             responsive=True,
+                    #             config={
+                    #                 'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                    #                 'doubleClick': False
+                    #             },
+                    #             className='figure'
+                    #         ),
+                    #     ],
+                    #     className='grid-item'
+                    # ),
                 ],
-                className='grid-container-three-cols',
+                className='grid-container-two-cols',
             ),
 
             # 4th row: 2 boxes
