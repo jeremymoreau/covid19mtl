@@ -559,10 +559,10 @@ def update_hospitalisations_qc_csv(sources_dir, processed_dir):
     hosp_df.to_csv(os.path.join(processed_dir, 'data_qc_hospitalisations.csv'), encoding='utf-8', index=False)
 
 
-def update_vaccination_qc_csv(sources_dir, processed_dir):
-    """Replace old copy of data_qc_vaccination.csv in processed_dir with latest version.
+def update_vaccination_csv(sources_dir, processed_dir):
+    """Replace old copies of vaccination data in processed_dir with latest version.
 
-    data_qc_vaccination.csv file will be overwritten with the new updated file.
+    data_qc_vaccination.csv, data_mtl_vaccination.csv file will be overwritten with the new updated files.
 
     Parameters
     ----------
@@ -573,16 +573,31 @@ def update_vaccination_qc_csv(sources_dir, processed_dir):
     """
     # read latest data/sources/*/data_qc_vaccination.csv
     source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc_vaccination.csv')
-    qc_df = pd.read_csv(source_file, encoding='utf-8')
+    df = pd.read_csv(source_file, encoding='utf-8', index_col=0)
+
+    column_mappings = {
+        'Date': 'date',
+        'vac_quo_1_n': 'new_doses_1d',
+        'vac_quo_2_n': 'new_doses_2d',
+        'vac_cum_1_n': 'total_doses_1d',
+        'vac_cum_2_n': 'total_doses_2d',
+        'vac_quo_tot_n': 'new_doses',
+        'vac_cum_tot_n': 'total_doses',
+        'cvac_cum_tot_1_p': 'perc_1d',
+        'cvac_cum_tot_2_p': 'perc_2d',
+    }
+
+    # rename columns
+    for (old, new) in column_mappings.items():
+        df.columns = df.columns.str.replace(old, new)
 
     # filter out all rows except Régions & RS99 (Ensemble du Québec) which contains total numbers for QC
-    qc_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS99')]
+    qc_df = df[(df['Regroupement'] == 'Région') & (df['Croisement'] == 'RSS99')]
+    mtl_df = df[(df['Regroupement'] == 'Région') & (df['Croisement'] == 'RSS06')]
 
-    # rename date columns
-    qc_df.columns = qc_df.columns.str.replace('Date', 'date')
-
-    # overwrite previous data/processed/data_qc.csv
-    qc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination.csv'), encoding='utf-8', index=False, na_rep='na')
+    # overwrite previous files
+    qc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination.csv'), encoding='utf-8', na_rep='na')
+    mtl_df.to_csv(os.path.join(processed_dir, 'data_mtl_vaccination.csv'), encoding='utf-8', na_rep='na')
 
 
 def append_mtl_cases_csv(sources_dir, processed_dir, date):
@@ -775,32 +790,6 @@ def update_mtl_data_csv(sources_dir, processed_dir):
 
     # Overwrite mtl_data.csv
     mtl_df.to_csv(mtl_csv, encoding='utf-8', index=False, na_rep='na')
-
-
-def update_vaccination_mtl_csv(sources_dir, processed_dir):
-    """Replace old copy of data_mtl_vaccination.csv in processed_dir with latest version.
-
-    data_mtl_vaccination.csv file will be overwritten with the new updated file.
-
-    Parameters
-    ----------
-    sources_dir : str
-        Absolute path of sources dir.
-    processed_dir : str
-        Absolute path of processed dir.
-    """
-    # read latest data/sources/*/data_qc_vaccination.csv
-    source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc_vaccination.csv')
-    qc_df = pd.read_csv(source_file, encoding='utf-8')
-
-    # filter out all rows except Régions & RS99 (Ensemble du Québec) which contains total numbers for QC
-    qc_df = qc_df[(qc_df['Regroupement'] == 'Région') & (qc_df['Croisement'] == 'RSS06')]
-
-    # rename date columns
-    qc_df.columns = qc_df.columns.str.replace('Date', 'date')
-
-    # overwrite previous data/processed/data_qc.csv
-    qc_df.to_csv(os.path.join(processed_dir, 'data_mtl_vaccination.csv'), encoding='utf-8', index=False, na_rep='na')
 
 
 def append_mtl_cases_by_age(sources_dir, processed_dir, date):
@@ -1058,8 +1047,8 @@ def process_inspq_data(sources_dir, processed_dir, date):
     # Replace data_qc_hospitalisations
     update_hospitalisations_qc_csv(sources_dir, processed_dir)
 
-    # Replace data_qc_vaccination
-    update_vaccination_qc_csv(sources_dir, processed_dir)
+    # Replace vaccination data files
+    update_vaccination_csv(sources_dir, processed_dir)
 
     # Update data_variants.csv
     append_variants_data_csv(sources_dir, processed_dir, date)
@@ -1069,9 +1058,6 @@ def process_inspq_data(sources_dir, processed_dir, date):
 
     # Update data_mtl.csv
     update_mtl_data_csv(sources_dir, processed_dir)
-
-    # Update data_mtl_vaccination
-    update_vaccination_mtl_csv(sources_dir, processed_dir)
 
     # Copy total rows
     append_totals_csv(processed_dir, 'data_qc_totals.csv', 'data_qc.csv')

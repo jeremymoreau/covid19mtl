@@ -1,4 +1,4 @@
-date,Regroupement,Croisement,Nom,vac_quo_1_n,vac_quo_2_n,vac_cum_1_n,vac_cum_2_n,vac_quo_tot_n,vac_cum_tot_n,cvac_cum_tot_1_p,cvac_cum_tot_2_p
+Date,Regroupement,Croisement,Nom,new_doses_1d,new_doses_2d,total_doses_1d,total_doses_2d,new_doses,total_doses,perc_1d,perc_2d
 2020-12-14,Région,RSS06,06 - Montréal,128,0,128,0,128,128,0.0062289,0.0
 2020-12-15,Région,RSS06,06 - Montréal,345,0,473,0,345,473,0.0238774,0.0
 2020-12-16,Région,RSS06,06 - Montréal,283,0,756,0,283,756,0.0385673,0.0

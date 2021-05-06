@@ -1,4 +1,4 @@
-date,Regroupement,Croisement,Nom,vac_quo_1_n,vac_quo_2_n,vac_cum_1_n,vac_cum_2_n,vac_quo_tot_n,vac_cum_tot_n,cvac_cum_tot_1_p,cvac_cum_tot_2_p
+Date,Regroupement,Croisement,Nom,new_doses_1d,new_doses_2d,total_doses_1d,total_doses_2d,new_doses,total_doses,perc_1d,perc_2d
 2020-12-14,Région,RSS99,Ensemble du Québec,291,0,291,0,291,291,0.00319508,0.0
 2020-12-15,Région,RSS99,Ensemble du Québec,1167,0,1458,0,1167,1458,0.0166381,0.0
 2020-12-16,Région,RSS99,Ensemble du Québec,948,0,2406,0,948,2406,0.0278564,0.0
