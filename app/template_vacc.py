@@ -3,13 +3,12 @@ import dash_html_components as html
 
 import app.figures as figures
 
-from .core import data_vaccination, data_vaccination_age
+from .core import data_vaccination_age, data_vaccines
 
 
 def generate_layout(labels):
     # Figures #####
-    vaccination_fig = figures.vaccination_fig(data_vaccination, labels)
-    vaccination_age_fig = figures.vaccination_age_fig(data_vaccination_age, labels)
+    vaccination_fig = figures.vaccination_fig(data_vaccines, labels)
 
     # Plotly modebar buttons to remove
     modebar_buttons_to_remove = ['select2d',

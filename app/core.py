@@ -79,7 +79,7 @@ data_qc = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc.csv'), encoding='
 data_qc_hosp = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_hospitalisations.csv'), encoding='utf-8')
 
 # Vaccination_data
-data_vaccination = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccines.csv'), encoding='utf-8', na_values='na')
+data_vaccines = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccines.csv'), encoding='utf-8', na_values='na')
 # Variants
 data_variants = pd.read_csv(DATA_PATH.joinpath('processed', 'data_variants.csv'), index_col=0, na_values='na')
 
@@ -109,8 +109,8 @@ latest_deaths_mtl = str(int(data_mtl_totals['deaths'].dropna().iloc[-1]))
 new_deaths_mtl = str(int(data_mtl_totals['deaths'].diff().iloc[-1]))
 new_hosp_mtl = str(int(data_mtl_totals['hos_cum_reg_n'].diff().iloc[-1]))
 new_icu_mtl = str(int(data_mtl_totals['hos_cum_si_n'].diff().iloc[-1]))
-perc_vac_mtl = str(float(data_vaccination['mtl_percent_vaccinated'].dropna().round(2).iloc[-1]))
-new_doses_mtl = int(data_vaccination['mtl_new_doses'].dropna().iloc[-1])
+perc_vac_mtl = str(float(data_vaccines['mtl_percent_vaccinated'].dropna().round(2).iloc[-1]))
+new_doses_mtl = int(data_vaccines['mtl_new_doses'].dropna().iloc[-1])
 pos_rate_mtl = float(data_mtl['psi_quo_pos_t'].dropna().iloc[-1])
 pos_rate_change_mtl = float(data_mtl['psi_quo_pos_t'].dropna().iloc[-1] - data_mtl['psi_quo_pos_t'].dropna().iloc[-2])
 
@@ -148,8 +148,8 @@ latest_deaths_qc = str(int(data_qc_totals['deaths'].dropna().iloc[-1]))
 new_deaths_qc = str(int(data_qc_totals['deaths'].diff().iloc[-1]))
 new_hosp_qc = str(int(data_qc_totals['hos_cum_reg_n'].diff().iloc[-1]))
 new_icu_qc = str(int(data_qc_totals['hos_cum_si_n'].diff().iloc[-1]))
-perc_vac_qc = str(float(data_vaccination['qc_percent_vaccinated'].dropna().round(2).iloc[-1]))
-new_doses_qc = int(data_vaccination['qc_new_doses'].dropna().iloc[-1])
+perc_vac_qc = str(float(data_vaccines['qc_percent_vaccinated'].dropna().round(2).iloc[-1]))
+new_doses_qc = int(data_vaccines['qc_new_doses'].dropna().iloc[-1])
 pos_rate_qc = float(data_qc['psi_quo_pos_t'].dropna().round(2).iloc[-1])
 pos_rate_change_qc = float(data_qc['psi_quo_pos_t'].dropna().iloc[-1] - data_qc['psi_quo_pos_t'].dropna().iloc[-2])
 

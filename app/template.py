@@ -3,8 +3,8 @@ import dash_html_components as html
 
 import app.figures as figures
 
-from .core import (data_mtl, data_mtl_death_loc, data_qc, data_qc_hosp, data_vaccination, data_variants,
-                   incid_per100k_7d_mtl, incid_per100k_7d_mtl_colour, incid_per100k_7d_qc, incid_per100k_7d_qc_colour,
+from .core import (data_mtl, data_mtl_death_loc, data_qc, data_qc_hosp, data_variants, incid_per100k_7d_mtl,
+                   incid_per100k_7d_mtl_colour, incid_per100k_7d_qc, incid_per100k_7d_qc_colour,
                    incid_per100K_perc_change_mtl, incid_per100K_perc_change_qc, latest_cases_mtl, latest_cases_qc,
                    latest_deaths_mtl, latest_deaths_qc, mtl_age_data, mtl_boroughs, mtl_geojson, new_cases_mtl,
                    new_cases_qc, new_deaths_mtl, new_deaths_qc, new_doses_mtl, new_doses_qc, new_hosp_mtl, new_hosp_qc,
