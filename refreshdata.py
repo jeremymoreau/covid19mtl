@@ -591,13 +591,17 @@ def update_vaccination_csv(sources_dir, processed_dir):
     for (old, new) in column_mappings.items():
         df.columns = df.columns.str.replace(old, new)
 
-    # filter out all rows except Régions & RS99 (Ensemble du Québec) which contains total numbers for QC
+    # filter out rows
     qc_df = df[(df['Regroupement'] == 'Région') & (df['Croisement'] == 'RSS99')]
     mtl_df = df[(df['Regroupement'] == 'Région') & (df['Croisement'] == 'RSS06')]
+    age_df = df[(df['Regroupement'] == "Groupe d'âge 1")]
+    # just keep the last date
+    age_df = age_df.loc[age_df.index[-1]]
 
     # overwrite previous files
-    qc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination.csv'), encoding='utf-8', na_rep='na')
-    mtl_df.to_csv(os.path.join(processed_dir, 'data_mtl_vaccination.csv'), encoding='utf-8', na_rep='na')
+    qc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination.csv'))
+    mtl_df.to_csv(os.path.join(processed_dir, 'data_mtl_vaccination.csv'))
+    age_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination_by_age.csv'))
 
 
 def append_mtl_cases_csv(sources_dir, processed_dir, date):
