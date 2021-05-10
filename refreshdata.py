@@ -71,8 +71,8 @@ SOURCES_QC = {
     # CSV
     'data_qc_outbreaks.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/eclosions-par-milieu.csv',  # noqa: E501
-    'data_qc_vaccines.csv':
-    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/doses-vaccins.csv',
+    'data_qc_vaccines_by_region.csv':
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/auto/COVID19_Qc_Vaccination_RegionAdministration.csv',  # noqa: E501
     'data_qc_vaccines_received.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/doses-vaccins-7jours.csv',  # noqa: E501
     'data_qc_vaccines_situation.csv':
@@ -837,14 +837,14 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
         Date of data to append (yyyy-mm-dd).
     """
     # Load csv files
-    day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_vaccines.csv')
+    day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_vaccines_by_region.csv')
     vacc_csv = os.path.join(processed_dir, 'data_vaccines.csv')
     day_received_csv = os.path.join(
         sources_dir,
         get_source_dir_for_date(sources_dir, date),
         'data_qc_vaccines_received.csv'
     )
-    day_df = pd.read_csv(day_csv, sep=';', thousands=' ', encoding='utf-8')
+    day_df = pd.read_csv(day_csv, index_col=0, encoding='utf-8')
     vaccine_df = pd.read_csv(vacc_csv, encoding='utf-8', index_col=0)
     # for some reason the thousands seperator is not converted here
     # there is a non-breaking space (\xa0) used as a thousands separator
@@ -868,8 +868,8 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
         qc_pop = 8539073  # QC Total, 2020 projection
 
         # get total values and calculate new doses and percentage administered
-        mtl_count = int(day_df[day_df['Région'] == '06 - Montréal']['Nombre de doses de vaccins administrées'])
-        qc_count = int(day_df[day_df['Région'] == 'Total']['Nombre de doses de vaccins administrées'])
+        mtl_count = day_df.loc[date, 'RSS06_DOSES_Total_cumu']
+        qc_count = day_df.loc[date, 'RSS99_DOSES_Total_cumu']
 
         mtl_new = mtl_count - vaccine_df['mtl_doses'][-1]
         qc_new = qc_count - vaccine_df['qc_doses'][-1]
