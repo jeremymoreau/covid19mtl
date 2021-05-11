@@ -3,12 +3,15 @@ import dash_html_components as html
 
 import app.figures as figures
 
-from .core import data_vaccination_age, data_vaccines
+from .core import (data_vaccination_age_old, data_vaccines, new_doses_mtl_1d, new_doses_mtl_2d, new_doses_qc_1d,
+                   new_doses_qc_2d, perc_vacc_mtl_1d, perc_vacc_mtl_2d, perc_vacc_qc_1d, perc_vacc_qc_2d,
+                   total_doses_mtl_1d, total_doses_mtl_2d, total_doses_qc_1d, total_doses_qc_2d)
 
 
 def generate_layout(labels):
     # Figures #####
     vaccination_fig = figures.vaccination_fig(data_vaccines, labels)
+    vaccination_age_fig = figures.vaccination_age_fig(data_vaccination_age_old, labels)
 
     # Plotly modebar buttons to remove
     modebar_buttons_to_remove = ['select2d',
@@ -61,6 +64,60 @@ def generate_layout(labels):
                     ),
                 ],
                 id='header',
+            ),
+
+            # mini info boxes
+            html.Div(
+                [
+                    # MTL
+                    html.Div(
+                        [html.P([f'{new_doses_mtl_1d:+d}' + labels['today']], className='superscript'),
+                         html.H3(total_doses_mtl_1d, className='main_text'),
+                         html.P([labels['cases_montreal_label']], className='subscript')],
+                        className='mini_container doses',
+                    ),
+                    html.Div(
+                        [html.H3(f'{perc_vacc_mtl_1d:.2f}%', className='main_text'),
+                         html.P([labels['vaccination_perc_mtl_label']], className='subscript')],
+                        className='mini_container vaccines',
+                    ),
+                    html.Div(
+                        [html.P([f'{new_doses_mtl_2d:+d}' + labels['today']], className='superscript'),
+                         html.H3(total_doses_mtl_2d, className='main_text'),
+                         html.P([labels['cases_montreal_label']], className='subscript')],
+                        className='mini_container doses',
+                    ),
+                    html.Div(
+                        [html.H3(f'{perc_vacc_mtl_2d:.2f}%', className='main_text'),
+                         html.P([labels['vaccination_perc_mtl_label']], className='subscript')],
+                        className='mini_container vaccines',
+                    ),
+                    # QC
+                    html.Div(
+                        [html.P([f'{new_doses_qc_1d:+d}' + labels['today']], className='superscript'),
+                         html.H3(total_doses_qc_1d, className='main_text'),
+                         html.P([labels['cases_qc_label']], className='subscript')],
+                        className='mini_container doses',
+                    ),
+                    html.Div(
+                        [html.H3(f'{perc_vacc_qc_1d:.2f}%', className='main_text'),
+                         html.P([labels['vaccination_perc_qc_label']], className='subscript')],
+                        className='mini_container vaccines',
+                    ),
+                    html.Div(
+                        [html.P([f'{new_doses_qc_2d:+d}' + labels['today']], className='superscript'),
+                         html.H3(total_doses_qc_2d, className='main_text'),
+                         html.P([labels['cases_qc_label']], className='subscript')],
+                        className='mini_container doses',
+                    ),
+                    html.Div(
+                        [html.H3(f'{perc_vacc_qc_2d:.2f}%', className='main_text'),
+                         html.P([labels['vaccination_perc_qc_label']], className='subscript')],
+                        className='mini_container vaccines',
+                    ),
+                ],
+                id='info-container',
+                className='vaccination',
             ),
 
             # 1st row: two boxes

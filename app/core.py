@@ -74,12 +74,16 @@ data_mtl_by_age = pd.read_csv(
     na_values='na'
 )
 
+data_mtl_vaccination = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl_vaccination.csv'))
+
 # QC data
 data_qc = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc.csv'), encoding='utf-8', na_values='na')
 data_qc_hosp = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_hospitalisations.csv'), encoding='utf-8')
 
 # Vaccination_data
 data_vaccines = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccines.csv'), encoding='utf-8', na_values='na')
+data_qc_vaccination = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_vaccination.csv'))
+data_vaccination_age_old = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccination_age.csv'))
 # Variants
 data_variants = pd.read_csv(DATA_PATH.joinpath('processed', 'data_variants.csv'), index_col=0, na_values='na')
 
@@ -180,6 +184,23 @@ elif incid_per100k_7d_qc < 500:
 else:
     incid_per100k_7d_qc_colour = '#600000'
 
+
+# Vaccination info boxes
+new_doses_mtl_1d = data_mtl_vaccination['new_doses_1d'].iloc[-1]
+new_doses_mtl_2d = data_mtl_vaccination['new_doses_2d'].iloc[-1]
+total_doses_mtl_1d = data_mtl_vaccination['total_doses_1d'].iloc[-1]
+total_doses_mtl_2d = data_mtl_vaccination['total_doses_2d'].iloc[-1]
+perc_vacc_mtl_1d = data_mtl_vaccination['perc_1d'].iloc[-1]
+perc_vacc_mtl_2d = data_mtl_vaccination['perc_2d'].iloc[-1]
+
+new_doses_qc_1d = data_qc_vaccination['new_doses_1d'].iloc[-1]
+new_doses_qc_2d = data_qc_vaccination['new_doses_2d'].iloc[-1]
+total_doses_qc_1d = data_qc_vaccination['total_doses_1d'].iloc[-1]
+total_doses_qc_2d = data_qc_vaccination['total_doses_2d'].iloc[-1]
+perc_vacc_qc_1d = data_qc_vaccination['perc_1d'].iloc[-1]
+perc_vacc_qc_2d = data_qc_vaccination['perc_2d'].iloc[-1]
+
+
 # Make MTL histogram data tidy
 # downsample then reset_index to have date column
 # mtl_age_data = downsample(data_mtl_by_age, '7d').reset_index().melt(
@@ -239,4 +260,9 @@ data_variants['new_sequenced_mtl'] = data_variants['sequenced_mtl'].diff()
 data_variants['new_presumptive_mtl'] = data_variants['presumptive_total_mtl'].diff()
 data_variants['new_presumptive_mtl_7dma'] = (
     data_variants['new_presumptive_mtl'].rolling(7, min_periods=1).mean().round()
+)
+
+# prepare vaccination age data
+data_vaccination_age_old['0d'] = (
+    data_vaccination_age_old['pop 2021'] - (data_vaccination_age_old['1d'] + data_vaccination_age_old['2d'])
 )

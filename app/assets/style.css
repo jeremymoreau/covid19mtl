@@ -1,7 +1,6 @@
 /* header */
 #header {
   overflow: auto;
-  margin-bottom: 15px;
 }
 #title-container {
   text-align: left;
@@ -73,8 +72,11 @@
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 15px;
-  /* margin-top: 15px; */
+  margin-top: 15px;
   margin-bottom: 15px;
+}
+#info-container.vaccination{
+  grid-template-columns: repeat(4, 1fr);
 }
 .cases {
   color:#c51515;
