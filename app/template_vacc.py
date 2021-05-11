@@ -34,7 +34,7 @@ def generate_layout(labels):
                         [
                             # title
                             html.P(
-                                [labels['title']],
+                                [labels['title'] + labels['vaccination_title']],
                                 id='title',
                             ),
                             # subtitle
@@ -73,51 +73,50 @@ def generate_layout(labels):
                     html.Div(
                         [html.P([f'{new_doses_mtl_1d:+d}' + labels['today']], className='superscript'),
                          html.H3(total_doses_mtl_1d, className='main_text'),
-                         html.P([labels['cases_montreal_label']], className='subscript')],
+                         html.P([labels['vaccination_1d_mtl_label']], className='subscript')],
                         className='mini_container doses',
                     ),
                     html.Div(
                         [html.H3(f'{perc_vacc_mtl_1d:.2f}%', className='main_text'),
-                         html.P([labels['vaccination_perc_mtl_label']], className='subscript')],
+                         html.P([labels['vaccination_1d_perc_mtl_label']], className='subscript')],
                         className='mini_container vaccines',
                     ),
                     html.Div(
                         [html.P([f'{new_doses_mtl_2d:+d}' + labels['today']], className='superscript'),
                          html.H3(total_doses_mtl_2d, className='main_text'),
-                         html.P([labels['cases_montreal_label']], className='subscript')],
+                         html.P([labels['vaccination_2d_mtl_label']], className='subscript')],
                         className='mini_container doses',
                     ),
                     html.Div(
                         [html.H3(f'{perc_vacc_mtl_2d:.2f}%', className='main_text'),
-                         html.P([labels['vaccination_perc_mtl_label']], className='subscript')],
+                         html.P([labels['vaccination_2d_perc_mtl_label']], className='subscript')],
                         className='mini_container vaccines',
                     ),
                     # QC
                     html.Div(
                         [html.P([f'{new_doses_qc_1d:+d}' + labels['today']], className='superscript'),
                          html.H3(total_doses_qc_1d, className='main_text'),
-                         html.P([labels['cases_qc_label']], className='subscript')],
+                         html.P([labels['vaccination_1d_qc_label']], className='subscript')],
                         className='mini_container doses',
                     ),
                     html.Div(
                         [html.H3(f'{perc_vacc_qc_1d:.2f}%', className='main_text'),
-                         html.P([labels['vaccination_perc_qc_label']], className='subscript')],
+                         html.P([labels['vaccination_1d_perc_qc_label']], className='subscript')],
                         className='mini_container vaccines',
                     ),
                     html.Div(
                         [html.P([f'{new_doses_qc_2d:+d}' + labels['today']], className='superscript'),
                          html.H3(total_doses_qc_2d, className='main_text'),
-                         html.P([labels['cases_qc_label']], className='subscript')],
+                         html.P([labels['vaccination_2d_qc_label']], className='subscript')],
                         className='mini_container doses',
                     ),
                     html.Div(
                         [html.H3(f'{perc_vacc_qc_2d:.2f}%', className='main_text'),
-                         html.P([labels['vaccination_perc_qc_label']], className='subscript')],
+                         html.P([labels['vaccination_2d_perc_qc_label']], className='subscript')],
                         className='mini_container vaccines',
                     ),
                 ],
                 id='info-container',
-                className='vaccination',
             ),
 
             # 1st row: two boxes
@@ -230,7 +229,8 @@ def generate_layout(labels):
             )
 
         ],
-        id='main-container'
+        id='main-container',
+        className='vaccination',
     )
 
     return layout
