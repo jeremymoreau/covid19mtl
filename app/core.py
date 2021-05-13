@@ -103,9 +103,9 @@ latest_update_date = latest_mtl_date.isoformat()
 data_mtl_totals = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl_totals.csv'), index_col=0, na_values='na')
 data_qc_totals = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_totals.csv'), index_col=0, na_values='na')
 
-# Source for 2020 pop estimates: https://publications.msss.gouv.qc.ca/msss/document-001617/
-mtl_pop = 2065657  # Région sociosanitaire 06 - Montreal, 2020 projection
-qc_pop = 8539073  # QC Total, 2020 projection
+# Source for 2021 pop estimates: https://publications.msss.gouv.qc.ca/msss/document-001617/
+mtl_pop = 2078464  # Région sociosanitaire 06 - Montreal, 2021 projection
+qc_pop = 8591866  # QC Total, 2021 projection
 # MTL
 latest_cases_mtl = str(int(data_mtl_totals['cases'].dropna().iloc[-1]))
 new_cases_mtl = str(int(data_mtl_totals['cases'].diff().iloc[-1]))
