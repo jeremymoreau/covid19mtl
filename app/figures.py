@@ -1,6 +1,6 @@
-import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 COLOUR_QC = '#001F97'
 # slightly more blue: #4677e7
@@ -735,6 +735,64 @@ def vaccination_fig(data_vaccination, labels):
     vaccination_fig = add_fig_controls(vaccination_fig, data_vaccination['qc_percent_vaccinated'], labels)
 
     return vaccination_fig
+
+
+def vaccination_age_fig(data_vaccination, labels):
+    figure = make_subplots(rows=2, cols=3, specs=[
+        # [{'type':'domain'}, {'type': 'domain'}],
+        # [{'type':'domain'}, {'type': 'domain'}],
+        # [{'type':'domain'}, {'type': 'domain'}]
+        [{'type': 'domain'}, {'type': 'domain'}, {'type': 'domain'}],
+        [{'type': 'domain'}, {'type': 'domain'}, {'type': 'domain'}]
+    ])
+
+    labels = ['Not vaccinated', '1 dose received', 'Fully vaccinated']
+    colours = [
+        'rgb(179, 179, 179)',
+        'rgb(179, 222, 105)',
+        'rgb(102, 166, 30)',
+    ]
+
+    for index, row in data_vaccination.iterrows():
+        values = [row['0d'], row['1d'], row['2d']]
+        chart = go.Pie(
+            labels=labels,
+            values=values,
+            title=f"<b>{row['group']}</b><br>({row['pop 2021']:,d})",
+            # hole=0.5
+        )
+        row = int(index / 3) + 1
+        col = index % 3 + 1
+        figure.add_trace(chart, row, col)
+
+    figure.update_traces(
+        # textposition='outside',
+        # textinfo='percent+label+value',
+        # hovertemplate='%{value}',
+        hovertemplate='',
+        # texttemplate='<b>%{label}</b><br>%{percent} (%{value})',
+        texttemplate='%{value}<br>(%{percent})',
+        hoverinfo='skip',
+        title={'position': 'bottom center', 'font': {'size': 12}},
+        # showlegend=False,
+        insidetextorientation='horizontal',
+    )
+
+    figure.update_layout(
+        piecolorway=colours,
+        legend_title_text='',
+        legend={
+            'bgcolor': 'rgba(255,255,255,0)',
+            'x': 0,
+            'y': 1.2,
+            'xanchor': 'left',
+            'orientation': 'h',
+            'font': {'size': 11}
+        },
+        margin={'r': 10, 't': 0, 'l': 10, 'b': 0},
+    )
+
+    return figure
 
 
 def variants_fig(data_variants, labels):
