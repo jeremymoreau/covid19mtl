@@ -11,6 +11,7 @@ from .core import (data_vaccination_age_old, data_vaccines, new_doses_mtl_1d, ne
 def generate_layout(labels):
     # Figures #####
     vaccination_fig = figures.vaccination_fig(data_vaccines, labels)
+    vaccine_delivery_fig = figures.vaccine_delivery_fig(data_vaccines, labels)
     vaccination_age_fig = figures.vaccination_age_fig(data_vaccination_age_old, labels)
 
     # Plotly modebar buttons to remove
@@ -151,6 +152,51 @@ def generate_layout(labels):
                     ),
                 ],
                 className='grid-container-onethird-twothirds-cols',
+            ),
+
+            # 2nd row: 2 boxes
+            html.Div(
+                [
+                    # left box
+                    html.Div(
+                        [
+                            html.H6(
+                                [labels['vaccine_delivery_label']]
+                            ),
+                            dcc.Graph(
+                                figure=vaccine_delivery_fig,
+                                id='vaccine_delivery_fig',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
+                                },
+                                className='figure'
+                            ),
+                        ],
+                        className='grid-item'
+                    ),
+                    # right box
+                    html.Div(
+                        [
+                            # html.H6(
+                            #     [labels['vaccination_label']]
+                            # ),
+                            # dcc.Graph(
+                            #     figure=vaccination_fig,
+                            #     id='vaccination_fig',
+                            #     responsive=True,
+                            #     config={
+                            #         'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                            #         'doubleClick': False
+                            #     },
+                            #     className='figure'
+                            # ),
+                        ],
+                        className='grid-item'
+                    ),
+                ],
+                className='grid-container-two-cols',
             ),
 
             # 3rd row: 3 boxes

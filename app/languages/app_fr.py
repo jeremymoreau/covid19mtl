@@ -159,9 +159,17 @@ labels = {
     'vaccination_perc_qc': '% de la population vaccinée (QC)',
     'vaccination_hovertemplate': 'Doses administrée: %{y:d}<br>Doses disponsible: %{customdata[0]:d}<br>% 1 dose reçues: %{customdata[1]:.2f}%',
     'vaccination_hovertemplate_mtl': 'Doses administrée: %{y:d}<br>% 1 dose reçues: %{customdata[0]:.2f}%',
-    'vaccination_received_hovertemplate': 'Doses reçues: %{y:d}<br>Nouvelles doses reçues: %{customdata:d}',
+    'vaccination_administered_hovertemplate': 'Doses administrée: %{y:d}<br>Doses disponsible: %{customdata[0]:d}',
     'vaccination_new_mtl': 'Nouvelles doses (MTL)',
     'vaccination_new_qc': 'Nouvelles doses (QC)',
+    # Vaccine delivery fig
+    'vaccine_delivery_label': 'Doses de vaccine reçues vs. administrée',
+    'vaccine_received': 'Doses reçues',
+    'vaccine_administered': 'Doses administrée',
+    'vaccine_available': 'Doses disponible',
+    'vaccine_received_hovertemplate': 'Doses reçues: %{y:d}<br>Nouvelles doses reçues: %{customdata:d}',
+    # Vaccination_age_fig
+    'vaccination_age_label': 'Vaccination by age group',
     # Variants fig
     'variants_label': 'Progression des nouveaux variants préoccupants',
     'variants_sequenced': 'Cas séquencés',

@@ -649,29 +649,6 @@ def vaccination_fig(data_vaccination, labels):
     vaccination_fig = go.Figure({
         'data': [
             {
-                'type': 'bar',
-                'x': data_vaccination['date'],
-                'y': data_vaccination['qc_doses_received'],
-                'yaxis': 'y1',
-                'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.3},
-                'name': labels['vaccination_total_received_qc'],
-                'customdata': data_vaccination['qc_new_doses_received'],
-                'hoverlabel': {'namelength': 0},
-                'hovertemplate': labels['vaccination_received_hovertemplate'],
-            },
-            {
-                'type': 'scatter',
-                'x': data_vaccination['date'],
-                'y': data_vaccination['qc_doses'],
-                'customdata': data_vaccination[['qc_doses_available', 'qc_percent_vaccinated']],
-                'yaxis': 'y1',
-                'mode': 'lines',
-                'marker': {'color': COLOUR_QC},
-                'name': labels['vaccination_total_qc'],
-                'hoverlabel': {'namelength': 0},
-                'hovertemplate': labels['vaccination_hovertemplate']
-            },
-            {
                 'type': 'scatter',
                 'x': data_vaccination['date'],
                 'y': data_vaccination['mtl_doses'],
@@ -735,6 +712,67 @@ def vaccination_fig(data_vaccination, labels):
     vaccination_fig = add_fig_controls(vaccination_fig, data_vaccination['qc_percent_vaccinated'], labels)
 
     return vaccination_fig
+
+
+def vaccine_delivery_fig(data_vaccine, labels):
+    data_vaccine['qc_doses_available'] = data_vaccine['qc_doses_received'] - data_vaccine['qc_doses']
+
+    vaccine_fig = go.Figure({
+        'data': [
+            {
+                'type': 'bar',
+                'x': data_vaccine['date'],
+                'y': data_vaccine['qc_doses_received'],
+                'yaxis': 'y1',
+                'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.3},
+                'name': labels['vaccine_received'],
+                'customdata': data_vaccine['qc_new_doses_received'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate': labels['vaccine_received_hovertemplate'],
+            },
+            {
+                'type': 'scatter',
+                'x': data_vaccine['date'],
+                'y': data_vaccine['qc_doses'],
+                'yaxis': 'y1',
+                'mode': 'lines',
+                'marker': {'color': COLOUR_QC},
+                'name': labels['vaccine_administered'],
+                'hoverlabel': {'namelength': 30},
+                'hovertemplate': '%{y:,d}',
+            },
+            {
+                'type': 'scatter',
+                'x': data_vaccine['date'],
+                'y': data_vaccine['qc_doses_available'],
+                'yaxis': 'y1',
+                'mode': 'lines',
+                'marker': {'color': COLOUR_MTL_LIGHT},
+                'name': labels['vaccine_available'],
+                'hoverlabel': {'namelength': 30},
+                'hovertemplate': '%{y:,d}',
+            },
+        ],
+        'layout': {
+            'autosize': True,
+            'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
+            'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
+            'yaxis': {
+                'title': {'text': labels['vaccination_y']},
+                'gridcolor': COLOUR_GRID
+            },
+            'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
+            'plot_bgcolor': 'rgba(255,255,255,1)',
+            'paper_bgcolor': 'rgba(255,255,255,1)',
+            'hovermode': 'x',
+            'barmode': 'overlay',
+            'hoverlabel': {'font': {'color': '#ffffff'}},
+            'dragmode': False
+        }
+    })
+    vaccine_fig = add_fig_controls(vaccine_fig, data_vaccine['qc_doses_received'], labels)
+
+    return vaccine_fig
 
 
 def vaccination_age_fig(data_vaccination, labels):
