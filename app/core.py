@@ -190,15 +190,15 @@ new_doses_mtl_1d = data_mtl_vaccination['new_doses_1d'].iloc[-1]
 new_doses_mtl_2d = data_mtl_vaccination['new_doses_2d'].iloc[-1]
 total_doses_mtl_1d = data_mtl_vaccination['total_doses_1d'].iloc[-1]
 total_doses_mtl_2d = data_mtl_vaccination['total_doses_2d'].iloc[-1]
-perc_vacc_mtl_1d = data_mtl_vaccination['perc_1d'].iloc[-1]
-perc_vacc_mtl_2d = data_mtl_vaccination['perc_2d'].iloc[-1]
+perc_vacc_mtl_1d = total_doses_mtl_1d / mtl_pop * 100
+perc_vacc_mtl_2d = total_doses_mtl_2d / mtl_pop * 100
 
 new_doses_qc_1d = data_qc_vaccination['new_doses_1d'].iloc[-1]
 new_doses_qc_2d = data_qc_vaccination['new_doses_2d'].iloc[-1]
 total_doses_qc_1d = data_qc_vaccination['total_doses_1d'].iloc[-1]
 total_doses_qc_2d = data_qc_vaccination['total_doses_2d'].iloc[-1]
-perc_vacc_qc_1d = data_qc_vaccination['perc_1d'].iloc[-1]
-perc_vacc_qc_2d = data_qc_vaccination['perc_2d'].iloc[-1]
+perc_vacc_qc_1d = total_doses_qc_1d / qc_pop * 100
+perc_vacc_qc_2d = total_doses_qc_2d / qc_pop * 100
 
 
 # Make MTL histogram data tidy
