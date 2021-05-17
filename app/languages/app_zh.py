@@ -160,6 +160,11 @@ labels = {
     'vaccination_administered_hovertemplate': 'Doses administered: %{y:,d}<br>Doses available: %{customdata[0]:,d}',
     'vaccination_new_mtl': '新增接种量 (蒙特利尔)',
     'vaccination_new_qc': '新增接种量 (魁省)',
+    # Vaccination administered fig
+    'vaccination_administered_label': 'New doses administered',
+    'vaccination_new_y': 'New doses (7-day moving average)',
+    'vaccination_new_1d': 'New 1st doses',
+    'vaccination_new_2d': 'New 2nd doses',
     # Vaccine delivery fig
     'vaccine_delivery_label': 'Vaccine doses delivered vs. administered',
     'vaccine_received': 'Doses received',

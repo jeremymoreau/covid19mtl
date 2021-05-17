@@ -152,8 +152,6 @@ labels = {
     'vaccination_label': 'Vaccination',
     'vaccination_y': 'Doses (cumul)',
     'vaccination_y2': 'Nouvelles doses',
-    'vaccination_total_received_qc': 'Doses reçues (QC)',
-    'vaccination_total_qc': 'Doses administrée (QC)',
     'vaccination_total_mtl': 'Doses administrée (MTL)',
     'vaccination_perc_mtl': '% de la population vaccinée (MTL)',
     'vaccination_perc_qc': '% de la population vaccinée (QC)',
@@ -162,6 +160,11 @@ labels = {
     'vaccination_administered_hovertemplate': 'Doses administrée: %{y:d}<br>Doses disponsible: %{customdata[0]:d}',
     'vaccination_new_mtl': 'Nouvelles doses (MTL)',
     'vaccination_new_qc': 'Nouvelles doses (QC)',
+    # Vaccination administered fig
+    'vaccination_administered_label': 'Nouveaux doses administrée',
+    'vaccination_new_y': 'Nouveaux doses (moyenne mobile 7 jours)',
+    'vaccination_new_1d': 'Nouveaux 1e doses',
+    'vaccination_new_2d': 'Nouveaux 2e doses',
     # Vaccine delivery fig
     'vaccine_delivery_label': 'Doses de vaccine reçues vs. administrée',
     'vaccine_received': 'Doses reçues',

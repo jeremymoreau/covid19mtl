@@ -3,14 +3,17 @@ import dash_html_components as html
 
 import app.figures as figures
 
-from .core import (data_vaccination_age_old, data_vaccines, new_doses_mtl_1d, new_doses_mtl_2d, new_doses_qc_1d,
-                   new_doses_qc_2d, perc_vacc_mtl_1d, perc_vacc_mtl_2d, perc_vacc_qc_1d, perc_vacc_qc_2d,
-                   total_doses_mtl_1d, total_doses_mtl_2d, total_doses_qc_1d, total_doses_qc_2d)
+from .core import (data_mtl_vaccination, data_qc_vaccination, data_vaccination_age_old, data_vaccines, new_doses_mtl_1d,
+                   new_doses_mtl_2d, new_doses_qc_1d, new_doses_qc_2d, perc_vacc_mtl_1d, perc_vacc_mtl_2d,
+                   perc_vacc_qc_1d, perc_vacc_qc_2d, total_doses_mtl_1d, total_doses_mtl_2d, total_doses_qc_1d,
+                   total_doses_qc_2d)
 
 
 def generate_layout(labels):
     # Figures #####
-    vaccination_fig = figures.vaccination_fig(data_vaccines, labels)
+    vaccination_administered_fig = figures.vaccination_administered_fig(
+        data_qc_vaccination, data_mtl_vaccination, labels
+    )
     vaccine_delivery_fig = figures.vaccine_delivery_fig(data_vaccines, labels)
     vaccination_age_fig = figures.vaccination_age_fig(data_vaccination_age_old, labels)
 
@@ -161,11 +164,11 @@ def generate_layout(labels):
                     html.Div(
                         [
                             html.H6(
-                                [labels['vaccine_delivery_label']]
+                                [labels['vaccination_administered_label']]
                             ),
                             dcc.Graph(
-                                figure=vaccine_delivery_fig,
-                                id='vaccine_delivery_fig',
+                                figure=vaccination_administered_fig,
+                                id='vaccination_administered_fig',
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
@@ -179,19 +182,19 @@ def generate_layout(labels):
                     # right box
                     html.Div(
                         [
-                            # html.H6(
-                            #     [labels['vaccination_label']]
-                            # ),
-                            # dcc.Graph(
-                            #     figure=vaccination_fig,
-                            #     id='vaccination_fig',
-                            #     responsive=True,
-                            #     config={
-                            #         'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                            #         'doubleClick': False
-                            #     },
-                            #     className='figure'
-                            # ),
+                            html.H6(
+                                [labels['vaccine_delivery_label']]
+                            ),
+                            dcc.Graph(
+                                figure=vaccine_delivery_fig,
+                                id='vaccine_delivery_fig',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
+                                },
+                                className='figure'
+                            ),
                         ],
                         className='grid-item'
                     ),
