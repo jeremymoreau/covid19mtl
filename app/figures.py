@@ -721,45 +721,59 @@ def vaccination_administered_fig(data_qc_vaccination, data_mtl_vaccination, labe
                 'type': 'scatter',
                 'x': data_qc_vaccination['date'],
                 'y': data_qc_vaccination['new_doses_1d'].rolling(7).mean().round(),
+                'customdata': data_qc_vaccination['new_doses_1d'],
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': COLOUR_QC},
                 'name': labels['vaccination_new_1d'] + ' (QC)',
-                'hoverlabel': {'namelength': 35},
-                'hovertemplate': '%{y:d}',
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate':
+                    labels['vaccination_new_1d'] + ' (QC): %{customdata:,d}<br>'
+                    + labels['7day_avg_short'] + ': %{y:,d}',
             },
             {
                 'type': 'scatter',
                 'x': data_qc_vaccination['date'],
                 'y': data_qc_vaccination['new_doses_2d'].rolling(7).mean().round(),
+                'customdata': data_qc_vaccination['new_doses_2d'],
                 'yaxis': 'y1',
                 'mode': 'lines',
+                'line': {'dash': 'dot'},
                 'marker': {'color': COLOUR_QC_LIGHT},
                 'name': labels['vaccination_new_2d'] + ' (QC)',
-                'hoverlabel': {'namelength': 35},
-                'hovertemplate': '%{y:d}',
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate':
+                    labels['vaccination_new_2d'] + ' (QC): %{customdata:,d}<br>'
+                    + labels['7day_avg_short'] + ': %{y:,d}',
             },
             {
                 'type': 'scatter',
                 'x': data_mtl_vaccination['date'],
                 'y': data_mtl_vaccination['new_doses_1d'].rolling(7).mean().round(),
+                'customdata': data_mtl_vaccination['new_doses_1d'],
                 'yaxis': 'y1',
                 'mode': 'lines',
                 'marker': {'color': COLOUR_MTL},
                 'name': labels['vaccination_new_1d'] + ' (MTL)',
-                'hoverlabel': {'namelength': 35},
-                'hovertemplate': '%{y:d}',
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate':
+                    labels['vaccination_new_1d'] + ' (MTL): %{customdata:,d}<br>'
+                    + labels['7day_avg_short'] + ': %{y:,d}',
             },
             {
                 'type': 'scatter',
                 'x': data_mtl_vaccination['date'],
                 'y': data_mtl_vaccination['new_doses_2d'].rolling(7).mean().round(),
+                'customdata': data_mtl_vaccination['new_doses_2d'],
                 'yaxis': 'y1',
                 'mode': 'lines',
+                'line': {'dash': 'dot'},
                 'marker': {'color': COLOUR_MTL_LIGHT},
                 'name': labels['vaccination_new_2d'] + ' (MTL)',
-                'hoverlabel': {'namelength': 35},
-                'hovertemplate': '%{y:d}',
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate':
+                    labels['vaccination_new_2d'] + ' (MTL): %{customdata:,d}<br>'
+                    + labels['7day_avg_short'] + ': %{y:,d}',
             },
         ],
         'layout': {
