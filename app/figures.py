@@ -718,62 +718,60 @@ def vaccination_administered_fig(data_qc_vaccination, data_mtl_vaccination, labe
     vaccination_fig = go.Figure({
         'data': [
             {
-                'type': 'scatter',
+                'type': 'bar',
                 'x': data_qc_vaccination['date'],
-                'y': data_qc_vaccination['new_doses_1d'].rolling(7).mean().round(),
-                'customdata': data_qc_vaccination['new_doses_1d'],
+                'y': data_qc_vaccination['new_doses'],
+                'customdata': data_qc_vaccination['new_doses'].rolling(7).mean().round(),
                 'yaxis': 'y1',
-                'mode': 'lines',
-                'marker': {'color': COLOUR_QC},
-                'name': labels['vaccination_new_1d'] + ' (QC)',
+                'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.7},
+                'name': labels['vaccination_new_qc'],
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate':
-                    labels['vaccination_new_1d'] + ' (QC): %{customdata:,d}<br>'
-                    + labels['7day_avg_short'] + ': %{y:,d}',
+                    labels['vaccination_new_qc'] + ': %{y:,d}<br>'
+                    + labels['7day_avg_short'] + ': %{customdata:,d}',
             },
             {
-                'type': 'scatter',
+                'type': 'bar',
                 'x': data_qc_vaccination['date'],
-                'y': data_qc_vaccination['new_doses_2d'].rolling(7).mean().round(),
-                'customdata': data_qc_vaccination['new_doses_2d'],
+                'y': data_qc_vaccination['new_doses_2d'],
+                'customdata': data_qc_vaccination['new_doses_2d'].rolling(7).mean().round(),
                 'yaxis': 'y1',
-                'mode': 'lines',
-                'line': {'dash': 'dot'},
-                'marker': {'color': COLOUR_QC_LIGHT},
+                'marker': {'color': COLOUR_QC},
                 'name': labels['vaccination_new_2d'] + ' (QC)',
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate':
-                    labels['vaccination_new_2d'] + ' (QC): %{customdata:,d}<br>'
-                    + labels['7day_avg_short'] + ': %{y:,d}',
+                    labels['vaccination_new_2d'] + ' (QC): %{y:,d}<br>'
+                    + labels['7day_avg_short'] + ': %{customdata:,d}',
             },
             {
-                'type': 'scatter',
+                'type': 'bar',
                 'x': data_mtl_vaccination['date'],
-                'y': data_mtl_vaccination['new_doses_1d'].rolling(7).mean().round(),
-                'customdata': data_mtl_vaccination['new_doses_1d'],
+                'y': data_mtl_vaccination['new_doses'],
+                'customdata': data_mtl_vaccination['new_doses'].rolling(7).mean().round(),
                 'yaxis': 'y1',
-                'mode': 'lines',
-                'marker': {'color': COLOUR_MTL},
-                'name': labels['vaccination_new_1d'] + ' (MTL)',
+                'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.7},
+                'name': labels['vaccination_new_mtl'],
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate':
-                    labels['vaccination_new_1d'] + ' (MTL): %{customdata:,d}<br>'
-                    + labels['7day_avg_short'] + ': %{y:,d}',
+                    labels['vaccination_new_mtl'] + ': %{y:,d}<br>'
+                    + labels['7day_avg_short'] + ': %{customdata:,d}',
+                # hide by default
+                'visible': False,
             },
             {
-                'type': 'scatter',
+                'type': 'bar',
                 'x': data_mtl_vaccination['date'],
-                'y': data_mtl_vaccination['new_doses_2d'].rolling(7).mean().round(),
-                'customdata': data_mtl_vaccination['new_doses_2d'],
+                'y': data_mtl_vaccination['new_doses_2d'],
+                'customdata': data_mtl_vaccination['new_doses_2d'].rolling(7).mean().round(),
                 'yaxis': 'y1',
-                'mode': 'lines',
-                'line': {'dash': 'dot'},
-                'marker': {'color': COLOUR_MTL_LIGHT},
+                'marker': {'color': COLOUR_MTL},
                 'name': labels['vaccination_new_2d'] + ' (MTL)',
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate':
-                    labels['vaccination_new_2d'] + ' (MTL): %{customdata:,d}<br>'
-                    + labels['7day_avg_short'] + ': %{y:,d}',
+                    labels['vaccination_new_2d'] + ' (MTL): %{y:,d}<br>'
+                    + labels['7day_avg_short'] + ': %{customdata:,d}',
+                # hide by default
+                'visible': False,
             },
         ],
         'layout': {
@@ -781,7 +779,7 @@ def vaccination_administered_fig(data_qc_vaccination, data_mtl_vaccination, labe
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
             'yaxis': {
-                'title': {'text': labels['vaccination_new_y']},
+                'title': {'text': labels['vaccination_y2']},
                 'gridcolor': COLOUR_GRID
             },
             'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
@@ -794,6 +792,35 @@ def vaccination_administered_fig(data_qc_vaccination, data_mtl_vaccination, labe
         }
     })
     vaccination_fig = add_fig_controls(vaccination_fig, data_qc_vaccination['new_doses_1d'], labels)
+
+    # add buttons to switch between QC/MTL
+    vaccination_fig.update_layout(
+        updatemenus=[
+            dict(
+                buttons=list([
+                    dict(
+                        label='Quebec',
+                        method='update',
+                        args=[{'visible': [True, True, False, False]}],
+                    ),
+                    dict(
+                        label='Montreal',
+                        method='update',
+                        args=[{'visible': [False, False, True, True]}],
+                    ),
+                ]),
+                type='buttons',
+                direction='right',
+                pad={'r': 10, 't': 10},
+                showactive=True,
+                active=0,
+                x=0,
+                xanchor='left',
+                y=-0.39,
+                yanchor='bottom',
+            ),
+        ]
+    )
 
     return vaccination_fig
 
