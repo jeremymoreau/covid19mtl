@@ -643,46 +643,64 @@ def testing_fig(data_qc, data_mtl, labels):
     return testing_fig
 
 
-def vaccination_fig(data_vaccination, labels):
-    data_vaccination['qc_doses_available'] = data_vaccination['qc_doses_received'] - data_vaccination['qc_doses']
-
+def vaccination_fig(data_qc_vaccination, data_mtl_vaccination, labels):
     vaccination_fig = go.Figure({
         'data': [
             {
-                'type': 'scatter',
-                'x': data_vaccination['date'],
-                'y': data_vaccination['mtl_doses'],
-                'customdata': data_vaccination[['mtl_percent_vaccinated']],
+                'type': 'bar',
+                'x': data_qc_vaccination['date'],
+                'y': data_qc_vaccination['total_doses'],
+                'customdata': data_qc_vaccination[['calc_perc', 'total_doses_1d']],
                 'yaxis': 'y1',
-                'mode': 'lines',
-                'marker': {'color': COLOUR_MTL},
-                'name': labels['vaccination_total_mtl'],
+                'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.7},
+                'name': labels['vaccination_total'],
                 'hoverlabel': {'namelength': 0},
-                'hovertemplate': labels['vaccination_hovertemplate_mtl']
+                'hovertemplate':
+                    labels['vaccination_total'] + ': %{y:,d}<br>'
+                    + labels['vaccination_perc'] + ': %{customdata[0]:.2f}%'
             },
             {
-                'type': 'scatter',
-                'x': data_vaccination['date'],
-                'y': data_vaccination['qc_new_doses'],
-                'yaxis': 'y2',
-                'mode': 'lines',
-                'line': {'dash': 'dot'},
-                'marker': {'color': '#1b97d1'},
-                'name': labels['vaccination_new_qc'],
-                'hoverlabel': {'namelength': 35},
-                'hovertemplate': '%{y:d}',
+                'type': 'bar',
+                'x': data_qc_vaccination['date'],
+                'y': data_qc_vaccination['total_doses_2d'],
+                'customdata': data_qc_vaccination['calc_perc_2d'],
+                'yaxis': 'y1',
+                'marker': {'color': COLOUR_QC},
+                'name': labels['vaccination_total_2d'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate':
+                    labels['vaccination_total_2d'] + ': %{y:,d}<br>'
+                    + labels['vaccination_perc_2d'] + ': %{customdata:.2f}%'
             },
             {
-                'type': 'scatter',
-                'x': data_vaccination['date'],
-                'y': data_vaccination['mtl_new_doses'],
-                'yaxis': 'y2',
-                'mode': 'lines',
-                'line': {'dash': 'dot'},
-                'marker': {'color': '#fa3b3b'},
-                'name': labels['vaccination_new_mtl'],
-                'hoverlabel': {'namelength': 35},
-                'hovertemplate': '%{y:d}',
+                'type': 'bar',
+                'x': data_mtl_vaccination['date'],
+                'y': data_mtl_vaccination['total_doses'],
+                'customdata': data_mtl_vaccination[['calc_perc_1d', 'total_doses_1d']],
+                'yaxis': 'y1',
+                'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.7},
+                'name': labels['vaccination_total'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate':
+                    labels['vaccination_total'] + ': %{y:,d}<br>'
+                    + labels['vaccination_perc'] + ': %{customdata[0]:.2f}%',
+                # hide by default
+                'visible': False,
+            },
+            {
+                'type': 'bar',
+                'x': data_mtl_vaccination['date'],
+                'y': data_mtl_vaccination['total_doses_2d'],
+                'customdata': data_qc_vaccination['calc_perc_2d'],
+                'yaxis': 'y1',
+                'marker': {'color': COLOUR_MTL},
+                'name': 'Doses administered (2nd dose)',
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate':
+                    labels['vaccination_total_2d'] + ': %{y:,d}<br>'
+                    + labels['vaccination_perc_2d'] + ': %{customdata:.2f}%',
+                # hide by default
+                'visible': False,
             },
         ],
         'layout': {
@@ -694,11 +712,10 @@ def vaccination_fig(data_vaccination, labels):
                 'gridcolor': COLOUR_GRID
             },
             'yaxis2': {
-                'title': {'text': labels['vaccination_y2']},
+                'title': {'text': labels['vaccination_new']},
                 'overlaying': 'y',
                 'rangemode': 'tozero',
-                'side': 'right'
-
+                'side': 'right',
             },
             'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
             'plot_bgcolor': 'rgba(255,255,255,1)',
@@ -709,7 +726,36 @@ def vaccination_fig(data_vaccination, labels):
             'dragmode': False
         }
     })
-    vaccination_fig = add_fig_controls(vaccination_fig, data_vaccination['qc_percent_vaccinated'], labels)
+    vaccination_fig = add_fig_controls(vaccination_fig, data_qc_vaccination['total_doses'], labels)
+
+    # add buttons to switch between QC/MTL
+    vaccination_fig.update_layout(
+        updatemenus=[
+            dict(
+                buttons=list([
+                    dict(
+                        label='Quebec',
+                        method='update',
+                        args=[{'visible': [True, True, False, False]}],
+                    ),
+                    dict(
+                        label='Montreal',
+                        method='update',
+                        args=[{'visible': [False, False, True, True]}],
+                    ),
+                ]),
+                type='buttons',
+                direction='right',
+                pad={'r': 10, 't': 10},
+                showactive=True,
+                active=0,
+                x=0.4,
+                xanchor='left',
+                y=1.1,
+                yanchor='top',
+            ),
+        ],
+    )
 
     return vaccination_fig
 
@@ -724,7 +770,7 @@ def vaccination_administered_fig(data_qc_vaccination, data_mtl_vaccination, labe
                 'customdata': data_qc_vaccination['new_doses'].rolling(7).mean().round(),
                 'yaxis': 'y1',
                 'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.7},
-                'name': labels['vaccination_new_qc'],
+                'name': labels['vaccination_new'],
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate':
                     labels['vaccination_new_qc'] + ': %{y:,d}<br>'
@@ -737,7 +783,7 @@ def vaccination_administered_fig(data_qc_vaccination, data_mtl_vaccination, labe
                 'customdata': data_qc_vaccination['new_doses_2d'].rolling(7).mean().round(),
                 'yaxis': 'y1',
                 'marker': {'color': COLOUR_QC},
-                'name': labels['vaccination_new_2d'] + ' (QC)',
+                'name': labels['vaccination_new_2d'],
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate':
                     labels['vaccination_new_2d'] + ' (QC): %{y:,d}<br>'
@@ -750,7 +796,7 @@ def vaccination_administered_fig(data_qc_vaccination, data_mtl_vaccination, labe
                 'customdata': data_mtl_vaccination['new_doses'].rolling(7).mean().round(),
                 'yaxis': 'y1',
                 'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.7},
-                'name': labels['vaccination_new_mtl'],
+                'name': labels['vaccination_new'],
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate':
                     labels['vaccination_new_mtl'] + ': %{y:,d}<br>'
@@ -765,7 +811,7 @@ def vaccination_administered_fig(data_qc_vaccination, data_mtl_vaccination, labe
                 'customdata': data_mtl_vaccination['new_doses_2d'].rolling(7).mean().round(),
                 'yaxis': 'y1',
                 'marker': {'color': COLOUR_MTL},
-                'name': labels['vaccination_new_2d'] + ' (MTL)',
+                'name': labels['vaccination_new_2d'],
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate':
                     labels['vaccination_new_2d'] + ' (MTL): %{y:,d}<br>'
@@ -779,7 +825,7 @@ def vaccination_administered_fig(data_qc_vaccination, data_mtl_vaccination, labe
             'legend': {'bgcolor': 'rgba(255,255,255,0)', 'x': 0, 'y': 1},
             'xaxis': {'tickformat': '%m-%d\n%Y', 'title': {'text': labels['date_label']}},
             'yaxis': {
-                'title': {'text': labels['vaccination_y2']},
+                'title': {'text': labels['vaccination_new']},
                 'gridcolor': COLOUR_GRID
             },
             'margin': {'r': 0, 't': 10, 'l': 30, 'b': 50},
@@ -814,10 +860,10 @@ def vaccination_administered_fig(data_qc_vaccination, data_mtl_vaccination, labe
                 pad={'r': 10, 't': 10},
                 showactive=True,
                 active=0,
-                x=0,
+                x=0.4,
                 xanchor='left',
-                y=-0.39,
-                yanchor='bottom',
+                y=1.1,
+                yanchor='top',
             ),
         ]
     )

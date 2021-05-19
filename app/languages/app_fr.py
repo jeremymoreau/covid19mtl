@@ -151,7 +151,11 @@ labels = {
     # Vaccination_fig
     'vaccination_label': 'Vaccination',
     'vaccination_y': 'Doses (cumul)',
-    'vaccination_y2': 'Nouvelles doses',
+    'vaccination_new': 'Nouvelles doses',
+    'vaccination_total': 'Doses administrée',
+    'vaccination_total_2d': 'Doses administrée (2e dose)',
+    'vaccination_perc': '% reçues au moins une dose',
+    'vaccination_perc_2d': '% reçues 2 doses',
     'vaccination_total_mtl': 'Doses administrée (MTL)',
     'vaccination_perc_mtl': '% de la population vaccinée (MTL)',
     'vaccination_perc_qc': '% de la population vaccinée (QC)',

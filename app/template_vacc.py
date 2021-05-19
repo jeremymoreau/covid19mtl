@@ -11,6 +11,7 @@ from .core import (data_mtl_vaccination, data_qc_vaccination, data_vaccination_a
 
 def generate_layout(labels):
     # Figures #####
+    vaccination_fig = figures.vaccination_fig(data_qc_vaccination, data_mtl_vaccination, labels)
     vaccination_administered_fig = figures.vaccination_administered_fig(
         data_qc_vaccination, data_mtl_vaccination, labels
     )

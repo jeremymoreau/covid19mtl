@@ -149,9 +149,13 @@ labels = {
     'cases_vs_newcases_legend_qc': '魁省',
     'cases_vs_newcases_hovertemplate': '日期: %{customdata} <br> 新增病例: %{y}',
     # Vaccination_fig
-    'vaccination_label': '疫苗接种量',
+    'vaccination_label': '疫苗接种量',  # TODO: add 'Progress'
     'vaccination_y': 'Doses (cumulative)',
-    'vaccination_y2': '新增接种量',
+    'vaccination_new': '新增接种量',
+    'vaccination_total': 'Doses administered',
+    'vaccination_total_2d': 'Doses administered (2nd dose)',
+    'vaccination_perc': '% of pop received at least 1 dose',
+    'vaccination_perc_2d': '% of pop received 2 doses',
     'vaccination_total_mtl': 'Doses administered (MTL)',
     'vaccination_perc_mtl': '接种人口百分比 (蒙特利尔)',
     'vaccination_perc_qc': '接种人口百分比 (魁省)',

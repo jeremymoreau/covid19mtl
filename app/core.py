@@ -266,3 +266,11 @@ data_variants['new_presumptive_mtl_7dma'] = (
 data_vaccination_age_old['0d'] = (
     data_vaccination_age_old['pop 2021'] - (data_vaccination_age_old['1d'] + data_vaccination_age_old['2d'])
 )
+
+# calculated vaccination coverage based on the population numbers we use
+data_qc_vaccination['calc_perc'] = data_qc_vaccination['total_doses'] / qc_pop * 100
+data_qc_vaccination['calc_perc_1d'] = data_qc_vaccination['total_doses_1d'] / qc_pop * 100
+data_qc_vaccination['calc_perc_2d'] = data_qc_vaccination['total_doses_2d'] / qc_pop * 100
+data_mtl_vaccination['calc_perc'] = data_mtl_vaccination['total_doses'] / mtl_pop * 100
+data_mtl_vaccination['calc_perc_1d'] = data_mtl_vaccination['total_doses_1d'] / mtl_pop * 100
+data_mtl_vaccination['calc_perc_2d'] = data_mtl_vaccination['total_doses_2d'] / mtl_pop * 100
