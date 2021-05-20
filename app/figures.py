@@ -925,15 +925,14 @@ def vaccine_delivery_fig(data_vaccine, labels):
 
 
 def vaccination_age_fig(data_vaccination, labels):
-    figure = make_subplots(rows=2, cols=3, specs=[
+    figure = make_subplots(rows=2, cols=4, specs=[
         # [{'type':'domain'}, {'type': 'domain'}],
         # [{'type':'domain'}, {'type': 'domain'}],
         # [{'type':'domain'}, {'type': 'domain'}]
-        [{'type': 'domain'}, {'type': 'domain'}, {'type': 'domain'}],
-        [{'type': 'domain'}, {'type': 'domain'}, {'type': 'domain'}]
+        [{'type': 'domain'}, {'type': 'domain'}, {'type': 'domain'}, {'type': 'domain'}],
+        [{'type': 'domain'}, {'type': 'domain'}, {'type': 'domain'}, {'type': 'domain'}]
     ])
 
-    labels = ['Not vaccinated', '1 dose received', 'Fully vaccinated']
     colours = [
         'rgb(179, 179, 179)',
         'rgb(179, 222, 105)',
@@ -943,13 +942,13 @@ def vaccination_age_fig(data_vaccination, labels):
     for index, row in data_vaccination.iterrows():
         values = [row['0d'], row['1d'], row['2d']]
         chart = go.Pie(
-            labels=labels,
+            labels=labels['vaccination_categories'],
             values=values,
             title=f"<b>{row['group']}</b><br>({row['pop 2021']:,d})",
             # hole=0.5
         )
-        row = int(index / 3) + 1
-        col = index % 3 + 1
+        row = int(index / 4) + 1
+        col = index % 4 + 1
         figure.add_trace(chart, row, col)
 
     figure.update_traces(

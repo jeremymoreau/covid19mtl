@@ -3,7 +3,7 @@ import dash_html_components as html
 
 import app.figures as figures
 
-from .core import (data_mtl_vaccination, data_qc_vaccination, data_vaccination_age_old, data_vaccines, new_doses_mtl_1d,
+from .core import (data_mtl_vaccination, data_qc_vaccination, data_qc_vaccination_age, data_vaccines, new_doses_mtl_1d,
                    new_doses_mtl_2d, new_doses_qc_1d, new_doses_qc_2d, perc_vacc_mtl_1d, perc_vacc_mtl_2d,
                    perc_vacc_qc_1d, perc_vacc_qc_2d, total_doses_mtl_1d, total_doses_mtl_2d, total_doses_qc_1d,
                    total_doses_qc_2d)
@@ -16,7 +16,7 @@ def generate_layout(labels):
         data_qc_vaccination, data_mtl_vaccination, labels
     )
     vaccine_delivery_fig = figures.vaccine_delivery_fig(data_vaccines, labels)
-    vaccination_age_fig = figures.vaccination_age_fig(data_vaccination_age_old, labels)
+    vaccination_age_fig = figures.vaccination_age_fig(data_qc_vaccination_age, labels)
 
     # Plotly modebar buttons to remove
     modebar_buttons_to_remove = ['select2d',

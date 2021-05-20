@@ -83,7 +83,9 @@ data_qc_hosp = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_hospitalisat
 # Vaccination_data
 data_vaccines = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccines.csv'), encoding='utf-8', na_values='na')
 data_qc_vaccination = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_vaccination.csv'))
-data_vaccination_age_old = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccination_age.csv'))
+data_qc_vaccination_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_vaccination_age.csv'))
+
+
 # Variants
 data_variants = pd.read_csv(DATA_PATH.joinpath('processed', 'data_variants.csv'), index_col=0, na_values='na')
 
@@ -268,9 +270,9 @@ data_variants['new_presumptive_mtl_7dma'] = (
     data_variants['new_presumptive_mtl'].rolling(7, min_periods=1).mean().round()
 )
 
-# prepare vaccination age data
-data_vaccination_age_old['0d'] = (
-    data_vaccination_age_old['pop 2021'] - (data_vaccination_age_old['1d'] + data_vaccination_age_old['2d'])
+# prepare vaccination age data: calculate population that hasn't received any dose yet
+data_qc_vaccination_age['0d'] = (
+    data_qc_vaccination_age['pop 2021'] - (data_qc_vaccination_age['1d'] + data_qc_vaccination_age['2d'])
 )
 
 # calculated vaccination coverage based on the population numbers we use
