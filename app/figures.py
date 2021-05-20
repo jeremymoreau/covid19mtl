@@ -655,9 +655,7 @@ def vaccination_fig(data_qc_vaccination, data_mtl_vaccination, labels):
                 'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.7},
                 'name': labels['vaccination_total'],
                 'hoverlabel': {'namelength': 0},
-                'hovertemplate':
-                    labels['vaccination_total'] + ': %{y:,d}<br>'
-                    + labels['vaccination_perc'] + ': %{customdata[0]:.2f}%'
+                'hovertemplate': labels['vaccination_total'] + ': %{y:,d} (%{customdata[0]:.2f}%)',
             },
             {
                 'type': 'bar',
@@ -668,9 +666,7 @@ def vaccination_fig(data_qc_vaccination, data_mtl_vaccination, labels):
                 'marker': {'color': COLOUR_QC},
                 'name': labels['vaccination_total_2d'],
                 'hoverlabel': {'namelength': 0},
-                'hovertemplate':
-                    labels['vaccination_total_2d'] + ': %{y:,d}<br>'
-                    + labels['vaccination_perc_2d'] + ': %{customdata:.2f}%'
+                'hovertemplate': labels['vaccination_total_2d'] + ': %{y:,d} (%{customdata:.2f}%)',
             },
             {
                 'type': 'bar',
@@ -681,9 +677,7 @@ def vaccination_fig(data_qc_vaccination, data_mtl_vaccination, labels):
                 'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.7},
                 'name': labels['vaccination_total'],
                 'hoverlabel': {'namelength': 0},
-                'hovertemplate':
-                    labels['vaccination_total'] + ': %{y:,d}<br>'
-                    + labels['vaccination_perc'] + ': %{customdata[0]:.2f}%',
+                'hovertemplate': labels['vaccination_total'] + ': %{y:,d} (%{customdata[0]:.2f}%)',
                 # hide by default
                 'visible': False,
             },
@@ -696,9 +690,7 @@ def vaccination_fig(data_qc_vaccination, data_mtl_vaccination, labels):
                 'marker': {'color': COLOUR_MTL},
                 'name': 'Doses administered (2nd dose)',
                 'hoverlabel': {'namelength': 0},
-                'hovertemplate':
-                    labels['vaccination_total_2d'] + ': %{y:,d}<br>'
-                    + labels['vaccination_perc_2d'] + ': %{customdata:.2f}%',
+                'hovertemplate': labels['vaccination_total_2d'] + ': %{y:,d} (%{customdata:.2f}%)',
                 # hide by default
                 'visible': False,
             },
