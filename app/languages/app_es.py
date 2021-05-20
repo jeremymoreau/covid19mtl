@@ -44,6 +44,7 @@ labels = {
     'incidence_per100k_7d_qc_label': '7-day incidence per 100k (QC)',
     'vs_last7d': ' vs. prev. 7 days',
     'recovered_qc_label': 'Recuperados (QC)',
+    'recovered_mtl_label': 'Recovered (MTL)',
     'negative_tests_qc_box_label': 'Pruebas negativas (QC)',
     'montreal_map_label': 'Casos por cada 100 000 habitantes (Isla de Montreal)',
     'total_cases_label': 'Casos confirmados',

@@ -108,15 +108,15 @@ mtl_pop = 2078464  # Région sociosanitaire 06 - Montreal, 2021 projection
 qc_pop = 8591866  # QC Total, 2021 projection
 # MTL
 latest_cases_mtl = str(int(data_mtl_totals['cases'].dropna().iloc[-1]))
-new_cases_mtl = str(int(data_mtl_totals['cases'].diff().iloc[-1]))
+new_cases_mtl = int(data_mtl_totals['cases'].diff().iloc[-1])
 latest_deaths_mtl = str(int(data_mtl_totals['deaths'].dropna().iloc[-1]))
-new_deaths_mtl = str(int(data_mtl_totals['deaths'].diff().iloc[-1]))
-new_hosp_mtl = str(int(data_mtl_totals['hos_cum_reg_n'].diff().iloc[-1]))
-new_icu_mtl = str(int(data_mtl_totals['hos_cum_si_n'].diff().iloc[-1]))
-perc_vac_mtl = str(float(data_vaccines['mtl_percent_vaccinated'].dropna().round(2).iloc[-1]))
-new_doses_mtl = int(data_vaccines['mtl_new_doses'].dropna().iloc[-1])
+new_deaths_mtl = int(data_mtl_totals['deaths'].diff().iloc[-1])
+new_hosp_mtl = int(data_mtl_totals['hos_cum_reg_n'].diff().iloc[-1])
+new_icu_mtl = int(data_mtl_totals['hos_cum_si_n'].diff().iloc[-1])
 pos_rate_mtl = float(data_mtl['psi_quo_pos_t'].dropna().iloc[-1])
 pos_rate_change_mtl = float(data_mtl['psi_quo_pos_t'].dropna().iloc[-1] - data_mtl['psi_quo_pos_t'].dropna().iloc[-2])
+latest_recovered_mtl = str(int(data_mtl_totals['recovered'].dropna().iloc[-1]))
+new_recovered_mtl = int(data_mtl_totals['recovered'].diff().iloc[-1])
 
 if pos_rate_mtl < 5:
     pos_rate_mtl_colour = '#83AF9B'
@@ -147,15 +147,15 @@ else:
 
 # QC
 latest_cases_qc = str(int(data_qc_totals['cases'].dropna().iloc[-1]))
-new_cases_qc = str(int(data_qc_totals['cases'].diff().iloc[-1]))
+new_cases_qc = int(data_qc_totals['cases'].diff().iloc[-1])
 latest_deaths_qc = str(int(data_qc_totals['deaths'].dropna().iloc[-1]))
-new_deaths_qc = str(int(data_qc_totals['deaths'].diff().iloc[-1]))
-new_hosp_qc = str(int(data_qc_totals['hos_cum_reg_n'].diff().iloc[-1]))
-new_icu_qc = str(int(data_qc_totals['hos_cum_si_n'].diff().iloc[-1]))
-perc_vac_qc = str(float(data_vaccines['qc_percent_vaccinated'].dropna().round(2).iloc[-1]))
-new_doses_qc = int(data_vaccines['qc_new_doses'].dropna().iloc[-1])
+new_deaths_qc = int(data_qc_totals['deaths'].diff().iloc[-1])
+new_hosp_qc = int(data_qc_totals['hos_cum_reg_n'].diff().iloc[-1])
+new_icu_qc = int(data_qc_totals['hos_cum_si_n'].diff().iloc[-1])
 pos_rate_qc = float(data_qc['psi_quo_pos_t'].dropna().round(2).iloc[-1])
 pos_rate_change_qc = float(data_qc['psi_quo_pos_t'].dropna().iloc[-1] - data_qc['psi_quo_pos_t'].dropna().iloc[-2])
+latest_recovered_qc = str(int(data_qc_totals['recovered'].dropna().iloc[-1]))
+new_recovered_qc = int(data_qc_totals['recovered'].diff().iloc[-1])
 
 if pos_rate_qc < 5:
     pos_rate_qc_colour = '#83AF9B'

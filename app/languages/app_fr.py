@@ -44,6 +44,7 @@ labels = {
     'incidence_per100k_7d_qc_label': 'Incid./100k 7 jours (QC)',
     'vs_last7d': ' vs. 7 jours préc.',
     'recovered_qc_label': 'Rétablis (QC)',
+    'recovered_mtl_label': 'Rétablis (MTL)',
     'negative_tests_qc_box_label': 'Analyses négatives (QC)',
     'montreal_map_label': 'Cas pour 100 000 habitants (Île de Montréal)',
     'total_cases_label': 'Cas confirmés',

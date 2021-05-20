@@ -103,7 +103,7 @@
 .tests {
   color: #D33505;
 }
-#recovered_qc {
+.recovered {
   color: #249a24;
 }
 #negative_tests_qc {

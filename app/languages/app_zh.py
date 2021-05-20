@@ -44,6 +44,7 @@ labels = {
     'incidence_per100k_7d_qc_label': '7日发病率/10万 (魁省)',
     'vs_last7d': '较7日前',
     'recovered_qc_label': '治愈（魁省）',
+    'recovered_mtl_label': '治愈 (蒙特利尔)',
     'negative_tests_qc_box_label': '检测阴性（魁省）',
     'montreal_map_label': '病例／100 000人（蒙特利尔岛）',
     'total_cases_label': '确诊病例',
