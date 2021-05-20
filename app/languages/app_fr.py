@@ -1,4 +1,4 @@
-from ..core import latest_update_date
+from ..core import latest_update_date, latest_vaccination_update_date
 from ..template import generate_layout as build_home_layout
 from ..template_vacc import generate_layout as build_vaccination_layout
 
@@ -18,6 +18,7 @@ labels = {
     'title': ' Tableau de bord COVID-19 Montréal',
     'vaccination_title': ': Vaccination',
     'subtitle': 'Dernière mise à jour: ' + latest_update_date,
+    'vaccination_subtitle': 'Dernière mise à jour: ' + latest_vaccination_update_date.isoformat(),
     'today': " aujourd'hui",
     'today_short': ' auj.',
     'cases_montreal_label': 'Cas (MTL)',

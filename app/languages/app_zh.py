@@ -1,4 +1,4 @@
-from ..core import latest_update_date
+from ..core import latest_update_date, latest_vaccination_update_date
 from ..template import generate_layout as build_home_layout
 from ..template_vacc import generate_layout as build_vaccination_layout
 
@@ -18,6 +18,7 @@ labels = {
     'title': '新型冠状病毒（COVID-19）蒙特利尔数据统计',
     'vaccination_title': ': Vaccination',
     'subtitle': '上次更新: ' + latest_update_date,
+    'vaccination_subtitle': '上次更新: ' + latest_vaccination_update_date.isoformat(),
     'today': '今日',
     'today_short': '今日',
     'cases_montreal_label': '确诊（蒙特利尔）',

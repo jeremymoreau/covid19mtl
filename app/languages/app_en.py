@@ -1,4 +1,4 @@
-from ..core import latest_update_date
+from ..core import latest_update_date, latest_vaccination_update_date
 from ..template import generate_layout as build_home_layout
 from ..template_vacc import generate_layout as build_vaccination_layout
 
@@ -18,6 +18,7 @@ labels = {
     'title': 'COVID-19 Montreal Dashboard',
     'vaccination_title': ': Vaccination',
     'subtitle': 'Last update: ' + latest_update_date,
+    'vaccination_subtitle': 'Last update: ' + latest_vaccination_update_date.isoformat(),
     'today': ' today',
     'today_short': ' today',
     'cases_montreal_label': 'Cases (MTL)',

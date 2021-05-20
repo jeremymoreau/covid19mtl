@@ -186,6 +186,12 @@ else:
 
 
 # Vaccination info boxes
+# Display 1 day after the latest data as data from the previous day are posted
+latest_vaccination_update_date = (
+    datetime.date.fromisoformat(data_qc_vaccination['date'].iloc[-1])
+    + datetime.timedelta(days=1)
+)
+
 new_doses_mtl_1d = data_mtl_vaccination['new_doses_1d'].iloc[-1]
 new_doses_mtl_2d = data_mtl_vaccination['new_doses_2d'].iloc[-1]
 total_doses_mtl_1d = data_mtl_vaccination['total_doses_1d'].iloc[-1]

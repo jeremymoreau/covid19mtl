@@ -44,7 +44,7 @@ def generate_layout(labels):
                             ),
                             # subtitle
                             html.P(
-                                [labels['subtitle']],
+                                [labels['vaccination_subtitle']],
                                 id='subtitle',
                             ),
                         ],
