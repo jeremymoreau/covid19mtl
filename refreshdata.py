@@ -81,6 +81,8 @@ SOURCES_QC = {
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours.csv',
     'data_qc_cases_by_region.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/cas-region.csv?t=1619549700',  # noqa: E501
+    'data_qc_vaccination_by_age.csv':
+    'https://msss.gouv.qc.ca/professionnels/statistiques/documents/covid19/COVID19_Qc_Vaccination_CatAge.csv',
 }
 
 
@@ -591,17 +593,20 @@ def update_vaccination_csv(sources_dir, processed_dir):
     for (old, new) in column_mappings.items():
         df.columns = df.columns.str.replace(old, new)
 
+    # rename index
+    df.index.name = 'date'
+
     # filter out rows
     qc_df = df[(df['Regroupement'] == 'Région') & (df['Croisement'] == 'RSS99')]
     mtl_df = df[(df['Regroupement'] == 'Région') & (df['Croisement'] == 'RSS06')]
-    age_df = df[(df['Regroupement'] == "Groupe d'âge 1")]
+    # age_df = df[(df['Regroupement'] == "Groupe d'âge 1")]
     # just keep the last date
-    age_df = age_df.loc[age_df.index[-1]]
+    # age_df = age_df.loc[age_df.index[-1]]
 
     # overwrite previous files
     qc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination.csv'))
     mtl_df.to_csv(os.path.join(processed_dir, 'data_mtl_vaccination.csv'))
-    age_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination_by_age.csv'))
+    # age_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination_by_age.csv'))
 
 
 def append_mtl_cases_csv(sources_dir, processed_dir, date):
@@ -946,6 +951,66 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
         print(f'Vaccine data: {date} has already been appended to {vacc_csv}')
 
 
+def update_vaccination_age_csv(sources_dir, processed_dir):
+    """Replace data in vaccination by age data in processed_dir with latest data.
+
+    data_qc_vaccination_age.csv will be updated with the new data.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    """
+    # read latest data/sources/*/data_qc_vaccination_by_age.csv
+    source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc_vaccination_by_age.csv')
+    df = pd.read_csv(source_file, encoding='utf-8', index_col=0)
+
+    vacc_csv = os.path.join(processed_dir, 'data_qc_vaccination_age.csv')
+    vacc_df = pd.read_csv(vacc_csv, encoding='utf-8', index_col=0)
+
+    # collect dose 1
+    dose_1_columns = [
+        'Age_18_24_ans_DOSE_Numero1_cumu', 'Age_25_29_ans_DOSE_Numero1_cumu',
+        'Age_30_34_ans_DOSE_Numero1_cumu', 'Age_35_39_ans_DOSE_Numero1_cumu',
+        'Age_40_44_ans_DOSE_Numero1_cumu', 'Age_45_49_ans_DOSE_Numero1_cumu',
+        'Age_50_54_ans_DOSE_Numero1_cumu', 'Age_55_59_ans_DOSE_Numero1_cumu',
+        'Age_60_64_ans_DOSE_Numero1_cumu', 'Age_65_69_ans_DOSE_Numero1_cumu',
+        'Age_70_74_ans_DOSE_Numero1_cumu', 'Age_75_79_ans_DOSE_Numero1_cumu',
+        'Age_80_84_ans_DOSE_Numero1_cumu', 'Age_85_110_ans_DOSE_Numero1_cumu',
+        'Age_0_110_ans_DOSE_Numero1_cumu',
+    ]
+
+    # collect dose 2
+    dose_2_columns = [
+        'Age_18_24_ans_DOSE_Numero2_cumu', 'Age_25_29_ans_DOSE_Numero2_cumu',
+        'Age_30_34_ans_DOSE_Numero2_cumu', 'Age_35_39_ans_DOSE_Numero2_cumu',
+        'Age_40_44_ans_DOSE_Numero2_cumu', 'Age_45_49_ans_DOSE_Numero2_cumu',
+        'Age_50_54_ans_DOSE_Numero2_cumu', 'Age_55_59_ans_DOSE_Numero2_cumu',
+        'Age_60_64_ans_DOSE_Numero2_cumu', 'Age_65_69_ans_DOSE_Numero2_cumu',
+        'Age_70_74_ans_DOSE_Numero2_cumu', 'Age_75_79_ans_DOSE_Numero2_cumu',
+        'Age_80_84_ans_DOSE_Numero2_cumu', 'Age_85_110_ans_DOSE_Numero2_cumu',
+        'Age_0_110_ans_DOSE_Numero2_cumu',
+    ]
+
+    # sum up every two age groups (except last one)
+    # see: https://stackoverflow.com/a/47239367
+    dose_1 = df[dose_1_columns].iloc[-1].reset_index()
+    dose_1 = dose_1.groupby(dose_1.index // 2).sum()
+
+    dose_2 = df[dose_2_columns].iloc[-1].reset_index()
+    dose_2 = dose_2.groupby(dose_2.index // 2).sum()
+
+    # overwrite existing data
+    # data is in first column and needs to be converted to a list
+    vacc_df['1d'] = list(dose_1.iloc[:, 0])
+    vacc_df['2d'] = list(dose_2.iloc[:, 0])
+
+    # overwrite previous files
+    vacc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination_age.csv'))
+
+
 def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
     """Append new row to data_variants.csv data.
 
@@ -1082,6 +1147,8 @@ def process_qc_data(sources_dir, processed_dir, date):
     """
     # Update data_vaccines.csv
     append_vaccines_data_csv(sources_dir, processed_dir, date)
+
+    update_vaccination_age_csv(sources_dir, processed_dir)
 
 
 def process_mtl_data(sources_dir, processed_dir, date):
