@@ -1007,7 +1007,7 @@ def process_inspq_data(sources_dir, processed_dir, date):
     update_data_qc_csv(sources_dir, processed_dir)
 
     # Replace data_qc_hospitalisations
-    update_hospitalisations_qc_csv(sources_dir, processed_dir)
+    # update_hospitalisations_qc_csv(sources_dir, processed_dir)
 
     # Update data_variants.csv
     append_variants_data_csv(sources_dir, processed_dir, date)

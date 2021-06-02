@@ -1,4 +1,3 @@
-import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
@@ -469,8 +468,8 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
         'data': [
             {
                 'type': 'bar',
-                'x': data_qc_hosp['date'],
-                'y': data_qc_hosp['hospitalisations_all'],
+                'x': data_qc['date'],
+                'y': data_qc['hos_act_reg_n'],
                 'yaxis': 'y1',
                 'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.3},
                 'name': labels['hospitalisations_active_qc'],
@@ -478,8 +477,8 @@ def hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels):
             },
             {
                 'type': 'bar',
-                'x': data_qc_hosp['date'],
-                'y': data_qc_hosp['icu'],
+                'x': data_qc['date'],
+                'y': data_qc['hos_act_si_n'],
                 'yaxis': 'y1',
                 'marker': {'color': '#158c17', 'opacity': 0.5},
                 'name': labels['intensive_care_active_qc'],
