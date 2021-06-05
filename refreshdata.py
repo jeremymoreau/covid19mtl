@@ -4,6 +4,7 @@
 import datetime as dt
 # import logging
 import io
+import json
 import os
 import shutil
 import sys
@@ -41,6 +42,9 @@ SOURCES_MTL = {
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/sexe.csv',
     'data_mtl_new_cases.csv':
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/courbe.csv',
+    # updated once a week on Tuesdays
+    'data_mtl_vaccination_by_age.json':
+    'https://services5.arcgis.com/pBN1lh7yaF4K7Tod/arcgis/rest/services/VAXparGrpAGE_CSVupload/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*',  # noqa: E501
 }
 
 # INSPQ
@@ -80,7 +84,7 @@ SOURCES_QC = {
     'data_qc_7days.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours.csv',
     'data_qc_cases_by_region.csv':
-    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/cas-region.csv?t=1619549700',  # noqa: E501
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/cas-region.csv',  # noqa: E501
     'data_qc_vaccination_by_age.csv':
     'https://msss.gouv.qc.ca/professionnels/statistiques/documents/covid19/COVID19_Qc_Vaccination_CatAge.csv',
 }
@@ -207,7 +211,8 @@ def download_source_files(sources, sources_dir, version=True):
     for file, url in sources.items():
         # add "random" string to url to prevent server-side caching
         unix_time = datetime.now().strftime('%s')
-        data = fetch(f'{url}?{unix_time}')
+        query_param_separator = '&' if '?' in url else '?'
+        data = fetch(f'{url}{query_param_separator}{unix_time}')
         fq_path = current_sources_dir.joinpath(file)
 
         if not fq_path.exists():
@@ -1011,6 +1016,65 @@ def update_vaccination_age_csv(sources_dir, processed_dir):
     vacc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination_age.csv'))
 
 
+def update_mtl_vaccination_age_csv(sources_dir, processed_dir):
+    """Replace data in vaccination by age data for MTL in processed_dir with latest data.
+
+    data_mtl_vaccination_age.csv will be updated with the new data.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    """
+    # read latest data/sources/*/data_mtl_vaccination_by_age.json
+    source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_mtl_vaccination_by_age.json')
+
+    with Path(source_file).open() as fd:
+        data = json.load(fd)
+
+    vacc_csv = os.path.join(processed_dir, 'data_mtl_vaccination_age.csv')
+    vacc_df = pd.read_csv(vacc_csv, encoding='utf-8', index_col=0)
+
+    # prepare JSON data
+    # convert age groups into dict for easy access
+    data_groups = {feature['attributes']['Groupe_d_âge']: feature['attributes'] for feature in data['features']}
+
+    age_groups = [
+        '0-4 ans',
+        '5-11 ans',
+        '12-17 ans',
+        '18-29 ans',
+        '30-39 ans',
+        '40-49 ans',
+        '50-59 ans',
+        '60-69 ans',
+        '70-79 ans',
+        '80 ans et plus',
+        'Tous les âges',
+    ]
+
+    dose_none = []
+    dose_1 = []
+    dose_2 = []
+
+    for age in age_groups:
+        item = data_groups[age]
+
+        dose_none.append(item['Nombre_de_personnes_non_Vacciné'])
+        dose_1.append(item['Nombre_de_personnes_ayant_reçu_'])
+        dose_2.append(item['Nombre_de_personnes_ayant_reçu1'])
+
+    # overwrite existing data
+    vacc_df['0d'] = dose_none
+    vacc_df['1d'] = dose_1
+    vacc_df['2d'] = dose_2
+
+    # overwrite previous files
+    vacc_df.to_csv(os.path.join(processed_dir, 'data_mtl_vaccination_age.csv'))
+
+
 def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
     """Append new row to data_variants.csv data.
 
@@ -1170,7 +1234,8 @@ def process_mtl_data(sources_dir, processed_dir, date):
     update_mtl_boroughs_csv(processed_dir)
 
     # Append row to data_mtl_age.csv
-    append_mtl_cases_by_age(sources_dir, processed_dir, date)
+
+    update_mtl_vaccination_age_csv(sources_dir, processed_dir)
 
 
 def main():
