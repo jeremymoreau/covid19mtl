@@ -39,6 +39,35 @@ def downsample(df, offset):
     return resampled
 
 
+def prepare_vaccination_by_age_data(data):
+    data['1d_plus'] = data['1d']
+    data['1d'] = data['1d_plus'] - data['2d']
+    data['total'] = data[['0d', '1d', '2d']].sum(axis=1)
+
+    # create mapping of age group to its population
+    total = dict(data['total'])
+
+    # reverse rows so that it will be by ascending age in the figure
+    data = data.iloc[::-1]
+
+    # convert wide to long format
+    data_long = data.melt(
+        ignore_index=False,
+        value_vars=[
+            '2d',
+            '1d',
+            '0d',
+        ]
+    )
+
+    # calculate the percentage of each data point
+    data_long['perc'] = data_long.apply(
+        lambda x: x['value'] / total[x.name] * 100, axis=1
+    )
+
+    return data_long
+
+
 # get relative data folder
 PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath('data').resolve()
@@ -75,6 +104,7 @@ data_mtl_by_age = pd.read_csv(
 )
 
 data_mtl_vaccination = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl_vaccination.csv'))
+data_mtl_vaccination_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl_vaccination_age.csv'), index_col=0)
 
 # QC data
 data_qc = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc.csv'), encoding='utf-8', na_values='na')
@@ -83,7 +113,7 @@ data_qc_hosp = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_hospitalisat
 # Vaccination_data
 data_vaccines = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccines.csv'), encoding='utf-8', na_values='na')
 data_qc_vaccination = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_vaccination.csv'))
-data_qc_vaccination_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_vaccination_age.csv'))
+data_qc_vaccination_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_vaccination_age.csv'), index_col=0)
 
 
 # Variants
@@ -270,10 +300,14 @@ data_variants['new_presumptive_mtl_7dma'] = (
     data_variants['new_presumptive_mtl'].rolling(7, min_periods=1).mean().round()
 )
 
+# prepare MTL vaccination age data
+data_mtl_vaccination_age = prepare_vaccination_by_age_data(data_mtl_vaccination_age)
+
 # prepare vaccination age data: calculate population that hasn't received any dose yet
 data_qc_vaccination_age['0d'] = (
-    data_qc_vaccination_age['pop 2021'] - (data_qc_vaccination_age['1d'] + data_qc_vaccination_age['2d'])
+    data_qc_vaccination_age['pop 2021'] - (data_qc_vaccination_age['1d'])
 )
+data_qc_vaccination_age = prepare_vaccination_by_age_data(data_qc_vaccination_age)
 
 # calculated vaccination coverage based on the population numbers we use
 data_qc_vaccination['calc_perc'] = data_qc_vaccination['total_doses'] / qc_pop * 100

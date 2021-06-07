@@ -178,7 +178,7 @@ labels = {
     'vaccine_available': 'Doses available',
     'vaccine_received_hovertemplate': 'Doses received: %{y:,d}<br>New doses received: %{customdata:,d}',
     # Vaccination_age_fig
-    'vaccination_age_label': 'Vaccination by age group (QC)',
+    'vaccination_age_label': 'Vaccination by age group',
     'vaccination_categories': ['Not vaccinated', '1 dose received', 'Fully vaccinated'],
     # Variants fig
     'variants_label': 'Progression of new variants of concern (VOC)',

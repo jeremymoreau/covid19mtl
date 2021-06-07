@@ -1,3 +1,5 @@
+from itertools import cycle
+
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -924,7 +926,7 @@ def vaccine_delivery_fig(data_vaccine, labels):
     return vaccine_fig
 
 
-def vaccination_age_fig(data_vaccination, labels):
+def vaccination_qc_age_fig(data_vaccination, labels):
     figure = make_subplots(rows=2, cols=4, specs=[
         # [{'type':'domain'}, {'type': 'domain'}],
         # [{'type':'domain'}, {'type': 'domain'}],
@@ -977,6 +979,70 @@ def vaccination_age_fig(data_vaccination, labels):
         },
         margin={'r': 10, 't': 0, 'l': 10, 'b': 0},
     )
+
+    return figure
+
+
+def vaccination_age_fig(data_vaccination, labels):
+    colours = [
+        # fully vaccinated
+        'rgb(102, 166, 30)',
+        # 1 dose
+        'rgb(179, 222, 105)',
+        # no dose
+        'rgb(179, 179, 179, 50)',
+    ]
+
+    figure = px.bar(
+        data_vaccination,
+        x='perc',
+        y=data_vaccination.index,
+        color='variable',
+        orientation='h',
+        color_discrete_sequence=colours,
+        text='perc',
+        custom_data=['value'],
+    )
+
+    figure.update_traces(
+        texttemplate='%{text:.2f}%',
+        hovertemplate='%{customdata} (%{text:.2f}%)',
+    )
+
+    figure.update_layout(
+        legend_title_text='',
+        legend={
+            'bgcolor': 'rgba(255,255,255,0)',
+            'x': 0,
+            'y': 1.05,
+            'xanchor': 'left',
+            'orientation': 'h',
+            'font': {'size': 11}
+        },
+        xaxis={
+            'ticksuffix': '%',
+            'dtick': 10,
+            'ticks': 'inside',
+            'tickcolor': '#ccc',
+            'title': '%',
+        },
+        yaxis={
+            'title': labels['age_label'],
+            'hoverformat': 'test',
+        },
+        barmode='stack',
+        hovermode='y unified',
+        margin={'r': 0, 't': 0, 'l': 10, 'b': 0},
+        plot_bgcolor='rgba(255,255,255,1)',
+        paper_bgcolor='rgba(255,255,255,1)',
+        dragmode=False,
+    )
+
+    # update labels of traces
+    # see: https://stackoverflow.com/a/64378982
+    the_labels = cycle(reversed(labels['vaccination_categories']))
+
+    figure.for_each_trace(lambda t: t.update(name=next(the_labels)))
 
     return figure
 

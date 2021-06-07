@@ -3,10 +3,10 @@ import dash_html_components as html
 
 import app.figures as figures
 
-from .core import (data_mtl_vaccination, data_qc_vaccination, data_qc_vaccination_age, data_vaccines, new_doses_mtl_1d,
-                   new_doses_mtl_2d, new_doses_qc_1d, new_doses_qc_2d, perc_vacc_mtl_1d, perc_vacc_mtl_2d,
-                   perc_vacc_qc_1d, perc_vacc_qc_2d, total_doses_mtl_1d, total_doses_mtl_2d, total_doses_qc_1d,
-                   total_doses_qc_2d)
+from .core import (data_mtl_vaccination, data_mtl_vaccination_age, data_qc_vaccination, data_qc_vaccination_age,
+                   data_vaccines, new_doses_mtl_1d, new_doses_mtl_2d, new_doses_qc_1d, new_doses_qc_2d,
+                   perc_vacc_mtl_1d, perc_vacc_mtl_2d, perc_vacc_qc_1d, perc_vacc_qc_2d, total_doses_mtl_1d,
+                   total_doses_mtl_2d, total_doses_qc_1d, total_doses_qc_2d)
 
 
 def generate_layout(labels):
@@ -16,7 +16,8 @@ def generate_layout(labels):
         data_qc_vaccination, data_mtl_vaccination, labels
     )
     vaccine_delivery_fig = figures.vaccine_delivery_fig(data_vaccines, labels)
-    vaccination_age_fig = figures.vaccination_age_fig(data_qc_vaccination_age, labels)
+    vaccination_mtl_age_fig = figures.vaccination_age_fig(data_mtl_vaccination_age, labels)
+    vaccination_qc_age_fig = figures.vaccination_age_fig(data_qc_vaccination_age, labels)
 
     # Plotly modebar buttons to remove
     modebar_buttons_to_remove = ['select2d',
@@ -203,43 +204,37 @@ def generate_layout(labels):
                 className='grid-container-two-cols',
             ),
 
-            # 3rd row: 3 boxes
-            # html.Div(
-            #     [
-            #         # right box
-            #         html.Div(
-            #             [
-            #                 html.H6(
-            #                     [labels['vaccination_label']]
-            #                 ),
-            #                 dcc.Graph(
-            #                     figure=vaccination_fig,
-            #                     id='vaccination_fig',
-            #                     responsive=True,
-            #                     config={
-            #                         'modeBarButtonsToRemove': modebar_buttons_to_remove,
-            #                         'doubleClick': False
-            #                     },
-            #                     className='figure'
-            #                 ),
-            #             ],
-            #             className='grid-item'
-            #         ),
-            #     ],
-            #     className='grid-container-two-cols',
-            # ),
-
-            # row: 1 box
+            # 3rd row: 2 boxes
             html.Div(
                 [
+                    # left box
                     html.Div(
                         [
                             html.H6(
-                                [labels['vaccination_age_label']]
+                                [labels['vaccination_age_label'] + ' (MTL)']
                             ),
                             dcc.Graph(
-                                figure=vaccination_age_fig,
-                                id='vaccination_age_fig',
+                                figure=vaccination_mtl_age_fig,
+                                id='vaccination_mtl_age_fig',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
+                                },
+                                className='figure'
+                            ),
+                        ],
+                        className='grid-item'
+                    ),
+                    # right box
+                    html.Div(
+                        [
+                            html.H6(
+                                [labels['vaccination_age_label'] + ' (QC)']
+                            ),
+                            dcc.Graph(
+                                figure=vaccination_qc_age_fig,
+                                id='vaccination_qc_age_fig',
                                 responsive=True,
                                 config={
                                     'modeBarButtonsToRemove': modebar_buttons_to_remove,
@@ -251,7 +246,7 @@ def generate_layout(labels):
                         className='grid-item'
                     ),
                 ],
-                className='grid-container-one-col',
+                className='grid-container-two-cols',
             ),
 
             # footer
