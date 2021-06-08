@@ -1120,23 +1120,26 @@ def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
         presumptive_total_mtl = day_df.loc['06 - Montréal', 'CRIBLAGE']
         new_cases_mtl = regions_df.loc['06 - Montréal', date]
 
-        # build and add new data, use dict to preserve column datatypes
-        new_data = {
-            'sequenced': sequenced,
-            'presumptive': presumptive,
-            'presumptive_total': presumptive_total,
-            'new_sequenced': new_sequenced,
-            'new_presumptive': new_presumptive,
-            'new_cases': new_cases,
-            'sequenced_mtl': sequenced_mtl,
-            'presumptive_total_mtl': presumptive_total_mtl,
-            'new_cases_mtl': new_cases_mtl,
-        }
+        # INSPQ is only updating the CSV Mon-Fri (since May 15th)
+        # check whether same data already exists for previous day
+        if variants_df.iloc[-1]['presumptive_total'] != presumptive_total:
+            # build and add new data, use dict to preserve column datatypes
+            new_data = {
+                'sequenced': sequenced,
+                'presumptive': presumptive,
+                'presumptive_total': presumptive_total,
+                'new_sequenced': new_sequenced,
+                'new_presumptive': new_presumptive,
+                'new_cases': new_cases,
+                'sequenced_mtl': sequenced_mtl,
+                'presumptive_total_mtl': presumptive_total_mtl,
+                'new_cases_mtl': new_cases_mtl,
+            }
 
-        variants_df.loc[date] = new_data
+            variants_df.loc[date] = new_data
 
-        # Overwrite data_variants.csv
-        variants_df.to_csv(variants_csv, encoding='utf-8', na_rep='na')
+            # Overwrite data_variants.csv
+            variants_df.to_csv(variants_csv, encoding='utf-8', na_rep='na')
     else:
         print(f'Variant data: {date} has already been appended to {variants_csv}')
 
@@ -1186,7 +1189,7 @@ def process_inspq_data(sources_dir, processed_dir, date):
     update_data_qc_csv(sources_dir, processed_dir)
 
     # Replace data_qc_hospitalisations
-    update_hospitalisations_qc_csv(sources_dir, processed_dir)
+    # update_hospitalisations_qc_csv(sources_dir, processed_dir)
 
     # Replace vaccination data files
     update_vaccination_csv(sources_dir, processed_dir)
