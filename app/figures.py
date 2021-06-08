@@ -1007,6 +1007,7 @@ def vaccination_age_fig(data_vaccination, labels):
     figure.update_traces(
         texttemplate='%{text:.2f}%',
         hovertemplate='%{customdata} (%{text:.2f}%)',
+        # textfont={'size': 10},
     )
 
     figure.update_layout(
@@ -1028,7 +1029,6 @@ def vaccination_age_fig(data_vaccination, labels):
         },
         yaxis={
             'title': labels['age_label'],
-            'hoverformat': 'test',
         },
         barmode='stack',
         hovermode='y unified',

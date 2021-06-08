@@ -977,6 +977,7 @@ def update_vaccination_age_csv(sources_dir, processed_dir):
 
     # collect dose 1
     dose_1_columns = [
+        'Age_0_11_ans_DOSE_Numero1_cumu', 'Age_12_17_ans_DOSE_Numero1_cumu',
         'Age_18_24_ans_DOSE_Numero1_cumu', 'Age_25_29_ans_DOSE_Numero1_cumu',
         'Age_30_34_ans_DOSE_Numero1_cumu', 'Age_35_39_ans_DOSE_Numero1_cumu',
         'Age_40_44_ans_DOSE_Numero1_cumu', 'Age_45_49_ans_DOSE_Numero1_cumu',
@@ -989,6 +990,7 @@ def update_vaccination_age_csv(sources_dir, processed_dir):
 
     # collect dose 2
     dose_2_columns = [
+        'Age_0_11_ans_DOSE_Numero2_cumu', 'Age_12_17_ans_DOSE_Numero2_cumu',
         'Age_18_24_ans_DOSE_Numero2_cumu', 'Age_25_29_ans_DOSE_Numero2_cumu',
         'Age_30_34_ans_DOSE_Numero2_cumu', 'Age_35_39_ans_DOSE_Numero2_cumu',
         'Age_40_44_ans_DOSE_Numero2_cumu', 'Age_45_49_ans_DOSE_Numero2_cumu',
@@ -999,18 +1001,24 @@ def update_vaccination_age_csv(sources_dir, processed_dir):
         'Age_0_110_ans_DOSE_Numero2_cumu',
     ]
 
-    # sum up every two age groups (except last one)
+    # sum up every two age groups (except first two and last one)
     # see: https://stackoverflow.com/a/47239367
     dose_1 = df[dose_1_columns].iloc[-1].reset_index()
-    dose_1 = dose_1.groupby(dose_1.index // 2).sum()
+    dose_1_grouped = dose_1.iloc[2:]
+    dose_1_grouped = dose_1_grouped.groupby(dose_1_grouped.index // 2).sum()
+    # data is in first column
+    dose_1 = dose_1.iloc[:2, 1].append(dose_1_grouped.iloc[:, 0])
 
     dose_2 = df[dose_2_columns].iloc[-1].reset_index()
-    dose_2 = dose_2.groupby(dose_2.index // 2).sum()
+    dose_2_grouped = dose_2.iloc[2:]
+    dose_2_grouped = dose_2_grouped.groupby(dose_2_grouped.index // 2).sum()
+
+    # data is in first column
+    dose_2 = dose_2.iloc[:2, 1].append(dose_2_grouped.iloc[:, 0])
 
     # overwrite existing data
-    # data is in first column and needs to be converted to a list
-    vacc_df['1d'] = list(dose_1.iloc[:, 0])
-    vacc_df['2d'] = list(dose_2.iloc[:, 0])
+    vacc_df['1d'] = list(dose_1)
+    vacc_df['2d'] = list(dose_2)
 
     # overwrite previous files
     vacc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination_age.csv'))
