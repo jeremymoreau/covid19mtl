@@ -1,9 +1,14 @@
-from ..core import latest_update_date
-from ..template import generate_layout
+from ..core import latest_update_date, latest_vaccination_update_date
+from ..template import generate_layout as build_home_layout
+from ..template_vacc import generate_layout as build_vaccination_layout
 
 # Label text (FR) #####
 # TODO: Make markdown links open in new tab
 labels = {
+    'home_link': '/fr',
+    'home_link_text': 'Accueil',
+    'vaccination_link': '/fr/vaccination',
+    'vaccination_link_text': 'Vaccination',
     'language0': 'English',
     'language_link0': '/en',
     'language1': 'Español',
@@ -11,7 +16,9 @@ labels = {
     'language2': '中文',
     'language_link2': '/zh',
     'title': ' Tableau de bord COVID-19 Montréal',
+    'vaccination_title': ': Vaccination',
     'subtitle': 'Dernière mise à jour: ' + latest_update_date,
+    'vaccination_subtitle': 'Dernière mise à jour: ' + latest_vaccination_update_date.isoformat(),
     'today': " aujourd'hui",
     'today_short': ' auj.',
     'cases_montreal_label': 'Cas (MTL)',
@@ -23,8 +30,14 @@ labels = {
     'icu': ' soins intensifs auj.',
     'yesterday': ' hier',
     'vs_2dago': ' vs. 2 jours préc.',
-    'vaccination_perc_mtl_label': '% 1 dose reçues (MTL)',
-    'vaccination_perc_qc_label': '% 1 dose reçues (QC)',
+    'vaccination_1d_mtl_label': '1e doses administrées (MTL)',
+    'vaccination_2d_mtl_label': '2e doses administrées (MTL)',
+    'vaccination_1d_perc_mtl_label': '% 1 dose reçues (MTL)',
+    'vaccination_2d_perc_mtl_label': '% 2 doses reçues (MTL)',
+    'vaccination_1d_qc_label': '1e doses administrées (QC)',
+    'vaccination_2d_qc_label': '2e doses administrées (QC)',
+    'vaccination_1d_perc_qc_label': '% 1 dose reçues (QC)',
+    'vaccination_2d_perc_qc_label': '% 2 doses reçues (QC)',
     'doses_today': ' doses auj.',
     'test_pos_mtl_label': 'Positivité des tests (MTL)',
     'test_pos_qc_label': 'Positivité des tests (QC)',
@@ -32,6 +45,7 @@ labels = {
     'incidence_per100k_7d_qc_label': 'Incid./100k 7 jours (QC)',
     'vs_last7d': ' vs. 7 jours préc.',
     'recovered_qc_label': 'Rétablis (QC)',
+    'recovered_mtl_label': 'Rétablis (MTL)',
     'negative_tests_qc_box_label': 'Analyses négatives (QC)',
     'montreal_map_label': 'Cas pour 100 000 habitants (Île de Montréal)',
     'total_cases_label': 'Cas confirmés',
@@ -107,7 +121,7 @@ labels = {
     #
     'date_slider_label': 'Date: ',
     'date_label': 'Date',
-    'age_label': 'Age',
+    'age_label': 'Âge',
     'week_label': 'Semaine',
     'linear_label': 'Échelle linéaire',
     'log_label': 'Échelle logarithmique',
@@ -139,17 +153,33 @@ labels = {
     # Vaccination_fig
     'vaccination_label': 'Vaccination',
     'vaccination_y': 'Doses (cumul)',
-    'vaccination_y2': 'Nouvelles doses',
-    'vaccination_total_received_qc': 'Doses reçues (QC)',
-    'vaccination_total_qc': 'Doses administrée (QC)',
+    'vaccination_new': 'Nouvelles doses',
+    'vaccination_total': 'Doses administrée',
+    'vaccination_total_2d': 'Doses administrée (2e dose)',
+    'vaccination_perc': '% reçues au moins une dose',
+    'vaccination_perc_2d': '% reçues 2 doses',
     'vaccination_total_mtl': 'Doses administrée (MTL)',
     'vaccination_perc_mtl': '% de la population vaccinée (MTL)',
     'vaccination_perc_qc': '% de la population vaccinée (QC)',
     'vaccination_hovertemplate': 'Doses administrée: %{y:d}<br>Doses disponsible: %{customdata[0]:d}<br>% 1 dose reçues: %{customdata[1]:.2f}%',
     'vaccination_hovertemplate_mtl': 'Doses administrée: %{y:d}<br>% 1 dose reçues: %{customdata[0]:.2f}%',
-    'vaccination_received_hovertemplate': 'Doses reçues: %{y:d}<br>Nouvelles doses reçues: %{customdata:d}',
+    'vaccination_administered_hovertemplate': 'Doses administrée: %{y:d}<br>Doses disponsible: %{customdata[0]:d}',
     'vaccination_new_mtl': 'Nouvelles doses (MTL)',
     'vaccination_new_qc': 'Nouvelles doses (QC)',
+    # Vaccination administered fig
+    'vaccination_administered_label': 'Nouveaux doses administrée',
+    'vaccination_new_y': 'Nouveaux doses (moyenne mobile 7 jours)',
+    'vaccination_new_1d': 'Nouveaux 1e doses',
+    'vaccination_new_2d': 'Nouveaux 2e doses',
+    # Vaccine delivery fig
+    'vaccine_delivery_label': 'Doses de vaccine reçues vs. administrée',
+    'vaccine_received': 'Doses reçues',
+    'vaccine_administered': 'Doses administrée',
+    'vaccine_available': 'Doses disponible',
+    'vaccine_received_hovertemplate': 'Doses reçues: %{y:d}<br>Nouvelles doses reçues: %{customdata:d}',
+    # Vaccination_age_fig
+    'vaccination_age_label': "Vaccination par groupe d'âge",
+    'vaccination_categories': ['Non-vaccinée', '1 dose reçues', '2 dose reçues'],
     # Variants fig
     'variants_label': 'Progression des nouveaux variants préoccupants',
     'variants_sequenced': 'Cas séquencés',
@@ -172,4 +202,5 @@ labels = {
     'all': 'tout'
 }
 
-layout = generate_layout(labels)
+layout = build_home_layout(labels)
+layout_vaccination = build_vaccination_layout(labels)

@@ -4,6 +4,7 @@
 import datetime as dt
 # import logging
 import io
+import json
 import os
 import shutil
 import sys
@@ -41,6 +42,9 @@ SOURCES_MTL = {
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/sexe.csv',
     'data_mtl_new_cases.csv':
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/courbe.csv',
+    # updated once a week on Tuesdays
+    'data_mtl_vaccination_by_age.json':
+    'https://services5.arcgis.com/pBN1lh7yaF4K7Tod/arcgis/rest/services/VAXparGrpAGE_CSVupload/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*',  # noqa: E501
 }
 
 # INSPQ
@@ -80,7 +84,9 @@ SOURCES_QC = {
     'data_qc_7days.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours.csv',
     'data_qc_cases_by_region.csv':
-    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/cas-region.csv?t=1619549700',  # noqa: E501
+    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/cas-region.csv',  # noqa: E501
+    'data_qc_vaccination_by_age.csv':
+    'https://msss.gouv.qc.ca/professionnels/statistiques/documents/covid19/COVID19_Qc_Vaccination_CatAge.csv',
 }
 
 
@@ -205,7 +211,8 @@ def download_source_files(sources, sources_dir, version=True):
     for file, url in sources.items():
         # add "random" string to url to prevent server-side caching
         unix_time = datetime.now().strftime('%s')
-        data = fetch(f'{url}?{unix_time}')
+        query_param_separator = '&' if '?' in url else '?'
+        data = fetch(f'{url}{query_param_separator}{unix_time}')
         fq_path = current_sources_dir.joinpath(file)
 
         if not fq_path.exists():
@@ -565,6 +572,54 @@ def update_hospitalisations_qc_csv(sources_dir, processed_dir):
     hosp_df.to_csv(os.path.join(processed_dir, 'data_qc_hospitalisations.csv'), encoding='utf-8', index=False)
 
 
+def update_vaccination_csv(sources_dir, processed_dir):
+    """Replace old copies of vaccination data in processed_dir with latest version.
+
+    data_qc_vaccination.csv, data_mtl_vaccination.csv file will be overwritten with the new updated files.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    """
+    # read latest data/sources/*/data_qc_vaccination.csv
+    source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc_vaccination.csv')
+    df = pd.read_csv(source_file, encoding='utf-8', index_col=0)
+
+    column_mappings = {
+        'Date': 'date',
+        'vac_quo_1_n': 'new_doses_1d',
+        'vac_quo_2_n': 'new_doses_2d',
+        'vac_cum_1_n': 'total_doses_1d',
+        'vac_cum_2_n': 'total_doses_2d',
+        'vac_quo_tot_n': 'new_doses',
+        'vac_cum_tot_n': 'total_doses',
+        'cvac_cum_tot_1_p': 'perc_1d',
+        'cvac_cum_tot_2_p': 'perc_2d',
+    }
+
+    # rename columns
+    for (old, new) in column_mappings.items():
+        df.columns = df.columns.str.replace(old, new)
+
+    # rename index
+    df.index.name = 'date'
+
+    # filter out rows
+    qc_df = df[(df['Regroupement'] == 'Région') & (df['Croisement'] == 'RSS99')]
+    mtl_df = df[(df['Regroupement'] == 'Région') & (df['Croisement'] == 'RSS06')]
+    # age_df = df[(df['Regroupement'] == "Groupe d'âge 1")]
+    # just keep the last date
+    # age_df = age_df.loc[age_df.index[-1]]
+
+    # overwrite previous files
+    qc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination.csv'))
+    mtl_df.to_csv(os.path.join(processed_dir, 'data_mtl_vaccination.csv'))
+    # age_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination_by_age.csv'))
+
+
 def append_mtl_cases_csv(sources_dir, processed_dir, date):
     """Append daily MTL borough data to cases.csv file.
 
@@ -907,6 +962,133 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
         print(f'Vaccine data: {date} has already been appended to {vacc_csv}')
 
 
+def update_vaccination_age_csv(sources_dir, processed_dir):
+    """Replace data in vaccination by age data in processed_dir with latest data.
+
+    data_qc_vaccination_age.csv will be updated with the new data.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    """
+    # read latest data/sources/*/data_qc_vaccination_by_age.csv
+    source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc_vaccination_by_age.csv')
+    df = pd.read_csv(source_file, encoding='utf-8', index_col=0)
+
+    vacc_csv = os.path.join(processed_dir, 'data_qc_vaccination_age.csv')
+    vacc_df = pd.read_csv(vacc_csv, encoding='utf-8', index_col=0)
+
+    # collect dose 1
+    dose_1_columns = [
+        'Age_0_11_ans_DOSE_Numero1_cumu', 'Age_12_17_ans_DOSE_Numero1_cumu',
+        'Age_18_24_ans_DOSE_Numero1_cumu', 'Age_25_29_ans_DOSE_Numero1_cumu',
+        'Age_30_34_ans_DOSE_Numero1_cumu', 'Age_35_39_ans_DOSE_Numero1_cumu',
+        'Age_40_44_ans_DOSE_Numero1_cumu', 'Age_45_49_ans_DOSE_Numero1_cumu',
+        'Age_50_54_ans_DOSE_Numero1_cumu', 'Age_55_59_ans_DOSE_Numero1_cumu',
+        'Age_60_64_ans_DOSE_Numero1_cumu', 'Age_65_69_ans_DOSE_Numero1_cumu',
+        'Age_70_74_ans_DOSE_Numero1_cumu', 'Age_75_79_ans_DOSE_Numero1_cumu',
+        'Age_80_84_ans_DOSE_Numero1_cumu', 'Age_85_110_ans_DOSE_Numero1_cumu',
+        'Age_0_110_ans_DOSE_Numero1_cumu',
+    ]
+
+    # collect dose 2
+    dose_2_columns = [
+        'Age_0_11_ans_DOSE_Numero2_cumu', 'Age_12_17_ans_DOSE_Numero2_cumu',
+        'Age_18_24_ans_DOSE_Numero2_cumu', 'Age_25_29_ans_DOSE_Numero2_cumu',
+        'Age_30_34_ans_DOSE_Numero2_cumu', 'Age_35_39_ans_DOSE_Numero2_cumu',
+        'Age_40_44_ans_DOSE_Numero2_cumu', 'Age_45_49_ans_DOSE_Numero2_cumu',
+        'Age_50_54_ans_DOSE_Numero2_cumu', 'Age_55_59_ans_DOSE_Numero2_cumu',
+        'Age_60_64_ans_DOSE_Numero2_cumu', 'Age_65_69_ans_DOSE_Numero2_cumu',
+        'Age_70_74_ans_DOSE_Numero2_cumu', 'Age_75_79_ans_DOSE_Numero2_cumu',
+        'Age_80_84_ans_DOSE_Numero2_cumu', 'Age_85_110_ans_DOSE_Numero2_cumu',
+        'Age_0_110_ans_DOSE_Numero2_cumu',
+    ]
+
+    # sum up every two age groups (except first two and last one)
+    # see: https://stackoverflow.com/a/47239367
+    dose_1 = df[dose_1_columns].iloc[-1].reset_index()
+    dose_1_grouped = dose_1.iloc[2:]
+    dose_1_grouped = dose_1_grouped.groupby(dose_1_grouped.index // 2).sum()
+    # data is in first column
+    dose_1 = dose_1.iloc[:2, 1].append(dose_1_grouped.iloc[:, 0])
+
+    dose_2 = df[dose_2_columns].iloc[-1].reset_index()
+    dose_2_grouped = dose_2.iloc[2:]
+    dose_2_grouped = dose_2_grouped.groupby(dose_2_grouped.index // 2).sum()
+
+    # data is in first column
+    dose_2 = dose_2.iloc[:2, 1].append(dose_2_grouped.iloc[:, 0])
+
+    # overwrite existing data
+    vacc_df['1d'] = list(dose_1)
+    vacc_df['2d'] = list(dose_2)
+
+    # overwrite previous files
+    vacc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination_age.csv'))
+
+
+def update_mtl_vaccination_age_csv(sources_dir, processed_dir):
+    """Replace data in vaccination by age data for MTL in processed_dir with latest data.
+
+    data_mtl_vaccination_age.csv will be updated with the new data.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    """
+    # read latest data/sources/*/data_mtl_vaccination_by_age.json
+    source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_mtl_vaccination_by_age.json')
+
+    with Path(source_file).open() as fd:
+        data = json.load(fd)
+
+    vacc_csv = os.path.join(processed_dir, 'data_mtl_vaccination_age.csv')
+    vacc_df = pd.read_csv(vacc_csv, encoding='utf-8', index_col=0)
+
+    # prepare JSON data
+    # convert age groups into dict for easy access
+    data_groups = {feature['attributes']['Groupe_d_âge']: feature['attributes'] for feature in data['features']}
+
+    age_groups = [
+        '0-4 ans',
+        '5-11 ans',
+        '12-17 ans',
+        '18-29 ans',
+        '30-39 ans',
+        '40-49 ans',
+        '50-59 ans',
+        '60-69 ans',
+        '70-79 ans',
+        '80 ans et plus',
+        'Tous les âges',
+    ]
+
+    dose_none = []
+    dose_1 = []
+    dose_2 = []
+
+    for age in age_groups:
+        item = data_groups[age]
+
+        dose_none.append(item['Nombre_de_personnes_non_Vacciné'])
+        dose_1.append(item['Nombre_de_personnes_ayant_reçu_'])
+        dose_2.append(item['Nombre_de_personnes_ayant_reçu1'])
+
+    # overwrite existing data
+    vacc_df['0d'] = dose_none
+    vacc_df['1d'] = dose_1
+    vacc_df['2d'] = dose_2
+
+    # overwrite previous files
+    vacc_df.to_csv(os.path.join(processed_dir, 'data_mtl_vaccination_age.csv'))
+
+
 def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
     """Append new row to data_variants.csv data.
 
@@ -1015,6 +1197,9 @@ def process_inspq_data(sources_dir, processed_dir, date):
     # Replace data_qc_hospitalisations
     # update_hospitalisations_qc_csv(sources_dir, processed_dir)
 
+    # Replace vaccination data files
+    update_vaccination_csv(sources_dir, processed_dir)
+
     # Update data_variants.csv
     append_variants_data_csv(sources_dir, processed_dir, date)
 
@@ -1044,6 +1229,8 @@ def process_qc_data(sources_dir, processed_dir, date):
     # Update data_vaccines.csv
     append_vaccines_data_csv(sources_dir, processed_dir, date)
 
+    update_vaccination_age_csv(sources_dir, processed_dir)
+
 
 def process_mtl_data(sources_dir, processed_dir, date):
     """Processes new Sante Montreal data.
@@ -1064,7 +1251,8 @@ def process_mtl_data(sources_dir, processed_dir, date):
     update_mtl_boroughs_csv(processed_dir)
 
     # Append row to data_mtl_age.csv
-    append_mtl_cases_by_age(sources_dir, processed_dir, date)
+
+    update_mtl_vaccination_age_csv(sources_dir, processed_dir)
 
 
 def main():

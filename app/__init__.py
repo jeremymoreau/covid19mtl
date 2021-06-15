@@ -34,5 +34,13 @@ def display_page(pathname):
         return app_zh.layout
     elif pathname == '/es':
         return app_es.layout
+    elif pathname == '/vaccination' or pathname == '/fr/vaccination':
+        return app_fr.layout_vaccination
+    elif pathname == '/en/vaccination':
+        return app_en.layout_vaccination
+    elif pathname == '/zh/vaccination':
+        return app_zh.layout_vaccination
+    elif pathname == '/es/vaccination':
+        return app_es.layout_vaccination
     else:
         return '404: Page Not Found'

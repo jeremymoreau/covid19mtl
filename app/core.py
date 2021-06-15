@@ -39,6 +39,35 @@ def downsample(df, offset):
     return resampled
 
 
+def prepare_vaccination_by_age_data(data):
+    data['1d_plus'] = data['1d']
+    data['1d'] = data['1d_plus'] - data['2d']
+    data['total'] = data[['0d', '1d', '2d']].sum(axis=1)
+
+    # create mapping of age group to its population
+    total = dict(data['total'])
+
+    # reverse rows so that it will be by ascending age in the figure
+    data = data.iloc[::-1]
+
+    # convert wide to long format
+    data_long = data.melt(
+        ignore_index=False,
+        value_vars=[
+            '2d',
+            '1d',
+            '0d',
+        ]
+    )
+
+    # calculate the percentage of each data point
+    data_long['perc'] = data_long.apply(
+        lambda x: x['value'] / total[x.name] * 100, axis=1
+    )
+
+    return data_long
+
+
 # get relative data folder
 PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath('data').resolve()
@@ -74,12 +103,19 @@ data_mtl_by_age = pd.read_csv(
     na_values='na'
 )
 
+data_mtl_vaccination = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl_vaccination.csv'))
+data_mtl_vaccination_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl_vaccination_age.csv'), index_col=0)
+
 # QC data
 data_qc = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc.csv'), encoding='utf-8', na_values='na')
 data_qc_hosp = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_hospitalisations.csv'), encoding='utf-8')
 
 # Vaccination_data
-data_vaccination = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccines.csv'), encoding='utf-8', na_values='na')
+data_vaccines = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccines.csv'), encoding='utf-8', na_values='na')
+data_qc_vaccination = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_vaccination.csv'))
+data_qc_vaccination_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_vaccination_age.csv'), index_col=0)
+
+
 # Variants
 data_variants = pd.read_csv(DATA_PATH.joinpath('processed', 'data_variants.csv'), index_col=0, na_values='na')
 
@@ -99,20 +135,20 @@ latest_update_date = latest_mtl_date.isoformat()
 data_mtl_totals = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl_totals.csv'), index_col=0, na_values='na')
 data_qc_totals = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_totals.csv'), index_col=0, na_values='na')
 
-# Source for 2020 pop estimates: https://publications.msss.gouv.qc.ca/msss/document-001617/
-mtl_pop = 2065657  # Région sociosanitaire 06 - Montreal, 2020 projection
-qc_pop = 8539073  # QC Total, 2020 projection
+# Source for 2021 pop estimates: https://publications.msss.gouv.qc.ca/msss/document-001617/
+mtl_pop = 2078464  # Région sociosanitaire 06 - Montreal, 2021 projection
+qc_pop = 8591866  # QC Total, 2021 projection
 # MTL
 latest_cases_mtl = str(int(data_mtl_totals['cases'].dropna().iloc[-1]))
-new_cases_mtl = str(int(data_mtl_totals['cases'].diff().iloc[-1]))
+new_cases_mtl = int(data_mtl_totals['cases'].diff().iloc[-1])
 latest_deaths_mtl = str(int(data_mtl_totals['deaths'].dropna().iloc[-1]))
-new_deaths_mtl = str(int(data_mtl_totals['deaths'].diff().iloc[-1]))
-new_hosp_mtl = str(int(data_mtl_totals['hos_cum_reg_n'].diff().iloc[-1]))
-new_icu_mtl = str(int(data_mtl_totals['hos_cum_si_n'].diff().iloc[-1]))
-perc_vac_mtl = str(float(data_vaccination['mtl_percent_vaccinated'].dropna().round(2).iloc[-1]))
-new_doses_mtl = int(data_vaccination['mtl_new_doses'].dropna().iloc[-1])
+new_deaths_mtl = int(data_mtl_totals['deaths'].diff().iloc[-1])
+new_hosp_mtl = int(data_mtl_totals['hos_cum_reg_n'].diff().iloc[-1])
+new_icu_mtl = int(data_mtl_totals['hos_cum_si_n'].diff().iloc[-1])
 pos_rate_mtl = float(data_mtl['psi_quo_pos_t'].dropna().iloc[-1])
 pos_rate_change_mtl = float(data_mtl['psi_quo_pos_t'].dropna().iloc[-1] - data_mtl['psi_quo_pos_t'].dropna().iloc[-2])
+latest_recovered_mtl = str(int(data_mtl_totals['recovered'].dropna().iloc[-1]))
+new_recovered_mtl = int(data_mtl_totals['recovered'].diff().iloc[-1])
 
 if pos_rate_mtl < 5:
     pos_rate_mtl_colour = '#83AF9B'
@@ -143,15 +179,15 @@ else:
 
 # QC
 latest_cases_qc = str(int(data_qc_totals['cases'].dropna().iloc[-1]))
-new_cases_qc = str(int(data_qc_totals['cases'].diff().iloc[-1]))
+new_cases_qc = int(data_qc_totals['cases'].diff().iloc[-1])
 latest_deaths_qc = str(int(data_qc_totals['deaths'].dropna().iloc[-1]))
-new_deaths_qc = str(int(data_qc_totals['deaths'].diff().iloc[-1]))
-new_hosp_qc = str(int(data_qc_totals['hos_cum_reg_n'].diff().iloc[-1]))
-new_icu_qc = str(int(data_qc_totals['hos_cum_si_n'].diff().iloc[-1]))
-perc_vac_qc = str(float(data_vaccination['qc_percent_vaccinated'].dropna().round(2).iloc[-1]))
-new_doses_qc = int(data_vaccination['qc_new_doses'].dropna().iloc[-1])
+new_deaths_qc = int(data_qc_totals['deaths'].diff().iloc[-1])
+new_hosp_qc = int(data_qc_totals['hos_cum_reg_n'].diff().iloc[-1])
+new_icu_qc = int(data_qc_totals['hos_cum_si_n'].diff().iloc[-1])
 pos_rate_qc = float(data_qc['psi_quo_pos_t'].dropna().round(2).iloc[-1])
 pos_rate_change_qc = float(data_qc['psi_quo_pos_t'].dropna().iloc[-1] - data_qc['psi_quo_pos_t'].dropna().iloc[-2])
+latest_recovered_qc = str(int(data_qc_totals['recovered'].dropna().iloc[-1]))
+new_recovered_qc = int(data_qc_totals['recovered'].diff().iloc[-1])
 
 if pos_rate_qc < 5:
     pos_rate_qc_colour = '#83AF9B'
@@ -179,6 +215,29 @@ elif incid_per100k_7d_qc < 500:
     incid_per100k_7d_qc_colour = '#800000'
 else:
     incid_per100k_7d_qc_colour = '#600000'
+
+
+# Vaccination info boxes
+# Display 1 day after the latest data as data from the previous day are posted
+latest_vaccination_update_date = (
+    datetime.date.fromisoformat(data_qc_vaccination['date'].iloc[-1])
+    + datetime.timedelta(days=1)
+)
+
+new_doses_mtl_1d = data_mtl_vaccination['new_doses_1d'].iloc[-1]
+new_doses_mtl_2d = data_mtl_vaccination['new_doses_2d'].iloc[-1]
+total_doses_mtl_1d = data_mtl_vaccination['total_doses_1d'].iloc[-1]
+total_doses_mtl_2d = data_mtl_vaccination['total_doses_2d'].iloc[-1]
+perc_vacc_mtl_1d = total_doses_mtl_1d / mtl_pop * 100
+perc_vacc_mtl_2d = total_doses_mtl_2d / mtl_pop * 100
+
+new_doses_qc_1d = data_qc_vaccination['new_doses_1d'].iloc[-1]
+new_doses_qc_2d = data_qc_vaccination['new_doses_2d'].iloc[-1]
+total_doses_qc_1d = data_qc_vaccination['total_doses_1d'].iloc[-1]
+total_doses_qc_2d = data_qc_vaccination['total_doses_2d'].iloc[-1]
+perc_vacc_qc_1d = total_doses_qc_1d / qc_pop * 100
+perc_vacc_qc_2d = total_doses_qc_2d / qc_pop * 100
+
 
 # Make MTL histogram data tidy
 # downsample then reset_index to have date column
@@ -240,3 +299,20 @@ data_variants['new_presumptive_mtl'] = data_variants['presumptive_total_mtl'].di
 data_variants['new_presumptive_mtl_7dma'] = (
     data_variants['new_presumptive_mtl'].rolling(7, min_periods=1).mean().round()
 )
+
+# prepare MTL vaccination age data
+data_mtl_vaccination_age = prepare_vaccination_by_age_data(data_mtl_vaccination_age)
+
+# prepare vaccination age data: calculate population that hasn't received any dose yet
+data_qc_vaccination_age['0d'] = (
+    data_qc_vaccination_age['pop 2021'] - (data_qc_vaccination_age['1d'])
+)
+data_qc_vaccination_age = prepare_vaccination_by_age_data(data_qc_vaccination_age)
+
+# calculated vaccination coverage based on the population numbers we use
+data_qc_vaccination['calc_perc'] = data_qc_vaccination['total_doses'] / qc_pop * 100
+data_qc_vaccination['calc_perc_1d'] = data_qc_vaccination['total_doses_1d'] / qc_pop * 100
+data_qc_vaccination['calc_perc_2d'] = data_qc_vaccination['total_doses_2d'] / qc_pop * 100
+data_mtl_vaccination['calc_perc'] = data_mtl_vaccination['total_doses'] / mtl_pop * 100
+data_mtl_vaccination['calc_perc_1d'] = data_mtl_vaccination['total_doses_1d'] / mtl_pop * 100
+data_mtl_vaccination['calc_perc_2d'] = data_mtl_vaccination['total_doses_2d'] / mtl_pop * 100

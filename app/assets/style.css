@@ -20,18 +20,28 @@
   text-align: right;
   user-select: none;
   float: right;
-  width: 240px;
+  /* width: 240px; */
 }
 .lang-link{
   margin-left: 1.5rem;
   color: #323232;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
 }
 .lang-link:hover {
   color: #44aacc;
 }
 .lang-link:active {
   color: #cc4444;
+}
+#language-container .divider {
+  margin-left: 1.3rem;
+  font-weight: bold;
+}
+.nav-link {
+  margin-left: 1.7rem;
+}
+#language-container .active {
+  font-weight: bold;
 }
 
 /* mini info boxes */
@@ -54,6 +64,9 @@
   margin-top: 0;
   margin-bottom: 0;
 }
+.vaccines > .main_text {
+  margin-bottom: 1.5rem;
+}
 .subscript {
   margin-bottom: 5px;
   font-size: 1.5rem;
@@ -64,6 +77,9 @@
   gap: 15px;
   margin-top: 15px;
   margin-bottom: 15px;
+}
+.vaccination > #info-container {
+  grid-template-columns: repeat(4, 1fr);
 }
 .cases {
   color:#c51515;
@@ -78,12 +94,16 @@
   color: #0083CB;
 }
 .vaccines {
-  color: #3156A0;
+  color: #83af9b;
+  padding-top: 25px;
+}
+.doses {
+  color: #0083CB;
 }
 .tests {
   color: #D33505;
 }
-#recovered_qc {
+.recovered {
   color: #249a24;
 }
 #negative_tests_qc {
@@ -98,6 +118,12 @@
 }
 
 /* main grid */
+.grid-container-one-col {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  column-gap: 15px;
+  margin-bottom: 15px;
+}
 .grid-container-two-cols {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -283,9 +309,12 @@ li {
   #info-container {
     grid-template-columns: repeat(3, 1fr);
   }
+  .vaccination .subscript, .vaccination .superscript {
+    font-size: 1.3rem;
+  }
 }
 @media (max-width: 750px) {
-  #info-container {
+  #info-container, .vaccination > #info-container {
     grid-template-columns: repeat(2, 1fr);
   }
   .grid-container-onethird-twothirds-cols {
@@ -391,6 +420,9 @@ li {
     font-size: 1.5rem;
   }
   .lang-link {
+    font-size: 1.3rem;
+  }
+  .nav-link {
     font-size: 1.5rem;
   }
   p {

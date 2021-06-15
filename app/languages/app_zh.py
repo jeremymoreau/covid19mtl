@@ -1,9 +1,14 @@
-from ..core import latest_update_date
-from ..template import generate_layout
+from ..core import latest_update_date, latest_vaccination_update_date
+from ..template import generate_layout as build_home_layout
+from ..template_vacc import generate_layout as build_vaccination_layout
 
 # Label text (EN) #####
 # TODO: Make markdown links open in new tab
 labels = {
+    'home_link': '/zh',
+    'home_link_text': 'Home',
+    'vaccination_link': '/zh/vaccination',
+    'vaccination_link_text': 'Vaccination',
     'language0': 'Français',
     'language_link0': '/',
     'language1': 'English',
@@ -11,7 +16,9 @@ labels = {
     'language2': 'Español',
     'language_link2': '/es',
     'title': '新型冠状病毒（COVID-19）蒙特利尔数据统计',
+    'vaccination_title': ': Vaccination',
     'subtitle': '上次更新: ' + latest_update_date,
+    'vaccination_subtitle': '上次更新: ' + latest_vaccination_update_date.isoformat(),
     'today': '今日',
     'today_short': '今日',
     'cases_montreal_label': '确诊（蒙特利尔）',
@@ -23,8 +30,14 @@ labels = {
     'icu': '重症患者（今日）',
     'yesterday': '昨日',
     'vs_2dago': '较2日前',
-    'vaccination_perc_mtl_label': '% received 1 dose (蒙特利尔)',
-    'vaccination_perc_qc_label': '% received 1 dose (魁省)',
+    'vaccination_1d_mtl_label': '1st doses administered (MTL)',
+    'vaccination_2d_mtl_label': '2nd doses administered (MTL)',
+    'vaccination_1d_perc_mtl_label': '% received 1 dose (MTL)',
+    'vaccination_2d_perc_mtl_label': '% received 2 doses (MTL)',
+    'vaccination_1d_qc_label': '1st doses administered (QC)',
+    'vaccination_2d_qc_label': '2nd doses administered (QC)',
+    'vaccination_1d_perc_qc_label': '% received 1 dose (QC)',
+    'vaccination_2d_perc_qc_label': '% received 2 doses (QC)',
     'doses_today': '接种量（今日）',
     'test_pos_mtl_label': '检测阳性率 (蒙特利尔)',
     'test_pos_qc_label': '检测阳性率 (魁省)',
@@ -32,6 +45,7 @@ labels = {
     'incidence_per100k_7d_qc_label': '7日发病率/10万 (魁省)',
     'vs_last7d': '较7日前',
     'recovered_qc_label': '治愈（魁省）',
+    'recovered_mtl_label': '治愈 (蒙特利尔)',
     'negative_tests_qc_box_label': '检测阴性（魁省）',
     'montreal_map_label': '病例／100 000人（蒙特利尔岛）',
     'total_cases_label': '确诊病例',
@@ -137,19 +151,35 @@ labels = {
     'cases_vs_newcases_legend_qc': '魁省',
     'cases_vs_newcases_hovertemplate': '日期: %{customdata} <br> 新增病例: %{y}',
     # Vaccination_fig
-    'vaccination_label': '疫苗接种量',
+    'vaccination_label': '疫苗接种量',  # TODO: add 'Progress'
     'vaccination_y': 'Doses (cumulative)',
-    'vaccination_y2': '新增接种量',
-    'vaccination_total_received_qc': 'Doses received (QC)',
-    'vaccination_total_qc': 'Doses administered (QC)',
+    'vaccination_new': '新增接种量',
+    'vaccination_total': 'Doses administered',
+    'vaccination_total_2d': 'Doses administered (2nd dose)',
+    'vaccination_perc': '% of pop received at least 1 dose',
+    'vaccination_perc_2d': '% of pop received 2 doses',
     'vaccination_total_mtl': 'Doses administered (MTL)',
     'vaccination_perc_mtl': '接种人口百分比 (蒙特利尔)',
     'vaccination_perc_qc': '接种人口百分比 (魁省)',
     'vaccination_hovertemplate': '接种人数: %{y:,d}<br>Doses available: %{customdata[0]:,d}<br>% of pop received 1 dose: %{customdata[1]:.2f}%',
     'vaccination_hovertemplate_mtl': '接种人数: %{y:,d}<br>% of pop received 1 dose: %{customdata[0]:.2f}%',
-    'vaccination_received_hovertemplate': 'Doses received: %{y:,d}<br>New doses received: %{customdata:,d}',
+    'vaccination_administered_hovertemplate': 'Doses administered: %{y:,d}<br>Doses available: %{customdata[0]:,d}',
     'vaccination_new_mtl': '新增接种量 (蒙特利尔)',
     'vaccination_new_qc': '新增接种量 (魁省)',
+    # Vaccination administered fig
+    'vaccination_administered_label': 'New doses administered',
+    'vaccination_new_y': 'New doses (7-day moving average)',
+    'vaccination_new_1d': 'New 1st doses',
+    'vaccination_new_2d': 'New 2nd doses',
+    # Vaccine delivery fig
+    'vaccine_delivery_label': 'Vaccine doses delivered vs. administered',
+    'vaccine_received': 'Doses received',
+    'vaccine_administered': 'Doses administered',
+    'vaccine_available': 'Doses available',
+    'vaccine_received_hovertemplate': 'Doses received: %{y:,d}<br>New doses received: %{customdata:,d}',
+    # Vaccination_age_fig
+    'vaccination_age_label': 'Vaccination by age group',
+    'vaccination_categories': ['Not vaccinated', '1 dose received', 'Fully vaccinated'],
     # Variants fig
     'variants_label': 'Progression of new variants of concern (VOC)',
     'variants_sequenced': 'Sequenced cases',
@@ -172,4 +202,5 @@ labels = {
     'all': 'all'
 }
 
-layout = generate_layout(labels)
+layout = build_home_layout(labels)
+layout_vaccination = build_vaccination_layout(labels)
