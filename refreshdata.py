@@ -411,14 +411,20 @@ def is_new_mtl_data_available(expected_date: dt.date):
 
     html_date = dateparser.parse(date_text).date()  # type: ignore[union-attr]
 
-    # additionally, check that the CSV files are updated as well
-    content = fetch(SOURCES_MTL.get('data_mtl_new_cases.csv'))
+    # get new cases reported on page
+    top_taple = soup.select('div.csc-textpic-text table.contenttable')[1]
+    new_cases = top_taple.select('td h3')[1].text[1:]
+
+    # get new cases from municipal CSV
+    content = fetch(SOURCES_MTL.get('data_mtl_municipal.csv'))
     df = pd.read_csv(io.StringIO(content), sep=';', na_values='')
-    date_string = df.dropna(how='all').iloc[-1, 0]
+    csv_new_cases = df.dropna(how='all').iloc[-1, 1]
 
-    csv_date = dateparser.parse(date_string).date()  # type: ignore[union-attr]
+    content = fetch(SOURCES_MTL.get('data_mtl_age.csv'))
+    df = pd.read_csv(io.StringIO(content), sep=';', na_values='')
+    csv_new_cases2 = df.dropna(how='all').iloc[-1, 1]
 
-    return html_date == expected_date and csv_date == expected_date
+    return html_date == expected_date and new_cases == csv_new_cases and new_cases == csv_new_cases2
 
 
 def load_data_qc_csv(source_file):
