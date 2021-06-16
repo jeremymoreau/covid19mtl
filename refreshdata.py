@@ -1251,6 +1251,7 @@ def process_mtl_data(sources_dir, processed_dir, date):
     update_mtl_boroughs_csv(processed_dir)
 
     # Append row to data_mtl_age.csv
+    append_mtl_cases_by_age(sources_dir, processed_dir, date)
 
     update_mtl_vaccination_age_csv(sources_dir, processed_dir)
 
