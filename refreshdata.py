@@ -420,16 +420,16 @@ def is_new_mtl_data_available(expected_date: dt.date):
 
     # get new cases reported on page
     top_taple = soup.select('div.csc-textpic-text table.contenttable')[1]
-    new_cases = top_taple.select('td h3')[1].text[1:]
+    new_cases = int(top_taple.select('td h3')[1].text[1:])
 
     # get new cases from municipal CSV
     content = fetch(SOURCES_MTL.get('data_mtl_municipal.csv'))
     df = pd.read_csv(io.StringIO(content), sep=';', na_values='')
-    csv_new_cases = df.dropna(how='all').iloc[-1, 1]
+    csv_new_cases = int(df.dropna(how='all').iloc[-1, 1])
 
     content = fetch(SOURCES_MTL.get('data_mtl_age.csv'))
     df = pd.read_csv(io.StringIO(content), sep=';', na_values='')
-    csv_new_cases2 = df.dropna(how='all').iloc[-1, 1]
+    csv_new_cases2 = int(df.dropna(how='all').iloc[-1, 1])
 
     return html_date == expected_date and new_cases == csv_new_cases and new_cases == csv_new_cases2
 
