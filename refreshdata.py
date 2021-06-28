@@ -897,15 +897,13 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
     date : str
         Date of data to append (yyyy-mm-dd).
     """
-    # Load csv files
-    day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_vaccines_by_region.csv')
+    # Load csv file
     vacc_csv = os.path.join(processed_dir, 'data_vaccines.csv')
     day_received_csv = os.path.join(
         sources_dir,
         get_source_dir_for_date(sources_dir, date),
         'data_qc_vaccines_received.csv'
     )
-    day_df = pd.read_csv(day_csv, index_col=0, encoding='utf-8')
     vaccine_df = pd.read_csv(vacc_csv, encoding='utf-8', index_col=0)
     # for some reason the thousands seperator is not converted here
     # there is a non-breaking space (\xa0) used as a thousands separator
@@ -918,48 +916,30 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
         converters={'Nombre de doses de vaccins reçues': lambda x: int(''.join(x.split()))}
     )
 
-    if date not in vaccine_df.index:
-        # Add approx calculated % of population vaccinated
-        # Note: this is based on the somewhat inaccurate assumption that 2 doses = 1 person vaccinated.
-        # This estimate should be closer to the truth once a larger % of the population is vaccinated,
-        # as the ratio of (ppl waiting for a 2nd dose / ppl having received 2 doses) decreases.
-        # Source for 2020 pop estimates: https://publications.msss.gouv.qc.ca/msss/document-001617/
-        # Note2: Disabled 2 doses for now as noone has received the second dose yet
-        mtl_pop = 2065657  # Région sociosanitaire 06 - Montreal, 2020 projection
-        qc_pop = 8539073  # QC Total, 2020 projection
+    # add any missing dates
+    # needed since data is not updated on weekends anymore (starting Jun 26)
+    for current_date in reversed(received_df.index):
+        if current_date not in vaccine_df.index:
+            # get total values and calculate new doses and percentage administered
+            qc_count = received_df.loc[current_date, 'Doses du vaccin COVID-19 administrées (cumulatif)']
 
-        # get total values and calculate new doses and percentage administered
-        mtl_count = day_df.loc[date, 'RSS06_DOSES_Total_cumu']
-        qc_count = day_df.loc[date, 'RSS99_DOSES_Total_cumu']
+            total_doses = received_df.loc[current_date, 'Doses du vaccin COVID-19 reçues (cumulatif)']
+            new_doses = total_doses - vaccine_df['qc_doses_received'][-1]
+            doses_used = qc_count / total_doses * 100
 
-        mtl_new = mtl_count - vaccine_df['mtl_doses'][-1]
-        qc_new = qc_count - vaccine_df['qc_doses'][-1]
+            # build and add new data, use dict to preserve column datatypes
+            new_data = {
+                'qc_doses': qc_count,
+                'qc_new_doses_received': new_doses,
+                'qc_doses_received': total_doses,
+                'qc_percent_used': doses_used
+            }
 
-        mtl_perc = (mtl_count) * 100 / mtl_pop
-        qc_perc = (qc_count) * 100 / qc_pop
-
-        total_doses = received_df.loc[date, 'Doses du vaccin COVID-19 reçues (cumulatif)']
-        new_doses = total_doses - vaccine_df['qc_doses_received'][-1]
-        doses_used = qc_count / total_doses * 100
-
-        # build and add new data, use dict to preserve column datatypes
-        new_data = {
-            'mtl_doses': mtl_count,
-            'qc_doses': qc_count,
-            'mtl_new_doses': mtl_new,
-            'qc_new_doses': qc_new,
-            'mtl_percent_vaccinated': mtl_perc,
-            'qc_percent_vaccinated': qc_perc,
-            'qc_new_doses_received': new_doses,
-            'qc_doses_received': total_doses,
-            'qc_percent_used': doses_used
-        }
-
-        vaccine_df.loc[date] = new_data
+            vaccine_df.loc[current_date] = new_data
+        # else:
+            # print(f'Vaccine data: {current_date} has already been appended to {vacc_csv}')
 
         vaccine_df.to_csv(vacc_csv, encoding='utf-8', float_format='%.4f', na_rep='na')
-    else:
-        print(f'Vaccine data: {date} has already been appended to {vacc_csv}')
 
 
 def update_vaccination_age_csv(sources_dir, processed_dir):
