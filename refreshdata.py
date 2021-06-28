@@ -295,7 +295,7 @@ def is_new_inspq_data_available(expected_date: dt.date):
 
     # in addition, verify the date of the historic QC data in the main CSV
     content = fetch(SOURCES_INSPQ.get('data_qc.csv'))
-    df = pd.read_csv(io.StringIO(content))
+    df = pd.read_csv(io.StringIO(content), usecols=[0])
     # get last cell with date
     date_string = df.iloc[-1, 0]
 
