@@ -1002,9 +1002,15 @@ def update_vaccination_age_csv(sources_dir, processed_dir):
     # data is in first column
     dose_2 = dose_2.iloc[:2, 1].append(dose_2_grouped.iloc[:, 0])
 
+    # add sum of eligible population (12+) and insert before total
+    dose_1 = list(dose_1)
+    dose_1.insert(-1, sum(dose_1[1: -1]))
+    dose_2 = list(dose_2)
+    dose_2.insert(-1, sum(dose_2[1: -1]))
+
     # overwrite existing data
-    vacc_df['1d'] = list(dose_1)
-    vacc_df['2d'] = list(dose_2)
+    vacc_df['1d'] = dose_1
+    vacc_df['2d'] = dose_2
 
     # overwrite previous files
     vacc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination_age.csv'))
@@ -1059,6 +1065,11 @@ def update_mtl_vaccination_age_csv(sources_dir, processed_dir):
         dose_none.append(item['Nombre_de_personnes_non_Vacciné'])
         dose_1.append(item['Nombre_de_personnes_ayant_reçu_'])
         dose_2.append(item['Nombre_de_personnes_ayant_reçu1'])
+
+    # add sum of eligible population (12+) and insert before total
+    dose_none.insert(-1, sum(dose_none[2: -1]))
+    dose_1.insert(-1, sum(dose_1[2: -1]))
+    dose_2.insert(-1, sum(dose_2[2: -1]))
 
     # overwrite existing data
     vacc_df['0d'] = dose_none
