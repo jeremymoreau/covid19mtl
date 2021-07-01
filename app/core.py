@@ -40,6 +40,11 @@ def downsample(df, offset):
 
 
 def prepare_vaccination_by_age_data(data):
+    # calculate population that hasn't received any dose yet
+    data['0d'] = data['pop 2021'] - (data['1d'])
+
+    # 1d refers to "at least 1 dose" (also contains 2nd doses)
+    # calculate actual 1 dose
     data['1d_plus'] = data['1d']
     data['1d'] = data['1d_plus'] - data['2d']
     data['total'] = data[['0d', '1d', '2d']].sum(axis=1)
@@ -300,13 +305,8 @@ data_variants['new_presumptive_mtl_7dma'] = (
     data_variants['new_presumptive_mtl'].rolling(7, min_periods=1).mean().round()
 )
 
-# prepare MTL vaccination age data
+# prepare vaccination age data
 data_mtl_vaccination_age = prepare_vaccination_by_age_data(data_mtl_vaccination_age)
-
-# prepare vaccination age data: calculate population that hasn't received any dose yet
-data_qc_vaccination_age['0d'] = (
-    data_qc_vaccination_age['pop 2021'] - (data_qc_vaccination_age['1d'])
-)
 data_qc_vaccination_age = prepare_vaccination_by_age_data(data_qc_vaccination_age)
 
 # calculated vaccination coverage based on the population numbers we use
