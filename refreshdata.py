@@ -108,6 +108,11 @@ def fetch(url):
     RuntimeError
         Failed to retrieve data from URL.
     """
+    # add "random" string to url to prevent server-side caching
+    unix_time = datetime.now().strftime('%s')
+    query_param_separator = '&' if '?' in url else '?'
+    url = f'{url}{query_param_separator}{unix_time}'
+
     for _ in range(NB_RETRIES):
         resp = requests.get(url)
         if resp.status_code != 200:
@@ -209,10 +214,7 @@ def download_source_files(sources, sources_dir, version=True):
 
     # Download all source data files to sources dir
     for file, url in sources.items():
-        # add "random" string to url to prevent server-side caching
-        unix_time = datetime.now().strftime('%s')
-        query_param_separator = '&' if '?' in url else '?'
-        data = fetch(f'{url}{query_param_separator}{unix_time}')
+        data = fetch(url)
         fq_path = current_sources_dir.joinpath(file)
 
         if not fq_path.exists():
