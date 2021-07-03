@@ -1095,13 +1095,11 @@ def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
     # Load csv files
     manual_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_manual_data.csv')
     day_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_variants.csv')
-    # this file is coming from QC, not INSPQ like the rest
-    # usually QC data comes in first but this causes an error if it is not the case
-    regions_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_cases_by_region.csv')
+    regions_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_regions.csv')
     variants_csv = os.path.join(processed_dir, 'data_variants.csv')
     manual_df = pd.read_csv(manual_csv, header=1, encoding='utf-8')
     day_df = pd.read_csv(day_csv, index_col=0)
-    regions_df = pd.read_csv(regions_csv, sep=';', index_col=0)
+    regions_df = pd.read_csv(regions_csv, index_col=1, header=1)
     variants_df = pd.read_csv(variants_csv, encoding='utf-8', index_col=0, na_values='na')
 
     if date not in variants_df.index:
@@ -1115,7 +1113,7 @@ def append_variants_data_csv(sources_dir: str, processed_dir: str, date: str):
         new_cases = manual_df['cas'][1]
         sequenced_mtl = day_df.loc['06 - Montréal', 'TOTAL SÉQUENCAGE']
         presumptive_total_mtl = day_df.loc['06 - Montréal', 'CRIBLAGE']
-        new_cases_mtl = regions_df.loc['06 - Montréal', date]
+        new_cases_mtl = regions_df.loc['06 - Montréal', 'Confirmé dans les 24 dernières heures']
 
         # INSPQ is only updating the CSV Mon-Fri (since May 15th)
         # check whether same data already exists for previous day
