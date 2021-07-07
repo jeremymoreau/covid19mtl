@@ -44,7 +44,7 @@ SOURCES_MTL = {
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/courbe.csv',
     # updated once a week on Tuesdays
     'data_mtl_vaccination_by_age.json':
-    'https://services5.arcgis.com/pBN1lh7yaF4K7Tod/arcgis/rest/services/VAXparGrpAGE_CSVupload/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*',  # noqa: E501
+    'https://services5.arcgis.com/pBN1lh7yaF4K7Tod/arcgis/rest/services/VAXparGrpAGE_CSVuploadv2/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*',  # noqa: E501
 }
 
 # INSPQ
