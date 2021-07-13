@@ -81,10 +81,11 @@ SOURCES_QC = {
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/doses-vaccins-7jours.csv',  # noqa: E501
     'data_qc_vaccines_situation.csv':
     'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/situation-vaccination.csv',  # noqa: E501
-    'data_qc_7days.csv':
-    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours.csv',
-    'data_qc_cases_by_region.csv':
-    'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/cas-region.csv',  # noqa: E501
+    # CSVs retired on July 12th (might be added again in the future)
+    # 'data_qc_7days.csv':
+    # 'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/synthese-7jours.csv',
+    # 'data_qc_cases_by_region.csv':
+    # 'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/cas-region.csv',  # noqa: E501
     'data_qc_vaccination_by_age.csv':
     'https://msss.gouv.qc.ca/professionnels/statistiques/documents/covid19/COVID19_Qc_Vaccination_CatAge.csv',
 }
@@ -329,17 +330,18 @@ def is_new_qc_data_available(expected_date: dt.date):
     bool
         True, if new data is available, False otherwise
     """
+    # CSV retired on July 12th (might be added again in the future)
     # check the 7 day overview CSV
-    content = fetch(SOURCES_QC.get('data_qc_7days.csv'))
+    # content = fetch(SOURCES_QC.get('data_qc_7days.csv'))
 
     # directly load file from the web
-    df = pd.read_csv(io.StringIO(content), header=None, sep=';')
+    # df = pd.read_csv(io.StringIO(content), header=None, sep=';')
     # remove NaN line at the end
-    df.dropna(how='all', inplace=True)
+    # df.dropna(how='all', inplace=True)
     # get cell with date
-    date_string = df.iloc[-1, 0]
+    # date_string = df.iloc[-1, 0]
 
-    csv_date = dateparser.parse(date_string).date()  # type: ignore[union-attr]
+    # csv_date = dateparser.parse(date_string).date()  # type: ignore[union-attr]
 
     # check vaccine doses received CSV to ensure vaccination CSVs have been updated
     content = fetch(SOURCES_QC.get('data_qc_vaccines_received.csv'))
@@ -385,8 +387,8 @@ def is_new_qc_data_available(expected_date: dt.date):
     # the vaccination data update is provided the day of (not yesterday)
     vacc_expected_date = expected_date + timedelta(days=1)
 
-    return csv_date == expected_date \
-        and csv_date2 == expected_date \
+    # return csv_date == expected_date \
+    return csv_date2 == expected_date \
         and csv_date3 == vacc_expected_date \
         and html_date == expected_date \
         and vacc_date == vacc_expected_date
