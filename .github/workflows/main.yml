@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Dokku deploy
-      uses: vitalyliber/dokku-github-action@v6.1
+      uses: Eventyret/dokku-github-action@6.2
       env:
         PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
         HOST: ${{ secrets.DOKKU_IP }}
