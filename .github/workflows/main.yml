@@ -12,6 +12,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Dokku deploy
       uses: vitalyliber/dokku-github-action@v6.2
       env:
