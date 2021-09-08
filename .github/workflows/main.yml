@@ -1,6 +1,7 @@
 name: Auto-deploy to Dokku
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - '*'
