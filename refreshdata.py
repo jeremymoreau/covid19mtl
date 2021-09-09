@@ -423,7 +423,7 @@ def is_new_mtl_data_available(expected_date: dt.date):
     html_date = dateparser.parse(date_text).date()  # type: ignore[union-attr]
 
     # get new cases reported on page
-    top_table = soup.select('div.csc-textpic-text table.contenttable')[1]
+    top_table = soup.select('div.csc-textpic-text table.contenttable')[0]
     new_cases = top_table.select('td h3')[1].text[1:]
     # convert new cases to int
     new_cases = int(new_cases.replace(' ', ''))
