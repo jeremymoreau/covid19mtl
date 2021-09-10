@@ -1196,7 +1196,7 @@ def process_inspq_data(sources_dir, processed_dir, date):
     update_vaccination_csv(sources_dir, processed_dir)
 
     # Update data_variants.csv
-    append_variants_data_csv(sources_dir, processed_dir, date)
+    # append_variants_data_csv(sources_dir, processed_dir, date)
 
     # Append row to data_mtl_death_loc.csv
     append_mtl_death_loc_csv(sources_dir, processed_dir, date)
