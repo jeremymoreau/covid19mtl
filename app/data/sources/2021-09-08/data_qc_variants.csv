@@ -1,20 +1,21 @@
-RÉGION SOCIOSANITAIRE	,B.1.1.7,B.1.351,P.1,B.1.617.2,TOTAL SÉQUENCAGE,CRIBLAGE,Taux pour 100 000,Criblage positif (7 jours),Positif B.1.1.7
-01 - Bas-Saint-Laurent,173,,,4,177,,,,
-02 - Saguenay–Lac-Saint-Jean,124,,2,6,132,,,,
-03 - Capitale-Nationale,650,5,12,119,786,,,,
-04 - Mauricie et Centre-du-Québec,117,,1,53,171,,,,
-05 - Estrie,99,,19,51,169,,,,
-06 - Montréal,3359,138,280,873,4650,,,,
-07 - Outaouais,496,16,35,70,617,,,,
-08 - Abitibi-Témiscamingue,,177,,6,183,,,,
-09 - Côte-Nord,11,,,3,14,,,,
-10 - Nord-du-Québec,,1,,1,2,,,,
-11 - Gaspésie–Îles-de-la-Madeleine,8,,,8,16,,,,
-12 - Chaudière-Appalaches,570,1,11,18,600,,,,
-13 - Laval,455,13,24,224,716,,,,
-14 - Lanaudière,308,33,15,90,446,,,,
-15 - Laurentides,512,32,56,121,721,,,,
-16 - Montérégie,372,24,157,387,940,,,,
-Inconnu,,1,,4,5,,,,
-Hors Québec,51,10,6,89,156,,,,
-Ensemble du Québec,7305,451,618,2127,10501,,,,
+﻿Regroupement,Croisement,Nom,nbPrelPos,nombreSequencageA,nombreSequencageB,nombreSequencageG,NbrConfirmeDelta,NbrPresomptifDelta,NbrAutres,Total_VOC,nbrNonVOC,nbrCribETSeq,nbrCrib,nbrSeq,nbrCribOUSeq
+Région,RSS01,01 - Bas-Saint-Laurent,2702,994,,,4,9,1695,1007,48,185,1556,220,1485
+Région,RSS02,02 - Saguenay-Lac-Saint-Jean,3158,997,,,7,29,2125,1033,83,161,1836,203,1813
+Région,RSS03,03 - Capitale-Nationale,14805,6275,5,11,130,144,8240,6565,318,789,9183,1037,9743
+Région,RSS04,04 - Mauricie et Centre-du-Québec,6008,1651,1,2,55,301,3998,2010,189,250,3168,364,2577
+Région,RSS05,05 - Estrie,7192,2005,,11,51,127,4998,2194,205,273,2998,326,3083
+Région,RSS06,06 - Montréal,66260,13816,126,283,915,2632,48488,17772,1222,3579,26495,5396,29981
+Région,RSS07,07 - Outaouais,7378,3839,17,33,76,311,3102,4276,485,155,4043,1114,4924
+Région,RSS08,08 - Abitibi-Témiscamingue,856,100,193,,6,8,549,307,35,10,212,234,414
+Région,RSS09,09 - Côte-Nord,289,162,,,3,1,123,166,14,14,221,35,214
+Région,RSS10,10 - Nord-du-Québec,61,22,2,,1,5,31,30,3,3,48,4,47
+Région,RSS11,11 - Gaspésie-Îles-de-la-Madeleine,498,185,,,8,2,303,195,26,17,292,35,269
+Région,RSS12,12 - Chaudière-Appalaches,11075,3452,1,10,20,31,7561,3514,123,477,6703,764,4276
+Région,RSS13,13 - Laval,16386,3278,13,23,231,928,11913,4473,244,417,5139,853,5712
+Région,RSS14,14 - Lanaudière,9737,1842,38,11,97,561,7188,2549,304,410,3883,678,4288
+Région,RSS15,15 - Laurentides,10839,2569,33,59,122,662,7394,3445,287,781,5328,959,6028
+Région,RSS16,16 - Montérégie,23635,4286,25,154,393,951,17826,5809,1265,1064,8958,1931,9838
+Région,RSS00,Inconnu,457,50,1,,5,34,367,90,78,10,214,85,245
+Région,RSS98,Hors-Québec,683,124,11,9,94,86,359,324,42,116,270,199,429
+Région,RSS99,Ensemble du Québec,182019,45647,466,606,2218,6822,126260,55759,4971,8711,80547,14437,85366
+
