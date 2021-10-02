@@ -44,7 +44,7 @@ SOURCES_MTL = {
     'https://santemontreal.qc.ca/fileadmin/fichiers/Campagnes/coronavirus/situation-montreal/courbe.csv',
     # updated once a week on Tuesdays
     'data_mtl_vaccination_by_age.json':
-    'https://services5.arcgis.com/pBN1lh7yaF4K7Tod/arcgis/rest/services/VAXparGrpAGE_CSVuploadv2/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*',  # noqa: E501
+    'https://services5.arcgis.com/pBN1lh7yaF4K7Tod/arcgis/rest/services/VAXparGrpAGE_CSVuploadv3_ADEQ/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*',  # noqa: E501
 }
 
 # INSPQ
@@ -1068,7 +1068,7 @@ def update_mtl_vaccination_age_csv(sources_dir, processed_dir):
     for age in age_groups:
         item = data_groups[age]
 
-        dose_none.append(item['Nombre_de_personnes_non_Vacciné'])
+        dose_none.append(item['Nombre_de_personnes_non_vacciné'])
         dose_1.append(item['Nombre_de_personnes_ayant_reçu_'])
         dose_2.append(item['Nombre_de_personnes_ayant_reçu1'])
 
