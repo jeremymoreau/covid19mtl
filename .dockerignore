@@ -1,0 +1,6 @@
+.*
+__pycache__
+
+app/data/manual_updates_backup
+app/data/processed_backups
+app/data/sources
