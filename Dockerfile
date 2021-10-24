@@ -14,4 +14,4 @@ RUN python -m pip install --no-cache-dir -r /tmp/requirements.txt
 WORKDIR /app
 ADD ./ /app
 
-ENTRYPOINT [ "gunicorn", "app:server", "--preload" ]
+# ENTRYPOINT [ "gunicorn", "app:server", "--preload" ]
