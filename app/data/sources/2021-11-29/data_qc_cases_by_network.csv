@@ -1,0 +1,116 @@
+﻿No,RSS,NoRLS,RLS,Cas,Cas actifs,Population,Cas pour 100 000,Cas actifs pour 100 000
+01,01 - Bas-Saint-Laurent,0111,0111 - RLS de Kamouraska,743,n.d.,20742,3582.10,n.d.
+01,01 - Bas-Saint-Laurent,0112,0112 - RLS de Rivière-du-Loup,1377,6,34840,3952.35,17.20
+01,01 - Bas-Saint-Laurent,0113,0113 - RLS de Témiscouata,429,5,19055.5,2251.32,26.32
+01,01 - Bas-Saint-Laurent,0114,0114 - RLS des Basques,223,n.d.,8507,2621.37,n.d.
+01,01 - Bas-Saint-Laurent,0115,0115 - RLS de Rimouski,903,10,57728,1564.23,17.29
+01,01 - Bas-Saint-Laurent,0116,0116 - RLS de La Mitis,214,5,17948.5,1192.30,27.90
+01,01 - Bas-Saint-Laurent,0117,0117 - RLS de Matane,288,11,20658.5,1394.10,53.42
+01,01 - Bas-Saint-Laurent,0118,0118 - RLS de La Matapédia,395,39,17455,2262.96,224.19
+01,01 - Bas-Saint-Laurent,,Total (incluant inconnus),4572,78,196934.5,2321.58,39.64
+02,02 - Saguenay-Lac-Saint-Jean,0211,0211 - RLS du Domaine-du-Roy,817,n.d.,31025,2633.36,n.d.
+02,02 - Saguenay-Lac-Saint-Jean,0212,0212 - RLS de Maria-Chapdelaine,1150,n.d.,25019.5,4596.41,n.d.
+02,02 - Saguenay-Lac-Saint-Jean,0213,0213 - RLS de Lac-Saint-Jean-Est,2861,0,52281,5472.35,0.00
+02,02 - Saguenay-Lac-Saint-Jean,0214,0214 - RLS de Jonquière,2563,15,67384,3803.57,22.27
+02,02 - Saguenay-Lac-Saint-Jean,0215,0215 - RLS de Chicoutimi,3274,5,79237.5,4131.88,6.31
+02,02 - Saguenay-Lac-Saint-Jean,0216,0216 - RLS de La Baie,829,0,22558,3674.97,0.00
+02,02 - Saguenay-Lac-Saint-Jean,,Total (incluant inconnus),11504,26,277505,4145.51,9.37
+03,03 - Capitale-Nationale,0311,0311 - RLS de Portneuf,2194,6,55121,3980.33,10.84
+03,03 - Capitale-Nationale,0312,0312 - RLS de Québec-Sud,15729,105,321832.5,4887.32,32.54
+03,03 - Capitale-Nationale,0313,0313 - RLS de Québec-Nord,16823,156,352784,4768.64,44.05
+03,03 - Capitale-Nationale,0314,0314 - RLS de Charlevoix,710,n.d.,28065.5,2529.80,n.d.
+03,03 - Capitale-Nationale,,Total (incluant inconnus),35737,273,757803,4715.87,35.91
+04,04 - Mauricie et Centre-du-Québec,0411,0411 - RLS du Haut-Saint-Maurice,488,23,15002,3252.90,153.50
+04,04 - Mauricie et Centre-du-Québec,0412,0412 - RLS de la Vallée de la Batiscan,586,8,25591.5,2289.82,31.22
+04,04 - Mauricie et Centre-du-Québec,0413,0413 - RLS de Maskinongé,821,39,22969.5,3574.31,169.73
+04,04 - Mauricie et Centre-du-Québec,0414,0414 - RLS du Centre-de-la-Mauricie,1811,27,64680,2799.94,41.72
+04,04 - Mauricie et Centre-du-Québec,0415,0415 - RLS de Trois-Rivières,4883,83,143710,3397.82,57.64
+04,04 - Mauricie et Centre-du-Québec,0416,0416 - RLS de Bécancour - Nicolet-Yamaska,1289,68,44674,2885.35,152.03
+04,04 - Mauricie et Centre-du-Québec,0417,0417 - RLS de Drummond,4614,61,108252,4262.28,56.15
+04,04 - Mauricie et Centre-du-Québec,0418,0418 - RLS d'Arthabaska - de l'Érable,4035,63,98452.5,4098.42,63.86
+04,04 - Mauricie et Centre-du-Québec,,Total (incluant inconnus),18614,374,523331.5,3556.83,71.33
+05,05 - Estrie,0511,0511 - RLS de la Pommeraie,1486,21,56363,2636.48,37.10
+05,05 - Estrie,0512,0512 - RLS de la Haute-Yamaska,4314,84,106352,4056.34,78.62
+05,05 - Estrie,0513,0513 - RLS de Memphrémagog,1506,157,52727.5,2856.19,296.56
+05,05 - Estrie,0514,0514 - RLS de Coaticook,774,71,18758.5,4126.13,378.14
+05,05 - Estrie,0515,0515 - RLS de Sherbrooke,6886,410,170859,4030.22,238.87
+05,05 - Estrie,0516,0516 - RLS de Val Saint-François,1066,63,31559.5,3377.75,199.18
+05,05 - Estrie,0517,0517 - RLS d'Asbestos,1120,178,14238.5,7866.00,1251.76
+05,05 - Estrie,0518,0518 - RLS du Haut-Saint-François,898,48,22777.5,3942.49,210.47
+05,05 - Estrie,0519,0519 - RLS du Granit,2072,101,21331,9713.56,473.93
+05,05 - Estrie,,Total (incluant inconnus),20140,1134,494966.5,4068.96,228.27
+06,06 - Montréal,0611,0611 - RLS de Pierrefonds - Lac Saint-Louis,12540,199,224851,5577.03,88.40
+06,06 - Montréal,0612,0612 - RLS de Dorval - Lachine - Lasalle,10886,115,149985,7258.06,76.44
+06,06 - Montréal,0621,0621 - RLS de Côte-Saint-Luc - NDG - Montréal-Ouest,8480,174,131806.5,6433.67,131.63
+06,06 - Montréal,0622,0622 - RLS de Côte-des-Neiges - Métro - Parc-Extension,18267,223,246803,7401.45,89.95
+06,06 - Montréal,0631,0631 - RLS de Verdun - Côte St-Paul - St-Henri - Pointe-St-Charles,8928,159,166781,5353.13,95.02
+06,06 - Montréal,0632,0632 - RLS des Faubourgs - Plateau-Mont-Royal - St-Louis-du-Parc,8529,162,162162,5259.56,99.38
+06,06 - Montréal,0641,0641 - RLS du Nord de l'Île - Saint-Laurent,15075,142,162793,9260.23,86.75
+06,06 - Montréal,0642,0642 - RLS d'Ahuntsic - Montréal-Nord,17280,173,172965.5,9990.43,99.76
+06,06 - Montréal,0643,0643 - RLS de la Petite Patrie - Villeray,6284,118,115764,5428.29,101.69
+06,06 - Montréal,0651,0651 - RLS de Saint-Léonard - Saint-Michel,15621,254,139539.5,11194.68,181.54
+06,06 - Montréal,0652,0652 - RLS de Rivière-des-Prairies - Anjou - Montréal-Est,18977,333,209153.5,9073.24,158.88
+06,06 - Montréal,0653,0653 - RLS de Hochelaga - Mercier-Ouest - Rosemont,12465,230,189456.5,6579.35,121.17
+06,06 - Montréal,,Total (incluant inconnus),156429,2344,2072060.5,7549.44,112.78
+07,07 - Outaouais,0711,0711 - RLS du Pontiac,452,n.d.,20175.5,2240.34,n.d.
+07,07 - Outaouais,0712,0712 - RLS de la Vallée-de-la-Gatineau,603,0,20531.5,2936.95,0.00
+07,07 - Outaouais,0713,0713 - RLS des Collines-de-l'Outaouais,897,5,39071.5,2295.79,12.74
+07,07 - Outaouais,0714,0714 - RLS de Grande-Rivière - Hull - Gatineau,10994,57,265865.5,4135.17,21.33
+07,07 - Outaouais,0715,0715 - RLS de la Vallée-de-la-Lièvre et de la Petite Nation,1592,5,57100,2788.09,8.73
+07,07 - Outaouais,,Total (incluant inconnus),14559,72,402744,3614.95,17.80
+08,08 - Abitibi-Témiscamingue,0811,0811 - RLS de l'Abitibi-Ouest,121,n.d.,20503.5,590.14,n.d.
+08,08 - Abitibi-Témiscamingue,0812,0812 - RLS de l'Abitibi,310,n.d.,24736.5,1253.21,n.d.
+08,08 - Abitibi-Témiscamingue,0813,0813 - RLS de Rouyn-Noranda,437,n.d.,43239,1010.66,n.d.
+08,08 - Abitibi-Témiscamingue,0814,0814 - RLS de la Vallée-de-l'Or,363,26,43569.5,833.15,59.65
+08,08 - Abitibi-Témiscamingue,0815,0815 - RLS du Témiscaming,242,108,15588.5,1552.43,694.58
+08,08 - Abitibi-Témiscamingue,,Total (incluant inconnus),1478,138,147637,1001.10,93.46
+09,09 - Côte-Nord,0911,0911 - RLS de Caniapiscau,12,0,3216,373.13,0.00
+09,09 - Côte-Nord,0912,0912 - RLS de la Haute-Côte-Nord - Manicouagan,520,6,40315.5,1289.83,14.95
+09,09 - Côte-Nord,0913,0913 - RLS de Port-Cartier,96,0,7285.5,1317.69,0.00
+09,09 - Côte-Nord,0914,0914 - RLS de Sept-Îles,153,0,27264.5,561.17,0.00
+09,09 - Côte-Nord,0915,0915 - RLS de la Minganie,21,0,6419,327.15,0.00
+09,09 - Côte-Nord,0916,0916 - RLS de la Basse-Côte-Nord,13,0,4556.5,285.31,0.00
+09,09 - Côte-Nord,0917,0917 - RLS de Kawawachikamach,0,0,643.5,0.00,0.00
+09,09 - Côte-Nord,,Total (incluant inconnus),822,6,89700.5,916.38,6.71
+10,10 - Nord-du-Québec,1001,1001 - Nord-du-Québec,138,n.d.,13521.5,1020.60,n.d.
+10,10 - Nord-du-Québec,,Total (incluant inconnus),138,n.d.,13521.5,1020.60,n.d.
+11,11 - Gaspésie-Îles-de-la-Madeleine,1111,1111 - RLS de la Baie-des-Chaleurs,1039,8,32134,3233.34,24.93
+11,11 - Gaspésie-Îles-de-la-Madeleine,1112,1112 - RLS de la Haute-Gaspésie,157,n.d.,10536.5,1490.06,n.d.
+11,11 - Gaspésie-Îles-de-la-Madeleine,1113,1113 - RLS de La Côte-de-Gaspé,515,0,18730,2749.60,0.00
+11,11 - Gaspésie-Îles-de-la-Madeleine,1114,1114 - RLS du Rocher-Percé,543,n.d.,15831.5,3429.87,n.d.
+11,11 - Gaspésie-Îles-de-la-Madeleine,1121,1121 - RLS des Îles-de-la-Madeleine,49,0,12591,389.17,0.00
+11,11 - Gaspésie-Îles-de-la-Madeleine,,Total (incluant inconnus),2327,13,89823,2590.65,14.50
+12,12 - Chaudière-Appalaches,1211,1211 - RLS Alphonse-Desjardins,11790,283,258909.5,4553.71,108.97
+12,12 - Chaudière-Appalaches,1212,1212 - RLS de la région de Thetford,2582,74,42474,6079.01,174.33
+12,12 - Chaudière-Appalaches,1213,1213 - RLS de Beauce,7655,168,73287,10445.24,228.88
+12,12 - Chaudière-Appalaches,1214,1214 - RLS des Etchemins,1118,42,16401.5,6816.45,256.46
+12,12 - Chaudière-Appalaches,1215,1215 - RLS de Montmagny-L'Islet,1091,5,40037.5,2724.95,12.51
+12,12 - Chaudière-Appalaches,,Total (incluant inconnus),24236,572,431109.5,5621.77,132.43
+13,13 - Laval,1311,1311 - RLS de Laval,38458,525,444658.5,8648.88,117.56
+13,13 - Laval,,Total (incluant inconnus),38458,525,444658.5,8648.88,117.56
+14,14 - Lanaudière,1411,1411 - RLS de Lanaudière-Nord,10578,229,224162,4718.91,101.68
+14,14 - Lanaudière,1412,1412 - RLS de Lanaudière-Sud,18081,361,298205,6063.28,120.57
+14,14 - Lanaudière,,Total (incluant inconnus),28718,590,522367,5497.67,112.46
+15,15 - Laurentides,1511,1511 - RLS d'Antoine-Labelle,1214,25,35581,3411.93,70.26
+15,15 - Laurentides,1512,1512 - RLS des Laurentides,1642,45,48185,3407.70,93.06
+15,15 - Laurentides,1513,1513 - RLS des Pays-d'en-Haut,1569,92,44594,3518.41,205.24
+15,15 - Laurentides,1514,1514 - RLS d'Argenteuil,1101,65,33534,3283.23,193.19
+15,15 - Laurentides,1515,1515 - RLS de Deux-Montagnes - Mirabel-Sud,5295,135,125286,4226.33,107.20
+15,15 - Laurentides,1516,1516 - RLS de la Rivière-du-Nord - Mirabel-Nord,8203,220,179123,4579.53,121.73
+15,15 - Laurentides,1517,1517 - RLS de Thérèse-De Blainville,8069,116,163935,4922.07,70.54
+15,15 - Laurentides,,Total (incluant inconnus),27148,699,630238,4307.58,110.34
+16,16 - Montérégie,1611,1611 - RLS de Champlain,11169,147,226331,4934.81,64.70
+16,16 - Montérégie,1612,1612 - RLS du Haut-Richelieu - Rouville,7172,158,196195,3655.55,80.17
+16,16 - Montérégie,1621,1621 - RLS Pierre-Boucher,12285,147,263144,4668.55,55.71
+16,16 - Montérégie,1622,1622 - RLS de Richelieu-Yamaska,9296,121,221458.5,4197.63,54.51
+16,16 - Montérégie,1623,1623 - RLS Pierre-De Saurel,1847,68,51410,3592.69,132.17
+16,16 - Montérégie,1631,1631 - RLS de Vaudreuil-Soulanges,5798,81,160847,3604.67,50.10
+16,16 - Montérégie,1632,1632 - RLS du Suroît,2586,60,60776,4254.97,98.31
+16,16 - Montérégie,1633,1633 - RLS du Haut-Saint-Laurent,827,12,24414,3387.40,49.02
+16,16 - Montérégie,1634,1634 - RLS de Jardins-Roussillon,9834,140,233650.5,4208.85,59.59
+16,16 - Montérégie,,Total (incluant inconnus),60865,935,1438226,4231.95,64.76
+17,17 - Nunavik,1701,1701 - Nunavik,979,106,14336.5,6828.72,735.45
+17,17 - Nunavik,,Total (incluant inconnus),979,106,14336.5,6828.72,735.45
+18,18 - Terres-Cries-de-la-Baie-James,1801,1801 - Terres-Cries-de-la-Baie-James,145,0,18507,783.49,0.00
+18,18 - Terres-Cries-de-la-Baie-James,,Total (incluant inconnus),145,0,18507,783.49,0.00
+
