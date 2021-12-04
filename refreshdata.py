@@ -948,6 +948,42 @@ def append_vaccines_data_csv(sources_dir: str, processed_dir: str, date: str):
         vaccine_df.to_csv(vacc_csv, encoding='utf-8', float_format='%.4f', na_rep='na')
 
 
+def extract_dose_per_age(df, dose_number):
+    columns = [
+        'Age_0_4_ans_DOSE_Numero{dose}_cumu',
+        'Age_5_11_ans_DOSE_Numero{dose}_cumu',
+        'Age_12_17_ans_DOSE_Numero{dose}_cumu',
+        'Age_18_24_ans_DOSE_Numero{dose}_cumu', 'Age_25_29_ans_DOSE_Numero{dose}_cumu',
+        'Age_30_34_ans_DOSE_Numero{dose}_cumu', 'Age_35_39_ans_DOSE_Numero{dose}_cumu',
+        'Age_40_44_ans_DOSE_Numero{dose}_cumu', 'Age_45_49_ans_DOSE_Numero{dose}_cumu',
+        'Age_50_54_ans_DOSE_Numero{dose}_cumu', 'Age_55_59_ans_DOSE_Numero{dose}_cumu',
+        'Age_60_64_ans_DOSE_Numero{dose}_cumu', 'Age_65_69_ans_DOSE_Numero{dose}_cumu',
+        'Age_70_74_ans_DOSE_Numero{dose}_cumu', 'Age_75_79_ans_DOSE_Numero{dose}_cumu',
+        'Age_80_84_ans_DOSE_Numero{dose}_cumu', 'Age_85_110_ans_DOSE_Numero{dose}_cumu',
+    ]
+
+    dose_columns = [column.format(dose=dose_number) for column in columns]
+
+    # sum up every two age groups (except first three)
+    # see: https://stackoverflow.com/a/47239367
+    data = df[dose_columns].iloc[-1].reset_index()
+    # need to reset index to be able to sum up the right groups
+    data_grouped = data.iloc[3:].reset_index(drop=True)
+    data_grouped = data_grouped.groupby(data_grouped.index // 2).sum()
+    # data is in first column
+    data = data.iloc[:3, 1].append(data_grouped.iloc[:, 0])
+
+    # add sum of eligible population (5+) and total and insert at the end
+    result = list(data)
+    total_5plus = sum(result[1:])
+    total = sum(result)
+
+    result.append(total_5plus)
+    result.append(total)
+
+    return result
+
+
 def update_vaccination_age_csv(sources_dir, processed_dir):
     """Replace data in vaccination by age data in processed_dir with latest data.
 
@@ -967,52 +1003,9 @@ def update_vaccination_age_csv(sources_dir, processed_dir):
     vacc_csv = os.path.join(processed_dir, 'data_qc_vaccination_age.csv')
     vacc_df = pd.read_csv(vacc_csv, encoding='utf-8', index_col=0)
 
-    # collect dose 1
-    dose_1_columns = [
-        'Age_0_11_ans_DOSE_Numero1_cumu', 'Age_12_17_ans_DOSE_Numero1_cumu',
-        'Age_18_24_ans_DOSE_Numero1_cumu', 'Age_25_29_ans_DOSE_Numero1_cumu',
-        'Age_30_34_ans_DOSE_Numero1_cumu', 'Age_35_39_ans_DOSE_Numero1_cumu',
-        'Age_40_44_ans_DOSE_Numero1_cumu', 'Age_45_49_ans_DOSE_Numero1_cumu',
-        'Age_50_54_ans_DOSE_Numero1_cumu', 'Age_55_59_ans_DOSE_Numero1_cumu',
-        'Age_60_64_ans_DOSE_Numero1_cumu', 'Age_65_69_ans_DOSE_Numero1_cumu',
-        'Age_70_74_ans_DOSE_Numero1_cumu', 'Age_75_79_ans_DOSE_Numero1_cumu',
-        'Age_80_84_ans_DOSE_Numero1_cumu', 'Age_85_110_ans_DOSE_Numero1_cumu',
-        'Age_0_110_ans_DOSE_Numero1_cumu',
-    ]
-
-    # collect dose 2
-    dose_2_columns = [
-        'Age_0_11_ans_DOSE_Numero2_cumu', 'Age_12_17_ans_DOSE_Numero2_cumu',
-        'Age_18_24_ans_DOSE_Numero2_cumu', 'Age_25_29_ans_DOSE_Numero2_cumu',
-        'Age_30_34_ans_DOSE_Numero2_cumu', 'Age_35_39_ans_DOSE_Numero2_cumu',
-        'Age_40_44_ans_DOSE_Numero2_cumu', 'Age_45_49_ans_DOSE_Numero2_cumu',
-        'Age_50_54_ans_DOSE_Numero2_cumu', 'Age_55_59_ans_DOSE_Numero2_cumu',
-        'Age_60_64_ans_DOSE_Numero2_cumu', 'Age_65_69_ans_DOSE_Numero2_cumu',
-        'Age_70_74_ans_DOSE_Numero2_cumu', 'Age_75_79_ans_DOSE_Numero2_cumu',
-        'Age_80_84_ans_DOSE_Numero2_cumu', 'Age_85_110_ans_DOSE_Numero2_cumu',
-        'Age_0_110_ans_DOSE_Numero2_cumu',
-    ]
-
-    # sum up every two age groups (except first two and last one)
-    # see: https://stackoverflow.com/a/47239367
-    dose_1 = df[dose_1_columns].iloc[-1].reset_index()
-    dose_1_grouped = dose_1.iloc[2:]
-    dose_1_grouped = dose_1_grouped.groupby(dose_1_grouped.index // 2).sum()
-    # data is in first column
-    dose_1 = dose_1.iloc[:2, 1].append(dose_1_grouped.iloc[:, 0])
-
-    dose_2 = df[dose_2_columns].iloc[-1].reset_index()
-    dose_2_grouped = dose_2.iloc[2:]
-    dose_2_grouped = dose_2_grouped.groupby(dose_2_grouped.index // 2).sum()
-
-    # data is in first column
-    dose_2 = dose_2.iloc[:2, 1].append(dose_2_grouped.iloc[:, 0])
-
-    # add sum of eligible population (12+) and insert before total
-    dose_1 = list(dose_1)
-    dose_1.insert(-1, sum(dose_1[1: -1]))
-    dose_2 = list(dose_2)
-    dose_2.insert(-1, sum(dose_2[1: -1]))
+    # collect doses
+    dose_1 = extract_dose_per_age(df, 1)
+    dose_2 = extract_dose_per_age(df, 2)
 
     # overwrite existing data
     vacc_df['1d'] = dose_1
