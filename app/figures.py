@@ -1002,10 +1002,11 @@ def vaccination_age_fig(data_vaccination, labels):
         color_discrete_sequence=colours,
         text='perc',
         custom_data=['value'],
+        range_x=[0, 109],
     )
 
     figure.update_traces(
-        texttemplate='%{text:.2f}%',
+        texttemplate='%{text:.1f}%',
         hovertemplate='%{customdata} (%{text:.2f}%)',
         # textfont={'size': 10},
     )
