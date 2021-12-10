@@ -539,6 +539,40 @@ def update_data_qc_csv(sources_dir, processed_dir):
     qc_df.to_csv(os.path.join(processed_dir, 'data_qc.csv'), encoding='utf-8', index=False, na_rep='na')
 
 
+def update_data_qc_age_csv(sources_dir, processed_dir):
+    """Replace old copy of data_qc_age.csv in processed_dir with latest version.
+
+    data_qc_age.csv file will be overwritten with the new updated file.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    """
+    # read latest data/sources/*/data_qc.csv
+    lastest_source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc.csv')
+
+    df = load_data_qc_csv(lastest_source_file)
+
+    # filter out irrelevant RSS (Inconnue and Hors du Quebec)
+    df = df[(df['Regroupement'] == "Groupe d'âge") & (df['Croisement'] != 'INC')]
+
+    # fix age group names
+    df['Nom'] = df['Nom'].str.split(' ').str[0]
+    df['Nom'] = df['Nom'].str.replace('90', '90+')
+
+    # drop unnecessary columns
+    df.drop(['Regroupement', 'Croisement'], axis=1, inplace=True)
+
+    # rename Nom to age_group
+    df.columns = df.columns.str.replace('Nom', 'age_group')
+
+    # overwrite previous data/processed/data_qc.csv
+    df.to_csv(os.path.join(processed_dir, 'data_qc_age.csv'), encoding='utf-8', index=False, na_rep='na')
+
+
 def update_hospitalisations_qc_csv(sources_dir, processed_dir):
     """Takes data_qc_manual_date.csv and extracts historic hospitalisation data.
 
@@ -1181,6 +1215,9 @@ def process_inspq_data(sources_dir, processed_dir, date):
     """
     # Replace data_qc
     update_data_qc_csv(sources_dir, processed_dir)
+
+    # Replace data_qc_age
+    update_data_qc_age_csv(sources_dir, processed_dir)
 
     # Replace data_qc_hospitalisations
     # update_hospitalisations_qc_csv(sources_dir, processed_dir)
