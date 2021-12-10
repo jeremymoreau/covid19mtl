@@ -119,6 +119,8 @@ data_vaccines = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccines.csv')
 data_qc_vaccination = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_vaccination.csv'))
 data_qc_vaccination_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_vaccination_age.csv'), index_col=0)
 
+# QC by age data
+data_qc_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_age.csv'), na_values='na')
 
 # Variants
 # data_variants = pd.read_csv(DATA_PATH.joinpath('processed', 'data_variants.csv'), index_col=0, na_values='na')
@@ -142,6 +144,8 @@ data_qc_totals = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_totals.csv
 # Source for 2021 pop estimates: https://publications.msss.gouv.qc.ca/msss/document-001617/
 mtl_pop = 2078464  # Région sociosanitaire 06 - Montreal, 2021 projection
 qc_pop = 8591866  # QC Total, 2021 projection
+# 0-9, 10-19, ..., 80-89, 90+
+qc_age_population = [893976, 878350, 1056238, 1115907, 1100832, 1182051, 1147673, 753701, 327675, 82670]
 # MTL
 latest_cases_mtl = str(int(data_mtl_totals['cases'].dropna().iloc[-1]))
 new_cases_mtl = int(data_mtl_totals['cases'].diff().iloc[-1])
@@ -286,6 +290,40 @@ mtl_age_data.index = mtl_age_data.index.strftime('%Y-%m-%d')
 # limit data to last 12 weeks
 mtl_age_data = mtl_age_data.iloc[-16:]
 mtl_age_data = mtl_age_data.reset_index().melt(id_vars=['date'], var_name='age', value_name='new_cases')
+
+# set up QC by age data for hospitalisations
+# drop total age group
+data_qc_age = data_qc_age[data_qc_age['age_group'] != 'Total']
+# change from long to wide
+data_qc_age = data_qc_age.pivot_table(
+    index=['date'],
+    columns=['age_group'],
+    values=['hos_quo_tot_n']
+)
+# drop the last 2 days since they are likely lower due to delays in reporting
+data_qc_age = data_qc_age.iloc[:-2]
+# determine 7-day rolling avg
+# (do not use for now in order to allow absolute admission numbers to be shown)
+# data_qc_age.rolling(7, min_periods=1).mean().fillna(0).round(2)
+# resample weekly
+data_qc_age.index = pd.to_datetime(data_qc_age.index)
+data_qc_age = data_qc_age.resample('W-MON', label='left', closed='left').sum().fillna(0).round().astype(int)
+data_qc_age.index = data_qc_age.index.strftime('%Y-%m-%d')
+# calculate per 100k of population
+data_qc_age_per100k = data_qc_age / qc_age_population * 100000
+# combine dataframes
+data_qc_age_per100k.columns = data_qc_age_per100k.columns.set_levels(['new_hosp_per100k'], level=0)
+data_qc_age = data_qc_age.join(data_qc_age_per100k)
+# rename columns
+data_qc_age.columns = data_qc_age.columns.set_levels(['new_hosp', 'new_hosp_per100k'], level=0)
+# reorder multicolumns
+data_qc_age.columns = data_qc_age.columns.swaplevel(0, 1)
+data_qc_age.sort_index(axis=1, level=0, inplace=True)
+# limit data to last 16 weeks
+data_qc_age = data_qc_age.iloc[-16:]
+# unstack multi index so that age groups are its own column as well
+data_qc_age = data_qc_age.unstack().unstack(level=1).reset_index()
+data_qc_age.sort_values(['date', 'age_group'], inplace=True)
 
 # clean variants data
 # filter out negative new presumptive numbers
