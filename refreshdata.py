@@ -1010,6 +1010,7 @@ def update_vaccination_age_csv(sources_dir, processed_dir):
     # overwrite existing data
     vacc_df['1d'] = dose_1
     vacc_df['2d'] = dose_2
+    vacc_df['3d'] = dose_3
 
     # overwrite previous files
     vacc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination_age.csv'))
@@ -1074,6 +1075,7 @@ def update_mtl_vaccination_age_csv(sources_dir, processed_dir):
     vacc_df['0d'] = dose_none
     vacc_df['1d'] = dose_1
     vacc_df['2d'] = dose_2
+    vacc_df['3d'] = 0
 
     # overwrite previous files
     vacc_df.to_csv(os.path.join(processed_dir, 'data_mtl_vaccination_age.csv'))

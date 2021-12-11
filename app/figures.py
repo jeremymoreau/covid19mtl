@@ -985,7 +985,10 @@ def vaccination_qc_age_fig(data_vaccination, labels):
 
 def vaccination_age_fig(data_vaccination, labels):
     colours = [
-        # fully vaccinated
+        # 3 doses
+        # 'rgb(92, 150, 27)',
+        'rgb(81, 132, 23)',
+        # 2 doses
         'rgb(102, 166, 30)',
         # 1 dose
         'rgb(179, 222, 105)',

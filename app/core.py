@@ -42,11 +42,15 @@ def prepare_vaccination_by_age_data(data):
     # calculate population that hasn't received any dose yet
     data['0d'] = data['pop 2021'] - (data['1d'])
 
-    # 1d refers to "at least 1 dose" (also contains 2nd doses)
-    # calculate actual 1 dose
+    # 1d also contains those who received 2 doses
+    # calculate people who only received 1 dose
     data['1d_plus'] = data['1d']
     data['1d'] = data['1d_plus'] - data['2d']
-    data['total'] = data[['0d', '1d', '2d']].sum(axis=1)
+    # 2d also contains those who received 3 doses
+    # calculate people who only received 2 doses
+    data['2d_plus'] = data['2d']
+    data['2d'] = data['2d_plus'] - data['3d']
+    data['total'] = data[['0d', '1d', '2d', '3d']].sum(axis=1)
 
     # create mapping of age group to its population
     total = dict(data['total'])

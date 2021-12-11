@@ -179,7 +179,7 @@ labels = {
     'vaccine_received_hovertemplate': 'Doses reçues: %{y:d}<br>Nouvelles doses reçues: %{customdata:d}',
     # Vaccination_age_fig
     'vaccination_age_label': "Vaccination par groupe d'âge",
-    'vaccination_categories': ['Non-vaccinée', '1 dose reçues', '2 dose reçues'],
+    'vaccination_categories': ['Non-vaccinée', '1 dose reçues', '2 doses reçues', '3 doses reçues'],
     # Variants fig
     'variants_label': 'Progression des nouveaux variants préoccupants',
     'variants_sequenced': 'Cas séquencés',
