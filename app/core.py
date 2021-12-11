@@ -62,6 +62,7 @@ def prepare_vaccination_by_age_data(data):
     data_long = data.melt(
         ignore_index=False,
         value_vars=[
+            '3d',
             '2d',
             '1d',
             '0d',
