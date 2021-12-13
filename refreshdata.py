@@ -1006,6 +1006,7 @@ def update_vaccination_age_csv(sources_dir, processed_dir):
     # collect doses
     dose_1 = extract_dose_per_age(df, 1)
     dose_2 = extract_dose_per_age(df, 2)
+    dose_3 = extract_dose_per_age(df, 3)
 
     # overwrite existing data
     vacc_df['1d'] = dose_1
