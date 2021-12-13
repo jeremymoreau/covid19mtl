@@ -14,24 +14,24 @@ chardet==4.0.0
     # via requests
 click==8.0.1
     # via flask
+dash==1.20.0
+    # via -r requirements.in
 dash-core-components==1.16.0
     # via dash
 dash-html-components==1.1.3
     # via dash
-dash-table==4.11.3
-    # via dash
-dash==1.20.0
-    # via -r requirements.in
 dash_renderer==1.9.1
+    # via dash
+dash-table==4.11.3
     # via dash
 dateparser==1.0.0
     # via -r requirements.in
-flask-compress==1.9.0
-    # via dash
 flask==2.0.1
     # via
     #   dash
     #   flask-compress
+flask-compress==1.9.0
+    # via dash
 future==0.18.2
     # via dash
 gunicorn==20.1.0
@@ -42,7 +42,7 @@ itsdangerous==2.0.1
     # via flask
 jinja2==3.0.1
     # via flask
-lxml==4.6.3
+lxml==4.6.5
     # via -r requirements.in
 markupsafe==2.0.1
     # via jinja2
