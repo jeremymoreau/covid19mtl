@@ -88,6 +88,8 @@ SOURCES_QC = {
     # 'https://cdn-contenu.quebec.ca/cdn-contenu/sante/documents/Problemes_de_sante/covid-19/csv/cas-region.csv',  # noqa: E501
     'data_qc_vaccination_by_age.csv':
     'https://msss.gouv.qc.ca/professionnels/statistiques/documents/covid19/COVID19_Qc_Vaccination_CatAge.csv',
+    'data_qc_cases_by_vaccination_status.csv':
+    'https://msss.gouv.qc.ca/professionnels/statistiques/documents/covid19/COVID19_Qc_RapportINSPQ_CasSelonStatutVaccinalEtAge.csv',  # noqa: E501
 }
 
 
@@ -1017,6 +1019,44 @@ def update_vaccination_age_csv(sources_dir, processed_dir):
     vacc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination_age.csv'))
 
 
+def update_cases_by_vaccination_status_csv(sources_dir, processed_dir):
+    """Replace data in cases by vaccination status data in processed_dir with latest data.
+
+    data_qc_cases_by_vaccination_status.csv will be updated with the new data.
+
+    Parameters
+    ----------
+    sources_dir : str
+        Absolute path of sources dir.
+    processed_dir : str
+        Absolute path of processed dir.
+    """
+    # read latest data/sources/*/data_qc_cases_by_vaccination_status.csv
+    source_file = os.path.join(
+        sources_dir,
+        get_latest_source_dir(sources_dir),
+        'data_qc_cases_by_vaccination_status.csv'
+    )
+    df = pd.read_csv(source_file, encoding='utf-8', index_col=0)
+
+    # TBD: filter out age group Inconnue?
+    # ignore age groups and group by date and vaccination status, sum up the cases
+    df = df.groupby(['Date', 'Statut_Vaccinal']).sum()
+
+    # convert from long to wide
+    df = df.pivot_table(index=['Date'], columns='Statut_Vaccinal')
+
+    # drop first column level (unnecessary)
+    df.columns = df.columns.droplevel()
+
+    # rename columns and index
+    df.index.name = 'date'
+    df.columns = ['0d', '1d', '2d']
+
+    # overwrite previous files
+    df.to_csv(os.path.join(processed_dir, 'data_qc_cases_by_vaccination_status.csv'))
+
+
 def update_mtl_vaccination_age_csv(sources_dir, processed_dir):
     """Replace data in vaccination by age data for MTL in processed_dir with latest data.
 
@@ -1221,6 +1261,8 @@ def process_qc_data(sources_dir, processed_dir, date):
     append_vaccines_data_csv(sources_dir, processed_dir, date)
 
     update_vaccination_age_csv(sources_dir, processed_dir)
+
+    update_cases_by_vaccination_status_csv(sources_dir, processed_dir)
 
 
 def process_mtl_data(sources_dir, processed_dir, date):
