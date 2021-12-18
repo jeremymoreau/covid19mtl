@@ -129,11 +129,11 @@ data_qc_vaccination_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_v
 # data_variants = pd.read_csv(DATA_PATH.joinpath('processed', 'data_variants.csv'), index_col=0, na_values='na')
 
 # MTL deaths by location data
-data_mtl_death_loc = pd.read_csv(
-    DATA_PATH.joinpath('processed', 'data_mtl_death_loc.csv'),
-    encoding='utf-8',
-    na_values='na'
-)
+# data_mtl_death_loc = pd.read_csv(
+#     DATA_PATH.joinpath('processed', 'data_mtl_death_loc.csv'),
+#     encoding='utf-8',
+#     na_values='na'
+# )
 
 # Last update date
 # Display 1 day after the latest data as data from the previous day are posted
