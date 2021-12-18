@@ -182,7 +182,7 @@ labels = {
     'vaccination_categories': ['Not vaccinated', '1 dose received', '2 doses received', '3 doses received'],
     # New cases by vaccination status figure
     'cases_vaccination_status_label': 'New cases by vaccination status (QC)',
-    'cases_vaccination_status_y': 'New cases per 100000',
+    'cases_vaccination_status_y': 'New cases per 100000 (7日移动平均)',
     'vaccination_unvaccinated': 'Unvaccinated or 1 dose < 14 days',
     'vaccination_1d': '1 dose ≥ 14 days',
     'vaccination_2d': '2 doses ≥ 7 days',
