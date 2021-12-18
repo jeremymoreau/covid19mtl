@@ -3,7 +3,7 @@ import dash_html_components as html
 
 import app.figures as figures
 
-from .core import (data_mtl, data_qc, data_qc_hosp, incid_per100k_7d_mtl,
+from .core import (data_mtl, data_qc, data_qc_cases_vacc_status, data_qc_hosp, incid_per100k_7d_mtl,
                    incid_per100k_7d_mtl_colour, incid_per100k_7d_qc, incid_per100k_7d_qc_colour,
                    incid_per100K_perc_change_mtl, incid_per100K_perc_change_qc, latest_cases_mtl, latest_cases_qc,
                    latest_deaths_mtl, latest_deaths_qc, latest_recovered_mtl, latest_recovered_qc, mtl_age_data,
@@ -20,6 +20,7 @@ def generate_layout(labels):
     deaths_fig = figures.deaths_fig(data_mtl, data_qc, labels)
     hospitalisations_fig = figures.hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels)
     testing_fig = figures.testing_fig(data_qc, data_mtl, labels)
+    cases_by_vaccination_status_fig = figures.qc_cases_by_vacc_status_fig(data_qc_cases_vacc_status, labels)
     # deaths_loc_mtl_fig = figures.mtl_deaths_loc_fig(data_mtl_death_loc, labels)
     # deaths_loc_qc_fig = figures.qc_deaths_loc_fig(data_qc, labels)
     # cases_vs_newcases_fig = figures.cases_vs_newcases_fig(data_mtl, data_qc, labels)
@@ -370,19 +371,19 @@ def generate_layout(labels):
                     html.Div(
                         [
 
-                            # html.H6(
-                            #     [labels['deaths_loc_fig_mtl_label']],
-                            # ),
-                            # dcc.Graph(
-                            #     figure=deaths_loc_mtl_fig,
-                            #     id='deaths_loc_fig_mtl',
-                            #     responsive=True,
-                            #     config={
-                            #         'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                            #         'doubleClick': False
-                            #     },
-                            #     className='figure'
-                            # ),
+                            html.H6(
+                                [labels['cases_vaccination_status_label']],
+                            ),
+                            dcc.Graph(
+                                figure=cases_by_vaccination_status_fig,
+                                id='cases_vaccination_status_fig',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
+                                },
+                                className='figure'
+                            ),
                         ],
                         className='grid-item'
                     ),

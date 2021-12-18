@@ -1051,6 +1051,71 @@ def vaccination_age_fig(data_vaccination, labels):
     return figure
 
 
+def qc_cases_by_vacc_status_fig(data, labels):
+    figure = px.line(
+        data,
+        x='date',
+        y='value',
+        color='status',
+        line_group='status',
+        hover_name='date',
+        hover_data={
+            'date': False,
+        },
+        color_discrete_map={
+            '0d': COLOUR_MTL_LIGHT,
+            '1d': COLOUR_EXTRA,
+            '2d': COLOUR_QC_LIGHT,
+        },
+    )
+
+    figure.update_layout({
+        'autosize': True,
+        'showlegend': True,
+        'legend_title_text': '',
+        'legend': {
+            'bgcolor': 'rgba(255,255,255,0)',
+            'x': 0,
+            'y': 1.03,
+            'xanchor': 'left',
+            'orientation': 'h',
+            'font': {'size': 11}
+        },
+        'xaxis': {
+            'tickformat': '%m-%d\n%Y',
+            'title': {'text': labels['date_label']},
+            'hoverformat': '%Y-%m-%d',
+            'tickcolor': '#ccc',
+        },
+        'yaxis': {
+            'title': {'text': labels['cases_vaccination_status_y']},
+            'gridcolor': COLOUR_GRID,
+            'rangemode': 'tozero',
+            'constrain': 'domain',
+        },
+        'margin': {'r': 0, 't': 30, 'l': 60, 'b': 30},
+        'plot_bgcolor': 'rgba(255,255,255,1)',
+        'paper_bgcolor': 'rgba(255,255,255,1)',
+        'hovermode': 'x unified',
+        'dragmode': False,
+    })
+
+    figure.update_traces({
+        'mode': 'lines',
+        'hovertemplate': '%{y:.2f}',
+    })
+
+    labels = {
+        '0d': labels['vaccination_unvaccinated'],
+        '1d': labels['vaccination_1d'],
+        '2d': labels['vaccination_2d'],
+    }
+
+    figure.for_each_trace(lambda t: t.update(name=labels[t.name]))
+
+    return figure
+
+
 def variants_fig(data_variants, labels):
     variants_fig = go.Figure({
         'data': [

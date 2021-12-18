@@ -180,6 +180,12 @@ labels = {
     # Vaccination_age_fig
     'vaccination_age_label': "Vaccination par groupe d'âge",
     'vaccination_categories': ['Non-vaccinée', '1 dose reçues', '2 doses reçues', '3 doses reçues'],
+    # New cases by vaccination status figure
+    'cases_vaccination_status_label': 'New cases by vaccination status (QC)',
+    'cases_vaccination_status_y': 'New cases per 100000',
+    'vaccination_unvaccinated': 'Non-vacciné ou 1 dose < 14 jours',
+    'vaccination_1d': '1 dose ≥ 14 jours',
+    'vaccination_2d': '2 doses ≥ 7 jours',
     # Variants fig
     'variants_label': 'Progression des nouveaux variants préoccupants',
     'variants_sequenced': 'Cas séquencés',
