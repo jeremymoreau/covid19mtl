@@ -77,6 +77,18 @@ def prepare_vaccination_by_age_data(data):
     return data_long
 
 
+def prepare_data_by_vaccination_status(data, population_by_vacc_status):
+    # use 7-day mov avg
+    data = data.rolling(7, min_periods=1).mean()
+    # calculate rate per 100k
+    data = data / population_by_vacc_status * 100000
+    data = data.melt(ignore_index=False, var_name='status')
+    data.sort_values(['date', 'status'], ascending=True, inplace=True)
+    data.reset_index(inplace=True)
+
+    return data
+
+
 # get relative data folder
 PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath('data').resolve()
@@ -324,13 +336,8 @@ qc_total_vaccinated = qc_total_vaccinated.loc['Total']
 # need to ignore 3d for now: combine 2d and 3d since 2d is missing those that got a 3rd dose
 qc_total_vaccinated['2d'] = qc_total_vaccinated['2d'] + qc_total_vaccinated['3d']
 qc_total_vaccinated = list(qc_total_vaccinated.iloc[:-1])
-# use 7-day mov avg
-data_qc_cases_vacc_status = data_qc_cases_vacc_status.rolling(7, min_periods=1).mean().round().astype(int)
-# calculate rate per 100k
-data_qc_cases_vacc_status = data_qc_cases_vacc_status / qc_total_vaccinated * 100000
-data_qc_cases_vacc_status = data_qc_cases_vacc_status.melt(ignore_index=False, var_name='status')
-data_qc_cases_vacc_status.sort_values(['date', 'status'], ascending=True, inplace=True)
-data_qc_cases_vacc_status.reset_index(inplace=True)
+
+data_qc_cases_vacc_status = prepare_data_by_vaccination_status(data_qc_cases_vacc_status, qc_total_vaccinated)
 
 # calculated vaccination coverage based on the population numbers we use
 data_qc_vaccination['calc_perc'] = data_qc_vaccination['total_doses'] / qc_pop * 100

@@ -20,7 +20,11 @@ def generate_layout(labels):
     deaths_fig = figures.deaths_fig(data_mtl, data_qc, labels)
     hospitalisations_fig = figures.hospitalisations_fig(data_qc_hosp, data_qc, data_mtl, labels)
     testing_fig = figures.testing_fig(data_qc, data_mtl, labels)
-    cases_by_vaccination_status_fig = figures.qc_cases_by_vacc_status_fig(data_qc_cases_vacc_status, labels)
+    cases_by_vaccination_status_fig = figures.qc_data_by_vacc_status_fig(
+        data_qc_cases_vacc_status,
+        'cases_vaccination_status_y',
+        labels,
+    )
     # deaths_loc_mtl_fig = figures.mtl_deaths_loc_fig(data_mtl_death_loc, labels)
     # deaths_loc_qc_fig = figures.qc_deaths_loc_fig(data_qc, labels)
     # cases_vs_newcases_fig = figures.cases_vs_newcases_fig(data_mtl, data_qc, labels)
@@ -370,7 +374,6 @@ def generate_layout(labels):
                     # left box
                     html.Div(
                         [
-
                             html.H6(
                                 [labels['cases_vaccination_status_label']],
                             ),

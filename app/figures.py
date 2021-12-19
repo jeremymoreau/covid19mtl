@@ -1051,7 +1051,7 @@ def vaccination_age_fig(data_vaccination, labels):
     return figure
 
 
-def qc_cases_by_vacc_status_fig(data, labels):
+def qc_data_by_vacc_status_fig(data, key_label_y_axis, labels):
     figure = px.line(
         data,
         x='date',
@@ -1062,11 +1062,11 @@ def qc_cases_by_vacc_status_fig(data, labels):
         hover_data={
             'date': False,
         },
-        color_discrete_map={
-            '0d': COLOUR_MTL_LIGHT,
-            '1d': COLOUR_EXTRA,
-            '2d': COLOUR_QC_LIGHT,
-        },
+        # color_discrete_map={
+        #     '0d': COLOUR_MTL_LIGHT,
+        #     '1d': COLOUR_EXTRA,
+        #     '2d': 'COLOUR_QC_LIGHT',
+        # },
     )
 
     figure.update_layout({
@@ -1088,7 +1088,7 @@ def qc_cases_by_vacc_status_fig(data, labels):
             'tickcolor': '#ccc',
         },
         'yaxis': {
-            'title': {'text': labels['cases_vaccination_status_y']},
+            'title': {'text': labels[key_label_y_axis]},
             'gridcolor': COLOUR_GRID,
             'rangemode': 'tozero',
             'constrain': 'domain',
