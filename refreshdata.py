@@ -90,6 +90,8 @@ SOURCES_QC = {
     'https://msss.gouv.qc.ca/professionnels/statistiques/documents/covid19/COVID19_Qc_Vaccination_CatAge.csv',
     'data_qc_cases_by_vaccination_status.csv':
     'https://msss.gouv.qc.ca/professionnels/statistiques/documents/covid19/COVID19_Qc_RapportINSPQ_CasSelonStatutVaccinalEtAge.csv',  # noqa: E501
+    'data_qc_hosp_by_vaccination_status.csv':
+    'https://msss.gouv.qc.ca/professionnels/statistiques/documents/covid19/COVID19_Qc_RapportINSPQ_HospitalisationsSelonStatutVaccinalEtAge.csv',  # noqa: E501
 }
 
 
@@ -1019,8 +1021,8 @@ def update_vaccination_age_csv(sources_dir, processed_dir):
     vacc_df.to_csv(os.path.join(processed_dir, 'data_qc_vaccination_age.csv'))
 
 
-def update_cases_by_vaccination_status_csv(sources_dir, processed_dir):
-    """Replace data in cases by vaccination status data in processed_dir with latest data.
+def update_data_by_vaccination_status_csv(sources_dir, processed_dir, filename):
+    """Replace data by vaccination status data in processed_dir with latest data of the given filename.
 
     data_qc_cases_by_vaccination_status.csv will be updated with the new data.
 
@@ -1030,12 +1032,13 @@ def update_cases_by_vaccination_status_csv(sources_dir, processed_dir):
         Absolute path of sources dir.
     processed_dir : str
         Absolute path of processed dir.
+    filename : str
+        Name of the file to process.
     """
-    # read latest data/sources/*/data_qc_cases_by_vaccination_status.csv
     source_file = os.path.join(
         sources_dir,
         get_latest_source_dir(sources_dir),
-        'data_qc_cases_by_vaccination_status.csv'
+        filename
     )
     df = pd.read_csv(source_file, encoding='utf-8', index_col=0)
 
@@ -1053,8 +1056,8 @@ def update_cases_by_vaccination_status_csv(sources_dir, processed_dir):
     df.index.name = 'date'
     df.columns = ['0d', '1d', '2d']
 
-    # overwrite previous files
-    df.to_csv(os.path.join(processed_dir, 'data_qc_cases_by_vaccination_status.csv'))
+    # overwrite previous file
+    df.to_csv(os.path.join(processed_dir, filename))
 
 
 def update_mtl_vaccination_age_csv(sources_dir, processed_dir):
@@ -1262,7 +1265,9 @@ def process_qc_data(sources_dir, processed_dir, date):
 
     update_vaccination_age_csv(sources_dir, processed_dir)
 
-    update_cases_by_vaccination_status_csv(sources_dir, processed_dir)
+    update_data_by_vaccination_status_csv(sources_dir, processed_dir, 'data_qc_cases_by_vaccination_status.csv')
+
+    update_data_by_vaccination_status_csv(sources_dir, processed_dir, 'data_qc_hosp_by_vaccination_status.csv')
 
 
 def process_mtl_data(sources_dir, processed_dir, date):
