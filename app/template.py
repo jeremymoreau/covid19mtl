@@ -3,8 +3,8 @@ import dash_html_components as html
 
 import app.figures as figures
 
-from .core import (data_mtl, data_qc, data_qc_cases_vacc_status, data_qc_hosp, incid_per100k_7d_mtl,
-                   incid_per100k_7d_mtl_colour, incid_per100k_7d_qc, incid_per100k_7d_qc_colour,
+from .core import (data_mtl, data_qc, data_qc_cases_vacc_status, data_qc_hosp, data_qc_hosp_vacc_status,
+                   incid_per100k_7d_mtl, incid_per100k_7d_mtl_colour, incid_per100k_7d_qc, incid_per100k_7d_qc_colour,
                    incid_per100K_perc_change_mtl, incid_per100K_perc_change_qc, latest_cases_mtl, latest_cases_qc,
                    latest_deaths_mtl, latest_deaths_qc, latest_recovered_mtl, latest_recovered_qc, mtl_age_data,
                    mtl_boroughs, mtl_geojson, new_cases_mtl, new_cases_qc, new_deaths_mtl, new_deaths_qc, new_hosp_mtl,
@@ -23,6 +23,11 @@ def generate_layout(labels):
     cases_by_vaccination_status_fig = figures.qc_data_by_vacc_status_fig(
         data_qc_cases_vacc_status,
         'cases_vaccination_status_y',
+        labels,
+    )
+    hosp_by_vaccination_status_fig = figures.qc_data_by_vacc_status_fig(
+        data_qc_hosp_vacc_status,
+        'hosp_vaccination_status_y',
         labels,
     )
     # deaths_loc_mtl_fig = figures.mtl_deaths_loc_fig(data_mtl_death_loc, labels)
@@ -393,19 +398,19 @@ def generate_layout(labels):
                     # right box
                     html.Div(
                         [
-                            # html.H6(
-                            #     [labels['deaths_loc_fig_qc_label']],
-                            # ),
-                            # dcc.Graph(
-                            #     figure=deaths_loc_qc_fig,
-                            #     id='deaths_loc_fig_qc',
-                            #     responsive=True,
-                            #     config={
-                            #         'modeBarButtonsToRemove': modebar_buttons_to_remove,
-                            #         'doubleClick': False
-                            #     },
-                            #     className='figure'
-                            # ),
+                            html.H6(
+                                [labels['hosp_vaccination_status_label']],
+                            ),
+                            dcc.Graph(
+                                figure=hosp_by_vaccination_status_fig,
+                                id='hosp_vaccination_status_fig',
+                                responsive=True,
+                                config={
+                                    'modeBarButtonsToRemove': modebar_buttons_to_remove,
+                                    'doubleClick': False
+                                },
+                                className='figure'
+                            ),
                         ],
                         className='grid-item'
                     ),

@@ -134,6 +134,10 @@ data_qc_cases_vacc_status = pd.read_csv(
     DATA_PATH.joinpath('processed', 'data_qc_cases_by_vaccination_status.csv'),
     index_col=0
 )
+data_qc_hosp_vacc_status = pd.read_csv(
+    DATA_PATH.joinpath('processed', 'data_qc_hosp_by_vaccination_status.csv'),
+    index_col=0
+)
 
 # Vaccination_data
 data_vaccines = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccines.csv'), encoding='utf-8', na_values='na')
@@ -338,6 +342,7 @@ qc_total_vaccinated['2d'] = qc_total_vaccinated['2d'] + qc_total_vaccinated['3d'
 qc_total_vaccinated = list(qc_total_vaccinated.iloc[:-1])
 
 data_qc_cases_vacc_status = prepare_data_by_vaccination_status(data_qc_cases_vacc_status, qc_total_vaccinated)
+data_qc_hosp_vacc_status = prepare_data_by_vaccination_status(data_qc_hosp_vacc_status, qc_total_vaccinated)
 
 # calculated vaccination coverage based on the population numbers we use
 data_qc_vaccination['calc_perc'] = data_qc_vaccination['total_doses'] / qc_pop * 100
