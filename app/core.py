@@ -77,6 +77,18 @@ def prepare_vaccination_by_age_data(data):
     return data_long
 
 
+def prepare_data_by_vaccination_status(data, population_by_vacc_status):
+    # use 7-day mov avg
+    data = data.rolling(7, min_periods=1).mean()
+    # calculate rate per 100k
+    data = data / population_by_vacc_status * 100000
+    data = data.melt(ignore_index=False, var_name='status')
+    data.sort_values(['date', 'status'], ascending=True, inplace=True)
+    data.reset_index(inplace=True)
+
+    return data
+
+
 # get relative data folder
 PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath('data').resolve()
@@ -118,6 +130,14 @@ data_mtl_vaccination_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_mtl
 # QC data
 data_qc = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc.csv'), encoding='utf-8', na_values='na')
 data_qc_hosp = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_hospitalisations.csv'), encoding='utf-8')
+data_qc_cases_vacc_status = pd.read_csv(
+    DATA_PATH.joinpath('processed', 'data_qc_cases_by_vaccination_status.csv'),
+    index_col=0
+)
+data_qc_hosp_vacc_status = pd.read_csv(
+    DATA_PATH.joinpath('processed', 'data_qc_hosp_by_vaccination_status.csv'),
+    index_col=0
+)
 
 # Vaccination_data
 data_vaccines = pd.read_csv(DATA_PATH.joinpath('processed', 'data_vaccines.csv'), encoding='utf-8', na_values='na')
@@ -129,11 +149,11 @@ data_qc_vaccination_age = pd.read_csv(DATA_PATH.joinpath('processed', 'data_qc_v
 # data_variants = pd.read_csv(DATA_PATH.joinpath('processed', 'data_variants.csv'), index_col=0, na_values='na')
 
 # MTL deaths by location data
-data_mtl_death_loc = pd.read_csv(
-    DATA_PATH.joinpath('processed', 'data_mtl_death_loc.csv'),
-    encoding='utf-8',
-    na_values='na'
-)
+# data_mtl_death_loc = pd.read_csv(
+#     DATA_PATH.joinpath('processed', 'data_mtl_death_loc.csv'),
+#     encoding='utf-8',
+#     na_values='na'
+# )
 
 # Last update date
 # Display 1 day after the latest data as data from the previous day are posted
@@ -312,6 +332,17 @@ mtl_age_data = mtl_age_data.reset_index().melt(id_vars=['date'], var_name='age',
 # prepare vaccination age data
 data_mtl_vaccination_age = prepare_vaccination_by_age_data(data_mtl_vaccination_age)
 data_qc_vaccination_age = prepare_vaccination_by_age_data(data_qc_vaccination_age)
+
+# prepare by vaccination status data
+# get population estimates for QC vaccination
+qc_total_vaccinated = data_qc_vaccination_age.pivot_table(index='group', columns='variable', values='value')
+qc_total_vaccinated = qc_total_vaccinated.loc['Total']
+# need to ignore 3d for now: combine 2d and 3d since 2d is missing those that got a 3rd dose
+qc_total_vaccinated['2d'] = qc_total_vaccinated['2d'] + qc_total_vaccinated['3d']
+qc_total_vaccinated = list(qc_total_vaccinated.iloc[:-1])
+
+data_qc_cases_vacc_status = prepare_data_by_vaccination_status(data_qc_cases_vacc_status, qc_total_vaccinated)
+data_qc_hosp_vacc_status = prepare_data_by_vaccination_status(data_qc_hosp_vacc_status, qc_total_vaccinated)
 
 # calculated vaccination coverage based on the population numbers we use
 data_qc_vaccination['calc_perc'] = data_qc_vaccination['total_doses'] / qc_pop * 100
