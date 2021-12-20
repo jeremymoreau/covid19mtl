@@ -316,7 +316,7 @@ def mtl_age_fig(mtl_age_data, labels):
             # 'tickformat': '%m-%d\n%Y',
             'tickformat': '%V\n%b %Y',
             'title': {'text': labels['week_label']},
-            'hoverformat': 'Week %V (of %Y-%m-%d)',
+            'hoverformat': labels['week_of_label'],
             'ticks': 'inside',
             'dtick': 7 * 86400000.0,
             'tick0': mtl_age_data['date'][0],
@@ -340,6 +340,66 @@ def mtl_age_fig(mtl_age_data, labels):
         'mode': 'lines+markers',
         # 'line_shape': 'spline',
         'hovertemplate': '%{y}',
+    })
+
+    return figure
+
+
+def qc_age_fig(qc_age_data, labels):
+    figure = px.line(
+        qc_age_data,
+        x='date',
+        y='new_hosp_per100k',
+        color='age_group',
+        # split into subplots
+        # facet_col='age',
+        # facet_col_wrap=5,
+        hover_name='age_group',
+        hover_data={
+            'new_hosp': True,
+        },
+    )
+
+    figure.update_layout({
+        'autosize': True,
+        'showlegend': True,
+        'legend_title_text': '',
+        'legend': {
+            'bgcolor': 'rgba(255,255,255,0)',
+            'x': 0,
+            'y': 1.03,
+            'xanchor': 'left',
+            'orientation': 'h',
+            'font': {'size': 11}
+        },
+        'xaxis': {
+            # 'tickformat': '%m-%d\n%Y',
+            'tickformat': '%V\n%b %Y',
+            'title': {'text': labels['week_label']},
+            'hoverformat': labels['week_of_label'] + '<br>' + labels['hospitalisations_hover_subtitle'],
+            'ticks': 'inside',
+            'dtick': 7 * 86400000.0,
+            'tick0': qc_age_data['date'][0],
+            'tickcolor': '#ccc',
+        },
+        'yaxis': {
+            'title': {'text': labels['hospitalisations_age_y_label']},
+            'gridcolor': COLOUR_GRID,
+            'rangemode': 'tozero',
+            'constrain': 'domain',
+            # 'ticksuffix': '%',
+        },
+        'margin': {'r': 0, 't': 30, 'l': 60, 'b': 30},
+        'plot_bgcolor': 'rgba(255,255,255,1)',
+        'paper_bgcolor': 'rgba(255,255,255,1)',
+        'hovermode': 'x unified',
+        'dragmode': False,
+    })
+
+    figure.update_traces({
+        'mode': 'lines+markers',
+        # 'line_shape': 'spline',
+        'hovertemplate': '%{y:.1f} (%{customdata})',
     })
 
     return figure

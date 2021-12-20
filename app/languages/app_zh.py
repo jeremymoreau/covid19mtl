@@ -49,7 +49,8 @@ labels = {
     'negative_tests_qc_box_label': '检测阴性（魁省）',
     'montreal_map_label': '病例／100 000人（蒙特利尔岛）',
     'total_cases_label': '确诊病例',
-    'age_group_label': 'Distribution of new cases across all age groups by week (MTL)',
+    'mtl_age_group_label': 'Distribution of new cases across all age groups by week (MTL)',
+    'qc_age_group_label': 'Weekly new hospitalisations by age group (QC)',
     'total_deaths_label': '死亡（魁省）',
     'total_hospitalisations_label': '入院人数（魁省）',
     'intensive_care_label': '重症患者 （魁省）',
@@ -110,6 +111,9 @@ labels = {
     'hospitalisations_active_qc': '现入院人数 (魁省)',
     'intensive_care_active_qc': '现重症患者 (魁省)',
     'hospitalisations_mtl': '新增入院 (蒙特利尔)',
+    # hospitalisations by age group
+    'hospitalisations_hover_subtitle': 'New hosp. per 100k (absolute)',
+    'hospitalisations_age_y_label': 'New hospitalisations per 100 000',
     # Test positivity fig
     'testing_label': 'Test positivity rate',
     'testing_y_label': 'Test positivity rate',
@@ -123,6 +127,7 @@ labels = {
     'date_label': '日期',
     'age_label': '年龄',
     'week_label': 'Week',
+    'week_of_label': '<b>Week %V (of %Y-%m-%d)</b>',
     'linear_label': '线性尺度',
     'log_label': '对数尺度',
     # Confirmed deaths by place of residence (MTL) fig
