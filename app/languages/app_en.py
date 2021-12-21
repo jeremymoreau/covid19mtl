@@ -182,10 +182,10 @@ labels = {
     'vaccination_categories': ['Not vaccinated', '1 dose received', '2 doses received', '3 doses received'],
     # New cases by vaccination status figure
     'cases_vaccination_status_label': 'New cases by vaccination status (QC)',
-    'cases_vaccination_status_y': 'New cases per 100000 (7-day moving average)',
+    'cases_vaccination_status_y': 'New cases per 100,000 (7-day moving average)',
     # New hospitalisations by vaccination status figure
     'hosp_vaccination_status_label': 'New hospitalisations by vaccination status (QC)',
-    'hosp_vaccination_status_y': 'New hospitalisations per 100000 (7-day moving average)',
+    'hosp_vaccination_status_y': 'New hospitalisations per 100,000 (7-day moving average)',
     # Vaccination status categories
     'vaccination_unvaccinated': 'Unvaccinated or 1 dose < 14 days',
     'vaccination_1d': '1 dose ≥ 14 days',
