@@ -17,7 +17,12 @@ server = app.server
 
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
-    html.Div(id='page-content')
+    dcc.Loading(
+        id='main-loading',
+        children=[html.Div(id='page-content')],
+        type='graph',
+        fullscreen=True
+    )
 ])
 
 
