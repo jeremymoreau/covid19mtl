@@ -304,7 +304,7 @@ data_qc_age = data_qc_age.pivot_table(
 data_qc_age = data_qc_age.iloc[:-2]
 # determine 7-day rolling avg
 # (do not use for now in order to allow absolute admission numbers to be shown)
-# data_qc_age.rolling(7, min_periods=1).mean().fillna(0).round(2)
+# data_qc_age = data_qc_age.rolling(7, min_periods=1).mean().fillna(0).round(2)
 # resample weekly
 data_qc_age.index = pd.to_datetime(data_qc_age.index)
 data_qc_age = data_qc_age.resample('W-MON', label='left', closed='left').sum().fillna(0).round().astype(int)
@@ -320,7 +320,7 @@ data_qc_age.columns = data_qc_age.columns.set_levels(['new_hosp', 'new_hosp_per1
 data_qc_age.columns = data_qc_age.columns.swaplevel(0, 1)
 data_qc_age.sort_index(axis=1, level=0, inplace=True)
 # limit data to last 16 weeks
-data_qc_age = data_qc_age.iloc[-16:]
+# data_qc_age = data_qc_age.iloc[-16:]
 # unstack multi index so that age groups are its own column as well
 data_qc_age = data_qc_age.unstack().unstack(level=1).reset_index()
 data_qc_age.sort_values(['date', 'age_group'], inplace=True)

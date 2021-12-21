@@ -13,7 +13,7 @@ COLOUR_EXTRA = '#1b97d1'
 COLOUR_GRID = '#f5f5f5'
 
 
-def add_fig_controls(fig, y_data, labels):
+def add_fig_controls(fig, y_data, labels, show_log_toggle=True):
     """Add a dropdown menu to select between log and linear scales and range sliders/buttons
 
     Parameters
@@ -24,6 +24,8 @@ def add_fig_controls(fig, y_data, labels):
         Pandas series containing the y axis data
     labels : dict
         Dict containing the labels to display in the dropdown and the range buttons
+    show_log_toggle : bool
+        Whether or not to display a dropdown to toggle y-axis between linear and log scales
 
     Returns
     -------
@@ -72,44 +74,53 @@ def add_fig_controls(fig, y_data, labels):
             ),
             type='date'
         ),
+        yaxis=dict(
+            fixedrange = False,  # enables manual zooming with drag zoom tool
+        ),
         legend=dict(
             yanchor='top',
             y=1.10,
             xanchor='left',
             x=0.01
         ),
-        updatemenus=[
-            dict(
-                active=0,
-                buttons=list([
-                    dict(label=labels['linear_label'],
-                         method='update',
-                         args=[{'visible': [True, True]},
-                               {'yaxis': {
-                                   'type': 'linear',
-                                   'gridcolor': COLOUR_GRID,
-                                   'title': str(fig.layout.yaxis.title.text)
-                               }
-                         }]),
-                    dict(label=labels['log_label'],
-                         method='update',
-                         args=[{'visible': [True, True]},
-                               {'yaxis': {
-                                   'type': 'log',
-                                   'nticks': nticks_log,
-                                   'gridcolor': COLOUR_GRID,
-                                   'title': str(fig.layout.yaxis.title.text)
-                               }
-                         }]),
-                ]),
-                direction='up',
-                pad={'t': 5, 'b': 5, 'r': 5},
-                x=0,
-                xanchor='left',
-                y=-0.39,
-                yanchor='bottom'
-            )
-        ])
+    )
+
+    if show_log_toggle:
+        fig.update_layout(
+            updatemenus=[
+                dict(
+                    active=0,
+                    buttons=list([
+                        dict(label=labels['linear_label'],
+                             method='update',
+                             args=[{'visible': [True, True]},
+                                   {'yaxis': {
+                                       'type': 'linear',
+                                       'gridcolor': COLOUR_GRID,
+                                       'title': str(fig.layout.yaxis.title.text)
+                                   }
+                             }]),
+                        dict(label=labels['log_label'],
+                             method='update',
+                             args=[{'visible': [True, True]},
+                                   {'yaxis': {
+                                       'type': 'log',
+                                       'nticks': nticks_log,
+                                       'gridcolor': COLOUR_GRID,
+                                       'title': str(fig.layout.yaxis.title.text)
+                                   }
+                             }]),
+                    ]),
+                    direction='up',
+                    pad={'t': 5, 'b': 5, 'r': 5},
+                    x=0,
+                    xanchor='left',
+                    y=-0.39,
+                    yanchor='bottom'
+                )
+            ]
+        )
+
     fig.update_xaxes(rangeslider_thickness=0.05)
     return fig
 
@@ -312,16 +323,16 @@ def mtl_age_fig(mtl_age_data, labels):
             'orientation': 'h',
             'font': {'size': 11}
         },
-        'xaxis': {
-            # 'tickformat': '%m-%d\n%Y',
-            'tickformat': '%V\n%b %Y',
-            'title': {'text': labels['week_label']},
-            'hoverformat': labels['week_of_label'],
-            'ticks': 'inside',
-            'dtick': 7 * 86400000.0,
-            'tick0': mtl_age_data['date'][0],
-            'tickcolor': '#ccc',
-        },
+        # 'xaxis': {
+        #     # 'tickformat': '%m-%d\n%Y',
+        #     'tickformat': '%V\n%b %Y',
+        #     'title': {'text': labels['week_label']},
+        #     'hoverformat': labels['week_of_label'],
+        #     'ticks': 'inside',
+        #     'dtick': 7 * 86400000.0,
+        #     'tick0': mtl_age_data['date'][0],
+        #     'tickcolor': '#ccc',
+        # },
         'yaxis': {
             'title': {'text': '%'},
             'gridcolor': COLOUR_GRID,
@@ -342,6 +353,7 @@ def mtl_age_fig(mtl_age_data, labels):
         'hovertemplate': '%{y}',
     })
 
+    figure = add_fig_controls(figure, mtl_age_data, labels, show_log_toggle=False)
     return figure
 
 
@@ -372,16 +384,16 @@ def qc_age_fig(qc_age_data, labels):
             'orientation': 'h',
             'font': {'size': 11}
         },
-        'xaxis': {
-            # 'tickformat': '%m-%d\n%Y',
-            'tickformat': '%V\n%b %Y',
-            'title': {'text': labels['week_label']},
-            'hoverformat': labels['week_of_label'] + '<br>' + labels['hospitalisations_hover_subtitle'],
-            'ticks': 'inside',
-            'dtick': 7 * 86400000.0,
-            'tick0': qc_age_data['date'][0],
-            'tickcolor': '#ccc',
-        },
+        # 'xaxis': {
+        #     # 'tickformat': '%m-%d\n%Y',
+        #     'tickformat': '%V\n%b %Y',
+        #     'title': {'text': labels['week_label']},
+        #     'hoverformat': labels['week_of_label'] + '<br>' + labels['hospitalisations_hover_subtitle'],
+        #     'ticks': 'inside',
+        #     'dtick': 7 * 86400000.0,
+        #     'tick0': qc_age_data['date'][0],
+        #     'tickcolor': '#ccc'
+        # },
         'yaxis': {
             'title': {'text': labels['hospitalisations_age_y_label']},
             'gridcolor': COLOUR_GRID,
@@ -402,6 +414,7 @@ def qc_age_fig(qc_age_data, labels):
         'hovertemplate': '%{y:.1f} (%{customdata})',
     })
 
+    figure = add_fig_controls(figure, qc_age_data, labels, show_log_toggle=False)
     return figure
 
 
