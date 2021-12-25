@@ -602,12 +602,15 @@ def update_vaccination_csv(sources_dir, processed_dir):
         'Date': 'date',
         'vac_quo_1_n': 'new_doses_1d',
         'vac_quo_2_n': 'new_doses_2d',
+        'vac_quo_3_n': 'new_doses_3d',
         'vac_cum_1_n': 'total_doses_1d',
         'vac_cum_2_n': 'total_doses_2d',
+        'vac_cum_3_n': 'total_doses_3d',
         'vac_quo_tot_n': 'new_doses',
         'vac_cum_tot_n': 'total_doses',
         'cvac_cum_tot_1_p': 'perc_1d',
         'cvac_cum_tot_2_p': 'perc_2d',
+        'cvac_cum_tot_3_p': 'perc_3d',
     }
 
     # rename columns
