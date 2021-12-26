@@ -249,9 +249,11 @@ else:
 data_qc_vaccination['calc_perc'] = data_qc_vaccination['total_doses'] / qc_pop * 100
 data_qc_vaccination['calc_perc_1d'] = data_qc_vaccination['total_doses_1d'] / qc_pop * 100
 data_qc_vaccination['calc_perc_2d'] = data_qc_vaccination['total_doses_2d'] / qc_pop * 100
+data_qc_vaccination['calc_perc_3d'] = data_qc_vaccination['total_doses_3d'] / qc_pop * 100
 data_mtl_vaccination['calc_perc'] = data_mtl_vaccination['total_doses'] / mtl_pop * 100
 data_mtl_vaccination['calc_perc_1d'] = data_mtl_vaccination['total_doses_1d'] / mtl_pop * 100
 data_mtl_vaccination['calc_perc_2d'] = data_mtl_vaccination['total_doses_2d'] / mtl_pop * 100
+data_mtl_vaccination['calc_perc_3d'] = data_mtl_vaccination['total_doses_3d'] / mtl_pop * 100
 
 # Vaccination info boxes
 # Display 1 day after the latest data as data from the previous day are posted
@@ -263,18 +265,24 @@ latest_vaccination_update_date = (
 data_mtl_vaccination_latest = data_mtl_vaccination.iloc[-1]
 new_doses_mtl_1d = data_mtl_vaccination_latest['new_doses_1d']
 new_doses_mtl_2d = data_mtl_vaccination_latest['new_doses_2d']
+new_doses_mtl_3d = data_mtl_vaccination_latest['new_doses_3d']
 total_doses_mtl_1d = data_mtl_vaccination_latest['total_doses_1d']
 total_doses_mtl_2d = data_mtl_vaccination_latest['total_doses_2d']
+total_doses_mtl_3d = data_mtl_vaccination_latest['total_doses_3d']
 perc_vacc_mtl_1d = data_mtl_vaccination_latest['calc_perc_1d']
 perc_vacc_mtl_2d = data_mtl_vaccination_latest['calc_perc_2d']
+perc_vacc_mtl_3d = data_mtl_vaccination_latest['calc_perc_3d']
 
 data_qc_vaccination_latest = data_qc_vaccination.iloc[-1]
 new_doses_qc_1d = data_qc_vaccination_latest['new_doses_1d']
 new_doses_qc_2d = data_qc_vaccination_latest['new_doses_2d']
+new_doses_qc_3d = data_qc_vaccination_latest['new_doses_3d']
 total_doses_qc_1d = data_qc_vaccination_latest['total_doses_1d']
 total_doses_qc_2d = data_qc_vaccination_latest['total_doses_2d']
+total_doses_qc_3d = data_qc_vaccination_latest['total_doses_3d']
 perc_vacc_qc_1d = data_qc_vaccination_latest['calc_perc_1d']
 perc_vacc_qc_2d = data_qc_vaccination_latest['calc_perc_2d']
+perc_vacc_qc_3d = data_qc_vaccination_latest['calc_perc_3d']
 
 # Make MTL histogram data tidy
 # downsample then reset_index to have date column

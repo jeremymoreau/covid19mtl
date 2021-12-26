@@ -4,9 +4,10 @@ import dash_html_components as html
 import app.figures as figures
 
 from .core import (data_mtl_vaccination, data_mtl_vaccination_age, data_qc_vaccination, data_qc_vaccination_age,
-                   data_vaccines, new_doses_mtl_1d, new_doses_mtl_2d, new_doses_qc_1d, new_doses_qc_2d,
-                   perc_vacc_mtl_1d, perc_vacc_mtl_2d, perc_vacc_qc_1d, perc_vacc_qc_2d, total_doses_mtl_1d,
-                   total_doses_mtl_2d, total_doses_qc_1d, total_doses_qc_2d)
+                   data_vaccines, new_doses_mtl_1d, new_doses_mtl_2d, new_doses_mtl_3d, new_doses_qc_1d,
+                   new_doses_qc_2d, new_doses_qc_3d, perc_vacc_mtl_1d, perc_vacc_mtl_2d, perc_vacc_mtl_3d,
+                   perc_vacc_qc_1d, perc_vacc_qc_2d, perc_vacc_qc_3d, total_doses_mtl_1d, total_doses_mtl_2d,
+                   total_doses_mtl_3d, total_doses_qc_1d, total_doses_qc_2d, total_doses_qc_3d)
 
 
 def generate_layout(labels):
@@ -98,6 +99,17 @@ def generate_layout(labels):
                          html.P([labels['vaccination_2d_perc_mtl_label']], className='subscript')],
                         className='mini_container vaccines',
                     ),
+                    html.Div(
+                        [html.P([f'{new_doses_mtl_3d:+d}' + labels['today']], className='superscript'),
+                         html.H3(total_doses_mtl_3d, className='main_text'),
+                         html.P([labels['vaccination_3d_mtl_label']], className='subscript')],
+                        className='mini_container doses',
+                    ),
+                    html.Div(
+                        [html.H3(f'{perc_vacc_mtl_3d:.2f}%', className='main_text'),
+                         html.P([labels['vaccination_3d_perc_mtl_label']], className='subscript')],
+                        className='mini_container vaccines',
+                    ),
                     # QC
                     html.Div(
                         [html.P([f'{new_doses_qc_1d:+d}' + labels['today']], className='superscript'),
@@ -119,6 +131,17 @@ def generate_layout(labels):
                     html.Div(
                         [html.H3(f'{perc_vacc_qc_2d:.2f}%', className='main_text'),
                          html.P([labels['vaccination_2d_perc_qc_label']], className='subscript')],
+                        className='mini_container vaccines',
+                    ),
+                    html.Div(
+                        [html.P([f'{new_doses_qc_3d:+d}' + labels['today']], className='superscript'),
+                         html.H3(total_doses_qc_3d, className='main_text'),
+                         html.P([labels['vaccination_3d_qc_label']], className='subscript')],
+                        className='mini_container doses',
+                    ),
+                    html.Div(
+                        [html.H3(f'{perc_vacc_qc_3d:.2f}%', className='main_text'),
+                         html.P([labels['vaccination_3d_perc_qc_label']], className='subscript')],
                         className='mini_container vaccines',
                     ),
                 ],

@@ -7,8 +7,10 @@ from plotly.subplots import make_subplots
 COLOUR_QC = '#001F97'
 # slightly more blue: #4677e7
 COLOUR_QC_LIGHT = '#5c6dad'
+COLOUR_QC_DARK = '#131d47'
 COLOUR_MTL = '#D6142C'
 COLOUR_MTL_LIGHT = '#d64b5b'
+COLOUR_MTL_DARK = '#77121f'
 COLOUR_EXTRA = '#1b97d1'
 COLOUR_GRID = '#f5f5f5'
 
@@ -657,7 +659,7 @@ def vaccination_fig(data_qc_vaccination, data_mtl_vaccination, labels):
                 'marker': {'color': COLOUR_QC_LIGHT, 'opacity': 0.7},
                 'name': labels['vaccination_total'],
                 'hoverlabel': {'namelength': 0},
-                'hovertemplate': labels['vaccination_total'] + ': %{y:,d} (%{customdata[0]:.2f}%)',
+                'hovertemplate': labels['vaccination_total'] + ': %{y:,d}',
             },
             {
                 'type': 'bar',
@@ -672,6 +674,17 @@ def vaccination_fig(data_qc_vaccination, data_mtl_vaccination, labels):
             },
             {
                 'type': 'bar',
+                'x': data_qc_vaccination['date'],
+                'y': data_qc_vaccination['total_doses_3d'],
+                'customdata': data_qc_vaccination['calc_perc_3d'],
+                'yaxis': 'y1',
+                'marker': {'color': COLOUR_QC_DARK},
+                'name': labels['vaccination_total_3d'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate': labels['vaccination_total_3d'] + ': %{y:,d} (%{customdata:.2f}%)',
+            },
+            {
+                'type': 'bar',
                 'x': data_mtl_vaccination['date'],
                 'y': data_mtl_vaccination['total_doses'],
                 'customdata': data_mtl_vaccination[['calc_perc_1d', 'total_doses_1d']],
@@ -679,7 +692,7 @@ def vaccination_fig(data_qc_vaccination, data_mtl_vaccination, labels):
                 'marker': {'color': COLOUR_MTL_LIGHT, 'opacity': 0.7},
                 'name': labels['vaccination_total'],
                 'hoverlabel': {'namelength': 0},
-                'hovertemplate': labels['vaccination_total'] + ': %{y:,d} (%{customdata[0]:.2f}%)',
+                'hovertemplate': labels['vaccination_total'] + ': %{y:,d}',
                 # hide by default
                 'visible': False,
             },
@@ -693,6 +706,19 @@ def vaccination_fig(data_qc_vaccination, data_mtl_vaccination, labels):
                 'name': 'Doses administered (2nd dose)',
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate': labels['vaccination_total_2d'] + ': %{y:,d} (%{customdata:.2f}%)',
+                # hide by default
+                'visible': False,
+            },
+            {
+                'type': 'bar',
+                'x': data_mtl_vaccination['date'],
+                'y': data_mtl_vaccination['total_doses_3d'],
+                'customdata': data_qc_vaccination['calc_perc_3d'],
+                'yaxis': 'y1',
+                'marker': {'color': COLOUR_MTL_DARK},
+                'name': 'Doses administered (3rd dose)',
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate': labels['vaccination_total_3d'] + ': %{y:,d} (%{customdata:.2f}%)',
                 # hide by default
                 'visible': False,
             },
@@ -730,12 +756,12 @@ def vaccination_fig(data_qc_vaccination, data_mtl_vaccination, labels):
                     dict(
                         label='Quebec',
                         method='update',
-                        args=[{'visible': [True, True, False, False]}],
+                        args=[{'visible': [True, True, True, False, False, False]}],
                     ),
                     dict(
                         label='Montreal',
                         method='update',
-                        args=[{'visible': [False, False, True, True]}],
+                        args=[{'visible': [False, False, False, True, True, True]}],
                     ),
                 ]),
                 type='buttons',
@@ -785,6 +811,19 @@ def vaccination_administered_fig(data_qc_vaccination, data_mtl_vaccination, labe
             },
             {
                 'type': 'bar',
+                'x': data_qc_vaccination['date'],
+                'y': data_qc_vaccination['new_doses_3d'],
+                'customdata': data_qc_vaccination['new_doses_3d'].rolling(7).mean().round(),
+                'yaxis': 'y1',
+                'marker': {'color': COLOUR_QC_DARK},
+                'name': labels['vaccination_new_3d'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate':
+                    labels['vaccination_new_3d'] + ' (QC): %{y:,d}<br>'
+                    + labels['7day_avg_short'] + ': %{customdata:,d}',
+            },
+            {
+                'type': 'bar',
                 'x': data_mtl_vaccination['date'],
                 'y': data_mtl_vaccination['new_doses'],
                 'customdata': data_mtl_vaccination['new_doses'].rolling(7).mean().round(),
@@ -809,6 +848,21 @@ def vaccination_administered_fig(data_qc_vaccination, data_mtl_vaccination, labe
                 'hoverlabel': {'namelength': 0},
                 'hovertemplate':
                     labels['vaccination_new_2d'] + ' (MTL): %{y:,d}<br>'
+                    + labels['7day_avg_short'] + ': %{customdata:,d}',
+                # hide by default
+                'visible': False,
+            },
+            {
+                'type': 'bar',
+                'x': data_mtl_vaccination['date'],
+                'y': data_mtl_vaccination['new_doses_3d'],
+                'customdata': data_mtl_vaccination['new_doses_3d'].rolling(7).mean().round(),
+                'yaxis': 'y1',
+                'marker': {'color': COLOUR_MTL_DARK},
+                'name': labels['vaccination_new_3d'],
+                'hoverlabel': {'namelength': 0},
+                'hovertemplate':
+                    labels['vaccination_new_3d'] + ' (MTL): %{y:,d}<br>'
                     + labels['7day_avg_short'] + ': %{customdata:,d}',
                 # hide by default
                 'visible': False,
@@ -841,12 +895,12 @@ def vaccination_administered_fig(data_qc_vaccination, data_mtl_vaccination, labe
                     dict(
                         label='Quebec',
                         method='update',
-                        args=[{'visible': [True, True, False, False]}],
+                        args=[{'visible': [True, True, True, False, False, False]}],
                     ),
                     dict(
                         label='Montreal',
                         method='update',
-                        args=[{'visible': [False, False, True, True]}],
+                        args=[{'visible': [False, False, False, True, True, True]}],
                     ),
                 ]),
                 type='buttons',
