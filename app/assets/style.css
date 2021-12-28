@@ -78,9 +78,9 @@
   margin-top: 15px;
   margin-bottom: 15px;
 }
-.vaccination > #info-container {
+/* .vaccination > #info-container {
   grid-template-columns: repeat(4, 1fr);
-}
+} */
 .cases {
   color:#c51515;
 }
