@@ -301,7 +301,7 @@ data_qc_age = data_qc_age.pivot_table(
     values=['hos_quo_tot_n']
 )
 # drop the last 2 days since they are likely lower due to delays in reporting
-data_qc_age = data_qc_age.iloc[:-2]
+# data_qc_age = data_qc_age.iloc[:-2]
 # determine 7-day rolling avg
 # (do not use for now in order to allow absolute admission numbers to be shown)
 # data_qc_age = data_qc_age.rolling(7, min_periods=1).mean().fillna(0).round(2)

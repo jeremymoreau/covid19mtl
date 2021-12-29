@@ -300,6 +300,7 @@ def mtl_age_fig(mtl_age_data, labels):
         mtl_age_data,
         x='date',
         y='new_cases',
+        range_x=[mtl_age_data['date'].iloc[0], mtl_age_data['date'].iloc[-1]],
         color='age',
         # split into subplots
         # facet_col='age',
@@ -362,6 +363,7 @@ def qc_age_fig(qc_age_data, labels):
         qc_age_data,
         x='date',
         y='new_hosp_per100k',
+        range_x=[qc_age_data['date'].iloc[0], qc_age_data['date'].iloc[-1]],
         color='age_group',
         # split into subplots
         # facet_col='age',
