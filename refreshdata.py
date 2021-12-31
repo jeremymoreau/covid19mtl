@@ -735,8 +735,19 @@ def update_mtl_boroughs_csv(processed_dir):
     seven_day_per100k_df = seven_day_per100k_df.round()
 
     # create categories for 7day incidence per 100k
-    bins = [-1, 10, 25, 50, 100, 200, 300, 500, np.inf]
-    labels = ['< 10', '> 10-25', '> 25-50', '> 50-100', '> 100-200', '> 200-300', '> 300-500', '> 500']
+    bins = [-1, 10, 25, 50, 100, 200, 300, 500, 1000, 1500, np.inf]
+    labels = [
+        '< 10',
+        '> 10-25',
+        '> 25-50',
+        '> 50-100',
+        '> 100-200',
+        '> 200-300',
+        '> 300-500',
+        '> 500-1000',
+        '> 1000-1500',
+        '> 1500'
+    ]
     category_df = seven_day_per100k_df.apply(pd.cut, bins=bins, labels=labels)
 
     # add suffixes to each df and join

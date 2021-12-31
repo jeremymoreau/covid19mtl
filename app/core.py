@@ -202,9 +202,13 @@ elif incid_per100k_7d_mtl < 200:
 elif incid_per100k_7d_mtl < 300:
     incid_per100k_7d_mtl_colour = '#A80101'
 elif incid_per100k_7d_mtl < 500:
-    incid_per100k_7d_mtl_colour = '#800000'
+    incid_per100k_7d_mtl_colour = '#800e0e'
+elif incid_per100k_7d_mtl < 1000:
+    incid_per100k_7d_mtl_colour = '#650e0e'
+elif incid_per100k_7d_mtl < 1500:
+    incid_per100k_7d_mtl_colour = '#500e0e'
 else:
-    incid_per100k_7d_mtl_colour = '#600000'
+    incid_per100k_7d_mtl_colour = '#350e0e'
 
 # QC
 latest_cases_qc = str(int(data_qc_totals['cases'].dropna().iloc[-1]))
@@ -241,9 +245,13 @@ elif incid_per100k_7d_qc < 200:
 elif incid_per100k_7d_qc < 300:
     incid_per100k_7d_qc_colour = '#A80101'
 elif incid_per100k_7d_qc < 500:
-    incid_per100k_7d_qc_colour = '#800000'
+    incid_per100k_7d_qc_colour = '#800e0e'
+elif incid_per100k_7d_qc < 1000:
+    incid_per100k_7d_qc_colour = '#650e0e'
+elif incid_per100k_7d_qc < 1500:
+    incid_per100k_7d_qc_colour = '#500e0e'
 else:
-    incid_per100k_7d_qc_colour = '#600000'
+    incid_per100k_7d_qc_colour = '#350e0e'
 
 # calculated vaccination coverage based on the population numbers we use
 data_qc_vaccination['calc_perc'] = data_qc_vaccination['total_doses'] / qc_pop * 100
