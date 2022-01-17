@@ -1068,7 +1068,12 @@ def update_data_by_vaccination_status_csv(sources_dir, processed_dir, filename):
 
     # rename columns and index
     df.index.name = 'date'
-    df.columns = ['0d', '1d', '2d']
+    df.columns = ['0-4', '0d', '1d', '2d']
+
+    # combine 0-4 and 0d
+    df['0d'] = df['0-4'] + df['0d']
+    # drop 0-4
+    df.drop('0-4', axis=1, inplace=True)
 
     # overwrite previous file
     df.to_csv(os.path.join(processed_dir, filename))
