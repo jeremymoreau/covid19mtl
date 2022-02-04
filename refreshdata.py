@@ -1129,6 +1129,8 @@ def update_mtl_vaccination_age_csv(sources_dir, processed_dir):
         dose_1.append(item['Nombre_de_personnes_ayant_reçu_'])
         dose_2.append(item['Nombre_de_personnes_ayant_reçu1'])
 
+    # fix empy values for non-vaccinated
+    dose_none = [item if item is not None else 0 for item in dose_none]
     # add sum of eligible population (12+) and insert before total
     dose_none.insert(-1, sum(dose_none[2: -1]))
     dose_1.insert(-1, sum(dose_1[2: -1]))
