@@ -1056,6 +1056,8 @@ def update_data_by_vaccination_status_csv(sources_dir, processed_dir, filename):
     )
     df = pd.read_csv(source_file, encoding='utf-8', index_col=0)
 
+    # Filter out vaccination status Inconnu
+    df = df[df['Statut_Vaccinal'] != 'Inconnu']
     # TBD: filter out age group Inconnue?
     # ignore age groups and group by date and vaccination status, sum up the cases
     df = df.groupby(['Date', 'Statut_Vaccinal']).sum()
@@ -1068,7 +1070,7 @@ def update_data_by_vaccination_status_csv(sources_dir, processed_dir, filename):
 
     # rename columns and index
     df.index.name = 'date'
-    df.columns = ['0-4', '0d', '1d', '2d']
+    df.columns = ['0-4', '0d', '1d', '2d', '3d']
 
     # combine 0-4 and 0d
     df['0d'] = df['0-4'] + df['0d']

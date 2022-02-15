@@ -1167,6 +1167,7 @@ def qc_data_by_vacc_status_fig(data, key_label_y_axis, labels):
         '0d': labels['vaccination_unvaccinated'],
         '1d': labels['vaccination_1d'],
         '2d': labels['vaccination_2d'],
+        '3d': labels['vaccination_3d'],
     }
 
     figure.for_each_trace(lambda t: t.update(name=labels[t.name]))

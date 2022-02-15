@@ -361,9 +361,6 @@ data_qc_vaccination_age = prepare_vaccination_by_age_data(data_qc_vaccination_ag
 # get population estimates for QC vaccination
 qc_total_vaccinated = data_qc_vaccination_age.pivot_table(index='group', columns='variable', values='value')
 qc_total_vaccinated = qc_total_vaccinated.loc['Total']
-# need to ignore 3d for now: combine 2d and 3d since 2d is missing those that got a 3rd dose
-qc_total_vaccinated['2d'] = qc_total_vaccinated['2d'] + qc_total_vaccinated['3d']
-qc_total_vaccinated = list(qc_total_vaccinated.iloc[:-1])
 
 data_qc_cases_vacc_status = prepare_data_by_vaccination_status(data_qc_cases_vacc_status, qc_total_vaccinated)
 data_qc_hosp_vacc_status = prepare_data_by_vaccination_status(data_qc_hosp_vacc_status, qc_total_vaccinated)

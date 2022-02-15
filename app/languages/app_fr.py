@@ -196,6 +196,7 @@ labels = {
     'vaccination_unvaccinated': 'Non-vacciné ou 1 dose < 14 jours',
     'vaccination_1d': '1 dose ≥ 14 jours',
     'vaccination_2d': '2 doses ≥ 7 jours',
+    'vaccination_3d': '3 doses ≥ 7 jours',
     # Variants fig
     'variants_label': 'Progression des nouveaux variants préoccupants',
     'variants_sequenced': 'Cas séquencés',
