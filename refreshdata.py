@@ -456,6 +456,9 @@ def load_data_qc_csv(source_file):
     qc_df = pd.read_csv(source_file, encoding='utf-8', na_values=['', '         .  ', '           .', '.'])
     # cut off first rows with 'Date inconnue'
     qc_df = qc_df[qc_df['Date'] != 'Date inconnue']
+    # Filter rows with invalid regions that started popping up on April 25, 2022
+    qc_df = qc_df[qc_df['Croisement'] != 'Te']
+    qc_df = qc_df[qc_df['Croisement'] != 'Un']
     # sometimes extra rows for INC, Inconnue show up with '           .' or '.' in the column 'cas_cum_tot_n'
     # considering the occurring string as NaN and drop those rows (otherwise cannot be converted to int later)
     qc_df.dropna(subset=['cas_cum_tot_n'], inplace=True)
