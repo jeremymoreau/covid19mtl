@@ -1091,7 +1091,7 @@ def update_data_by_vaccination_status_csv(sources_dir, processed_dir, filename):
     df.to_csv(os.path.join(processed_dir, filename))
 
 
-def update_mtl_vaccination_age_csv(sources_dir, processed_dir):
+def update_mtl_vaccination_age_csv(sources_dir, processed_dir, date):
     """Replace data in vaccination by age data for MTL in processed_dir with latest data.
 
     data_mtl_vaccination_age.csv will be updated with the new data.
@@ -1102,9 +1102,14 @@ def update_mtl_vaccination_age_csv(sources_dir, processed_dir):
         Absolute path of sources dir.
     processed_dir : str
         Absolute path of processed dir.
+    date : str
+        Date of data to append (yyyy-mm-dd).
     """
-    # read latest data/sources/*/data_mtl_vaccination_by_age.json
-    source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_mtl_vaccination_by_age.json')
+    source_file = os.path.join(
+        sources_dir,
+        get_source_dir_for_date(sources_dir, date),
+        'data_mtl_vaccination_by_age.json'
+    )
 
     with Path(source_file).open() as fd:
         data = json.load(fd)
