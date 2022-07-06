@@ -437,7 +437,7 @@ def is_new_mtl_data_available(expected_date: dt.date):
     cases_table = soup.select('div.csc-textpic-text table.contenttable')[1]
     last_row = cases_table.select('tbody tr')[-1]
     new_cases = last_row.select('td')[1].text
-    new_cases = int(new_cases)
+    new_cases = int(new_cases.replace(',', ''))
 
     # get new cases from municipal CSV
     content = fetch(SOURCES_MTL.get('data_mtl_municipal.csv'))
