@@ -1329,7 +1329,7 @@ def process_mtl_data(sources_dir, processed_dir, date):
     # Append row to data_mtl_age.csv
     append_mtl_cases_by_age(sources_dir, processed_dir, date)
 
-    update_mtl_vaccination_age_csv(sources_dir, processed_dir)
+    update_mtl_vaccination_age_csv(sources_dir, processed_dir, date)
 
 
 def main():
