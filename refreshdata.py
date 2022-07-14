@@ -50,7 +50,7 @@ SOURCES_MTL = {
 # INSPQ
 SOURCES_INSPQ = {
     # HTML
-    # 'INSPQ_main.html': 'https://www.inspq.qc.ca/covid-19/donnees',
+    'INSPQ_main.html': 'https://www.inspq.qc.ca/covid-19/donnees',
     # 'INSPQ_region.html': 'https://www.inspq.qc.ca/covid-19/donnees/regions',
     # 'INSPQ_par_region.html': 'https://www.inspq.qc.ca/covid-19/donnees/par-region',
     # CSV (Note: "," separated; Encoding: UTF-8)
