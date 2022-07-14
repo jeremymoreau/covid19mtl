@@ -480,7 +480,8 @@ def load_data_qc_csv(source_file):
         # 'cas_quo_lab_n': '',
         # 'cas_quo_epi_n': '',
         'cas_quo_tot_n': 'new_cases',
-        'act_cum_tot_n': 'active_cases',
+        # Removed as of July 11th from INSPQ data
+        # 'act_cum_tot_n': 'active_cases',
         # 'act_cum_tot_t': '',
         # 'cas_quo_tot_m': '',
         # 'cas_quo_tot_tm': '',

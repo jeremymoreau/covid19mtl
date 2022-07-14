@@ -216,18 +216,19 @@ def cases_fig(data_mtl, data_qc, labels):
     # Confirmed cases
     cases_fig = go.Figure({
         'data': [
-            {
-                'type': 'scatter',
-                'x': data_qc['date'],
-                'y': data_qc['active_cases'],
-                'yaxis': 'y2',
-                'mode': 'lines',
-                'marker': {'color': COLOUR_EXTRA},
-                'line': {'dash': 'dash'},
-                'name': labels['active_cases_qc_label'],
-                'hoverlabel': {'namelength': 25},
-                'hovertemplate': '%{y:d}',
-            },
+            # Removed from INSPQ data source as of July 11th
+            # {
+            #     'type': 'scatter',
+            #     'x': data_qc['date'],
+            #     'y': data_qc['active_cases'],
+            #     'yaxis': 'y2',
+            #     'mode': 'lines',
+            #     'marker': {'color': COLOUR_EXTRA},
+            #     'line': {'dash': 'dash'},
+            #     'name': labels['active_cases_qc_label'],
+            #     'hoverlabel': {'namelength': 25},
+            #     'hovertemplate': '%{y:d}',
+            # },
             {
                 'type': 'bar',
                 'x': data_qc['date'],
