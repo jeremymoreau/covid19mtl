@@ -1,0 +1,24 @@
+﻿,,Nombre de cas confirmé,,,Nombre de décès,,,,,,Nombre d'hospitalisations,,
+No,Région sociosanitaire,Total,Confirmé dans les 24 dernières heures,Nombre dans la dernière semaine CDC fermée,Total,Confirmé dans les 24 dernières heures,Nombre dans la dernière semaine CDC fermée,Population en 2022,Cas de COVID-19 par 100 000,Décès par COVID-19 par 100 000,Total,Différence dans les 24 dernières heures,Nombre dans la dernière semaine CDC fermée
+01,01 - Bas-Saint-Laurent,23379,69,948,194,1,6,197738.33333,.,.,1079,10,58
+02,02 - Saguenay-Lac-Saint-Jean,32779,82,1011,465,0,4,278600,.,.,1769,17,52
+03,03 - Capitale-Nationale,95532,360,2743,1613,3,15,761103.66667,.,.,4868,27,171
+04,04 - Mauricie et Centre-du-Québec,62738,209,1349,1030,0,5,527666.66667,.,.,3548,23,98
+05,05 - Estrie,53605,157,1665,629,0,1,502406,.,.,3057,10,93
+06,06 - Montréal,320126,517,1128,5555,2,9,2061667.3333,.,.,17204,44,306
+07,07 - Outaouais,39612,53,-1333,322,0,2,405378.66667,.,.,2020,2,37
+08,08 - Abitibi-Témiscamingue,11425,29,-573,119,0,1,147876.33333,.,.,779,5,34
+09,09 - Côte-Nord,10068,49,428,50,1,3,90082.333333,.,.,639,2,52
+10,10 - Nord-du-Québec,1498,7,-155,4,0,0,13383.666667,.,.,59,0,4
+11,11 - Gaspésie-Îles-de-la-Madeleine,10301,41,301,82,0,0,90783.333333,.,.,527,5,28
+12,12 - Chaudière-Appalaches,66334,185,2962,682,1,2,434525.66667,.,.,2814,13,77
+13,13 - Laval,73959,104,286,1134,1,3,445993.33333,.,.,3534,12,83
+14,14 - Lanaudière,73639,115,1443,805,3,7,530581,.,.,3151,17,109
+15,15 - Laurentides,84356,149,1382,787,0,8,640046.66667,.,.,4308,43,160
+16,16 - Montérégie,157608,283,1944,2314,2,21,1452381.3333,.,.,9032,41,261
+17,17 - Nunavik,3217,2,129,10,0,0,14619,.,.,116,0,2
+18,18 - Terres-Cries-de-la-Baie-James,2632,8,-611,17,0,0,18660.333333,.,.,116,0,3
+98,Inconnu,1035,-14,1031,0,0,0,.,.,.,417,2,7
+99,Hors Québec,6797,13,3717,2,0,0,.,.,.,0,0,0
+999,Ensemble du Québec,1130640,2418,19795,15814,14,87,8613493.6667,.,.,59037,273,1635
+
