@@ -392,9 +392,9 @@ def is_new_qc_data_available(expected_date: dt.date):
     vacc_expected_date = expected_date + timedelta(days=1)
 
     # return csv_date == expected_date \
+    # and html_date == expected_date \
     return csv_date2 == expected_date \
         and csv_date3 == vacc_expected_date \
-        and html_date == expected_date \
         and vacc_date == vacc_expected_date
 
 
