@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ Refresh data files for the COVID-19 MTL dashboard """
 
+import csv
 import datetime as dt
 # import logging
 import io
@@ -593,7 +594,21 @@ def update_hospitalisations_qc_csv(sources_dir, processed_dir):
     hosp_df.to_csv(os.path.join(processed_dir, 'data_qc_hospitalisations.csv'), encoding='utf-8', index=False)
 
 
-def update_vaccination_csv(sources_dir, processed_dir):
+def filter_records(records):
+    """
+    Discards any record which has an empty date field.
+
+    Source: https://stackoverflow.com/a/38819123
+    """
+
+    for record in records:
+        if record['\ufeffDate'] == '':
+            continue
+        else:
+            yield record
+
+
+def update_vaccination_csv(sources_dir, processed_dir, date):
     """Replace old copies of vaccination data in processed_dir with latest version.
 
     data_qc_vaccination.csv, data_mtl_vaccination.csv file will be overwritten with the new updated files.
@@ -606,8 +621,14 @@ def update_vaccination_csv(sources_dir, processed_dir):
         Absolute path of processed dir.
     """
     # read latest data/sources/*/data_qc_vaccination.csv
-    source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc_vaccination.csv')
-    df = pd.read_csv(source_file, encoding='utf-8', index_col=0)
+    source_file = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc_vaccination.csv')
+
+    # INSPQ vaccination dataset contains rows with empty dates etc. at the beginning
+    # this causes columns with int to be float due to the presence of NaNs
+    # filter out these "empty rows" first and load the dataframe after
+    with Path(source_file).open() as fd:
+        records = csv.DictReader(fd)
+        df = pd.DataFrame.from_records(filter_records(records), index='\ufeffDate')
 
     column_mappings = {
         'Date': 'date',
@@ -1271,7 +1292,7 @@ def process_inspq_data(sources_dir, processed_dir, date):
     # update_hospitalisations_qc_csv(sources_dir, processed_dir)
 
     # Replace vaccination data files
-    update_vaccination_csv(sources_dir, processed_dir)
+    update_vaccination_csv(sources_dir, processed_dir, date)
 
     # Update data_variants.csv
     # append_variants_data_csv(sources_dir, processed_dir, date)
