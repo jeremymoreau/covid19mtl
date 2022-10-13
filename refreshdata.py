@@ -531,7 +531,7 @@ def load_data_qc_csv(source_file):
     return qc_df
 
 
-def update_data_qc_csv(sources_dir, processed_dir):
+def update_data_qc_csv(sources_dir, processed_dir, date):
     """Replace old copy of data_qc.csv in processed_dir with latest version.
 
     data_qc.csv file will be overwritten with the new updated file.
@@ -544,7 +544,7 @@ def update_data_qc_csv(sources_dir, processed_dir):
         Absolute path of processed dir.
     """
     # read latest data/sources/*/data_qc.csv
-    lastest_source_file = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc.csv')
+    lastest_source_file = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc.csv')
 
     qc_df = load_data_qc_csv(lastest_source_file)
 
@@ -844,7 +844,7 @@ def append_mtl_death_loc_csv(sources_dir, processed_dir, date):
         print(f'MTL death loc: {date} has already been appended to {mtl_death_loc_csv}')
 
 
-def update_mtl_data_csv(sources_dir, processed_dir):
+def update_mtl_data_csv(sources_dir, processed_dir, date):
     """Replace old copy of data_mtl.csv in processed_dir with latest version of MTL data.
 
     data_mtl.csv file will be overwritten with the new updated file.
@@ -857,7 +857,7 @@ def update_mtl_data_csv(sources_dir, processed_dir):
         Absolute path of processed dir.
     """
     # use data_qc.csv
-    qc_csv = os.path.join(sources_dir, get_latest_source_dir(sources_dir), 'data_qc.csv')
+    qc_csv = os.path.join(sources_dir, get_source_dir_for_date(sources_dir, date), 'data_qc.csv')
     mtl_csv = os.path.join(processed_dir, 'data_mtl.csv')
 
     qc_df = load_data_qc_csv(qc_csv)
@@ -1286,7 +1286,7 @@ def process_inspq_data(sources_dir, processed_dir, date):
         Date of data to append (yyyy-mm-dd).
     """
     # Replace data_qc
-    update_data_qc_csv(sources_dir, processed_dir)
+    update_data_qc_csv(sources_dir, processed_dir, date)
 
     # Replace data_qc_hospitalisations
     # update_hospitalisations_qc_csv(sources_dir, processed_dir)
@@ -1301,7 +1301,7 @@ def process_inspq_data(sources_dir, processed_dir, date):
     append_mtl_death_loc_csv(sources_dir, processed_dir, date)
 
     # Update data_mtl.csv
-    update_mtl_data_csv(sources_dir, processed_dir)
+    update_mtl_data_csv(sources_dir, processed_dir, date)
 
     # Copy total rows
     append_totals_csv(processed_dir, 'data_qc_totals.csv', 'data_qc.csv')
