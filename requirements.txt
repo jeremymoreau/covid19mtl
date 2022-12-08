@@ -8,30 +8,28 @@ beautifulsoup4==4.10.0
     # via -r requirements.in
 brotli==1.0.9
     # via flask-compress
-certifi==2021.10.8
+certifi==2022.12.7
     # via requests
-chardet==4.0.0
+charset-normalizer==2.0.12
     # via requests
 click==8.0.3
     # via flask
+dash==1.21.0
+    # via -r requirements.in
 dash-core-components==1.17.1
     # via dash
 dash-html-components==1.1.4
     # via dash
 dash-table==4.12.0
     # via dash
-dash==1.21.0
-    # via -r requirements.in
-dash_renderer==1.9.1
-    # via dash
 dateparser==1.1.0
     # via -r requirements.in
-flask-compress==1.10.1
-    # via dash
 flask==2.0.2
     # via
     #   dash
     #   flask-compress
+flask-compress==1.10.1
+    # via dash
 future==0.18.2
     # via dash
 gunicorn==20.1.0
@@ -61,7 +59,8 @@ pytz==2021.3
     #   -r requirements.in
     #   dateparser
     #   pandas
-    #   tzlocal
+pytz-deprecation-shim==0.1.0.post0
+    # via tzlocal
 regex==2021.11.10
     # via dateparser
 requests==2.26.0
@@ -75,6 +74,8 @@ six==1.16.0
     #   retrying
 soupsieve==2.3.1
     # via beautifulsoup4
+tzdata==2022.7
+    # via pytz-deprecation-shim
 tzlocal==4.1
     # via dateparser
 urllib3==1.26.7
