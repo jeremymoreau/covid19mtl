@@ -2,9 +2,10 @@ name: Auto-deploy to Dokku
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - '*'
+  pull_request:
+#   push:
+#     tags:
+#       - '*'
 
 jobs:
   build:
@@ -12,14 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - name: Dokku deploy
-      uses: vitalyliber/dokku-github-action@v6.2
-      env:
-        PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-        HOST: ${{ secrets.DOKKU_IP }}
-        PROJECT: covid19mtl.ca
-        APP_CONFIG: ${{ secrets.APP_CONFIG }}
-        FORCE_DEPLOY: true
+      uses: dokku/github-action@v1.4.0
+      with:
+        git_remote_url: ssh://dokku@${{ secrets.DOKKU_IP }}:22:covid19mtl.ca
+        ssh_private_key: ${{ secrets.PRIVATE_KEY }}
+        git_push_flags: '--force'
+        trace: 1
