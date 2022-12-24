@@ -17,9 +17,10 @@ jobs:
       with:
         fetch-depth: 0
     - name: Dokku deploy
-      uses: dokku/github-action@v1.4.0
-      with:
-        git_remote_url: ssh://dokku@${{ secrets.DOKKU_IP }}:22:covid19mtl.ca
-        ssh_private_key: ${{ secrets.PRIVATE_KEY }}
-        git_push_flags: '--force'
-        trace: 1
+      uses: vitalyliber/dokku-github-action@v7.1
+      env:
+        PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        HOST: ${{ secrets.DOKKU_IP }}
+        PROJECT: covid19mtl.ca
+        APP_CONFIG: ${{ secrets.APP_CONFIG }}
+        FORCE_DEPLOY: true
