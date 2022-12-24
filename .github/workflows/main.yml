@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - name: Dokku deploy
-      uses: vitalyliber/dokku-github-action@v6.2
+      uses: vitalyliber/dokku-github-action@v7.1
       env:
         PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
         HOST: ${{ secrets.DOKKU_IP }}
