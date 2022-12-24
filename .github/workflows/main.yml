@@ -3,9 +3,9 @@ name: Auto-deploy to Dokku
 on:
   workflow_dispatch:
   pull_request:
-#   push:
-#     tags:
-#       - '*'
+  push:
+    tags:
+      - '*'
 
 jobs:
   build:
