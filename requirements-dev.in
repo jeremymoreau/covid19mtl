@@ -5,3 +5,7 @@ flake8
 flake8-isort
 flake8-quotes
 mypy
+types-dateparser
+types-pytz
+types-requests
+types-urllib3
