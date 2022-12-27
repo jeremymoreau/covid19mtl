@@ -62,6 +62,7 @@ labels = {
     'footer_left': 'Données: [Santé Montréal](https://santemontreal.qc.ca/population/coronavirus-covid-19/), [INSPQ](https://www.inspq.qc.ca/covid-19/donnees), [Gouvernement du Québec](https://www.quebec.ca/sante/problemes-de-sante/a-z/coronavirus-2019/situation-coronavirus-quebec/) / Créé avec [Dash](https://plotly.com/dash/) / [Github](https://github.com/jeremymoreau/covid19mtl)',
     'footer_centre': 'Hébergement offert par [DigitalOcean](https://www.digitalocean.com/community/pages/covid-19)',
     'footer_right': 'Créé par [Jeremy Moreau](https://jeremymoreau.com/), [Matthias Schoettle](https://mattsch.com) et [Contributeurs](https://github.com/jeremymoreau/covid19mtl#contributors) / [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.fr)',
+    'datanote': '**Note :** Les jeux de données de l\'INSPQ ne sont mis à jour qu\'une fois par semaine, le mercredi. Les boîtes d\'information ci-dessous montrent donc la différence avec la semaine précédente. Santé Montréal n\'a pas mis à jour ses jeux de données depuis juillet.',
     'infobox': """
     ###### Ressources utiles
 

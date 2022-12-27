@@ -87,7 +87,13 @@ def generate_layout(labels):
                 ],
                 id='header',
             ),
-
+            # data update note
+            html.Div(
+                [
+                    html.P([dcc.Markdown(labels['datanote'])]),
+                ],
+                className='note-container',
+            ),
             # mini info boxes
             html.Div(
                 [
