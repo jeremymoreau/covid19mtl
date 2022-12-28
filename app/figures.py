@@ -1,5 +1,6 @@
 from itertools import cycle
 
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -123,10 +124,15 @@ def mtl_cases_map_fig(mtl_boroughs, mtl_geojson, labels):
     dates = mtl_boroughs['date'].unique()
     for date in dates:
         for i in category:
-            mtl_boroughs = mtl_boroughs.append({
-                'date': date,
-                '7day_incidence_rate': i
-            }, ignore_index=True)
+            mtl_boroughs = pd.concat([
+                mtl_boroughs,
+                # pass index to avoid ValuError regarding passing scalar values
+                # see: https://stackoverflow.com/a/17840195
+                pd.DataFrame.from_records({
+                    'date': date,
+                    '7day_incidence_rate': i
+                }, index=[0])
+            ])
 
     # sort backwards as a workaround to show latest date first
     mtl_boroughs = mtl_boroughs.sort_values('date', ascending=False)
