@@ -376,7 +376,7 @@ def is_new_qc_data_available(expected_date: dt.date):
     date_text = date_elements[-1].contents[0]
     date_text = date_text.split('Updated on')[-1].split(')')[0]
 
-    html_date = dateparser.parse(date_text).date()  # type: ignore[union-attr]
+    # html_date = dateparser.parse(date_text).date()  # type: ignore[union-attr]
 
     # ensure vaccination data (what we are actually interested in is available)
     content = fetch(SOURCES_QC.get('QC_vaccination.html'))
@@ -795,7 +795,7 @@ def update_mtl_boroughs_csv(processed_dir):
     combined.sort_index(axis=1, inplace=True)
 
     # create multiindex by splitting on column names to have metrics per borough
-    combined.columns = combined.columns.str.split('_', 1, expand=True)
+    combined.columns = combined.columns.str.split(pat='_', n=1, expand=True)
     # name the levels
     combined.columns.names = ['borough', 'metric']
     combined.index.name = 'date'
@@ -1018,10 +1018,10 @@ def extract_dose_per_age(df, dose_number):
     # see: https://stackoverflow.com/a/47239367
     data = df[dose_columns].iloc[-1].reset_index()
     # need to reset index to be able to sum up the right groups
-    data_grouped = data.iloc[3:].reset_index(drop=True)
-    data_grouped = data_grouped.groupby(data_grouped.index // 2).sum()
+    data_grouped: pd.Series = data.iloc[3:].reset_index(drop=True)
+    data_grouped = data_grouped.groupby(data_grouped.index // 2).sum(numeric_only=True)
     # data is in first column
-    data = data.iloc[:3, 1].append(data_grouped.iloc[:, 0])
+    data = pd.concat([data.iloc[:3, 1], data_grouped.iloc[:, 0]])
 
     # add sum of eligible population (5+) and total and insert at the end
     result = list(data)
@@ -1092,7 +1092,7 @@ def update_data_by_vaccination_status_csv(sources_dir, processed_dir, filename):
     df = df[df['Statut_Vaccinal'] != 'Inconnu']
     # TBD: filter out age group Inconnue?
     # ignore age groups and group by date and vaccination status, sum up the cases
-    df = df.groupby(['Date', 'Statut_Vaccinal']).sum()
+    df = df.groupby(['Date', 'Statut_Vaccinal']).sum(numeric_only=True)
 
     # convert from long to wide
     df = df.pivot_table(index=['Date'], columns='Statut_Vaccinal')
