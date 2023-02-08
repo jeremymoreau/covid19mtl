@@ -187,7 +187,11 @@ else:
 # 7-days incidence per 100k (and % change vs previous 7 days)
 incid_per100k_7d_mtl = float(data_mtl['new_cases'].dropna().iloc[-7:].sum()) / (mtl_pop / 100000)
 incid_per100k_last7d_mtl = float(data_mtl['new_cases'].dropna().iloc[-14:-7].sum()) / (mtl_pop / 100000)
-incid_per100K_perc_change_mtl = ((incid_per100k_7d_mtl - incid_per100k_last7d_mtl) / incid_per100k_last7d_mtl) * 100
+# avoid division by zero error if incidence of last 7d is 0
+incid_per100K_perc_change_mtl = (
+    0 if incid_per100k_last7d_mtl == 0
+    else ((incid_per100k_7d_mtl - incid_per100k_last7d_mtl) / incid_per100k_last7d_mtl) * 100
+)
 
 if incid_per100k_7d_mtl < 10:
     incid_per100k_7d_mtl_colour = '#7ea47c'
@@ -230,7 +234,11 @@ else:
 # 7-days incidence per 100k (and % change vs previous 7 days)
 incid_per100k_7d_qc = float(data_qc['new_cases'].dropna().iloc[-7:].sum()) / (qc_pop / 100000)
 incid_per100k_last7d_qc = float(data_qc['new_cases'].dropna().iloc[-14:-7].sum()) / (qc_pop / 100000)
-incid_per100K_perc_change_qc = ((incid_per100k_7d_qc - incid_per100k_last7d_qc) / incid_per100k_last7d_qc) * 100
+# avoid division by zero error if incidence of last 7d is 0
+incid_per100K_perc_change_qc = (
+    0 if incid_per100k_last7d_qc == 0
+    else ((incid_per100k_7d_qc - incid_per100k_last7d_qc) / incid_per100k_last7d_qc) * 100
+)
 
 if incid_per100k_7d_qc < 10:
     incid_per100k_7d_qc_colour = '#7ea47c'
