@@ -24,6 +24,7 @@ pd.options.mode.chained_assignment = None
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'app', 'data')
 NB_RETRIES = 3
+FAKE_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.19582'
 TIMEZONE = pytz.timezone('America/Montreal')
 # Data sources mapping
 # {filename: url}
@@ -120,7 +121,7 @@ def fetch(url):
     url = f'{url}{query_param_separator}{unix_time}'
 
     for _ in range(NB_RETRIES):
-        resp = requests.get(url)
+        resp = requests.get(url, headers={'User-Agent': FAKE_USER_AGENT})
         if resp.status_code != 200:
             continue
 
