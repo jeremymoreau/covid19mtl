@@ -1406,13 +1406,13 @@ def main():
         qc_data_date = datetime.fromisoformat(df.index[-1]).date()
 
         # verify that we don't have the latest data yet
-        if qc_data_date != yesterday and is_new_qc_data_available(yesterday):
-            # print('retrieving new data from QC...')
-            download_source_files(SOURCES_QC, sources_dir, False)
+        # if qc_data_date != yesterday and is_new_qc_data_available(yesterday):
+        #     # print('retrieving new data from QC...')
+        #     download_source_files(SOURCES_QC, sources_dir, False)
 
-            process_qc_data(sources_dir, processed_dir, yesterday_date)
+        #     process_qc_data(sources_dir, processed_dir, yesterday_date)
 
-            print('Downloaded and processed data from QC.')
+        #     print('Downloaded and processed data from QC.')
 
         # get the latest date of INSPQ data
         df = pd.read_csv(Path(processed_dir).joinpath('data_qc.csv'), index_col=0)
@@ -1423,22 +1423,26 @@ def main():
             # print('retrieving new data from INSPQ...')
             download_source_files(SOURCES_INSPQ, sources_dir, False)
 
-            process_inspq_data(sources_dir, processed_dir, yesterday_date)
+            # Only download, don't process for now due to data change (April 10 2024)
+            # process_inspq_data(sources_dir, processed_dir, yesterday_date)
+            # Include QC vaccination data
+            download_source_files(SOURCES_QC, sources_dir, False)
 
-            print('Downloaded and processed data from INSPQ.')
+            # print('Downloaded and processed data from INSPQ.')
+            print('Downloaded current data.')
 
         # get the latest date of MTL data
         df = pd.read_csv(Path(processed_dir).joinpath('data_mtl_boroughs.csv'), index_col=0)
         mtl_data_date = datetime.fromisoformat(df.index[-1]).date()
 
         # verify that we don't have the latest data yet
-        if mtl_data_date != yesterday and is_new_mtl_data_available(yesterday):
-            # print('retrieving new data from Sante MTL...')
-            download_source_files(SOURCES_MTL, sources_dir, False)
+        # if mtl_data_date != yesterday and is_new_mtl_data_available(yesterday):
+        #     # print('retrieving new data from Sante MTL...')
+        #     download_source_files(SOURCES_MTL, sources_dir, False)
 
-            process_mtl_data(sources_dir, processed_dir, yesterday_date)
+        #     process_mtl_data(sources_dir, processed_dir, yesterday_date)
 
-            print('Downloaded and processed data from Sante Montreal.')
+        #     print('Downloaded and processed data from Sante Montreal.')
     # mode=manual
     else:
         if not args.no_backup:
