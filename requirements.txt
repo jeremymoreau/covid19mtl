@@ -43,7 +43,9 @@ jinja2==3.0.3
 lxml==4.9.2
     # via -r requirements.in
 markupsafe==2.1.1
-    # via jinja2
+    # via
+    #   jinja2
+    #   werkzeug
 numpy==1.24.1
     # via pandas
 pandas==1.5.2
@@ -80,7 +82,7 @@ tzlocal==4.2
     # via dateparser
 urllib3==1.26.13
     # via requests
-werkzeug==2.0.2
+werkzeug==2.2.3
     # via flask
 
 # The following packages are considered to be unsafe in a requirements file:
