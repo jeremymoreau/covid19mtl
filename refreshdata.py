@@ -132,7 +132,7 @@ def fetch(url):
         "Priority": "u=0, i",
         "Pragma": "no-cache",
         "Cache-Control": "no-cache"
-    },
+    }
 
     for _ in range(NB_RETRIES):
         resp = requests.get(url, headers=headers)
