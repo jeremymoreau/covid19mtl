@@ -24,7 +24,6 @@ pd.options.mode.chained_assignment = None
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'app', 'data')
 NB_RETRIES = 3
-FAKE_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.19582'
 TIMEZONE = pytz.timezone('America/Montreal')
 # Data sources mapping
 # {filename: url}
@@ -119,9 +118,24 @@ def fetch(url):
     unix_time = datetime.now().strftime('%s')
     query_param_separator = '&' if '?' in url else '?'
     url = f'{url}{query_param_separator}{unix_time}'
+    # headers of a real browser to avoid getting rejected
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en,de;q=0.9,fr;q=0.8,en-US;q=0.7",
+        "Sec-GPC": "1",
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Sec-Fetch-User": "?1",
+        "Priority": "u=0, i",
+        "Pragma": "no-cache",
+        "Cache-Control": "no-cache"
+    },
 
     for _ in range(NB_RETRIES):
-        resp = requests.get(url, headers={'User-Agent': FAKE_USER_AGENT})
+        resp = requests.get(url, headers=headers)
         if resp.status_code != 200:
             continue
 
